@@ -20,7 +20,7 @@ public class UserJson {
 		return userRepo.findByUid(uid);
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/login.json")
+	@RequestMapping(method = RequestMethod.POST, value = "/login.json")
 	public @ResponseBody User login(@RequestParam(value = "email") String email) {
 		return userRepo.login(email, null);
 	}
