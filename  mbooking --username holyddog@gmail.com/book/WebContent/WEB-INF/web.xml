@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" 
+    xmlns="http://java.sun.com/xml/ns/javaee" 
+  	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+	
+    <context-param>
+    	<param-name>appName</param-name>
+    	<param-value>Book</param-value>
+  	</context-param>
+  	<context-param>
+    	<param-name>context</param-name>
+    	<param-value>/book</param-value>
+  	</context-param>
+  	<context-param>
+    	<param-name>domain</param-name>
+    	<param-value>localhost</param-value>
+  	</context-param>
+  	<context-param>
+    	<param-name>root</param-name>
+    	<param-value>http://localhost:8080/book</param-value>
+  	</context-param>
+	<context-param>
+		<param-name>images</param-name>
+		<param-value>http://localhost/images/book</param-value>
+	</context-param>
+  	<context-param>    
+    	<param-name>upload</param-name>
+    	<param-value>D:/Resources/book</param-value>
+  	</context-param>
+	
+	<servlet>
+		<servlet-name>Faces Servlet</servlet-name>
+		<servlet-class>org.apache.myfaces.webapp.MyFacesServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<context-param>
+		<param-name>javax.faces.DEFAULT_SUFFIX</param-name>
+		<param-value>.jsp</param-value>
+	</context-param>
+	<context-param>
+		<param-name>javax.faces.DISABLE_FACELET_JSF_VIEWHANDLER</param-name>
+		<param-value>true</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>org.apache.myfaces.ERROR_HANDLING</param-name>
+		<param-value>false</param-value>
+	</context-param>
+	<context-param>
+		<param-name>facelets.DEVELOPMENT</param-name>
+		<param-value>false</param-value>
+	</context-param>
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<servlet>
+		<servlet-name>faces</servlet-name>
+		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>mvc-dispatcher</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>mvc-dispatcher</servlet-name>
+		<url-pattern>/data/*</url-pattern>
+    	<url-pattern>/action/*</url-pattern>
+	</servlet-mapping>
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+	<filter>
+		<filter-name>UrlRewriteFilter</filter-name>
+		<filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>UrlRewriteFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+	</filter-mapping>
+	
+	<filter>
+		<filter-name>cors</filter-name>
+		<filter-class>com.mbooking.CorsFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>cors</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<servlet-mapping>
+		<servlet-name>faces</servlet-name>
+		<url-pattern>*.jsf</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+    	<servlet-name>StartUp</servlet-name>
+    	<servlet-class>com.mbooking.StartUp</servlet-class>
+    	<load-on-startup>1</load-on-startup>
+  	</servlet>
+
+	<welcome-file-list>
+		<welcome-file>index.jsf</welcome-file>
+	</welcome-file-list>
+</web-app>
