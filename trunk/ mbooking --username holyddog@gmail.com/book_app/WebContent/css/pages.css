@@ -1,0 +1,60 @@
+#page_SignIn .sign_in_form {
+	width: 100%;
+}
+#page_SignIn .text_link {
+	text-align: center;
+	padding-top: 30px;
+	font-size: 80%;
+}
+
+#page_AddPage .sel_book {
+	background-color: #fff;
+	margin: 10px 10px 0 10px;
+	padding: 10px;
+}
+#page_AddPage .sel_book .bimage {
+	background-color: #ddd;
+	width: 50px;
+	height: 50px;
+}
+#page_AddPage .sel_book .btitle {
+	padding: 0 10px;
+}
+#page_AddPage .sel_book .show_all {
+	width: 40px;
+	height: 50px;
+	border-left: solid 1px #B3B3B3;
+}
+#page_AddPage .sel_book .mask_icon {
+	width: 40px;
+	height: 50px;
+	display: block;
+	padding-left: 10px;
+	background-color: #4D4D4D;
+}
+#page_AddPage .photo_panel {
+	background-color: #fff;
+	margin: 10px;
+	height: 200px;
+}
+#page_AddPage .photo_panel .mask_camera {
+	width: 40px;
+	height: 40px;
+	margin: 0 auto;
+	background-color: #999999;
+	-webkit-mask-size: 30px; 
+	-webkit-mask-position: center center; 
+	-webkit-mask-repeat: no-repeat;
+	-webkit-mask-image: url(../icons/camera.png);
+}
+#page_AddPage .photo_panel .label {
+	font-size: 80%;
+	color: #999;
+}
+#page_AddPage .caption_panel {
+	background-color: #fff;
+	margin: 0 10px 10px;
+}
+#page_AddPage .caption_panel textarea {
+	padding: 10px;
+}
