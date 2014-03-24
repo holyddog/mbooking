@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>The Book</title>
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+	
+	<link rel="stylesheet" href="css/default.css" type="text/css">
+	<link rel="stylesheet" href="css/style.css" type="text/css">
+	<link rel="stylesheet" href="css/pages.css" type="text/css">
+	
+	<script type="text/javascript" src="lib/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="lib/jquery.hashchange-1.3.js"></script>
+	<script type="text/javascript" src="lib/jquery.bbq-1.2.1.js"></script>	
+	
+    <script type="text/javascript" src="app.js"></script>
+	
+	<!-- Pages UI -->
+    <script type="text/javascript" src="pages/js/add_page.js"></script>
+	<script type="text/javascript" src="pages/js/book.js"></script>
+	<script type="text/javascript" src="pages/js/comments.js"></script>
+	<script type="text/javascript" src="pages/js/explore.js"></script>
+	<script type="text/javascript" src="pages/js/following.js"></script>
+	<script type="text/javascript" src="pages/js/my_books.js"></script>
+	<script type="text/javascript" src="pages/js/notifications.js"></script>
+	<script type="text/javascript" src="pages/js/page.js"></script>
+	<script type="text/javascript" src="pages/js/profile.js"></script>
+	<script type="text/javascript" src="pages/js/settings.js"></script>
+	<script type="text/javascript" src="pages/js/sign_in.js"></script>
+	<script type="text/javascript" src="pages/js/sign_up.js"></script>
+	
+	<!-- Services -->
+	<script type="text/javascript" src="services/user.js"></script>
+	
+	<style id="custom_style" type="text/css"></style>
+</head>
+<body>
+	<div id="sidebar_panel">
+		<div id="overlay"></div>
+		<ul id="sidebar">
+			<li data-page="Profile" class="item">Profile</li>
+			<li data-page="Explore" class="item">Explore</li>
+			<li data-page="Following" class="item">Following</li>
+			<!-- <li class="item">Favourite</li> -->
+			<li data-page="Settings" class="item">Settings</li>
+			<li data-page="Notifications" class="item">Notifications</li>
+			<!-- <li data-page="SignIn" class="item">Sign In</li> -->
+		</ul>
+	</div>
+	<div id="wrapper"></div>
+</body>
+</html>
+
