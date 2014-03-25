@@ -4,6 +4,13 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class Convert {	
+	public static String getExt(String fileName) {
+		if (fileName == null) {
+			return "";
+		}
+		return fileName.substring(fileName.lastIndexOf('.') + 1, fileName.length());
+	}
+	
 	public static String toMD5Password(String inputPwd) {
 	    MessageDigest algorithm = null;
 	    
