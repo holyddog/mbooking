@@ -10,8 +10,11 @@ public class User {
 	Long uid;
 	@Indexed(unique = true)
 	String email;
-	String name;
+	String dname; // display name
+	@Indexed(unique = true)
+	String uname; // username
 	String pwd;
+	Boolean inactive;
 
 	public Long getUid() {
 		return uid;
@@ -29,12 +32,20 @@ public class User {
 		this.email = email;
 	}
 
-	public String getName() {
-		return name;
+	public String getDname() {
+		return dname;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setDname(String dname) {
+		this.dname = dname;
+	}
+
+	public String getUname() {
+		return uname;
+	}
+
+	public void setUname(String uname) {
+		this.uname = uname;
 	}
 
 	public String getPwd() {
@@ -43,5 +54,13 @@ public class User {
 
 	public void setPwd(String pwd) {
 		this.pwd = pwd;
+	}
+
+	public Boolean getInactive() {
+		return inactive;
+	}
+
+	public void setInactive(Boolean inactive) {
+		this.inactive = inactive;
 	}
 }

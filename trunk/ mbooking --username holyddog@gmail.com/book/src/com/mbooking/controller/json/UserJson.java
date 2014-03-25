@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.mbooking.common.ErrorResponse;
+import com.mbooking.common.ResultResponse;
 import com.mbooking.model.User;
 import com.mbooking.repository.UserRepository;
 
@@ -15,13 +17,41 @@ public class UserJson {
 	@Autowired
 	UserRepository userRepo;
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/user.json")
-	public @ResponseBody User getUser(@RequestParam(value = "uid") Long uid) {
-		return userRepo.findByUid(uid);
+	// check duplicate email
+	@RequestMapping(method = RequestMethod.GET, value = "/checkEmail.json")
+	public @ResponseBody Object checkEmail(
+			@RequestParam(value = "email") String email
+			) {
+		return ResultResponse.getResult("result", userRepo.findByEmail(email) != null);
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, value = "/login.json")
-	public @ResponseBody User login(@RequestParam(value = "email") String email) {
-		return userRepo.login(email, null);
+	
+	// check duplicate username
+	@RequestMapping(method = RequestMethod.GET, value = "/checkUserName.json")
+	public @ResponseBody Object checkUserName(
+			@RequestParam(value = "uname") String userName
+			) {
+		return ResultResponse.getResult("result", userRepo.findByUserName(userName) != null);
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/signIn.json")
+	public @ResponseBody Object signIn(
+			@RequestParam(value = "login") String loginName,
+			@RequestParam(value = "pwd") String password
+			) {
+		User user = userRepo.signIn(loginName, password);
+		if (user != null) {
+			return user;
+		}
+		return ErrorResponse.getError("Invalid email/username or password");
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/signUp.json")
+	public @ResponseBody User signUp(
+			@RequestParam(value = "email") String email,
+			@RequestParam(value = "pwd") String password,
+			@RequestParam(value = "dname") String displayName,
+			@RequestParam(value = "uname") String userName) {
+		return userRepo.signUp(email, password, displayName, userName);
 	}
 }
