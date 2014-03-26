@@ -14,8 +14,8 @@ Service.Book = {
 		Web.post(url, params, callback);
 	},		
 	
-	CreateBookSimple: function(bookName,desc,userID) {
-		Service.Book.CreateBook(bookName,desc,userID,null,null,null,null);
+	CreateBookSimple: function(bookName,desc,userID,callback) {
+		Service.Book.CreateBook(bookName,desc,userID,null,null,null,null,callback);
 	},	
 	
 	EditBook: function(bookID,bookName,desc,userID,picName,startDate,endDate,tags,callback) {
