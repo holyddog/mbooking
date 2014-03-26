@@ -37,6 +37,19 @@ Service.Book = {
 		Service.Book.EditBook(bookID,bookName,desc,userID,picName,null,null,null);
 	},	
 	
+	EditBookBookSimple: function(bookID,bookName,desc,userID,picName) {
+		Service.Book.EditBook(bookID,bookName,desc,userID,picName,null,null,null);
+	},	
+	
+	DeleteBook: function(bookID,userID) {
+		var url = Service.url + '/deleteBook.json';
+		var params = {
+				bid		:bookID,
+				uid		:userID
+		};
+		Web.post(url, params, callback);
+	},		
+	
 	GetBook: function(bookName,userID) {
 		var url = Service.url + '/getBook.json';
 		var params = {
@@ -97,5 +110,15 @@ Service.Book = {
 				caption:desc		//Non - Require Field
 		};
 		Web.post(url, params, callback);
-	}	
+	},	
+	
+	DeletePage: function(pageID,bookID,userID) {
+		var url = Service.url + '/deletePage.json';
+		var params = {
+				pid		:pidID,
+				bid		:bookID,
+				uid		:userID
+		};
+		Web.post(url, params, callback);
+	}		
 };
