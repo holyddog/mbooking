@@ -54,4 +54,6 @@ public class UserJson {
 			@RequestParam(value = "uname") String userName) {
 		return userRepo.signUp(email, password, displayName, userName);
 	}
+	
+	
 }

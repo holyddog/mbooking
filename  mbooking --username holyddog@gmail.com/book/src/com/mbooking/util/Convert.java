@@ -1,5 +1,4 @@
 package com.mbooking.util;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -37,4 +36,5 @@ public class Convert {
         }
 		return hexString.toString();
 	}
+	
 }
