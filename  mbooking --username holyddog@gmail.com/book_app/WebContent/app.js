@@ -142,10 +142,10 @@ Page = {
 			
 			var img = new Image();
 			img.onload = function() {
-				var i = 1;
 				ctx.drawImage(img, 0, 0, 720, 40);
-				
-				var x = setInterval(function() {
+
+				var i = 1;
+				Page.interval = setInterval(function() {
 					ctx.drawImage(img, (i % 18) * -40, 0, 720, 40);
 					i++;
 				}, 80);
@@ -154,9 +154,50 @@ Page = {
 		}, 0);
 	},
 	hideLoading: function() {
+		if (Page.interval) {
+			clearInterval(Page.interval);
+			Page.interval = undefined;
+		}
+		
 		var overlay = document.getElementById('overlay_loading');
 		overlay.className = '';
+		overlay.style.display = 'none';
 		document.getElementById('loading_panel').className = '';
+	},
+	
+	btnShowLoading: function(btn) {
+		var cv = document.createElement('canvas');
+	    cv.id = "cv_button";
+	    cv.width = 20;
+	    cv.height = 20;
+	    cv.style.margin= '15px 0';
+
+	    btn.children[0].style.display = 'none';
+	    btn.appendChild(cv);	    
+		
+		//var cv = document.getElementById('cv_button');
+		var ctx = cv.getContext('2d');
+		
+		var img = new Image();
+		img.onload = function() {
+			ctx.drawImage(img, 0, 0, 360, 20);
+
+			var i = 1;
+			Page.btnInterval = setInterval(function() {
+				ctx.drawImage(img, (i % 18) * -20, 0, 360, 20);
+				i++;
+			}, 80);
+		};
+		img.src = 'images/circle_s.png';
+	},
+	btnHideLoading: function(btn) {
+		if (Page.btnInterval) {
+			clearInterval(Page.btnInterval);
+			Page.btnInterval = undefined;
+		}
+		
+	    btn.children[1].remove();
+	    btn.children[0].style.display = 'block';
 	}
 };
 
@@ -260,7 +301,9 @@ Web = {
 })(jQuery);
 
 $(function(){
-	$(window).hashchange(function() {	
+	$(window).hashchange(function() {
+		Page.hideLoading();
+		
 		var hash = location.hash;	
 		var arr = hash.split('?');
 		var page = arr[0].substring(1);

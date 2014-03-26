@@ -124,6 +124,40 @@
 	background-color: #4D4D4D;
 }
 
+#page_PublishBook .book_panel {
+	background-color: #fff;
+	padding: 10px;
+	margin: 10px;
+}
+#page_PublishBook .book_panel .bimage {
+	width: 90px;
+	height: 115px;
+	background-color: #ddd;
+}
+#page_PublishBook .book_panel .binfo  {
+	padding-left: 10px;
+}
+#page_PublishBook .book_panel .title {
+	font-weight: bold;
+	padding-bottom: 10px;
+}
+#page_PublishBook .book_panel .binfo .desc {
+	font-size: 85%;
+	color: #999;
+	overflow: hidden;
+}
+#page_PublishBook .book_panel .binfo .pcount {
+	padding-top: 10px;
+	font-size: 90%;
+	text-align: right;
+}
+#page_PublishBook .btn_panel {
+	margin: 0 10px;
+	text-align: center;
+	background-color: #ddd;
+	line-height: 40px;
+	font-size: 85%;
+}
 
 /*User Profile*/
 .user_profile{
@@ -283,4 +317,3 @@ top: 0px;
 	color:whitesmoke;
 	text-shadow: 1px 1px black;
 }
-

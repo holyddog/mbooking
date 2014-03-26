@@ -1,14 +1,15 @@
 Page.AddPage = {
 	url: 'pages/html/add_page.html',
-	init: function(params, container) {
-		Page.showLoading();
-	
+	init: function(params, container) {	
 		// set toolbar buttons
 		container.find('[data-id=btn_c]').tap(function() {
 			Page.back();
 		});	
 		container.find('[data-id=btn_s]').tap(function() {
-			//alert('save');
+			Page.showLoading();
+			setTimeout(function() {
+				Page.hideLoading();
+			}, 5000);
 		});
 		container.find('[data-id=btn_p]').tap(function() {
 			//alert('publish');

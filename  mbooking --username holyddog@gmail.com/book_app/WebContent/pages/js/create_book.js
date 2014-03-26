@@ -1,7 +1,7 @@
 Page.CreateBook = {
 	url: 'pages/html/create_book.html',
 	
-	init: function(params, container) {	
+	init: function(params, container) {			
 		// declare elements
 		var inputTitle = container.find('input[name=title]');
 		var inputDesc = container.find('textarea[name=desc]');
@@ -13,7 +13,10 @@ Page.CreateBook = {
 		var btnAccept = container.find('[data-id=btn_a]');
 		btnAccept.tap(function() {
 			if (!btnAccept.hasClass('disabled')) {
-				alert('create');
+				Page.btnShowLoading(btnAccept[0]);
+				setTimeout(function() {
+					Page.btnHideLoading(btnAccept[0]);
+				}, 3000);
 			}
 		});
 		
