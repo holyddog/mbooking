@@ -50,7 +50,7 @@ Service.Book = {
 		Web.post(url, params, callback);
 	},		
 	
-	GetBook: function(bookName,userID,callback) {
+	GetBook: function(userID,callback) {
 		var url = Service.url + '/getBook.json';
 		var params = {
 				bid		:bookID,
@@ -59,7 +59,7 @@ Service.Book = {
 		Web.get(url, params, callback);
 	},
 	
-	GetBooksByUid: function(bookName,userID,callback) {
+	GetBooksByUid: function(userID,callback) {
 		var url = Service.url + '/getBooksByUid.json';
 		var params = {
 				uid		:userID,
@@ -67,7 +67,7 @@ Service.Book = {
 		Web.get(url, params, callback);
 	},
 	
-	PublishBook: function(bookName,userID,callback) {
+	PublishBook: function(userID,callback) {
 		var url = Service.url + '/publishBook.json';
 		var params = {
 				bid		:bookID,
@@ -76,7 +76,7 @@ Service.Book = {
 		Web.post(url, params, callback);
 	},
 	
-	UnPublishBook: function(bookName,userID,callback) {
+	UnPublishBook: function(userID,callback) {
 		var url = Service.url + '/unpublishBook.json';
 		var params = {
 				bid		:bookID,
