@@ -60,7 +60,22 @@ public class BookJson {
 			return book;
 		}
 		
-		return ErrorResponse.getError("Unsuccess to create book");
+		return ErrorResponse.getError("Unsuccess to edit book id: "+bid);
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/deleteBook.json")
+	public @ResponseBody Object editBook(
+			@RequestParam(value = "bid") Long bid,
+			@RequestParam(value = "uid") Long uid
+			) 
+	{	
+		Boolean success = bookRepo.delete(bid, uid);
+		
+		if(success){
+			return success;
+		}
+		
+		return ErrorResponse.getError("Unsuccess to delete book id:"+bid);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/createPage.json")
@@ -98,7 +113,23 @@ public class BookJson {
 			return page;
 		}
 		
-		return ErrorResponse.getError("Unsuccess to edit page");
+		return ErrorResponse.getError("Unsuccess to edit page id: "+pid);
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/deletePage.json")
+	public @ResponseBody Object deletePage(
+			@RequestParam(value = "pid") Long pid,
+			@RequestParam(value = "bid") Long bid,
+			@RequestParam(value = "uid") Long uid
+			) {
+
+		Boolean success = pageRepo.delete(pid, bid, uid);
+		
+		if(success){
+			return success;
+		}
+		
+		return ErrorResponse.getError("Unsuccess to delete page id:"+pid);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/getBook.json")
