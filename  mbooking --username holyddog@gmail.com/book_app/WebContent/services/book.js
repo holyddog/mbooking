@@ -1,6 +1,6 @@
 Service.Book = {	
 	//Book
-	CreateBook: function(bookName,desc,userID,picName,startDate,endDate,tags) {
+	CreateBook: function(bookName,desc,userID,picName,startDate,endDate,tags,callback) {
 		var url = Service.url + '/createBook.json';
 		var params = {
 				title	:bookName,
@@ -18,7 +18,7 @@ Service.Book = {
 		Service.Book.CreateBook(bookName,desc,userID,null,null,null,null);
 	},	
 	
-	EditBook: function(bookID,bookName,desc,userID,picName,startDate,endDate,tags) {
+	EditBook: function(bookID,bookName,desc,userID,picName,startDate,endDate,tags,callback) {
 		var url = Service.url + '/editBook.json';
 		var params = {
 				bid		:bookID,
@@ -33,15 +33,15 @@ Service.Book = {
 		Web.post(url, params, callback);
 	},		
 	
-	EditBookBookSimple: function(bookID,bookName,desc,userID,picName) {
-		Service.Book.EditBook(bookID,bookName,desc,userID,picName,null,null,null);
+	EditBookBookSimple: function(bookID,bookName,desc,userID,picName,callback) {
+		Service.Book.EditBook(bookID,bookName,desc,userID,picName,null,null,null,callback);
 	},	
 	
-	EditBookBookSimple: function(bookID,bookName,desc,userID,picName) {
-		Service.Book.EditBook(bookID,bookName,desc,userID,picName,null,null,null);
+	EditBookBookSimple: function(bookID,bookName,desc,userID,picName,callback) {
+		Service.Book.EditBook(bookID,bookName,desc,userID,picName,null,null,null,callback);
 	},	
 	
-	DeleteBook: function(bookID,userID) {
+	DeleteBook: function(bookID,userID,callback) {
 		var url = Service.url + '/deleteBook.json';
 		var params = {
 				bid		:bookID,
@@ -50,7 +50,7 @@ Service.Book = {
 		Web.post(url, params, callback);
 	},		
 	
-	GetBook: function(bookName,userID) {
+	GetBook: function(bookName,userID,callback) {
 		var url = Service.url + '/getBook.json';
 		var params = {
 				bid		:bookID,
@@ -59,7 +59,7 @@ Service.Book = {
 		Web.get(url, params, callback);
 	},
 	
-	GetBooksByUid: function(bookName,userID) {
+	GetBooksByUid: function(bookName,userID,callback) {
 		var url = Service.url + '/getBooksByUid.json';
 		var params = {
 				uid		:userID,
@@ -67,7 +67,7 @@ Service.Book = {
 		Web.get(url, params, callback);
 	},
 	
-	PublishBook: function(bookName,userID) {
+	PublishBook: function(bookName,userID,callback) {
 		var url = Service.url + '/publishBook.json';
 		var params = {
 				bid		:bookID,
@@ -76,7 +76,7 @@ Service.Book = {
 		Web.post(url, params, callback);
 	},
 	
-	UnPublishBook: function(bookName,userID) {
+	UnPublishBook: function(bookName,userID,callback) {
 		var url = Service.url + '/unpublishBook.json';
 		var params = {
 				bid		:bookID,
@@ -87,7 +87,7 @@ Service.Book = {
 	
 	//Page
 	
-	CreatePage: function(bookID,userID,desc,picByteArray,date) {
+	CreatePage: function(bookID,userID,desc,picByteArray,date,callback) {
 		var url = Service.url + '/createPage.json';
 		var params = {
 				bid:bookID,
@@ -99,7 +99,7 @@ Service.Book = {
 		Web.post(url, params, callback);
 	},		
 	
-	EditPage: function(pageID,bookID,userID,desc,picByteArray,date) {
+	EditPage: function(pageID,bookID,userID,desc,picByteArray,date,callback) {
 		var url = Service.url + '/editPage.json';
 		var params = {
 				pid:pageID,
@@ -112,7 +112,7 @@ Service.Book = {
 		Web.post(url, params, callback);
 	},	
 	
-	DeletePage: function(pageID,bookID,userID) {
+	DeletePage: function(pageID,bookID,userID,callback) {
 		var url = Service.url + '/deletePage.json';
 		var params = {
 				pid		:pidID,
