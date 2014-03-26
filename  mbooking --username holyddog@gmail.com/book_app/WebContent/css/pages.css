@@ -123,3 +123,164 @@
 	display: block;
 	background-color: #4D4D4D;
 }
+
+
+/*User Profile*/
+.user_profile{
+		background-image:url('../temp/forest_bg.jpg');
+		background-size:auto 100%;
+		height:100%;
+		width:100%;
+		background-repeat: no-repeat;
+}
+.trans_bg{
+	height:100%;
+	width:100%;
+	background:black;
+	opacity:.4;
+	position: absolute;
+top: 0px;
+}
+.user_profile .main_panel{
+	position:absolute;
+	width:100%;
+	bottom:0px;
+	
+	display: -moz-box;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: box;
+		
+	-moz-box-orient: vertical;
+	-webkit-box-orient: vertical;
+	box-orient: vertical;
+}
+.user_profile .main_panel .profile_panel{
+	height:60px;
+	padding:10px;
+	
+	-moz-box-flex:1.0; /* Firefox */
+	-webkit-box-flex:1.0; /* Safari and Chrome */
+	-ms-flex:1.0; /* Internet Explorer 10 */
+	box-flex:1.0;
+	
+	display: -moz-box;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: box;
+	
+}
+
+
+.user_profile .main_panel .profile_panel .profile_icon{
+	width:60px;
+	height:60px;
+	background:url('../temp/person_icon.png');
+	background-size:100%;
+	
+}
+
+.user_profile .main_panel .profile_panel .info_panel{
+	height:60px;
+	-moz-box-flex:1.0; /* Firefox */
+	-webkit-box-flex:1.0; /* Safari and Chrome */
+	-ms-flex:1.0; /* Internet Explorer 10 */
+	box-flex:1.0;
+	padding-left: 10px;
+}
+.user_profile .main_panel .profile_panel .info_panel .name {
+	width: 100%;
+	height: 30px;
+	font-size: 23px;
+	line-height: 30px;
+}
+
+.user_profile .main_panel .profile_panel .info_panel .books_followers{
+	width: 100%;
+	height: 50%;
+	line-height: 30px;
+	font-size: 16px;
+}
+
+.user_profile .main_panel .book_panel{
+	background-color: rgba(0,0,0,0.5);
+	height:180px;
+	
+	-moz-box-flex:1.0; /* Firefox */
+	-webkit-box-flex:1.0; /* Safari and Chrome */
+	-ms-flex:1.0; /* Internet Explorer 10 */
+	box-flex:1.0;
+	
+	padding:10px;
+}
+
+
+.user_profile .main_panel .book_panel .top_bar{
+		/*background:white;*/
+	height:40px;
+	width:100%;
+	/*opacity:.2;*/
+}
+
+.user_profile .main_panel .book_panel .top_bar .title{
+	height: 25px;
+	line-height: 25px;
+	font-size: 15px;
+	float: left;
+
+}
+
+.user_profile .main_panel .book_panel .top_bar .see_more_btn{
+	height: 25px;
+	line-height: 25px;
+	font-size: 14px;
+	float: right;
+	background: grey;
+	background-color: rgba(255,255,255,.5);
+	padding-left: 10px;
+	padding-right: 10px;
+	color: black;
+}
+.user_profile .main_panel .book_panel .book_lists{
+	height:100%;
+	
+	-moz-box-flex:1.0; /* Firefox */
+	-webkit-box-flex:1.0; /* Safari and Chrome */
+	-ms-flex:1.0; /* Internet Explorer 10 */
+	box-flex:1.0;
+}
+.user_profile .main_panel .book_panel .book_lists .item{
+	width: 85px;
+	height: 130px;
+	/* display: inline-block; */
+	background-size: auto 100%;
+	background-position: center;
+	padding: 5px;
+	color: whitesmoke;
+	text-shadow: 1px 1px black;
+	float: left;
+	margin-left: 3px;
+}
+
+.user_profile .main_panel .book_panel .book_lists .item#book1{
+	background-image:url(../temp/Book4.jpg);
+}
+
+.user_profile .main_panel .book_panel .book_lists .item#book2{
+	background-image:url(../temp/Book5.jpg);
+	
+}
+
+.user_profile .main_panel .book_panel .book_lists .item#book3{
+	background-image:url(../temp/Book6.jpg);
+}
+
+.f_white{
+	color:whitesmoke;
+}
+
+.f_white.shadow{
+	color:whitesmoke;
+	text-shadow: 1px 1px black;
+}
+
