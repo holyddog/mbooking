@@ -7,35 +7,11 @@
 	font-size: 80%;
 }
 
-#page_AddPage .sel_book {
-	background-color: #fff;
-	margin: 10px 10px 0 10px;
-	padding: 10px;
-}
-#page_AddPage .sel_book .bimage {
-	background-color: #ddd;
-	width: 50px;
-	height: 50px;
-}
-#page_AddPage .sel_book .btitle {
-	padding: 0 10px;
-}
-#page_AddPage .sel_book .show_all {
-	width: 40px;
-	height: 50px;
-	border-left: solid 1px #B3B3B3;
-}
-#page_AddPage .sel_book .mask_icon {
-	width: 40px;
-	height: 50px;
-	display: block;
-	padding-left: 10px;
-	background-color: #4D4D4D;
-}
 #page_AddPage .photo_panel {
 	background-color: #fff;
 	margin: 10px;
 	height: 200px;
+	position: relative;
 }
 #page_AddPage .photo_panel .mask_camera {
 	width: 40px;
@@ -55,6 +31,95 @@
 	background-color: #fff;
 	margin: 0 10px 10px;
 }
-#page_AddPage .caption_panel textarea {
+#page_AddPage #add_photo {
+	background-size: 100%;
+}
+#page_AddPage .remove {
+	width: 50px; 
+	height: 50px; 
+	top: 0; 
+	right: 0; 
+	display: block;
+	position: absolute;
+}
+#page_AddPage .remove.no_display {
+	display: none;
+}
+#page_AddPage .remove_bg {
+	width: 50px; 
+	height: 50px; 
+	top: 0; 
+	right: 0; 
+	position: absolute;
+	background-color: #fff;
+	opacity: .8;
+}
+#page_AddPage .remove .icon {
+	-webkit-mask-size: 20px; 
+	-webkit-mask-position: center center; 
+	-webkit-mask-repeat: no-repeat;
+	-webkit-mask-image: url(../icons/cancel.png);
+	background: #4d4d4d;
+	width: 50px;
+	height: 50px;
+	display: block;
+}
+
+#page_BookList .book_list {
+	background-color: #fff;
+	margin: 10px;
+}
+#page_BookList .book_list li {
 	padding: 10px;
+}
+
+#page_BookList .container {
+	margin: 10px;
+}
+
+/* #page_AddPage, #page_BookList */
+.sel_book {
+	background-color: #fff;
+	margin: 10px 10px 0 10px;
+}
+.sel_book.item {
+	margin: 0;
+	-webkit-box-shadow: 0px 0px 2px #b6b6b6;
+}
+.sel_book .bimage {
+	background-color: #ddd;
+	width: 50px;
+	height: 50px;
+	margin: 10px 0 10px 10px;
+}
+.sel_book .bimage img {
+	width: 50px;
+	height: 50px;
+}
+.sel_book .btitle {
+	padding: 0 10px;
+	-webkit-box-align: center;
+	text-align: left; 
+}
+.sel_book .show_all {
+	height: 70px;
+}
+.sel_book .show_all .sep {
+	margin-top: 10px; 
+	width: 1px; 
+	height: 50px; 
+	border-left: solid 1px #B3B3B3;
+}
+.sel_book .link_icon {
+	display: block;
+	padding: 0 15px;
+}
+.sel_book .link_icon.highlight {
+	background-color: #6DCAEC;	
+}
+.sel_book .mask_icon {
+	width: 20px;
+	height: 70px;
+	display: block;
+	background-color: #4D4D4D;
 }

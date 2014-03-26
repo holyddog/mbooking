@@ -29,22 +29,31 @@
 	 -->
 </div>
 <div class="content gray flex1 box vertical">	
-	<div class="sel_book box horizontal">
+	<div class="sel_book box horizontal shadow_border">
 		<div class="bimage">
 			<img src="temp/book_sq.jpg" />
 		</div>
-		<div class="btitle flex1">Neuschwansten Castle</div>
-		<div class="show_all box center_middle">
-			<a href="javascript:void(0);" class="mask_icon next"></a>
+		<div class="btitle flex1 box"><span>Neuschwansten Castle</span></div>
+		<div class="show_all box">
+			<div class="sep"></div>
+			<a data-id="link_b" href="javascript:void(0);" class="link_icon">
+				<span class="mask_icon next"></span>
+			</a>
 		</div>
 	</div>
-	<div class="photo_panel box center_middle">
-		<div>
-			<div class="mask_camera"></div>
-			<div class="label">Add Photo</div>
+	<div class="photo_panel shadow_border">
+		<div id="add_photo" class="fill_dock box center_middle">
+			<div class="photo_label ">
+				<div class="mask_camera"></div>
+				<div class="label">Add Photo</div>
+			</div>
 		</div>
+		<div class="remove_bg no_display"></div>
+		<a class="remove no_display">
+			<span class="icon"></span>
+		</a>
 	</div>
-	<div class="caption_panel">
+	<div class="caption_panel shadow_border">
 		<textarea></textarea>
 	</div>
 </div>		
