@@ -219,4 +219,61 @@ public class ImageUtils {
 		return "/"+image_folder+"/" + image;
 	}
 	
+	public static Boolean deleteImageFile(String filename,boolean has_crop){
+		
+		String path = InitParam.getParam("upload");
+		
+		try{
+			File file = new File(path+filename);
+			
+			if(file.delete()){
+    			System.out.println(file.getName() + " is deleted!");
+    		}else{
+    			System.out.println("Delete operation is failed.");
+    		}
+		}
+		catch(Exception e){
+			System.out.println( "Can't Delete File "+path+filename+" error:"+ e);
+			return false;
+		}
+		if(has_crop){
+			String normal_size_path = path + filename.replace(".jpg","_n.jpg");	
+			String large_size_path = path + filename.replace(".jpg","_l.jpg");	
+			String xlarge_size_path = path + filename.replace(".jpg","_xl.jpg");	
+			
+			try{
+				
+				File normal_size_file = new File(normal_size_path);
+				File large_size_file = new File(large_size_path);
+				File xlarge_size_file = new File(xlarge_size_path);
+				
+				
+				if(normal_size_file.delete()){
+	    			System.out.println(normal_size_path + " is deleted!");
+	    		}else{
+	    			System.out.println("Delete "+normal_size_path +" is failed.");
+	    		}
+				
+				if(large_size_file.delete()){
+	    			System.out.println(normal_size_path + " is deleted!");
+	    		}else{
+	    			System.out.println("Delete "+large_size_path +" is failed.");
+	    		}
+				
+				
+				if(xlarge_size_file.delete()){
+	    			System.out.println(normal_size_path + " is deleted!");
+	    		}else{
+	    			System.out.println("Delete "+xlarge_size_path +" is failed.");
+	    		}
+				
+			}
+			catch(Exception e){
+				System.out.println( "Can't delete some of crop image  error:"+ e);
+				return false;
+			}
+		}
+		
+		return true;
+	}
 }

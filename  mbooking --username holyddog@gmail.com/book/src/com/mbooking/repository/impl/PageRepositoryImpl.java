@@ -87,7 +87,18 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 		Query query = new Query(criteria);
 		
 		try{
+	
+			query.fields().include("pic");
+			Page page = db.findOne(query,Page.class); 
+			 
+			//Remove Page
 			db.remove(query,Page.class);
+			
+			//Remove Image Files
+			String filename= page.getPic();
+			if(filename!=null&&filename!="")
+			ImageUtils.deleteImageFile(filename,true);
+			
 			
 			//Update pcount
 			criteria = Criteria.where("bid").is(bid).and("uid").is(uid);

@@ -1,5 +1,6 @@
 package com.mbooking.repository.impl;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,8 @@ import com.mbooking.model.Book;
 import com.mbooking.model.Page;
 import com.mbooking.model.User;
 import com.mbooking.repository.BookRepostitoryCustom;
+import com.mbooking.util.ImageUtils;
+import com.mbooking.util.InitParam;
 import com.mbooking.util.MongoCustom;
 
 public class BookRepositoryImpl implements BookRepostitoryCustom {
@@ -78,15 +81,32 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 
 		Criteria criteria = Criteria.where("bid").is(bid).and("uid").is(uid);
 		Query query = new Query(criteria);
+		query.fields().include("pic");
 		
-		try{
+		List<Page> pages = db.find(query,Page.class);
+	
+		try{	
+			//Remove Pages
+			db.remove(query,Page.class);
+			
+			//Remove Book
 			db.remove(query,Book.class);
+			
+			//Remove Image Files
+			for(int i = 0; i < pages.size();i++){
+				
+				String filename= pages.get(i).getPic();
+				if(filename != null&&filename !=""){
+					 ImageUtils.deleteImageFile(filename,true);
+				}
+			}
 		}
 		catch(Exception e){
 			
 			System.out.println( "Delete book err :"+ e);
 			return false;
 		}
+		
 		
 		return true;
 	}
