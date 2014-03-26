@@ -10,13 +10,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mbooking.common.ErrorResponse;
-import com.mbooking.common.ResultResponse;
 import com.mbooking.model.Book;
 import com.mbooking.model.Page;
-import com.mbooking.model.User;
 import com.mbooking.repository.BookRepository;
 import com.mbooking.repository.PageRepository;
-import com.mbooking.repository.UserRepository;
 
 @Controller
 public class BookJson {
