@@ -16,6 +16,8 @@ public class User {
 	String pwd;
 	Boolean inactive;
 
+	String pic; 
+	
 	public Long getUid() {
 		return uid;
 	}
@@ -63,4 +65,13 @@ public class User {
 	public void setInactive(Boolean inactive) {
 		this.inactive = inactive;
 	}
+
+	public String getPic() {
+		return pic;
+	}
+
+	public void setPic(String pic) {
+		this.pic = pic;
+	}
+
 }
