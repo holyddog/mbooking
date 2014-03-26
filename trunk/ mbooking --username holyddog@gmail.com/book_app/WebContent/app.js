@@ -128,6 +128,35 @@ Page = {
 		else {
 			history.back();
 		}
+	},
+	showLoading: function() {
+		var overlay = document.getElementById('overlay_loading');
+		overlay.style.display = '-webkit-box';
+		
+		setTimeout(function() {			
+			overlay.className = 'show';
+			document.getElementById('loading_panel').className = 'show';
+			
+			var cv = document.getElementById('cv_loading');
+			var ctx = cv.getContext('2d');
+			
+			var img = new Image();
+			img.onload = function() {
+				var i = 1;
+				ctx.drawImage(img, 0, 0, 720, 40);
+				
+				var x = setInterval(function() {
+					ctx.drawImage(img, (i % 18) * -40, 0, 720, 40);
+					i++;
+				}, 80);
+			};
+			img.src = 'images/circle.png';
+		}, 0);
+	},
+	hideLoading: function() {
+		var overlay = document.getElementById('overlay_loading');
+		overlay.className = '';
+		document.getElementById('loading_panel').className = '';
 	}
 };
 
@@ -185,7 +214,7 @@ Web = {
 };
 
 (function($){ 
-	$.fn.tap = function(fn) {
+	$.fn.tap = function(fn, allowDefault) {
 		return this.each(function() {
 			var self = $(this);
 			if (Device.isMobile()) {
@@ -194,12 +223,14 @@ Web = {
 				self.size = { w: self.width(), h: self.height() };
 				
 				self.bind('touchstart', function(e) {	
-					e.preventDefault();
+					if (!allowDefault)
+						e.preventDefault();
 					
 					self.addClass('highlight');
 				});
 				self.bind('touchmove', function(e) {
-					e.preventDefault();
+					if (!allowDefault)
+						e.preventDefault();
 					
 					var x = e.originalEvent.touches[0].pageX;
 					var y = e.originalEvent.touches[0].pageY;
@@ -212,7 +243,8 @@ Web = {
 					}
 				});
 				self.bind('touchend', function(e) {
-					e.preventDefault();
+					if (!allowDefault)
+						e.preventDefault();
 					
 					if (self.hasClass('highlight')) {
 						self.callback();
