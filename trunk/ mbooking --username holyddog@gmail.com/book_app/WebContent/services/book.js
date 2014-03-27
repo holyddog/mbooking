@@ -85,6 +85,11 @@ Service.Book = {
 		Web.post(url, params, callback);
 	},
 	
+	GetPublishBooks: function(callback) {
+		var url = Service.url + '/getPublishBooks.json';
+		Web.get(url, params, callback);
+	},
+	
 	//Page
 	
 	CreatePage: function(bookID,userID,desc,picByteArray,date,callback) {
