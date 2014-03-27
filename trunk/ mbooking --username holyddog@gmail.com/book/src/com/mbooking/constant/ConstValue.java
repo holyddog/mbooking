@@ -19,8 +19,8 @@ public interface ConstValue {
 	public static final int COVER_WIDTH_SIZE = 180;
 
 	
-	public static final String PAGE_FOLDER ="Page";
-	public static final String PROFILE_FOLDER ="Profile";
+	public static final String USER_FOLDER ="u";
+	public static final String BOOK_FOLDER ="b";
 	
 
 }
