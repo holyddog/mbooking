@@ -19,7 +19,7 @@ public class Book {
 	Long fdate;
 	Long tdate;
 	String []tags;
-	Long publish_date;
+	Long pbdate;
 	Integer seq;
 	
 	//Return from Service Only , Not in db
@@ -99,11 +99,11 @@ public class Book {
 	public Long getBid() {
 		return bid;
 	}
-	public Long getPublish_date() {
-		return publish_date;
+	public Long getPbdate() {
+		return pbdate;
 	}
-	public void setPublish_date(Long publish_date) {
-		this.publish_date = publish_date;
+	public void setPbdate(Long pbdate) {
+		this.pbdate = pbdate;
 	}
 	
 	

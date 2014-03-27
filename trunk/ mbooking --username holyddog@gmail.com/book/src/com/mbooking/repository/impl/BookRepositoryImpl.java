@@ -184,7 +184,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			Criteria criteria = Criteria.where("bid").is(bid).and("uid").is(uid);
 			Query query = new Query(criteria);
 			Update update = new Update();
-			update.set("publish_date",current_time );
+			update.set("pbdate",current_time );
 			
 			db.updateFirst(query, update, Book.class);
 			return true;
@@ -201,7 +201,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			Criteria criteria = Criteria.where("bid").is(bid).and("uid").is(uid);
 			Query query = new Query(criteria);
 			Update update = new Update();
-			update.unset("publish_date");
+			update.unset("pbdate");
 			
 			db.updateFirst(query, update, Book.class);
 			return true;
