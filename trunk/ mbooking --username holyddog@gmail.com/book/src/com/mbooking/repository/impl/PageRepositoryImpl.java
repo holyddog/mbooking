@@ -26,7 +26,7 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 		Page page = new Page();
 		try {
 			Long pid = MongoCustom.generateMaxSeq(Page.class, db);
-			page.setBid(pid);
+			page.setPid(pid);
 
 			page.setBid(bid);
 			page.setCaption(caption);
