@@ -32,7 +32,7 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 			page.setCaption(caption);
 			page.setDate(date);
 
-			String img_path = ImageUtils.toImageFile(ConstValue.PAGE_FOLDER, pic, true);
+			String img_path = ImageUtils.toImageFile(ConstValue.USER_FOLDER+uid+"/"+ConstValue.BOOK_FOLDER+bid, pic, true);
 			pic = img_path;
 
 			page.setPic(pic);
