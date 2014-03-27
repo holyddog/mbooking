@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 
 
-@Document(collection = "book")
+@Document(collection = "books")
 public class Book {
 	@Id
 	Long bid;
