@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.codec.binary.Base64;
 
+import com.mbooking.constant.Config;
 import com.mbooking.constant.ConstValue;
 
 public class ImageUtils {
@@ -182,7 +183,7 @@ public class ImageUtils {
 		if (isEmpty(base64)) {
 			return null;
 		}
-		String uploadPath = InitParam.getParam("upload")+"/"+image_folder;
+		String uploadPath = Config.UPLOAD_PATH + "/" + image_folder;
 		
 		String key = uniqueString(8);
 		String image = key + ".jpg";
@@ -221,7 +222,7 @@ public class ImageUtils {
 	
 	public static Boolean deleteImageFile(String filename,boolean has_crop){
 		
-		String path = InitParam.getParam("upload");
+		String path = Config.UPLOAD_PATH;
 		
 		try{
 			File file = new File(path+filename);
