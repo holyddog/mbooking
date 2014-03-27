@@ -90,9 +90,21 @@ public class BookJson {
 			return books;
 		}
 
-		return ErrorResponse.getError("Find book by uid: " + uid + " was not found");
+		return ErrorResponse.getError("Find books by uid: " + uid + " was not found");
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value = "/getPublishBooks.json")
+	public @ResponseBody
+	Object getPublishBooks() {
+		
+		List<Book> books = bookRepo.findByPbdateExists(true);
+		if (books != null && books.size() != 0) {
+			return books;
+		}
+
+		return ErrorResponse.getError("Has no publish books");
+	}
+	
 	@RequestMapping(method = RequestMethod.POST, value = "/publishBook.json")
 	public @ResponseBody
 	Object publishBook(
