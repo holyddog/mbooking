@@ -86,7 +86,7 @@ public class BookJson {
 	Object getBooksByUid(@RequestParam(value = "uid") Long uid) {
 		
 		List<Book> books = bookRepo.findByUid(uid);
-		if (books != null && books.size() != 0) {
+		if (books != null) {
 			return books;
 		}
 
