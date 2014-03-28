@@ -25,8 +25,6 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 	public Boolean create(Long bid, Long uid, Long date, String pic, String caption) {
 		Page page = new Page();
 		try {
-			Long pid = MongoCustom.generateMaxSeq(Page.class, db);
-			page.setPid(pid);
 
 			page.setBid(bid);
 			page.setCaption(caption);
@@ -43,6 +41,8 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 
 			page.setSeq(seq);
 
+			Long pid = MongoCustom.generateMaxSeq(Page.class, db);
+			page.setPid(pid);
 			db.insert(page);
 
 			if (seq == 1) {
