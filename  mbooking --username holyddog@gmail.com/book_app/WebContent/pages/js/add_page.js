@@ -18,6 +18,7 @@ Page.AddPage = {
 			
 			var fn = function(data) {
 				Page.hideLoading();
+				// reset form
 			};
 			Service.Page.CreatePage(bid, Account.userId, caption, pic, null, fn);
 		});
