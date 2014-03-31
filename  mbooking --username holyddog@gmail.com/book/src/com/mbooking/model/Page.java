@@ -1,5 +1,4 @@
 package com.mbooking.model;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -11,9 +10,18 @@ public class Page {
 	Long uid;
 	
 	Integer seq;
-	Long date;
+	Long cdate;	//Create Date
+	Long date;	//Date
+	
 	String pic;
 	String caption;
+	
+	Boolean lpage;	//last create page
+	
+	// Return from Service Only , Not in db
+	User author;
+	String strtime;
+	Book book;
 
 	public Long getPid() {
 		return pid;
@@ -39,6 +47,12 @@ public class Page {
 	public void setSeq(Integer seq) {
 		this.seq = seq;
 	}
+	public Long getCdate() {
+		return cdate;
+	}
+	public void setCdate(Long cdate) {
+		this.cdate = cdate;
+	}
 	public Long getDate() {
 		return date;
 	}
@@ -57,5 +71,32 @@ public class Page {
 	public void setCaption(String caption) {
 		this.caption = caption;
 	}
-
+	
+	public Boolean getLpage() {
+		return lpage;
+	}
+	public void setLpage(Boolean lpage) {
+		this.lpage = lpage;
+	}
+	
+	// Return from Service Only , Not in db
+	public User getAuthor() {
+		return author;
+	}
+	public void setAuthor(User author) {
+		this.author = author;
+	}
+	public String getStrtime() {
+		return strtime;
+	}
+	public void setStrtime(String strtime) {
+		this.strtime = strtime;
+	}
+	
+	public Book getBook() {
+		return book;
+	}
+	public void setBook(Book book) {
+		this.book = book;
+	}
 }
