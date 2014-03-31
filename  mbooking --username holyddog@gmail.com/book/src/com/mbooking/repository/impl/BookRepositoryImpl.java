@@ -33,10 +33,18 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 
 		book.setTitle(title);
 		book.setDesc(desc);
-		book.setFdate(fdate);
-		book.setTdate(tdate);
-		book.setTags(tags);
 		book.setUid(uid);
+		
+		if(fdate!=null)
+		book.setFdate(fdate);
+		
+		if(tdate!=null)
+		book.setTdate(tdate);
+		
+		if(tags!=null)
+		book.setTags(tags);
+		
+		if(pic!=null)
 		book.setPic(pic);
 
 		Criteria criteria = Criteria.where("uid").is(uid);
@@ -64,13 +72,20 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 		Update update = new Update();
 		update.set("title", title);
 		update.set("desc", desc);
+		
+		if(fdate!=null)
 		update.set("fdate", fdate);
+		
+		if(tdate!=null)
 		update.set("tdate", tdate);
+		
+		if(tags!=null)
 		update.set("tags", tags);
+		
+		if(pic!=null)
 		update.set("pic", pic);
 
-		return db.findAndModify(query, update,
-				new FindAndModifyOptions().returnNew(true), Book.class);
+		return db.findAndModify(query, update,new FindAndModifyOptions().returnNew(true), Book.class);
 
 	}
 
