@@ -159,6 +159,161 @@
 	font-size: 85%;
 }
 
+#page_Profile .profile_bg, #page_Book .book_bg {
+	z-index: -3;	
+}
+#page_Profile .grad_overlay {
+	z-index: -2;
+	background-color: #000;
+	opacity: .5;
+}
+#page_Profile .books_panel {
+	position: absolute;
+	height: 175px;
+	width: 100%;
+	bottom: 0;
+}
+#page_Profile .books_grad {
+	position: absolute;
+	height: 175px;
+	width: 100%;
+	background-color: #000;
+	opacity: .5;
+	bottom: 0;
+	z-index: -1;
+}
+#page_Profile .books_panel .label {
+	color: #fff;
+	font-size: 90%;
+	padding: 10px;
+}
+#page_Profile .books_panel .label span {
+	color: #ccc;
+}
+#page_Profile .books_panel .bitem {
+	margin: 0 5px;
+}
+#page_Profile .books_panel .books {
+	padding: 0 5px;
+}
+#page_Profile .books_panel .book {
+	background-color: #ddd;
+	color: #fff;
+	height: 125px;
+	background-position: center center;
+	background-size: auto 100%;
+	position: relative;
+	overflow: hidden;
+}
+#page_Profile .books_panel .book:after {
+	content: " ";
+	display: block;
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 75%;
+	background-image: -webkit-linear-gradient(top, rgba(0,0,0,0.6), rgba(0,0,0,0) 100%);
+}
+
+#page_Profile .books_panel .book .title {	
+	text-shadow: 0 2px 0 rgba(0,0,0,0.6);
+	font-size: 100%;
+	padding: 5px;
+	position: absolute;
+	z-index: 1;
+}
+#page_Profile .profile_info {
+	bottom: 175px;
+	width: 100%;
+	position: absolute;
+	height: 90px;
+}
+#page_Profile .profile_info .pimage {
+	width: 70px;
+	height: 70px;
+	margin: 10px;
+	border-radius: 35px;
+	background-color: #ddd;
+}
+#page_Profile .profile_info .pimage img {
+	width: 70px;
+	height: 70px;
+	border-radius: 35px;
+}
+#page_Profile .profile_info .name {
+	color: #fff;
+	padding-top: 15px;
+	font-size: 120%;
+}
+#page_Profile .profile_info .stat {
+	overflow: hidden;
+	margin-top: 10px;
+}
+#page_Profile .profile_info .stat .counter {
+	float: left;
+	width: 80px;
+	color: #fff;
+}
+#page_Profile .profile_info .stat .label {	
+	font-size: 70%;
+}
+
+#page_Book .btitle {
+	padding: 10px;
+	font-size: 180%;
+	color: #fff;
+	line-height: 35px;
+}
+#page_Book .grad_overlay {
+	z-index: -2;
+	background-color: #000;
+	opacity: .5;
+}
+#page_Book .bdesc {
+	font-size: 80%;
+	color: #eee;
+	padding: 0 10px;
+}
+#page_Book .bline {
+	height: 1px;
+	margin: 10px;
+	width: 70%;
+	background-color: #fff;
+}
+#page_Book .author_info {
+}
+#page_Book .author_info .pimage {
+	width: 50px;
+	height: 50px;
+	margin: 0 10px;
+	border-radius: 25px;
+	background-color: #ddd;
+}
+#page_Book .author_info .pimage img {
+	width: 50px;
+	height: 50px;
+	border-radius: 25px;
+}
+#page_Book .author_info .name {
+	color: #fff;
+}
+#page_Book .text_bar {
+	padding: 10px;
+}
+#page_Book .bottom_info {
+	position: absolute;
+	bottom: 0;
+	color: #fff;
+	width: 100%;
+}
+#page_Book .page_nav {
+	top: 0;
+}
+#page_Book #tap_nav .flex1.highlight {
+	
+}
+
 /*User Profile*/
 .user_profile{
 		background-image:url('../temp/forest_bg.jpg');
@@ -238,7 +393,7 @@ top: 0px;
 
 .user_profile .main_panel .book_panel{
 	background-color: rgba(0,0,0,0.5);
-	height:180px;
+	height:175px;
 	
 	-moz-box-flex:1.0; /* Firefox */
 	-webkit-box-flex:1.0; /* Safari and Chrome */

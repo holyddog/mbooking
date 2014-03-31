@@ -25,7 +25,6 @@ Page.Page = {
 		
 		// set content data
 		var content = container.find('.content');
-		var ch = content.height();
 		
 		var data = [{
 			pic: 'temp/1.jpg',
@@ -66,8 +65,6 @@ Page.Page = {
 			var pic = img.parent();
 			var pw = pic.width();
 			var ph = pic.height();
-			
-			console.log(pw + ', ' + ph);
 			
 			if (ph >= pw) {
 				img.css({
