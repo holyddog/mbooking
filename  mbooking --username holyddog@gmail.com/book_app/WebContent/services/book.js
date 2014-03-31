@@ -95,5 +95,86 @@ Service.Book = {
 	GetPublishBooks : function(callback) {
 		var url = Service.url + '/getPublishBooks.json';
 		Web.get(url, params, callback);
+	},
+	
+	//Page
+	
+	CreatePage: function(bookID,userID,desc,picByteArray,date,callback) {
+		var url = Service.url + '/createPage.json';
+		var params = {
+				bid:bookID,
+				uid:userID,
+				date:date,			//Non - Require Field
+				pic:picByteArray,
+				caption:desc		//Non - Require Field
+		};
+		Web.post(url, params, callback);
+	},		
+	
+	EditPage: function(pageID,bookID,userID,desc,picByteArray,date,callback) {
+		var url = Service.url + '/editPage.json';
+		var params = {
+				pid:pageID,
+				bid:bookID,
+				uid:userID,
+				date:date,			//Non - Require Field
+				pic:picByteArray,
+				caption:desc		//Non - Require Field
+		};
+		Web.post(url, params, callback);
+	},	
+	
+	DeletePage: function(pageID,bookID,userID,callback) {
+		var url = Service.url + '/deletePage.json';
+		var params = {
+				pid		:pidID,
+				bid		:bookID,
+				uid		:userID
+		};
+		Web.post(url, params, callback);
+	},		
+	
+	//Follow
+	
+	FollowAuthor: function(authorID,userID,callback){
+		var url = Service.url + '/followAuthor.json';
+		var params = {
+				auid	:authorID,
+				uid		:userID
+		};
+		Web.post(url, params, callback);
+	},
+	
+	GetAuthors: function(authorID,callback){
+		var url = Service.url + '/getAuthors.json';
+		var params = {
+				auid	:authorID
+		};
+		Web.get(url, params, callback);
+	},
+	
+	GetFollowBooksByUID: function(userID,callback){
+		var url = Service.url + '/getFollowBooksByUID.json';
+		var params = {
+				uid	:userID
+		};
+		Web.get(url, params, callback);
+	},
+	
+	GetFollowPagessByUID: function(userID,callback){
+		var url = Service.url + '/getFollowPagessByUID.json';
+		var params = {
+				uid	:userID
+		};
+		Web.get(url, params, callback);
+	},
+	
+	GetFollowers: function(authorID,callback){
+		var url = Service.url + '/getFollowers.json';
+		var params = {
+				auid	:authorID
+		};
+		Web.get(url, params, callback);
 	}
+	
 };
