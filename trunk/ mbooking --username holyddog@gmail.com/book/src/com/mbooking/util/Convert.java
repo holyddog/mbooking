@@ -37,4 +37,9 @@ public class Convert {
 		return hexString.toString();
 	}
 	
+	public static String getStrTime(String fileName) {
+		
+		return "";
+	}
+	
 }

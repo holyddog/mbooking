@@ -21,6 +21,8 @@ public class User {
 
 	List<Book> books;
 
+	Integer fcount;
+	
 	public Long getUid() {
 		return uid;
 	}
@@ -76,7 +78,7 @@ public class User {
 	public void setPic(String pic) {
 		this.pic = pic;
 	}
-
+	
 	public List<Book> getBooks() {
 		return books;
 	}

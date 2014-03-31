@@ -26,7 +26,8 @@ public class Book {
 	// Return from Service Only , Not in db
 	User author;
 	List<Page> pages;
-
+	String strtime;
+	
 	public void setBid(Long bid) {
 		this.bid = bid;
 	}
@@ -147,4 +148,13 @@ public class Book {
 	public void setPages(List<Page> pages) {
 		this.pages = pages;
 	}
+	
+	public String getStrtime() {
+		return strtime;
+	}
+
+	public void setStrtime(String strtime) {
+		this.strtime = strtime;
+	}
+
 }

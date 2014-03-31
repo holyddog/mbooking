@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
@@ -25,11 +26,15 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 	public Boolean create(Long bid, Long uid, Long date, String pic, String caption) {
 		Page page = new Page();
 		try {
-
+			
+			db.updateMulti(new Query(Criteria.where("bid").is(bid).and("uid").is(uid)),new Update().unset("lpage"), Page.class);
+			
 			page.setBid(bid);
 			page.setCaption(caption);
 			page.setDate(date);
-
+			page.setCdate(System.currentTimeMillis());
+			page.setLpage(true);
+			
 			String img_path = ImageUtils.toImageFile(ConstValue.USER_FOLDER+uid+"/"+ConstValue.BOOK_FOLDER+bid, pic, true);
 			pic = img_path;
 
@@ -87,10 +92,14 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 		Query query = new Query(criteria);
 
 		try {
-
+			query.fields().include("lpage");
 			query.fields().include("pic");
+			query.fields().include("seq");
+			
 			Page page = db.findOne(query, Page.class);
-
+			
+			
+			
 			// Remove Page
 			db.remove(query, Page.class);
 
@@ -107,6 +116,11 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 			update.set("pcount", pcount);
 			db.updateFirst(query, update, Book.class);
 
+			if(page.getLpage()){
+				query.sort().on("seq", Order.DESCENDING);
+				db.updateFirst(query,new Update().set("lpage", true), Page.class);
+			}
+			
 		} catch (Exception e) {
 
 			System.out.println("Delete page err :" + e);
