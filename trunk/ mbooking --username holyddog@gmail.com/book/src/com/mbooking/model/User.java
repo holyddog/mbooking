@@ -1,5 +1,7 @@
 package com.mbooking.model;
 
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -13,11 +15,12 @@ public class User {
 	String dname; // display name
 	@Indexed(unique = true)
 	String uname; // username
+	String pic;
 	String pwd;
 	Boolean inactive;
 
-	String pic; 
-	
+	List<Book> books;
+
 	public Long getUid() {
 		return uid;
 	}
@@ -72,6 +75,14 @@ public class User {
 
 	public void setPic(String pic) {
 		this.pic = pic;
+	}
+
+	public List<Book> getBooks() {
+		return books;
+	}
+
+	public void setBooks(List<Book> books) {
+		this.books = books;
 	}
 
 }

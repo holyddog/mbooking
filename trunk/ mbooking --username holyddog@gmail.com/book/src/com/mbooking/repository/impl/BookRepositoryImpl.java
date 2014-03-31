@@ -201,4 +201,13 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			return false;
 		}
 	}
+
+	@Override
+	public List<Book> findLastBookByUid(Long uid) {
+		Query query = new Query(Criteria.where("uid").is(uid).and("pbdate").exists(true));
+		query.sort().on("pbdate", Order.DESCENDING);
+		query.skip(0).limit(3);
+		query.fields().include("title").include("pic");
+		return db.find(query, Book.class);
+	}
 }
