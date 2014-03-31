@@ -10,12 +10,26 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.mbooking.common.ErrorResponse;
 import com.mbooking.common.ResultResponse;
 import com.mbooking.model.User;
+import com.mbooking.repository.BookRepository;
 import com.mbooking.repository.UserRepository;
 
 @Controller
 public class UserJson {
 	@Autowired
-	UserRepository userRepo;
+	UserRepository userRepo;	
+	@Autowired
+	BookRepository bookRepo;
+
+	@RequestMapping(method = RequestMethod.GET, value = "/getProfile.json")
+	public @ResponseBody Object checkUserName(
+			@RequestParam(value = "uid") Long uid
+			) {
+		User user = userRepo.findById(uid);
+		if (user != null) {
+			return user;
+		}
+		return ErrorResponse.getError("User not found");
+	}
 	
 	// check duplicate email
 	@RequestMapping(method = RequestMethod.GET, value = "/checkEmail.json")
@@ -23,8 +37,7 @@ public class UserJson {
 			@RequestParam(value = "email") String email
 			) {
 		return ResultResponse.getResult("result", userRepo.findByEmail(email) != null);
-	}
-	
+	}	
 	
 	// check duplicate username
 	@RequestMapping(method = RequestMethod.GET, value = "/checkUserName.json")
