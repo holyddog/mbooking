@@ -30,7 +30,11 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 			db.updateMulti(new Query(Criteria.where("bid").is(bid).and("uid").is(uid)),new Update().unset("lpage"), Page.class);
 			
 			page.setBid(bid);
+			
+			if(caption!=null)
 			page.setCaption(caption);
+			
+			if(date!=null)
 			page.setDate(date);
 			page.setCdate(System.currentTimeMillis());
 			page.setLpage(true);
@@ -77,8 +81,12 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 		Query query = new Query(criteria);
 
 		Update update = new Update();
+		
+		if(date!=null)
 		update.set("date", date);
 		update.set("pic", pic);
+		
+		if(caption!=null)
 		update.set("caption", caption);
 
 		return db.findAndModify(query, update,
