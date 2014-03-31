@@ -7,12 +7,22 @@ Page.AddPage = {
 		});	
 		container.find('[data-id=btn_s]').tap(function() {
 			Page.showLoading();
-			setTimeout(function() {
+			
+			var bid = container.find('.sel_book').data('bid');
+			var bgImage = $('#add_photo').css('background-image');
+			var pic = null;
+			if (bgImage != 'none') {
+				pic = bgImage.split(',')[1].replace(')', '');
+			}
+			var caption = container.find('[name=caption]').val();
+			
+			var fn = function(data) {
 				Page.hideLoading();
-			}, 5000);
+			};
+			Service.Page.CreatePage(bid, Account.userId, caption, pic, null, fn);
 		});
 		container.find('[data-id=btn_p]').tap(function() {
-			//alert('publish');
+			Page.open('PublishBook', true);
 		});
 		
 		// set content links

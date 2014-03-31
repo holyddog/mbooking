@@ -11,7 +11,9 @@ Service = {
 	url: 'http://' + window.location.hostname + ':8080/book/data'
 };
 
-Account = {};
+Account = {
+	userId: 1
+};
 
 MessageBox = {
 	confirm: function(config) {

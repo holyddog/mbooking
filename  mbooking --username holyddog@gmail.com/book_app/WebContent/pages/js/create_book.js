@@ -14,15 +14,20 @@ Page.CreateBook = {
 		btnAccept.tap(function() {
 			if (!btnAccept.hasClass('disabled')) {
 				Page.btnShowLoading(btnAccept[0]);
-				setTimeout(function() {
+				
+				var fn = function(data) {
 					Page.btnHideLoading(btnAccept[0]);
-				}, 3000);
+					Page.back(function(c) {
+						Page.BookList.load(c);
+					});
+				};
+				Service.Book.CreateBook(inputTitle.val(), inputDesc.val(), Account.userId, null, null, null, null, fn);
 			}
 		});
 		
 		// check required field
 		var checkInput = function() {
-			if (inputTitle.val().length > 0 && inputDesc.val().length > 0) {
+			if (inputTitle.val().length > 0) {
 				btnAccept.removeClass('disabled');
 			}
 			else {
@@ -31,9 +36,6 @@ Page.CreateBook = {
 		};
 		
 		inputTitle[0].addEventListener('input', function() {
-			checkInput();
-		}, false);
-		inputDesc[0].addEventListener('input', function() {
 			checkInput();
 		}, false);
 	}

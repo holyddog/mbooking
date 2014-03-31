@@ -12,17 +12,53 @@ Page.BookList = {
 			Page.open('AddPage', true);
 		});
 		
-		// set content links
-		container.find('.item').tap(function() {
-			var item = $(this);
-			var src = item.find('.bimage img').attr('src');
-			var title = item.find('.btitle span').text();
+		// load data
+		this.load(container);
+	},
+	
+	load: function(container) {
+		Service.Book.GetBooksByUid(Account.userId, function(data) {		
+			var c = container.find('.container');
+			c.empty();
 			
-			Page.back(function(c) {
-				var selBook = c.find('.sel_book');
-				selBook.find('.bimage img').attr('src', src);
-				selBook.find('.btitle span').text(title);
-			});
-		}, true);
+			for (var i = 0; i < data.length; i++) {
+				var b = data[i];
+				
+				var itemDiv = $(document.createElement('div'));
+				itemDiv.data('bid', b.bid);
+				itemDiv.addClass('sel_book item box horizontal');
+				
+				var bImage = $(document.createElement('div'));
+				bImage.addClass('bimage');
+				var img = $(document.createElement('img'));
+				img.attr('src', '');
+				bImage.append(img);
+				itemDiv.append(bImage);
+				
+				var bTitle = $(document.createElement('div'));
+				bTitle.addClass('btitle flex1 box');
+				var span = $(document.createElement('span'));
+				span.text(b.title);
+				bTitle.append(span);
+				itemDiv.append(bTitle);
+				
+				c.append(itemDiv);
+			}
+			
+			// set content links
+			container.find('.item').tap(function() {
+				var item = $(this);
+				var bid = item.data('bid');
+				var src = item.find('.bimage img').attr('src');
+				var title = item.find('.btitle span').text();
+				
+				Page.back(function(c) {
+					var selBook = c.find('.sel_book');
+					selBook.data('bid', bid);
+					selBook.find('.bimage img').attr('src', src);
+					selBook.find('.btitle span').text(title);
+				});
+			}, true);
+		});
 	}
 };
