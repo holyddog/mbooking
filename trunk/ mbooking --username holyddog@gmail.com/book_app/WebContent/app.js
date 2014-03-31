@@ -4,7 +4,9 @@ Config = {
 	DEFAULT_PAGE: 'Profile',
 	
 	SLIDE_DELAY: 250,
-	FADE_DELAY: 250
+	FADE_DELAY: 250,
+	
+	FILE_URL: 'http://' + window.location.hostname + '/res/book'
 };
 
 Service = {
@@ -102,11 +104,14 @@ Page = {
 	
 	_tempBack: undefined,
 
-	open: function(page, append) {
+	open: function(page, append, params) {
 		var fn = function() {
 			var url = '#' + page;
 			if (append) {
 				url += '?append=true';
+				if (params) {
+					url += '&' + $.param(params);
+				}
 			}
 			window.location = url;
 		};
@@ -165,6 +170,37 @@ Page = {
 		overlay.className = '';
 		overlay.style.display = 'none';
 		document.getElementById('loading_panel').className = '';
+	},
+	
+	bodyShowLoading: function(content) {
+		var cv = document.createElement('canvas');
+		cv.className = 'content_loading';
+		cv.width = 40;
+		cv.height = 40;
+		content.append(cv);
+		
+		var ctx = cv.getContext('2d');		
+		var img = new Image();
+		img.onload = function() {
+			ctx.drawImage(img, 0, 0, 720, 40);
+
+			var i = 1;
+			Page.bodyInterval = setInterval(function() {
+				ctx.drawImage(img, (i % 18) * -40, 0, 720, 40);
+				i++;
+			}, 80);
+		};
+		img.src = 'images/circle_g.png';
+	},
+	
+	bodyHideLoading: function(content) {
+		if (Page.bodyInterval) {
+			clearInterval(Page.bodyInterval);
+			Page.bodyInterval = undefined;
+		}
+		if (content) {
+			content.find('canvas').remove();
+		}
 	},
 	
 	btnShowLoading: function(btn) {
@@ -262,13 +298,13 @@ Web = {
 			var self = $(this);
 			if (Device.isMobile()) {
 				self.callback = fn;
-				self.pos = self.offset();
-				self.size = { w: self.width(), h: self.height() };
 				
 				self.bind('touchstart', function(e) {	
 					if (!allowDefault)
 						e.preventDefault();
-					
+
+					self.pos = self.offset();
+					self.size = { w: self.width(), h: self.height() };
 					self.addClass('highlight');
 				});
 				self.bind('touchmove', function(e) {
@@ -281,7 +317,7 @@ Web = {
 					if (x > self.pos.left + self.size.w || y > self.pos.top + self.size.h) {
 						self.removeClass('highlight');
 					}
-					if (x < self.pos.left || y < self.pos.top) {
+					else if (x < self.pos.left || y < self.pos.top) {
 						self.removeClass('highlight');
 					}
 				});
@@ -305,6 +341,7 @@ Web = {
 $(function(){
 	$(window).hashchange(function() {
 		Page.hideLoading();
+		Page.bodyHideLoading();
 		
 		var hash = location.hash;	
 		var arr = hash.split('?');
