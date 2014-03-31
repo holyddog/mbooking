@@ -204,7 +204,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 
 	@Override
 	public List<Book> findLastBookByUid(Long uid) {
-		Query query = new Query(Criteria.where("uid").is(uid).and("pbdate").exists(true));
+		Query query = new Query(Criteria.where("uid").is(uid));
 		query.sort().on("pbdate", Order.DESCENDING);
 		query.skip(0).limit(3);
 		query.fields().include("title").include("pic");

@@ -1,5 +1,7 @@
 package com.mbooking.controller.json;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mbooking.common.ErrorResponse;
 import com.mbooking.common.ResultResponse;
+import com.mbooking.model.Book;
 import com.mbooking.model.User;
 import com.mbooking.repository.BookRepository;
 import com.mbooking.repository.UserRepository;
@@ -26,6 +29,8 @@ public class UserJson {
 			) {
 		User user = userRepo.findById(uid);
 		if (user != null) {
+			List<Book> books = bookRepo.findLastBookByUid(uid);
+			user.setBooks(books);
 			return user;
 		}
 		return ErrorResponse.getError("User not found");
