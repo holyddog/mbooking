@@ -132,18 +132,36 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			
 			user_update.set("tcount", tcount);
 			
-			Query book_query = new Query(Criteria.where("uid").is(uid));
-			book_query.fields().include("ledate");
-			book_query.fields().include("bid");
-			book_query.sort().on("ledate", Order.DESCENDING);
-			Book book = db.findOne(book_query, Book.class);
+			User user = db.findOne(user_query,User.class);
 			
-			if(book!=null){
-				user_update.set("leb", book.getBid());
+			if(user!=null){
+				if(user.getLeb()==bid){
+					Query book_query = new Query(Criteria.where("uid").is(uid));
+					book_query.fields().include("ledate");
+					book_query.fields().include("bid");
+					book_query.fields().include("title");
+					book_query.fields().include("pic");
+					book_query.sort().on("ledate", Order.DESCENDING);
+					Book book = db.findOne(book_query, Book.class);
+					
+					if(book!=null){
+						user_update.set("leb", book.getBid());
+					
+							String btitle = book.getTitle();
+							String bpic = book.getPic();
+							
+							if(btitle!=null&&!btitle.isEmpty()&&!btitle.equals("")&&!btitle.equals("undefined")){
+								user_update.set("lebt", btitle);
+							}
+							if(bpic!=null&&!bpic.isEmpty()&&!bpic.equals("")&&!bpic.equals("undefined")){
+								user_update.set("lebp", bpic);
+							}
+									
+					}
+				}	
+				
+				db.updateFirst(user_query, user_update, User.class);
 			}
-			
-			db.updateFirst(user_query, user_update, User.class);
-			
 		} catch (Exception e) {
 
 			System.out.println("Delete book err :" + e);
