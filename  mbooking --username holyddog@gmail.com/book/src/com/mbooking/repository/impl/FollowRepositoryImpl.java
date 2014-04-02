@@ -73,4 +73,44 @@ public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 		}
 	}
 
+	@Override
+	public Boolean unfollowAuthor(Long uid, Long auid) {
+		try{	
+		
+			
+			Follow follow = new Follow();
+			follow.setAuid(auid);
+			follow.setUid(uid);
+			
+			Criteria rcriteria = Criteria.where("auid").is(auid).and("uid").is(uid);
+			Query rquery = new Query(rcriteria);
+			
+			db.remove(rquery, Follow.class);
+			
+			
+			Criteria au_criteria = Criteria.where("auid").is(auid);
+			Query au_query = new Query(au_criteria);
+			
+			int fcount = (int) db.count(au_query, Follow.class);
+			
+			Criteria u_criteria = Criteria.where("uid").is(auid);
+			Query u_query = new Query(u_criteria);
+			
+			Update update = new Update();
+			update.set("fcount", fcount);
+			
+			db.updateFirst(u_query, update, User.class);
+			
+			return true;
+		
+		}
+		catch(Exception e){
+			System.out.println(e);
+			return false;
+		}
+	}
+	
+	
+	
+
 }
