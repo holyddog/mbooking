@@ -63,6 +63,12 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 		Book rbook = new Book();
 		rbook.setBid(bid);
 		rbook.setTitle(title);
+		
+		int tcount = (int) db.count(query, Book.class);
+		Update user_update = new Update();
+		user_update.set("tcount", tcount);
+		
+		db.updateFirst(query, user_update, User.class);
 
 		return rbook;
 	}
@@ -118,6 +124,26 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 					ImageUtils.deleteImageFile(filename, true);
 				}
 			}
+			
+			Query user_query = new Query(Criteria.where("uid").is(uid));
+			int tcount = (int) db.count(user_query, Book.class);
+			
+			Update user_update = new Update();
+			
+			user_update.set("tcount", tcount);
+			
+			Query book_query = new Query(Criteria.where("uid").is(uid));
+			book_query.fields().include("ledate");
+			book_query.fields().include("bid");
+			book_query.sort().on("ledate", Order.DESCENDING);
+			Book book = db.findOne(book_query, Book.class);
+			
+			if(book!=null){
+				user_update.set("leb", book.getBid());
+			}
+			
+			db.updateFirst(user_query, user_update, User.class);
+			
 		} catch (Exception e) {
 
 			System.out.println("Delete book err :" + e);
@@ -199,6 +225,14 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 
 			db.updateFirst(query, update, Book.class);
 			db.updateMulti(query, update, Page.class);
+			
+			int pbcount = (int) db.count(new Query(Criteria.where("uid").is(uid).and("pbdate").exists(true)), Book.class);
+			Update user_update = new Update();
+			user_update.set("pbcount", pbcount);
+			
+			db.updateFirst(new Query(Criteria.where("uid").is(uid)), user_update, User.class);
+
+			
 			return true;
 		} catch (Exception e) {
 			System.out.println("Publish Book Service error: " + e);
@@ -217,6 +251,12 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 
 			db.updateFirst(query, update, Book.class);
 			db.updateMulti(query, update, Page.class);
+			
+			int pbcount = (int) db.count(new Query(Criteria.where("uid").is(uid).and("pbdate").exists(true)), Book.class);
+			Update user_update = new Update();
+			user_update.set("pbcount", pbcount);
+			db.updateFirst(new Query(Criteria.where("uid").is(uid)), user_update, User.class);
+			
 			return true;
 		} catch (Exception e) {
 			System.out.println("Unpublish Book Service error: " + e);
