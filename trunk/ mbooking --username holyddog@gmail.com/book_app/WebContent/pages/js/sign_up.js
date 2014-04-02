@@ -1,6 +1,14 @@
 Page.SignUp = {
 	url: 'pages/html/sign_up.html',
-	init: function(params, container) {		
+	init: function(params, container) {
+		// check authen
+		if (localStorage.getItem('u')) {
+			Account = JSON.parse(localStorage.getItem('u'));
+			Page.open('Profile');
+			
+			return;
+		}
+		
 		// set toolbar buttons
 		container.find('[data-id=btn_b]').tap(function() {
 			Page.back();

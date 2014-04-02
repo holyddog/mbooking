@@ -1,7 +1,9 @@
 Page.CreateBook = {
 	url: 'pages/html/create_book.html',
 	
-	init: function(params, container) {			
+	init: function(params, container) {	
+		var ret = params.ret;
+		
 		// declare elements
 		var inputTitle = container.find('input[name=title]');
 		var inputDesc = container.find('textarea[name=desc]');
@@ -15,10 +17,20 @@ Page.CreateBook = {
 			if (!btnAccept.hasClass('disabled')) {
 				Page.btnShowLoading(btnAccept[0]);
 				
-				var fn = function(data) {
+				var fn = function(data) {					
 					Page.btnHideLoading(btnAccept[0]);
 					Page.back(function(c) {
-						Page.BookList.load(c);
+						if (!ret) {
+							Page.BookList.load(c);							
+						}
+						else {
+							var src = '';
+							
+							var selBook = c.find('.sel_book');
+							selBook.data('bid', data.bid);
+							selBook.find('.bimage img').attr('src', src);
+							selBook.find('.btitle span').text(data.title);
+						}
 					});
 				};
 				Service.Book.CreateBook(inputTitle.val(), inputDesc.val(), Account.userId, null, null, null, null, fn);

@@ -1,6 +1,13 @@
 Page.Profile = {
 	url: 'pages/html/profile.html',
 	init: function(params, container) {
+		// check authen
+		if (!localStorage.getItem('u')) {
+			Page.open('Home');
+			
+			return;
+		}
+		
 		var self = this;
 		
 		// set toolbar buttons

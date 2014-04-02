@@ -6,6 +6,11 @@ body {
 	overflow: hidden;
 }
 
+@font-face {
+	font-family: "HNC";
+	src: url(HNC.ttf) format("truetype")
+}
+
 .aleft { left: 0; }
 .aright { right: 0; }
 .no_display { display: none; }
@@ -16,7 +21,7 @@ body {
 .valign_middle { vertical-align: middle; display: table-cell; }
 .center_middle { -webkit-box-align: center; -webkit-box-pack: center; text-align: center; }
 .align_left { text-align: left; };
-.middle { -webkit-box-align: center; -webkit-box-pack: center; }
+.middle { -webkit-box-align: center; }
 .flow_hidden { overflow: hidden; }
 .fixed { position: fixed; }
 .relative { position: relative; }
@@ -163,7 +168,7 @@ textarea {
 	background-color: #fff;
 }
 .tbar_bg.gray {
-	background-color: #e2e2e2;
+	background-color: #ddd;
 }
 .tbar_bg.dark {
 	background-color: #333;
@@ -204,7 +209,7 @@ textarea {
 	line-height: 50px;
 	float: left;
 	position: relative;
-	padding: 0 10px;
+	padding: 0 15px;
 }
 .tbar .btn_img.highlight {	
 	background-color: #6DCAEC;
@@ -229,8 +234,8 @@ textarea {
 .tbar .sep {
 	float: left;
 	width: 1px;
-	height: 30px;
-	margin: 10px 5px;
+	height: 20px;
+	margin: 15px 0;
 	background-color: #999;
 }
 
@@ -309,13 +314,41 @@ textarea {
 	-webkit-mask-image: url(../icons/next.png);	
 }
 
+.link_panel {
+	padding: 10px 0;
+}
 .link {
-	padding: 10px;
+	padding: 15px;
 	margin: 10px;
-	background-color: #33B5E5;
 	color: #fff;
 	display: block;
 	text-align: center;
+	font-size: 80%;
+	font-weight: bold;
+	position: relative;
+}
+.link:last-child {
+	margin-bottom: 0;
+}
+.link .label {
+	position: relative;
+}
+.link .overlay {
+	opacity: .8;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+}
+.link .overlay.gray {
+	background-color: #333;
+}
+.link .overlay.fb {
+	background-color: #3B5998;
+}
+.link .overlay.blue {
+	background-color: #33B5E5;
 }
 .link.highlight {
 	background-color: #6DCAEC;
@@ -374,6 +407,7 @@ textarea {
 	background-color: #ccc;
 	text-align: left;
 	z-index: 100;
+	-webkit-box-shadow: 4px 3px 5px 0px rgba(50, 50, 50, 0);
 	
 	overflow-y: scroll; 
 	-webkit-overflow-scrolling: touch; 
@@ -413,4 +447,110 @@ textarea {
 }
 #overlay.slide {
 	opacity: 0.5;
+}
+
+.profile_item .overlay {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: #000;
+	top: 0;
+	left: 0;
+	opacity: .3;
+}
+
+.profile_item {
+	line-height: 0;
+	color: #fff;
+	position: relative;
+	padding: 15px;
+	background-size: 100% auto;
+	background-position: center center;
+}
+.profile_item .pimage {
+	background-color: #ddd;
+	border-radius: 25px;
+	position: relative;
+}
+.profile_item .pimage img {
+	width: 50px;
+	height: 50px;
+	border-radius: 25px;
+}
+.profile_item .info {
+	padding-left: 10px;
+	position: relative;
+}
+.profile_item .info h1 {
+	 line-height: 30px;	 
+	 font-weight: bold;
+}
+.profile_item .info .stat {
+	line-height: 20px;
+	font-size: 80%;
+}*/
+
+#app_logo {
+	width: 50px;
+	height: 50px;
+	background-color: #000;
+	-webkit-mask-size: 50px;
+	-webkit-mask-position: center center;
+	-webkit-mask-repeat: no-repeat;
+	-webkit-mask-image: url(../icons/quill.png);
+}
+
+.layout_panel {
+	background-color: #fff;
+}
+.layout_panel .item {
+	height: 60px;
+	padding: 0 10px;
+	-webkit-box-align: center;
+	-webkit-box-shadow: 0px 1px 0px 0px #eee;
+	position: relative;
+}
+.layout_panel .item:last-child {
+	-webkit-box-shadow: none;
+}
+.layout_panel .item .next {
+	width: 20px;
+	height: 20px;
+	position: absolute;
+	right: 5px;
+	top: 20px;
+	background-color: #333;
+	-webkit-mask-size: 20px;
+	-webkit-mask-position: center center;
+	-webkit-mask-repeat: no-repeat;
+	-webkit-mask-image: url(../icons/next.png);
+}
+.layout_panel .title {
+	font-size: 80%;
+	font-weight: bold;
+	line-height: 30px;
+	padding: 0 10px;
+	border-bottom: solid 2px #aaa;
+}
+
+#dd_message {
+	position: fixed;
+	z-index: -1;
+	top: 60px;
+	height: 50px;
+	overflow: hidden;
+	width: 100%;
+}
+#dd_message .msg {
+	padding: 10px;
+	background-color: #0099CC;
+	line-height: 30px;
+	color: #fff;
+	font-size: 80%;
+	
+	-webkit-transform: translateY(-50px);
+	-webkit-transition: .3s -webkit-transform ease-in-out;
+}
+#dd_message.show .msg {
+	-webkit-transform: translateY(0px);
 }
