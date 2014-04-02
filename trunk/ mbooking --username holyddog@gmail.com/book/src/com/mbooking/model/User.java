@@ -25,7 +25,8 @@ public class User {
 
 	List<Book> books;
 
-	Integer fcount;			//Follow book count
+	Integer fcount;			//Follower book count
+	Integer fgcount;		//Following book count
 	Integer pbcount;		//Public book count
 	Integer tbcount;		//Total book count
 
@@ -124,7 +125,14 @@ public class User {
 	public void setFcount(Integer fcount) {
 		this.fcount = fcount;
 	}
+	
+	public Integer getFgcount() {
+		return fgcount;
+	}
 
+	public void setFgcount(Integer fgcount) {
+		this.fgcount = fgcount;
+	}
 	public Integer getPbcount() {
 		return pbcount;
 	}
