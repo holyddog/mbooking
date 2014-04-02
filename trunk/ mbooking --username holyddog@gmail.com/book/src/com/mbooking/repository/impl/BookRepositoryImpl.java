@@ -126,15 +126,16 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			}
 			
 			Query user_query = new Query(Criteria.where("uid").is(uid));
-			int tcount = (int) db.count(user_query, Book.class);
-			
-			Update user_update = new Update();
-			
-			user_update.set("tcount", tcount);
 			
 			User user = db.findOne(user_query,User.class);
 			
 			if(user!=null){
+				int tcount = (int) db.count(user_query, Book.class);
+				
+				Update user_update = new Update();
+				
+				user_update.set("tcount", tcount);
+				
 				if(user.getLeb()==bid){
 					Query book_query = new Query(Criteria.where("uid").is(uid));
 					book_query.fields().include("ledate");
