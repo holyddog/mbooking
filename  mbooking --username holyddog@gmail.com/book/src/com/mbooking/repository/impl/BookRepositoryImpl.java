@@ -41,10 +41,10 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 		if(tdate!=null)
 		book.setTdate(tdate);
 		
-		if(tags!=null)
+		if(tags!=null&&tags.length!=0)
 		book.setTags(tags);
 		
-		if(pic!=null)
+		if(pic!=null&&!pic.equals("")&&!pic.equals("undefined"))
 		book.setPic(pic);
 
 		Criteria criteria = Criteria.where("uid").is(uid);
@@ -79,10 +79,10 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 		if(tdate!=null)
 		update.set("tdate", tdate);
 		
-		if(tags!=null)
+		if(tags!=null&&tags.length!=0)
 		update.set("tags", tags);
 		
-		if(pic!=null)
+		if(pic!=null&&!pic.equals(""))
 		update.set("pic", pic);
 
 		return db.findAndModify(query, update,new FindAndModifyOptions().returnNew(true), Book.class);
@@ -225,4 +225,14 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 		query.fields().include("title").include("pic");
 		return db.find(query, Book.class);
 	}
+
+	@Override
+	public List<Book> findByPbdateExists(boolean exists) {
+		Query query = new Query(Criteria.where("pbdate").exists(true));
+		query.sort().on("pbdate", Order.DESCENDING);
+		query.fields().include("bid").include("title").include("pic");
+		return db.find(query, Book.class);
+	}
+	
+	
 }

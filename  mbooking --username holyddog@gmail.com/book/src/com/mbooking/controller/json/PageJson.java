@@ -26,8 +26,9 @@ public class PageJson {
 			@RequestParam(value = "date", required = false) Long date,
 			@RequestParam(value = "caption", required = false) String caption
 
-	) {
-		return ResultResponse.getResult("success", pageRepo.create(bid, uid, date, pic, caption));
+	) 
+	{
+		return ResultResponse.getResult("success",  pageRepo.create(bid, uid, date, pic, caption));
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/editPage.json")
@@ -40,7 +41,8 @@ public class PageJson {
 			@RequestParam(value = "date", required = false) Long date,
 			@RequestParam(value = "caption", required = false) String caption
 
-	) {
+	) 
+	{
 
 		Page page = pageRepo.edit(pid, uid, bid, date, pic, caption);
 		if (page != null) {
@@ -55,8 +57,8 @@ public class PageJson {
 	Object deletePage(
 			@RequestParam(value = "pid") Long pid,
 			@RequestParam(value = "bid") Long bid,
-			@RequestParam(value = "uid") Long uid) {
-
+			@RequestParam(value = "uid") Long uid) 
+	{
 		return ResultResponse.getResult("success", pageRepo.delete(pid, bid, uid));
 	}
 }
