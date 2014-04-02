@@ -198,21 +198,21 @@ public class ImageUtils {
 			Image cover_image = crop_img.getScaledInstance(COVER_HEIGHT_SIZE, COVER_HEIGHT_SIZE, 72);
 			 
 			
-			 File xlargeSizeFile = new File(path_file +key+ "_xl.jpg");
+			 File xlargeSizeFile = new File(path_file + "/" + key+ "_xl.jpg");
 			 BufferedImage xlarge_buff = new BufferedImage(xlarge_image.getWidth(null), xlarge_image.getHeight(null), BufferedImage.TYPE_INT_RGB);
 			 Graphics g_xl = xlarge_buff.getGraphics();
 			 g_xl.drawImage(xlarge_image, 0, 0, null);
 			 g_xl.dispose();
 			 boolean success = ImageIO.write(xlarge_buff, Convert.getExt(xlargeSizeFile.getName()), xlargeSizeFile);
 			
-			 File largeSizeFile = new File(path_file +key+ "_l.jpg");
+			 File largeSizeFile = new File(path_file + "/" +key+ "_l.jpg");
 			 BufferedImage large_buff = new BufferedImage(large_image.getWidth(null), large_image.getHeight(null), BufferedImage.TYPE_INT_RGB);
 			 Graphics g_l = large_buff.getGraphics();
 			 g_l.drawImage(large_image, 0, 0, null);
 			 g_l.dispose();
 			 success = ImageIO.write(large_buff, Convert.getExt(largeSizeFile.getName()), largeSizeFile);
 			
-			 File normalSizeFile = new File(path_file +key+ "_n.jpg");
+			 File normalSizeFile = new File(path_file + "/" + key+ "_n.jpg");
 			 BufferedImage normal_buff = new BufferedImage(normal_image.getWidth(null), normal_image.getHeight(null), BufferedImage.TYPE_INT_RGB);
 			 Graphics g_n = normal_buff.getGraphics();
 			 g_n.drawImage(normal_image, 0, 0, null);
@@ -225,7 +225,7 @@ public class ImageUtils {
 			 
 			 x = (cvheight / 2) - (cvwidth/ 2);
 			 
-			 File coverSizeFile = new File(path_file +key+ "_cv.jpg");
+			 File coverSizeFile = new File(path_file + "/" + key+ "_cv.jpg");
 			 BufferedImage cover_buff = new BufferedImage(cvwidth, cvheight, BufferedImage.TYPE_INT_RGB);
 			 Graphics g_cv = cover_buff.getGraphics();
 			 g_cv.drawImage(cover_image, 0, 0, cvwidth, cvheight, x, 0, x + cvwidth,cvheight, null);
