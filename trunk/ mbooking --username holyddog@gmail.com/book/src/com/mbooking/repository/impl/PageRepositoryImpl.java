@@ -14,6 +14,7 @@ import com.mbooking.constant.ConstValue;
 import com.mbooking.model.Book;
 import com.mbooking.model.Page;
 import com.mbooking.repository.PageRepostitoryCustom;
+import com.mbooking.util.Convert;
 import com.mbooking.util.ImageUtils;
 import com.mbooking.util.MongoCustom;
 
@@ -27,7 +28,10 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 		Page page = new Page();
 		try {
 			
-			db.updateMulti(new Query(Criteria.where("bid").is(bid).and("uid").is(uid)),new Update().unset("lpage"), Page.class);
+			
+			Update uplpage = new Update();
+			uplpage.unset("lpage");
+			db.updateMulti(new Query(Criteria.where("bid").is(bid).and("uid").is(uid)),uplpage, Page.class);
 			
 			page.setBid(bid);
 			
@@ -38,12 +42,15 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 			page.setDate(date);
 			page.setCdate(System.currentTimeMillis());
 			page.setLpage(true);
+			page.setUid(uid);
 			
-			String img_path = ImageUtils.toImageFile(ConstValue.USER_FOLDER+uid+"/"+ConstValue.BOOK_FOLDER+bid, pic, true);
-			pic = img_path;
-
-			page.setPic(pic);
-
+			if(pic!=null&&!pic.equals("")&&!pic.equals("undefined"))
+			{
+				String img_path = ImageUtils.toImageFile(ConstValue.USER_FOLDER+uid+"/"+ConstValue.BOOK_FOLDER+bid, pic, true);
+				pic = img_path;
+				page.setPic(pic);
+			}
+			
 			Criteria criteria = Criteria.where("bid").is(bid).and("uid").is(uid);
 			Query query = new Query(criteria);
 			Integer seq = (int) db.count(query, Page.class) + 1;
@@ -54,14 +61,15 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 			page.setPid(pid);
 			db.insert(page);
 
-			if (seq == 1) {
+			if (seq == 1&&pic!=null&&!pic.equals("")&&!pic.equals("undefined")) {
 				Update update = new Update();
 				update.set("pic", pic);
 				db.updateFirst(query, update, Book.class);
 			}
 
 			Update update = new Update();
-			update.set("pcount", seq);
+			int pcount = (int)db.count(new Query(Criteria.where("bid").is(bid)), Page.class);
+			update.set("pcount", pcount);
 
 			db.updateFirst(query, update, Book.class);
 

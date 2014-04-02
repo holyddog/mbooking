@@ -36,18 +36,18 @@ public class FollowJson {
 		return ErrorResponse.getError("Unsuccess to follow author :"+auid);
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/getAuthors.json")
+	@RequestMapping(method = RequestMethod.GET, value = "/getFollowAuthors.json")
 	public @ResponseBody
 	Object getAuthors(
-			@RequestParam(value = "auid") Long auid
+			@RequestParam(value = "uid") Long uid
 		) {
 		
-		List<Follow> authors = followRepo.findByAuid(auid);
+		List<Follow> authors = followRepo.findByUid(uid);
 		if (authors != null) {
 			return authors;
 		}
 
-		return ErrorResponse.getError("Unsuccess to load authors that uid: "+auid+" following");
+		return ErrorResponse.getError("Unsuccess to load authors that uid: "+uid+" following");
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/getFollowBooksByUID.json")
