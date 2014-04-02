@@ -79,6 +79,20 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 
 			Update user_update = new Update();
 			user_update.set("leb", bid);
+			
+			Book book = db.findOne(new Query(Criteria.where("bid").is(bid)), Book.class);
+			if(book!=null){
+				String btitle = book.getTitle();
+				String bpic = book.getPic();
+				
+				if(btitle!=null&&!btitle.isEmpty()&&!btitle.equals("")&&!btitle.equals("undefined")){
+					user_update.set("lebt", btitle);
+				}
+				if(bpic!=null&&!bpic.isEmpty()&&!bpic.equals("")&&!bpic.equals("undefined")){
+					user_update.set("lebp", bpic);
+				}
+			}
+			
 			db.updateFirst(new Query(Criteria.where("uid").is(uid)), user_update, User.class);
 			
 		} catch (Exception e) {

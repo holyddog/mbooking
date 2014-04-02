@@ -19,7 +19,9 @@ public class User {
 	String pwd;
 	Boolean inactive;
 
-	Long leb;	//last edit book
+	Long leb;		//last edit book
+	String lebt;	//last edit book title
+	String lebp;	//last edit book picture
 
 	List<Book> books;
 
@@ -98,6 +100,23 @@ public class User {
 	public void setLeb(Long leb) {
 		this.leb = leb;
 	}
+	
+	public String getLebt() {
+		return lebt;
+	}
+
+	public void setLebt(String lebt) {
+		this.lebt = lebt;
+	}
+	
+	public String getLebp() {
+		return lebp;
+	}
+
+	public void setLebp(String lebp) {
+		this.lebp = lebp;
+	}
+	
 	public Integer getFcount() {
 		return fcount;
 	}
