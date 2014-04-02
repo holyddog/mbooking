@@ -5,5 +5,11 @@ Page.Settings = {
 		container.find('[data-id=btn_m]').tap(function() {
 			Page.slideMenu();
 		});	
+		
+		// set content links
+		container.find('[data-id=sign_out]').tap(function() {
+			localStorage.removeItem('u');
+			Page.open('Home');
+		});
 	}
 };

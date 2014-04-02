@@ -24,6 +24,7 @@
 	<script type="text/javascript" src="pages/js/create_book.js"></script>
 	<script type="text/javascript" src="pages/js/explore.js"></script>
 	<script type="text/javascript" src="pages/js/following.js"></script>
+    <script type="text/javascript" src="pages/js/home.js"></script>
 	<script type="text/javascript" src="pages/js/my_books.js"></script>
 	<script type="text/javascript" src="pages/js/notifications.js"></script>
 	<script type="text/javascript" src="pages/js/page.js"></script>
@@ -41,6 +42,9 @@
 	<style id="custom_style" type="text/css"></style>
 </head>
 <body>
+	<div id="dd_message" class="box center_middle">
+		<div class="msg"></div>
+	</div>
 	<div id="overlay_loading"></div>
 	<div id="loading_panel">
 		<div class="loading box horizontal">
@@ -51,7 +55,18 @@
 	<div id="sidebar_panel">
 		<div id="overlay"></div>
 		<ul id="sidebar">
-			<li data-page="Profile" class="item">Profile</li>
+			<li data-page="Profile" class="item" style="padding: 0;">
+				<div class="profile_item box horizontal" style="background-image: url(temp/2.jpg);">
+					<div class="overlay"></div>
+					<div class="pimage">
+						<img src="temp/u1.jpg">
+					</div>
+					<div class="info flex1">
+					 	<h1>Holy D Dog</h1>
+					  	<div class="stat">20 Books | 30 followers</div>
+					</div>
+				</div>
+			</li>
 			<li data-page="Explore" class="item">Explore</li>
 			<li data-page="Following" class="item">Following</li>
 			<!-- <li class="item">Favourite</li> -->

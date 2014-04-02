@@ -2,6 +2,14 @@ Page.SignIn = {
 	url: 'pages/html/sign_in.html',
 	
 	init: function(params, container) {	
+		// check authen
+		if (localStorage.getItem('u')) {
+			Account = JSON.parse(localStorage.getItem('u'));
+			Page.open('Profile');
+			
+			return;
+		}
+		
 		// declare elements
 		var inputText = container.find('input[name=login]');
 		var inputPwd = container.find('input[name=pwd]');
@@ -14,7 +22,9 @@ Page.SignIn = {
 		var btnAccept = container.find('[data-id=btn_a]');
 		btnAccept.tap(function() {
 			if (!btnAccept.hasClass('disabled')) {
+				Page.btnShowLoading(btnAccept[0]);
 				Service.User.SignIn(inputText.val(), inputPwd.val(), function(data) {
+					Page.btnHideLoading(btnAccept[0]);
 					if (data.error) {
 						MessageBox.alert({ message: data.error.message });
 					}
@@ -25,6 +35,9 @@ Page.SignIn = {
 							displayName: data.dname,
 							userName: data.uname
 						};
+						localStorage.setItem("u", JSON.stringify(Account));
+						
+						Page.open('Profile');
 					}
 				});
 			}

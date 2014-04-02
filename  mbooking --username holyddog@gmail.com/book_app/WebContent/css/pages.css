@@ -116,6 +116,7 @@
 }
 .sel_book .link_icon.highlight {
 	background-color: #6DCAEC;	
+	position: relative;
 }
 .sel_book .mask_icon {
 	width: 20px;
@@ -252,11 +253,20 @@
 }
 #page_Profile .profile_info .stat .counter {
 	float: left;
-	width: 80px;
+	padding-right: 15px;
+	margin-right: 15px;
+	border-right: solid 1px #fff;
 	color: #fff;
+}
+#page_Profile .profile_info .stat .counter:last-child {
+	border-right: none;
+}
+#page_Profile .profile_info .stat .counter .value {
+	font-family: HNC;
 }
 #page_Profile .profile_info .stat .label {	
 	font-size: 70%;
+	font-weight: bold;
 }
 
 #page_Book .btitle {

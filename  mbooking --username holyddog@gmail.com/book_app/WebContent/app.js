@@ -1,7 +1,7 @@
 Config = { 
 	PHONEGAP: false,
 	DEBUG_MODE: true,
-	DEFAULT_PAGE: 'Profile',
+	DEFAULT_PAGE: 'Home',
 	
 	SLIDE_DELAY: 250,
 	FADE_DELAY: 250,
@@ -43,6 +43,20 @@ MessageBox = {
 				config.callback();
 			}
 		}
+	},
+	drop: function(message) {
+		var dd = document.getElementById('dd_message');
+		dd.style.zIndex = 2000;
+		dd.children[0].innerText = message;
+		var temp = dd.className;
+		dd.className = temp + ' show';
+		
+		setTimeout(function() {
+			dd.className = temp;
+			setTimeout(function() {
+				dd.style.zIndex = -1;
+			}, 300);
+		}, 3000);
 	}
 };
 
@@ -233,8 +247,7 @@ Page = {
 			clearInterval(Page.btnInterval);
 			Page.btnInterval = undefined;
 		}
-		
-	    btn.children[1].remove();
+		$('#cv_button').remove();
 	    btn.children[0].style.display = 'block';
 	}
 };
@@ -296,8 +309,9 @@ Web = {
 	$.fn.tap = function(fn, allowDefault) {
 		return this.each(function() {
 			var self = $(this);
+			self.callback = fn;
+			
 			if (Device.isMobile()) {
-				self.callback = fn;
 				
 				self.bind('touchstart', function(e) {	
 					if (!allowDefault)
@@ -332,7 +346,24 @@ Web = {
 				});
 			}
 			else {
-				self.bind('click', fn);
+				self.bind('mousedown', function(e) {
+					e.preventDefault();
+
+					self.addClass('highlight');					
+				});
+				self.bind('mouseout', function(e) {
+					e.preventDefault();
+					
+					if (self.hasClass('highlight')) {
+						self.removeClass('highlight');
+					}
+				});
+				self.bind('mouseup', function(e) {
+					e.preventDefault();
+
+					self.removeClass('highlight');					
+					self.callback();
+				});
 			}
 		});
 	};
@@ -412,7 +443,8 @@ $(function(){
 				}
 			}
 			else if (checkPage == -1) {
-				Page.Error.init(404);
+				Page.open(Config.DEFAULT_PAGE);
+				//Page.Error.init(404);
 			}
 		}
 		else {			
