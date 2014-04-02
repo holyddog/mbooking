@@ -161,6 +161,7 @@ public class ImageUtils {
 	
 	public static boolean cropSquareAndResizeCustom(File input, String  path_file,String filename) {
 		try {
+			final int SMALL_SIZE = ConstValue.SMALL_SIZE;
 			final int NORMAL_SIZE = ConstValue.NORMAL_SIZE;
 			final int LARGE_SIZE = ConstValue.LARGE_SIZE;
 			final int EXTRA_LARGE_SIZE = ConstValue.EXTRA_LARGE_SIZE;
@@ -195,6 +196,7 @@ public class ImageUtils {
 			Image xlarge_image = crop_img.getScaledInstance(EXTRA_LARGE_SIZE, EXTRA_LARGE_SIZE, 72);
 			Image large_image = crop_img.getScaledInstance(LARGE_SIZE, LARGE_SIZE, 72);
 			Image normal_image = crop_img.getScaledInstance(NORMAL_SIZE, NORMAL_SIZE, 72);
+			Image small_image = crop_img.getScaledInstance(SMALL_SIZE, NORMAL_SIZE, 72);
 			Image cover_image = crop_img.getScaledInstance(COVER_HEIGHT_SIZE, COVER_HEIGHT_SIZE, 72);
 			 
 			
@@ -218,6 +220,13 @@ public class ImageUtils {
 			 g_n.drawImage(normal_image, 0, 0, null);
 			 g_n.dispose();
 			 success = ImageIO.write(normal_buff, Convert.getExt(normalSizeFile.getName()), normalSizeFile);
+			 
+			 File smallSizeFile = new File(path_file + "/" + key+ "_s.jpg");
+			 BufferedImage small_buff = new BufferedImage(small_image.getWidth(null), small_image.getHeight(null), BufferedImage.TYPE_INT_RGB);
+			 Graphics g_s = small_buff.getGraphics();
+			 g_s.drawImage(small_image, 0, 0, null);
+			 g_s.dispose();
+			 success = ImageIO.write(small_buff, Convert.getExt(smallSizeFile.getName()), smallSizeFile);
 			 
 			 int cvheight = COVER_HEIGHT_SIZE;
 			 int cvwidth = COVER_WIDTH_SIZE;
@@ -330,16 +339,25 @@ public class ImageUtils {
 			return false;
 		}
 		if(has_crop){
+			
+			String small_size_path = path + filename.replace(".jpg","_s.jpg");	
 			String normal_size_path = path + filename.replace(".jpg","_n.jpg");	
 			String large_size_path = path + filename.replace(".jpg","_l.jpg");	
 			String xlarge_size_path = path + filename.replace(".jpg","_xl.jpg");	
 			
 			try{
 				
+				File small_size_file = new File(small_size_path);
 				File normal_size_file = new File(normal_size_path);
 				File large_size_file = new File(large_size_path);
 				File xlarge_size_file = new File(xlarge_size_path);
 				
+				
+				if(small_size_file.delete()){
+	    			System.out.println(small_size_path + " is deleted!");
+	    		}else{
+	    			System.out.println("Delete "+small_size_path +" is failed.");
+	    		}
 				
 				if(normal_size_file.delete()){
 	    			System.out.println(normal_size_path + " is deleted!");
