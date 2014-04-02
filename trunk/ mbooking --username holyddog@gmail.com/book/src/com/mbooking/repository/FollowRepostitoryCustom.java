@@ -12,4 +12,8 @@ public interface FollowRepostitoryCustom {
 			Long auid
 	);
 
+	public Boolean unfollowAuthor(
+			Long uid,
+			Long auid
+	);
 }
