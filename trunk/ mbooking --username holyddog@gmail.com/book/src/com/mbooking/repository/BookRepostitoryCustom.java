@@ -26,4 +26,6 @@ public interface BookRepostitoryCustom {
 	
 	public List<Book> findByPbdateExists(boolean exists);
 	
+	public List<Book> findFollowingBooks(Long uid);
+	
 }

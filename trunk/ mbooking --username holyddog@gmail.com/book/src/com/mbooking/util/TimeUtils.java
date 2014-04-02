@@ -19,6 +19,7 @@ public class TimeUtils {
 		int y_period = eyear-styear;
 		int m_period = emonth - stmonth;
 		
+		
 		if(y_period>1||(y_period==1&&m_period>-11)){
 	
 			if(m_period<0){
@@ -36,6 +37,11 @@ public class TimeUtils {
 			
 			long duration = enddate-startdate;
 			long ONE_SECOND = 1000;
+			
+			if(duration / ONE_SECOND<=0){
+				  return "0 second ago";
+			}
+			
 			long SECONDS = 60;
 		    long ONE_MINUTE = ONE_SECOND * SECONDS;
 		    long MINUTES = 60;

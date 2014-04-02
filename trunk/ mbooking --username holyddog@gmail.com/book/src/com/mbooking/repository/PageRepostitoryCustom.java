@@ -1,6 +1,7 @@
 package com.mbooking.repository;
 import java.util.List;
 
+import com.mbooking.model.Book;
 import com.mbooking.model.Page;
 
 public interface PageRepostitoryCustom {
@@ -33,6 +34,10 @@ public interface PageRepostitoryCustom {
 			Long uid,
 			Long[]pid,
 			Integer[]seq
+	);
+	
+	public List<Page> findFollowingPages(
+			Long uid
 	);
 	
 }

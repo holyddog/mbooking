@@ -12,11 +12,4 @@ public interface FollowRepostitoryCustom {
 			Long auid
 	);
 
-	public List<Book> findFollowingBooks(
-			Long uid
-	);
-	
-	public List<Page> findFollowingPages(
-			Long uid
-	);
 }

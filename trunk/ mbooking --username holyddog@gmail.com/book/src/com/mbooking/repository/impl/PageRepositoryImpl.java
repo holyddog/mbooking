@@ -1,5 +1,8 @@
 package com.mbooking.repository.impl;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +15,14 @@ import org.springframework.data.mongodb.core.query.Update;
 
 import com.mbooking.constant.ConstValue;
 import com.mbooking.model.Book;
+import com.mbooking.model.Follow;
 import com.mbooking.model.Page;
+import com.mbooking.model.User;
 import com.mbooking.repository.PageRepostitoryCustom;
 import com.mbooking.util.Convert;
 import com.mbooking.util.ImageUtils;
 import com.mbooking.util.MongoCustom;
+import com.mbooking.util.TimeUtils;
 
 public class PageRepositoryImpl implements PageRepostitoryCustom {
 
@@ -28,11 +34,6 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 		Page page = new Page();
 		try {
 			
-			
-			Update uplpage = new Update();
-			uplpage.unset("lpage");
-			db.updateMulti(new Query(Criteria.where("bid").is(bid).and("uid").is(uid)),uplpage, Page.class);
-			
 			page.setBid(bid);
 			
 			if(caption!=null)
@@ -41,7 +42,6 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 			if(date!=null)
 			page.setDate(date);
 			page.setCdate(System.currentTimeMillis());
-			page.setLpage(true);
 			page.setUid(uid);
 			
 			if(pic!=null&&!pic.equals("")&&!pic.equals("undefined"))
@@ -108,7 +108,7 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 		Query query = new Query(criteria);
 
 		try {
-			query.fields().include("lpage");
+			
 			query.fields().include("pic");
 			query.fields().include("seq");
 			
@@ -131,11 +131,6 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 			Update update = new Update();
 			update.set("pcount", pcount);
 			db.updateFirst(query, update, Book.class);
-
-			if(page.getLpage()){
-				query.sort().on("seq", Order.DESCENDING);
-				db.updateFirst(query,new Update().set("lpage", true), Page.class);
-			}
 			
 		} catch (Exception e) {
 
@@ -168,6 +163,62 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 		}
 
 		return null;
+	}
+	
+	public List<Page> findFollowingPages(Long uid) {
+		try{	
+				ArrayList<Page> fpages = new ArrayList<>();
+				
+				Criteria criteria = Criteria.where("uid").is(uid);
+				Query query = new Query(criteria);
+				query.fields().include("auid");
+				query.fields().include("auth");
+				List<Follow> follows = db.find(query, Follow.class);
+				
+				for(int i = 0;i<follows.size();i++){
+					
+					Follow follow = follows.get(i);
+					Long auid = follow.getAuid();
+					User author = follow.getAuth();
+					author.setUid(auid);
+					
+					Criteria pcriteria = Criteria.where("uid").is(auid).and("pbdate").exists(true);
+					Query pquery = new Query(pcriteria);
+
+					List<Page> pages = db.find(pquery, Page.class);
+					for(int j=0;j<pages.size();j++){
+						Page page = pages.get(j);
+						Long bid = page.getBid();
+						Book book = db.findOne(new Query(Criteria.where("bid").is(bid)), Book.class);
+						pages.get(j).setBook(book);
+						pages.get(j).setAuthor(author);
+						pages.get(j).setStrtime(TimeUtils.timefromNow(page.getCdate(),System.currentTimeMillis()));
+					}
+					fpages.addAll(pages);
+				}
+				
+				Collections.sort(fpages, new Comparator<Page>() {
+					@Override
+					public int compare(Page page1, Page page2) {
+						if(page1.getCdate()>page2.getCdate()){
+							return -1;
+						}
+						else if(page1.getCdate()<page2.getCdate()){
+							return 1;
+						}
+						else{
+							return 0;
+						}
+					}
+			    });
+				
+				
+				return fpages;
+			}
+		catch(Exception e){
+			System.out.println(e);
+			return null;
+		}
 	}
 
 }
