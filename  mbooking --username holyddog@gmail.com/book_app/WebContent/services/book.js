@@ -74,7 +74,7 @@ Service.Book = {
 		Web.get(url, params, callback);
 	},
 
-	PublishBook : function(userID, callback) {
+	PublishBook : function(bookID,userID, callback) {
 		var url = Service.url + '/publishBook.json';
 		var params = {
 			bid : bookID,
@@ -94,6 +94,7 @@ Service.Book = {
 
 	GetPublishBooks : function(callback) {
 		var url = Service.url + '/getPublishBooks.json';
+		var params = {};
 		Web.get(url, params, callback);
 	},
 	
@@ -145,10 +146,10 @@ Service.Book = {
 		Web.post(url, params, callback);
 	},
 	
-	GetAuthors: function(authorID,callback){
-		var url = Service.url + '/getAuthors.json';
+	GetFollowAuthors: function(userID,callback){
+		var url = Service.url + '/getFollowAuthors.json';
 		var params = {
-				auid	:authorID
+				uid	:userID
 		};
 		Web.get(url, params, callback);
 	},
