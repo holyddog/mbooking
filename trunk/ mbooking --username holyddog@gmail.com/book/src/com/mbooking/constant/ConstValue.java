@@ -10,7 +10,7 @@ public interface ConstValue {
 		"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 	};
 
-	
+	public static final int SMALL_SIZE = 270;
 	public static final int NORMAL_SIZE = 500;
 	public static final int LARGE_SIZE = 800;
 	public static final int EXTRA_LARGE_SIZE = 1024;
