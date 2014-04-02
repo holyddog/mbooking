@@ -17,12 +17,13 @@ public class Page {
 	String pic;
 	String caption;
 	
-	Boolean lpage;	//last create page
-	
 	// Return from Service Only , Not in db
 	User author;
 	String strtime;
 	Book book;
+	
+	Long pbdate;
+
 
 	public Long getPid() {
 		return pid;
@@ -73,13 +74,6 @@ public class Page {
 		this.caption = caption;
 	}
 	
-	public Boolean getLpage() {
-		return lpage;
-	}
-	public void setLpage(Boolean lpage) {
-		this.lpage = lpage;
-	}
-	
 	// Return from Service Only , Not in db
 	public User getAuthor() {
 		return author;
@@ -99,5 +93,12 @@ public class Page {
 	}
 	public void setBook(Book book) {
 		this.book = book;
+	}
+	
+	public Long getPbdate() {
+		return pbdate;
+	}
+	public void setPbdate(Long pbdate) {
+		this.pbdate = pbdate;
 	}
 }

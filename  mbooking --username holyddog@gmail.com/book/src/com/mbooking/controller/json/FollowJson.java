@@ -13,14 +13,20 @@ import com.mbooking.common.ErrorResponse;
 import com.mbooking.model.Book;
 import com.mbooking.model.Follow;
 import com.mbooking.model.Page;
+import com.mbooking.repository.BookRepository;
 import com.mbooking.repository.FollowRepository;
+import com.mbooking.repository.PageRepository;
 
 
 @Controller
 public class FollowJson {
 	@Autowired
 	FollowRepository followRepo;
-
+	@Autowired
+	BookRepository bookRepo;
+	@Autowired
+	PageRepository pageRepo;
+	
 	@RequestMapping(method = RequestMethod.POST, value = "/followAuthor.json")
 	public @ResponseBody
 	Object followAuthor(
@@ -56,7 +62,7 @@ public class FollowJson {
 			@RequestParam(value = "uid") Long uid
 		) {
 		
-		List<Book> books = followRepo.findFollowingBooks(uid);
+		List<Book> books = bookRepo.findFollowingBooks(uid);
 		if (books != null) {
 			return books;
 		}
@@ -70,7 +76,7 @@ public class FollowJson {
 			@RequestParam(value = "uid") Long uid
 		) {
 		
-		List<Page> pages = followRepo.findFollowingPages(uid);
+		List<Page> pages = pageRepo.findFollowingPages(uid);
 		if (pages != null) {
 			return pages;
 		}

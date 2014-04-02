@@ -1,5 +1,8 @@
 package com.mbooking.repository.impl;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +14,13 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
 import com.mbooking.model.Book;
+import com.mbooking.model.Follow;
 import com.mbooking.model.Page;
 import com.mbooking.model.User;
 import com.mbooking.repository.BookRepostitoryCustom;
 import com.mbooking.util.ImageUtils;
 import com.mbooking.util.MongoCustom;
+import com.mbooking.util.TimeUtils;
 
 public class BookRepositoryImpl implements BookRepostitoryCustom {
 
@@ -193,6 +198,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			update.set("pbdate", current_time);
 
 			db.updateFirst(query, update, Book.class);
+			db.updateMulti(query, update, Page.class);
 			return true;
 		} catch (Exception e) {
 			System.out.println("Publish Book Service error: " + e);
@@ -210,6 +216,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			update.unset("pbdate");
 
 			db.updateFirst(query, update, Book.class);
+			db.updateMulti(query, update, Page.class);
 			return true;
 		} catch (Exception e) {
 			System.out.println("Unpublish Book Service error: " + e);
@@ -234,5 +241,61 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 		return db.find(query, Book.class);
 	}
 	
+	
+	public List<Book> findFollowingBooks(Long uid) {
+		
+		try{	
+				ArrayList<Book> fbooks = new ArrayList<>();
+				
+				Criteria criteria = Criteria.where("uid").is(uid);
+				Query query = new Query(criteria);
+				query.fields().include("auid");
+				query.fields().include("auth");
+				List<Follow> follows = db.find(query, Follow.class);
+				
+				for(int i = 0;i<follows.size();i++){
+					
+					Follow follow = follows.get(i);
+					Long auid = follow.getAuid();
+					User author = follow.getAuth();
+					author.setUid(auid);
+					
+					Criteria bcriteria = Criteria.where("uid").is(auid).and("pbdate").exists(true);
+					Query bquery = new Query(bcriteria);
+
+					
+					List<Book> books = db.find(bquery, Book.class);
+					for(int j=0;j<books.size();j++){
+						Book book = books.get(j);
+						Long pbdate = book.getPbdate();
+						books.get(j).setAuthor(author);
+						books.get(j).setStrtime(TimeUtils.timefromNow(pbdate,System.currentTimeMillis()));
+					}
+					fbooks.addAll(books);
+				}
+				
+				Collections.sort(fbooks, new Comparator<Book>() {
+					@Override
+					public int compare(Book book1, Book book2) {
+						if(book1.getPbdate()>book2.getPbdate()){
+							return -1;
+						}
+						else if(book1.getPbdate()<book2.getPbdate()){
+							return 1;
+						}
+						else{
+							return 0;
+						}
+					}
+			    });
+				
+				
+				return fbooks;
+			}
+		catch(Exception e){
+			System.out.println(e);
+			return null;
+		}
+	}
 	
 }
