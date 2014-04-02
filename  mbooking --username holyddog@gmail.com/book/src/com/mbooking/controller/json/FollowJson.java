@@ -38,6 +38,16 @@ public class FollowJson {
 		return ResultResponse.getResult("success",  followRepo.followAuthor(uid, auid));
 	}
 	
+	@RequestMapping(method = RequestMethod.POST, value = "/unfollowAuthor.json")
+	public @ResponseBody
+	Object unfollowAuthor(
+			@RequestParam(value = "auid") Long auid,
+			@RequestParam(value = "uid") Long uid
+		) {
+		
+		return ResultResponse.getResult("success",  followRepo.unfollowAuthor(uid, auid));
+	}
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/getFollowAuthors.json")
 	public @ResponseBody
 	Object getAuthors(
