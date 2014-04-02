@@ -64,6 +64,12 @@ public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 			follow.setFoll(foll);
 			db.insert(follow);
 			
+			
+			int fgcount = (int) db.count(new Query(criteria), Follow.class);
+			Update following_update = new Update();
+			following_update.set("fgcount", fgcount);
+			db.updateFirst(new Query(criteria), following_update, User.class);
+			
 			return true;
 		
 		}
@@ -100,6 +106,12 @@ public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 			update.set("fcount", fcount);
 			
 			db.updateFirst(u_query, update, User.class);
+			
+			int fgcount = (int) db.count(new Query(Criteria.where("uid").is(uid)), Follow.class);
+			Update following_update = new Update();
+			following_update.set("fgcount", fgcount);
+			db.updateFirst(new Query(Criteria.where("uid").is(uid)), following_update, User.class);
+			
 			
 			return true;
 		
