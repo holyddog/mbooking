@@ -41,7 +41,10 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 			
 			if(date!=null)
 			page.setDate(date);
-			page.setCdate(System.currentTimeMillis());
+			
+			Long create_date = System.currentTimeMillis(); 
+		
+			page.setCdate(create_date);
 			page.setUid(uid);
 			
 			if(pic!=null&&!pic.equals("")&&!pic.equals("undefined"))
@@ -70,9 +73,14 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 			Update update = new Update();
 			int pcount = (int)db.count(new Query(Criteria.where("bid").is(bid)), Page.class);
 			update.set("pcount", pcount);
-
+			update.set("ledate", create_date);
+			
 			db.updateFirst(query, update, Book.class);
 
+			Update user_update = new Update();
+			user_update.set("leb", bid);
+			db.updateFirst(new Query(Criteria.where("uid").is(uid)), user_update, User.class);
+			
 		} catch (Exception e) {
 			System.out.println("Create page arr: " + e);
 			return false;

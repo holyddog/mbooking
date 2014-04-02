@@ -19,9 +19,14 @@ public class User {
 	String pwd;
 	Boolean inactive;
 
+	Long leb;	//last edit book
+
 	List<Book> books;
 
-	Integer fcount;
+	Integer fcount;			//Follow book count
+	Integer pbcount;		//Public book count
+	Integer tbcount;		//Total book count
+
 	
 	public Long getUid() {
 		return uid;
@@ -85,6 +90,36 @@ public class User {
 
 	public void setBooks(List<Book> books) {
 		this.books = books;
+	}
+	public Long getLeb() {
+		return leb;
+	}
+
+	public void setLeb(Long leb) {
+		this.leb = leb;
+	}
+	public Integer getFcount() {
+		return fcount;
+	}
+
+	public void setFcount(Integer fcount) {
+		this.fcount = fcount;
+	}
+
+	public Integer getPbcount() {
+		return pbcount;
+	}
+
+	public void setPbcount(Integer pbcount) {
+		this.pbcount = pbcount;
+	}
+
+	public Integer getTbcount() {
+		return tbcount;
+	}
+
+	public void setTbcount(Integer tbcount) {
+		this.tbcount = tbcount;
 	}
 
 }

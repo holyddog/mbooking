@@ -23,6 +23,8 @@ public class Book {
 	Long pbdate;
 	Integer seq;
 
+	Long ledate;	//Last Edit Date
+
 	// Return from Service Only , Not in db
 	User author;
 	List<Page> pages;
@@ -155,6 +157,13 @@ public class Book {
 
 	public void setStrtime(String strtime) {
 		this.strtime = strtime;
+	}
+	public Long getLedate() {
+		return ledate;
+	}
+
+	public void setLedate(Long ledate) {
+		this.ledate = ledate;
 	}
 
 }

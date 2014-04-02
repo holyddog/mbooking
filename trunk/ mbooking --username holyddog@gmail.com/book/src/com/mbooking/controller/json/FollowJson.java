@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mbooking.common.ErrorResponse;
+import com.mbooking.common.ResultResponse;
 import com.mbooking.model.Book;
 import com.mbooking.model.Follow;
 import com.mbooking.model.Page;
@@ -34,12 +35,7 @@ public class FollowJson {
 			@RequestParam(value = "uid") Long uid
 		) {
 		
-		Boolean success = followRepo.followAuthor(uid, auid);
-		if (success != null) {
-			return success;
-		}
-
-		return ErrorResponse.getError("Unsuccess to follow author :"+auid);
+		return ResultResponse.getResult("success",  followRepo.followAuthor(uid, auid));
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/getFollowAuthors.json")
