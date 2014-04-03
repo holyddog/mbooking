@@ -73,7 +73,7 @@ public class UserJson {
 		return userRepo.signUp(email, password, displayName, userName);
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/changePassword.json")
+	@RequestMapping(method = RequestMethod.POST, value = "/changePassword.json")
 	public @ResponseBody Object changePassword(
 			@RequestParam(value = "uid") Long uid,
 			@RequestParam(value = "oldpwd") String oldpassword,
