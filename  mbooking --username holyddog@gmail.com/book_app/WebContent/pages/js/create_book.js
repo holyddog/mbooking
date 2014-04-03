@@ -26,10 +26,13 @@ Page.CreateBook = {
 						else {
 							var src = '';
 							
-							var selBook = c.find('.sel_book');
+							var selBook = c.find('.sel_book').show();
 							selBook.data('bid', data.bid);
 							selBook.find('.bimage img').attr('src', src);
-							selBook.find('.btitle span').text(data.title);
+							selBook.find('.btitle span').text(data.title);							
+
+							var linkCreate = c.find('[data-id=link_c]');
+							linkCreate.hide();
 						}
 					});
 				};

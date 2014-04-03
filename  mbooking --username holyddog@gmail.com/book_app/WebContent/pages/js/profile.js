@@ -1,6 +1,8 @@
-Page.Profile = {
+Page.Profile = {	
 	url: 'pages/html/profile.html',
 	init: function(params, container) {
+		var self = this;
+		
 		// check authen
 		if (!localStorage.getItem('u')) {
 			Page.open('Home');
@@ -8,14 +10,12 @@ Page.Profile = {
 			return;
 		}
 		
-		var self = this;
-		
 		// set toolbar buttons
 		container.find('[data-id=btn_m]').tap(function() {
 			Page.slideMenu();
 		});
 		container.find('[data-id=btn_a]').tap(function() {
-			Page.open('AddPage', true);
+			Page.open('AddPage', true, { total: self.totalBook });
 		});
 		
 		var content = container.find('.content');
@@ -36,41 +36,25 @@ Page.Profile = {
 		});
 	},
 	
-	load: function(container, userData) {		
-		container.find('.profile_info .name').text(userData.dname);
+	lastEditBook: {
 		
-		var bookPanel = container.find('.books_panel .books');
-		var books = userData.books;
-		for (var i = 0; i < books.length; i++) {
-			var b = books[i];
-			
-			var bItemDiv = document.createElement('div');
-			bItemDiv.className = 'bitem flex1 flex_lock';
-			var bookDiv = document.createElement('div');
-			bookDiv.className = 'book';
-			bookDiv.dataset.bid = b.bid;
-			bookDiv.style.backgroundImage = 'url(temp/b' + (i + 1) + '.jpg)';
-			var titleH3 = document.createElement('h3');
-			titleH3.className = 'title';
-			titleH3.innerText = b.title;
-			
-			bookDiv.appendChild(titleH3);
-			bItemDiv.appendChild(bookDiv);
-			
-			bookPanel.append(bItemDiv);
+	},
+	totalBook: 0,
+	
+	load: function(container, userData) {		
+		container.find('.pname').text(userData.dname);
+		container.find('[data-id=bcount]').text((userData.pbcount)? userData.pbcount: 0);
+		container.find('[data-id=fcount]').text((userData.fcount)? userData.fcount: 0);
+		container.find('[data-id=fgcount]').text((userData.fgcount)? userData.fgcount: 0);
+		
+		if (userData.tcount) {
+			this.totalBook = userData.tcount;
+		}		
+		if (!userData.pbcount) {
+			container.find('.books_panel .label a').hide();
 		}
 		
-		// set background image		
-		var img = $('<img class="profile_bg absolute fade_out show" src="temp/bg3.jpg" />');
-		img.load(function() {
-			img.prependTo(container);
-			
-			var h = $(window).innerHeight();
-			var w = $(window).innerWidth();
-			
-			img.height(h);
-			img.css('left', -1 * (img.width() / 2 - w / 2) + 'px');
-		});		
+		this.loadBook(userData.books, container);
 		
 		// show panel
 		container.find('.content').removeClass('gray').addClass('no_color');
@@ -91,5 +75,45 @@ Page.Profile = {
 //				<h3 class="title">Adipiscing eaque error</h3>
 //			</div>
 //		</div>
+	},
+	loadBook: function(books, container) {
+		var bookPanel = container.find('.books_panel .books');
+		var bgImage = 'temp/home.jpg';
+		for (var i = 0; i < 3; i++) {
+			var b = books[i];
+			
+			var bItemDiv = document.createElement('div');
+			bItemDiv.className = 'bitem flex1 flex_lock';
+			if (b) {
+				var bookDiv = document.createElement('div');
+				bookDiv.className = 'book';
+				bookDiv.dataset.bid = b.bid;
+				bookDiv.style.backgroundImage = 'url(' + (Util.getImage(Config.FILE_URL + b.pic, Config.FILE_SIZE.COVER)) + ')';
+				var titleH3 = document.createElement('h3');
+				titleH3.className = 'title';
+				titleH3.innerText = b.title;
+				
+				bookDiv.appendChild(titleH3);
+				bItemDiv.appendChild(bookDiv);
+			}			
+			bookPanel.append(bItemDiv);
+		}
+		
+		if (books.length) {
+			var rIndex = Util.getRandomInt(0, books.length - 1);
+			bgImage = Util.getImage(Config.FILE_URL + books[rIndex].pic, Config.FILE_SIZE.LARGE);
+		}
+		
+		// set background image		
+		var img = $('<img class="profile_bg absolute fade_out show" src="' + bgImage +'" />');
+		img.load(function() {
+			img.prependTo(container);
+			
+			var h = $(window).innerHeight();
+			var w = $(window).innerWidth();
+			
+			img.height(h);
+			img.css('left', -1 * (img.width() / 2 - w / 2) + 'px');
+		});	
 	}
 };
