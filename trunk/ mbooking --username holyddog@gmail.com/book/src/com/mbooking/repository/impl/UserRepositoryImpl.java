@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 
 import com.mbooking.model.User;
 import com.mbooking.repository.UserRepostitoryCustom;
@@ -41,5 +42,25 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		
 		user.setPwd(null); // remove password before return data
 		return user;
+	}
+
+	@Override
+	public Boolean changePassword(Long uid, String oldpassword,
+			String newpassword) {
+		
+		Query query = new Query(Criteria.where("uid").is(uid));
+		User user = db.findOne(query, User.class);
+		
+		String oldpassword_MD5 = Convert.toMD5Password(oldpassword);
+		if(oldpassword_MD5.equals(user.getPwd())){
+			
+			Update update = new Update();
+			update.set("pwd",Convert.toMD5Password(newpassword));
+			
+			db.updateFirst(query, update, User.class);
+			return true;
+		}
+		
+		return false;
 	}
 }
