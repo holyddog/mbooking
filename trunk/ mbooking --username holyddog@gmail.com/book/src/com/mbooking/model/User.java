@@ -19,9 +19,7 @@ public class User {
 	String pwd;
 	Boolean inactive;
 
-	Long leb;		//last edit book
-	String lebt;	//last edit book title
-	String lebp;	//last edit book picture
+	Book leb;		//last edit book
 
 	List<Book> books;
 
@@ -94,28 +92,12 @@ public class User {
 	public void setBooks(List<Book> books) {
 		this.books = books;
 	}
-	public Long getLeb() {
+	public Book getLeb() {
 		return leb;
 	}
 
-	public void setLeb(Long leb) {
+	public void setLeb(Book leb) {
 		this.leb = leb;
-	}
-	
-	public String getLebt() {
-		return lebt;
-	}
-
-	public void setLebt(String lebt) {
-		this.lebt = lebt;
-	}
-	
-	public String getLebp() {
-		return lebp;
-	}
-
-	public void setLebp(String lebp) {
-		this.lebp = lebp;
 	}
 	
 	public Integer getFcount() {

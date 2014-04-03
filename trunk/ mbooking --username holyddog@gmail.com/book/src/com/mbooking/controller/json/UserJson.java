@@ -24,7 +24,7 @@ public class UserJson {
 	BookRepository bookRepo;
 
 	@RequestMapping(method = RequestMethod.GET, value = "/getProfile.json")
-	public @ResponseBody Object checkUserName(
+	public @ResponseBody Object getProfile(
 			@RequestParam(value = "uid") Long uid
 			) {
 		User user = userRepo.findById(uid);
@@ -34,6 +34,13 @@ public class UserJson {
 			return user;
 		}
 		return ErrorResponse.getError("User not found");
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/getMyLastBooks.json")
+	public @ResponseBody Object getMyLastBooks(
+			@RequestParam(value = "uid") Long uid
+			) {
+		return bookRepo.findLastBookByUid(uid);
 	}
 	
 	// check duplicate email
