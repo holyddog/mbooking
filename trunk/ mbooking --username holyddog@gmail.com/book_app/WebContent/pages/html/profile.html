@@ -7,27 +7,34 @@
 </div>
 <div class="content gray flex1 box vertical">
 	<div class="hid_loading">
+		<h1 class="pname"></h1>
 		<div class="profile_info box horizontal">
 			<div class="pimage">
-				<img src="temp/u1.jpg" />
+				<img src="images/user.jpg" />
 			</div>
-			<div class="flex1">
-				<h1 class="name"></h1>
-				<div class="stat">
-					<div class="counter">
-						<div class="value">20</div>
+			<div class="box center_middle flex1">				
+				<div class="stat box flex1 horizontal">
+					<div class="counter flex1  flex_lock">
+						<div data-id="bcount" class="value">20</div>
 						<div class="label">Books</div>
 					</div>
-					<div class="counter">
-						<div class="value">153</div>
+					<div class="counter flex1  flex_lock">
+						<div data-id="fcount" class="value">153</div>
 						<div class="label">Followers</div>
+					</div>
+					<div class="counter flex1 flex_lock">
+						<div data-id="fgcount" class="value">43</div>
+						<div class="label">Following</div>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="books_grad"></div>
 		<div class="books_panel">
-			<div class="label flow_hidden">My Books<span class="fright">More</span></div>
+			<div class="label flow_hidden">
+				<div class="fleft">My Books</div>
+				<a class="fright">More</a>
+			</div>
 			<div class="books box horizontal"></div>
 		</div>
 	</div>

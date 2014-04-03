@@ -1,6 +1,15 @@
 Page.AddPage = {
 	url: 'pages/html/add_page.html',
-	init: function(params, container) {	
+	init: function(params, container) {
+		var selBook = container.find('.sel_book');
+		var linkCreate = container.find('[data-id=link_c]');
+		if (!params.total) {
+			selBook.hide();
+		}
+		else {
+			linkCreate.hide();
+		}
+		
 		var captionText = container.find('[name=caption]');
 		var content = container.find('.content');
 		var addPhoto = content.find('#add_photo');
@@ -21,35 +30,45 @@ Page.AddPage = {
 			Page.back();
 		});	
 		container.find('[data-id=btn_s]').tap(function() {
-			Page.showLoading();
-			
-			var bid = container.find('.sel_book').data('bid');
+			var bid = container.find('.sel_book').data('bid');			
 			var bgImage = $('#add_photo').css('background-image');
 			var pic = null;
 			if (bgImage != 'none') {
 				pic = bgImage.split(',')[1].replace(')', '');
 			}
 			
+			if (!bid) {
+				MessageBox.alert({ message: 'Please select a book' });
+				return;
+			}
+			else if (!pic && !captionText.val()) {
+				MessageBox.alert({ message: 'Please insert photo or caption' });
+				return;				
+			}
+			
+			Page.showLoading();
+			
 			var fn = function(data) {
 				Page.hideLoading();
 				
 				MessageBox.drop('New page added');
-				
+
+				// reset form
 				removeFn();
 				captionText.val(null);
-				// reset form
 			};
 			Service.Page.CreatePage(bid, Account.userId, captionText.val(), pic, null, fn);
 		});
-		container.find('[data-id=btn_p]').tap(function() {
-			Page.open('PublishBook', true);
+		container.find('[data-id=btn_p]').tap(function() {		
+			var bid = selBook.data('bid');
+			Page.open('PublishBook', true, { bid: bid });
 		});
 		
 		// set content links
 		container.find('[data-id=link_b]').tap(function() {
 			Page.open('BookList', true);
 		});
-		container.find('[data-id=link_c]').tap(function() {
+		linkCreate.tap(function() {
 			Page.open('CreateBook', true, { ret: 1 });
 		});
 		

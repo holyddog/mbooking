@@ -30,6 +30,7 @@ Page.Book = {
 		content.find('.btitle').text(bookData.title);
 		content.find('.bdesc').text(bookData.desc);
 		content.find('.author_info .name').text(bookData.author.dname);
+		content.find('.text_bar .fright').text(bookData.pcount + ' Page' + ((bookData.pcount > 1)? 's': ''));
 		
 		var index = 0;
 		var size = 0;
@@ -133,7 +134,8 @@ Page.Book = {
 		}
 		
 		// set background image
-		var img = $('<img class="book_bg absolute fade_out show" src="temp/bg2.jpg" />');
+		var bgImage = Config.FILE_URL + Util.getImage(bookData.pic, Config.FILE_SIZE.LARGE);
+		var img = $('<img class="book_bg absolute fade_out show" src="' + bgImage + '" />');
 		img.load(function() {
 			img.prependTo(container);
 			

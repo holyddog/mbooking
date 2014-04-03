@@ -6,15 +6,48 @@ Config = {
 	SLIDE_DELAY: 250,
 	FADE_DELAY: 250,
 	
-	FILE_URL: 'http://' + window.location.hostname + '/res/book'
+	FILE_URL: 'http://' + window.location.hostname + '/res/book',
+	
+	FILE_SIZE: {
+		COVER: 0,
+		NORMAL: 1,
+		LARGE: 2,
+		XLARGE: 3
+	}
 };
 
 Service = {
 	url: 'http://' + window.location.hostname + ':8080/book/data'
 };
 
-Account = {
-	userId: 1
+Account = {};
+
+Util = {
+	getRandomInt: function(min, max) {
+		return Math.floor(Math.random() * (max - min + 1)) + min;
+	},
+	getImage: function(file, size) {
+		var suffix = '';
+		switch (size) {
+			case Config.FILE_SIZE.COVER: {
+				suffix = '_cv';
+				break;
+			}
+			case Config.FILE_SIZE.NORMAL: {
+				suffix = '_n';
+				break;
+			}
+			case Config.FILE_SIZE.LARGE: {
+				suffix = '_l';
+				break;
+			}
+			case Config.FILE_SIZE.XLARGE: {
+				suffix = '_xl';
+				break;
+			}
+		}
+		return file.substring(0, file.lastIndexOf('.')) + suffix + file.substring(file.lastIndexOf('.'), file.length);
+	}
 };
 
 MessageBox = {
@@ -61,6 +94,10 @@ MessageBox = {
 };
 
 $(document).ready(function() {
+	if (localStorage.getItem("u")) {
+		Account = JSON.parse(localStorage.getItem("u"));	
+	}
+	
 	var win = $(window);
 	win.on('resize', function() {
 		var h = win.height() - 50;
@@ -347,22 +384,28 @@ Web = {
 			}
 			else {
 				self.bind('mousedown', function(e) {
-					e.preventDefault();
-
-					self.addClass('highlight');					
+					if (e.button == 0) {
+						e.preventDefault();
+	
+						self.addClass('highlight');
+					}
 				});
 				self.bind('mouseout', function(e) {
-					e.preventDefault();
-					
-					if (self.hasClass('highlight')) {
-						self.removeClass('highlight');
+					if (e.button == 0) {
+						e.preventDefault();
+						
+						if (self.hasClass('highlight')) {
+							self.removeClass('highlight');
+						}
 					}
 				});
 				self.bind('mouseup', function(e) {
-					e.preventDefault();
-
-					self.removeClass('highlight');					
-					self.callback();
+					if (e.button == 0) {
+						e.preventDefault();
+	
+						self.removeClass('highlight');					
+						self.callback();
+					}
 				});
 			}
 		});
