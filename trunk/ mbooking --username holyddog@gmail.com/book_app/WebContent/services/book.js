@@ -146,6 +146,15 @@ Service.Book = {
 		Web.post(url, params, callback);
 	},
 	
+	UnFollowAuthor: function(authorID,userID,callback){
+		var url = Service.url + '/unfollowAuthor.json';
+		var params = {
+				auid	:authorID,
+				uid		:userID
+		};
+		Web.post(url, params, callback);
+	},
+	
 	GetFollowAuthors: function(userID,callback){
 		var url = Service.url + '/getFollowAuthors.json';
 		var params = {
