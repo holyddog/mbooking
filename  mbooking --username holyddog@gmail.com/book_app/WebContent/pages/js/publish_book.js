@@ -7,6 +7,16 @@ Page.PublishBook = {
 		});
 		var btnAccept = container.find('[data-id=btn_a]');
 		btnAccept.tap(function() {
+			Page.btnShowLoading(btnAccept[0]);
+			Service.Book.PublishBook(params.bid, Account.userId, function() {
+				Page.btnHideLoading(btnAccept[0]);
+				
+				Page.back(function() {
+					Page.back(function(c) {
+						Page.Profile.invoke(Account.userId, c);			
+					});
+				});
+			});
 		});
 		
 		// set content data

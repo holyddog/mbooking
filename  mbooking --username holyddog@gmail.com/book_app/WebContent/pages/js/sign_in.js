@@ -25,6 +25,7 @@ Page.SignIn = {
 				Page.btnShowLoading(btnAccept[0]);
 				Service.User.SignIn(inputText.val(), inputPwd.val(), function(data) {
 					Page.btnHideLoading(btnAccept[0]);
+					
 					if (data.error) {
 						MessageBox.alert({ message: data.error.message });
 					}
@@ -41,7 +42,7 @@ Page.SignIn = {
 					}
 				});
 			}
-		});
+		}, true);
 		
 		// check required field before enable sign in button
 		container.find('input').each(function() {

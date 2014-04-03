@@ -153,7 +153,7 @@ Page = {
 	_stackPages: new Array(),
 	_slideMenu: false,
 	
-	_tempBack: undefined,
+	_tempBack: [],
 
 	open: function(page, append, params) {
 		var fn = function() {
@@ -176,7 +176,9 @@ Page = {
 		
 	},
 	back: function(fn) {
-		Page._tempBack = fn;
+		if (typeof fn == 'function') {
+			Page._tempBack.push(fn);
+		}
 		history.back();
 	},
 	slideMenu: function() {		
@@ -480,9 +482,13 @@ $(function(){
 				activeContainer.addClass('active');
 				$('[data-page=' + p + ']').remove();	
 				
-				if (typeof Page._tempBack == 'function') {
-					Page._tempBack(activeContainer);
-					Page._tempBack = undefined;
+//				if (typeof Page._tempBack == 'function') {
+//					Page._tempBack(activeContainer);
+//					Page._tempBack = undefined;
+//				}
+				if (Page._tempBack && Page._tempBack.length) {
+					var fn = Page._tempBack.pop();
+					fn(activeContainer);
 				}
 			}
 			else if (checkPage == -1) {

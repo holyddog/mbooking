@@ -74,7 +74,7 @@ Service.Book = {
 		Web.get(url, params, callback);
 	},
 
-	PublishBook : function(bookID,userID, callback) {
+	PublishBook : function(bookID, userID, callback) {
 		var url = Service.url + '/publishBook.json';
 		var params = {
 			bid : bookID,
