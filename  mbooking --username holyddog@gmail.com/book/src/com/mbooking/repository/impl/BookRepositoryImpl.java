@@ -67,6 +67,13 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 		int tcount = (int) db.count(query, Book.class);
 		Update user_update = new Update();
 		user_update.set("tcount", tcount);
+
+		Book b = new Book();
+		b.setBid(bid);
+		b.setTitle(book.getTitle());
+		b.setPic(book.getPic());
+		
+		user_update.set("leb", b);
 		
 		db.updateFirst(query, user_update, User.class);
 
@@ -129,14 +136,14 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			
 			User user = db.findOne(user_query,User.class);
 			
-			if(user!=null){
+			if (user != null) {
 				int tcount = (int) db.count(user_query, Book.class);
-				
+
 				Update user_update = new Update();
-				
+
 				user_update.set("tcount", tcount);
-				
-				if(user.getLeb()==bid){
+
+				if (user.getLeb() != null && user.getLeb().getBid().longValue() == bid.longValue()) {
 					Query book_query = new Query(Criteria.where("uid").is(uid));
 					book_query.fields().include("ledate");
 					book_query.fields().include("bid");
@@ -144,23 +151,32 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 					book_query.fields().include("pic");
 					book_query.sort().on("ledate", Order.DESCENDING);
 					Book book = db.findOne(book_query, Book.class);
-					
-					if(book!=null){
-						user_update.set("leb", book.getBid());
-					
-							String btitle = book.getTitle();
-							String bpic = book.getPic();
-							
-							if(btitle!=null&&!btitle.isEmpty()&&!btitle.equals("")&&!btitle.equals("undefined")){
-								user_update.set("lebt", btitle);
-							}
-							if(bpic!=null&&!bpic.isEmpty()&&!bpic.equals("")&&!bpic.equals("undefined")){
-								user_update.set("lebp", bpic);
-							}
-									
+
+					if (book != null) {
+						Book b = new Book();
+						b.setBid(bid);
+						b.setTitle(book.getTitle());
+						b.setPic(book.getPic());
+						user_update.set("leb", b);
+						
+//						user_update.set("leb", book.getBid());
+//
+//						String btitle = book.getTitle();
+//						String bpic = book.getPic();
+//
+//						if (btitle != null && !btitle.isEmpty()
+//								&& !btitle.equals("")
+//								&& !btitle.equals("undefined")) {
+//							user_update.set("lebt", btitle);
+//						}
+//						if (bpic != null && !bpic.isEmpty() && !bpic.equals("")
+//								&& !bpic.equals("undefined")) {
+//							user_update.set("lebp", bpic);
+//						}
+
 					}
-				}	
-				
+				}
+
 				db.updateFirst(user_query, user_update, User.class);
 			}
 		} catch (Exception e) {
