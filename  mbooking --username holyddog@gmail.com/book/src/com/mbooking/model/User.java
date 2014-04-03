@@ -28,7 +28,7 @@ public class User {
 	Integer fcount;			//Follower book count
 	Integer fgcount;		//Following book count
 	Integer pbcount;		//Public book count
-	Integer tbcount;		//Total book count
+	Integer tcount;		//Total book count
 
 	
 	public Long getUid() {
@@ -141,12 +141,12 @@ public class User {
 		this.pbcount = pbcount;
 	}
 
-	public Integer getTbcount() {
-		return tbcount;
+	public Integer getTcount() {
+		return tcount;
 	}
 
-	public void setTbcount(Integer tbcount) {
-		this.tbcount = tbcount;
+	public void setTcount(Integer tcount) {
+		this.tcount = tcount;
 	}
 
 }

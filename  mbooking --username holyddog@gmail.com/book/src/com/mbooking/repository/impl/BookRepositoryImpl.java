@@ -39,18 +39,18 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 		book.setTitle(title);
 		book.setDesc(desc);
 		book.setUid(uid);
-		
-		if(fdate!=null)
-		book.setFdate(fdate);
-		
-		if(tdate!=null)
-		book.setTdate(tdate);
-		
-		if(tags!=null&&tags.length!=0)
-		book.setTags(tags);
-		
-		if(pic!=null&&!pic.equals("")&&!pic.equals("undefined"))
-		book.setPic(pic);
+
+		if (fdate != null)
+			book.setFdate(fdate);
+
+		if (tdate != null)
+			book.setTdate(tdate);
+
+		if (tags != null && tags.length != 0)
+			book.setTags(tags);
+
+		if (pic != null && !pic.equals("") && !pic.equals("undefined"))
+			book.setPic(pic);
 
 		Criteria criteria = Criteria.where("uid").is(uid);
 		Query query = new Query(criteria);
@@ -63,7 +63,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 		Book rbook = new Book();
 		rbook.setBid(bid);
 		rbook.setTitle(title);
-		
+
 		int tcount = (int) db.count(query, Book.class);
 		Update user_update = new Update();
 		user_update.set("tcount", tcount);
