@@ -18,11 +18,21 @@ Page.Profile = {
 			Page.open('AddPage', true, { total: self.totalBook });
 		});
 		
+		// set content data
+		var uid = (params && params.uid)? params.uid: Account.userId;
+		this.invoke(uid, container);
+	},
+	
+	lastEditBook: {
+		
+	},
+	totalBook: 0,
+	
+	invoke: function(uid, container) {	
+		var self = this;
 		var content = container.find('.content');
 		Page.bodyShowLoading(content);
 		
-		// set content data
-		var uid = (params && params.uid)? params.uid: Account.userId;
 		Service.User.GetProfile(uid, function(data) {
 			Page.bodyHideLoading(content);
 			
@@ -35,12 +45,6 @@ Page.Profile = {
 			});
 		});
 	},
-	
-	lastEditBook: {
-		
-	},
-	totalBook: 0,
-	
 	load: function(container, userData) {		
 		container.find('.pname').text(userData.dname);
 		container.find('[data-id=bcount]').text((userData.pbcount)? userData.pbcount: 0);
@@ -50,7 +54,7 @@ Page.Profile = {
 		if (userData.tcount) {
 			this.totalBook = userData.tcount;
 		}		
-		if (!userData.pbcount) {
+		if (!userData.pbcount || userData.pbcount < 4) {
 			container.find('.books_panel .label a').hide();
 		}
 		
@@ -77,7 +81,7 @@ Page.Profile = {
 //		</div>
 	},
 	loadBook: function(books, container) {
-		var bookPanel = container.find('.books_panel .books');
+		var bookPanel = container.find('.books_panel .books').empty();
 		var bgImage = 'temp/home.jpg';
 		for (var i = 0; i < 3; i++) {
 			var b = books[i];
@@ -105,10 +109,9 @@ Page.Profile = {
 		}
 		
 		// set background image		
-		var img = $('<img class="profile_bg absolute fade_out show" src="' + bgImage +'" />');
-		img.load(function() {
-			img.prependTo(container);
-			
+//		var img = $('<img class="profile_bg absolute fade_out show" src="' + bgImage +'" />');
+		var img = container.find('#profile_bg').attr('src', bgImage);
+		img.load(function() {			
 			var h = $(window).innerHeight();
 			var w = $(window).innerWidth();
 			
