@@ -23,5 +23,14 @@ Service.User = {
 			uid: uid
 		};
 		Web.get(url, params, callback);
+	},		
+	ChangePassword: function(uid,oldpassword,newpassword, callback) {
+		var url = Service.url + '/changePassword.json';
+		var params = {
+			uid: uid,
+			oldpwd:oldpassword,
+			newpwd:newpassword
+		};
+		Web.post(url, params, callback);
 	}
 };
