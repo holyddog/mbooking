@@ -317,55 +317,74 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 	}
 	
 	
-	public List<Book> findFollowingBooks(Long uid) {
+	public List<Book> findFollowingBooks(Long uid,int skip,int limit) {
 		
 		try{	
-				ArrayList<Book> fbooks = new ArrayList<>();
-				
+
 				Criteria criteria = Criteria.where("uid").is(uid);
 				Query query = new Query(criteria);
-				query.fields().include("auid");
-				query.fields().include("auth");
-				List<Follow> follows = db.find(query, Follow.class);
+				User user = db.findOne(query,User.class);
+				Long[] followings  = user.getFollowing();
+				ArrayList<Long> arr = new ArrayList<Long>();
+				for(Long f : followings){
+					arr.add(f);
+				}
+				Criteria bcriteria = Criteria.where("uid").in(arr).and("pbdate").exists(true);
+				Query bquery = new Query(bcriteria);
+				bquery.sort().on("pbdate", Order.DESCENDING);
+				bquery.skip(skip).limit(limit);
 				
-				for(int i = 0;i<follows.size();i++){
-					
-					Follow follow = follows.get(i);
-					Long auid = follow.getAuid();
-					User author = follow.getAuth();
-					author.setUid(auid);
-					
-					Criteria bcriteria = Criteria.where("uid").is(auid).and("pbdate").exists(true);
-					Query bquery = new Query(bcriteria);
-
-					
-					List<Book> books = db.find(bquery, Book.class);
-					for(int j=0;j<books.size();j++){
-						Book book = books.get(j);
-						Long pbdate = book.getPbdate();
-						books.get(j).setAuthor(author);
-						books.get(j).setStrtime(TimeUtils.timefromNow(pbdate,System.currentTimeMillis()));
-					}
-					fbooks.addAll(books);
+				List<Book> books = db.find(bquery, Book.class);
+				
+				for(Book book : books){
+					Long pbdate = book.getPbdate();
+					book.setStrtime(TimeUtils.timefromNow(pbdate,System.currentTimeMillis()));
 				}
 				
-				Collections.sort(fbooks, new Comparator<Book>() {
-					@Override
-					public int compare(Book book1, Book book2) {
-						if(book1.getPbdate()>book2.getPbdate()){
-							return -1;
-						}
-						else if(book1.getPbdate()<book2.getPbdate()){
-							return 1;
-						}
-						else{
-							return 0;
-						}
-					}
-			    });
+				return books;
 				
+//				Criteria criteria = Criteria.where("uid").is(uid);
+//				Query query = new Query(criteria);
+//				query.fields().include("auid");
+//				query.fields().include("auth");
+//				List<Follow> follows = db.find(query, Follow.class);
 				
-				return fbooks;
+//				for(int i = 0;i<follows.size();i++){
+//					
+//					Follow follow = follows.get(i);
+//					Long auid = follow.getAuid();
+//					User author = follow.getAuth();
+//					author.setUid(auid);
+//					
+//					Criteria bcriteria = Criteria.where("uid").is(auid).and("pbdate").exists(true);
+//					Query bquery = new Query(bcriteria);
+//
+//					
+//					List<Book> books = db.find(bquery, Book.class);
+//					for(int j=0;j<books.size();j++){
+//						Book book = books.get(j);
+//						Long pbdate = book.getPbdate();
+//						books.get(j).setAuthor(author);
+//						books.get(j).setStrtime(TimeUtils.timefromNow(pbdate,System.currentTimeMillis()));
+//					}
+//					fbooks.addAll(books);
+//				}
+				
+//				Collections.sort(fbooks, new Comparator<Book>() {
+//					@Override
+//					public int compare(Book book1, Book book2) {
+//						if(book1.getPbdate()>book2.getPbdate()){
+//							return -1;
+//						}
+//						else if(book1.getPbdate()<book2.getPbdate()){
+//							return 1;
+//						}
+//						else{
+//							return 0;
+//						}
+//					}
+//			    });
+//				return fbooks;
 			}
 		catch(Exception e){
 			System.out.println(e);

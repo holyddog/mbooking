@@ -20,13 +20,15 @@ public class User {
 	Boolean inactive;
 
 	Book leb;		//last edit book
-
-	List<Book> books;
-
 	Integer fcount;			//Follower book count
 	Integer fgcount;		//Following book count
 	Integer pbcount;		//Public book count
 	Integer tcount;		//Total book count
+	
+	Long[] following;
+
+	//Service return
+	List<Book> books;
 
 	
 	public Long getUid() {
@@ -84,14 +86,7 @@ public class User {
 	public void setPic(String pic) {
 		this.pic = pic;
 	}
-	
-	public List<Book> getBooks() {
-		return books;
-	}
 
-	public void setBooks(List<Book> books) {
-		this.books = books;
-	}
 	public Book getLeb() {
 		return leb;
 	}
@@ -130,5 +125,19 @@ public class User {
 	public void setTcount(Integer tcount) {
 		this.tcount = tcount;
 	}
+	public Long[] getFollowing() {
+		return following;
+	}
 
+	public void setFollows(Long[] following) {
+		this.following = following;
+	}
+	
+	public List<Book> getBooks() {
+		return books;
+	}
+
+	public void setBooks(List<Book> books) {
+		this.books = books;
+	}
 }
