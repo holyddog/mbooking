@@ -89,4 +89,12 @@ public class UserJson {
 		return ResultResponse.getResult("result", userRepo.changePassword(uid, oldpassword, newpassword)!= null);
 	}
 	
+	@RequestMapping(method = RequestMethod.POST, value = "/changeDisplayName.json")
+	public @ResponseBody Object changeName(
+			@RequestParam(value = "uid") Long uid,
+			@RequestParam(value = "dname") String displayName
+			) {
+		return ResultResponse.getResult("result", userRepo.changeDisplayName(uid, displayName) != null);
+	}
+	
 }

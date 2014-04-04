@@ -63,4 +63,10 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		
 		return false;
 	}
+
+	@Override
+	public Boolean changeDisplayName(Long uid, String displayName) {
+		db.updateFirst(new Query(Criteria.where("uid").is(uid)), new Update().set("dname", displayName), User.class);
+		return false;
+	}
 }

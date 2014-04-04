@@ -7,4 +7,5 @@ public interface UserRepostitoryCustom {
 	User signUp(String email, String password, String displayName, String userName);
 	
 	Boolean changePassword(Long uid, String oldpassword, String newpassword);
+	Boolean changeDisplayName(Long uid, String displayName);
 }
