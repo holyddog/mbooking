@@ -196,7 +196,7 @@ public class ImageUtils {
 			Image xlarge_image = crop_img.getScaledInstance(EXTRA_LARGE_SIZE, EXTRA_LARGE_SIZE, 72);
 			Image large_image = crop_img.getScaledInstance(LARGE_SIZE, LARGE_SIZE, 72);
 			Image normal_image = crop_img.getScaledInstance(NORMAL_SIZE, NORMAL_SIZE, 72);
-			Image small_image = crop_img.getScaledInstance(SMALL_SIZE, NORMAL_SIZE, 72);
+			Image small_image = crop_img.getScaledInstance(SMALL_SIZE, SMALL_SIZE, 72);
 			Image cover_image = crop_img.getScaledInstance(COVER_HEIGHT_SIZE, COVER_HEIGHT_SIZE, 72);
 			 
 			
