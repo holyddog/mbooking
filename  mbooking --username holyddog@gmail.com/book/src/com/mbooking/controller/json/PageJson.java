@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mbooking.common.ErrorResponse;
 import com.mbooking.common.ResultResponse;
+import com.mbooking.model.Book;
 import com.mbooking.model.Page;
 import com.mbooking.repository.PageRepository;
 
@@ -28,7 +29,11 @@ public class PageJson {
 
 	) 
 	{
-		return ResultResponse.getResult("success",  pageRepo.create(bid, uid, date, pic, caption));
+		Book b = pageRepo.create(bid, uid, date, pic, caption);
+		if (b != null) {
+			return b;
+		}
+		return ErrorResponse.getError("Error, No page added");
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/editPage.json")
