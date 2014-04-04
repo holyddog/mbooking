@@ -17,7 +17,15 @@ Page.CreateBook = {
 			if (!btnAccept.hasClass('disabled')) {
 				Page.btnShowLoading(btnAccept[0]);
 				
-				var fn = function(data) {					
+				var fn = function(data) {	
+					// update local user data
+					Account.lastEditBook = {
+						bid: data.bid,
+						pic: data.pic,
+						title: data.title
+					};
+					localStorage.setItem("u", JSON.stringify(Account));
+					
 					Page.btnHideLoading(btnAccept[0]);
 					Page.back(function(c) {
 						if (!ret) {

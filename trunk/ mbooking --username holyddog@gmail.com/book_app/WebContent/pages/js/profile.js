@@ -14,9 +14,33 @@ Page.Profile = {
 		container.find('[data-id=btn_m]').tap(function() {
 			Page.slideMenu();
 		});
-		container.find('[data-id=btn_a]').tap(function() {
+		var btnAdd = container.find('[data-id=btn_a]');
+		btnAdd.tap(function() {
 			Page.open('AddPage', true, { total: self.totalBook });
 		});
+		
+		// change some layout for another user
+		if (params && params.uid != Account.userId) {
+			var btnFollow = container.find('.btn_follow');
+			btnFollow.tap(function() {
+				if (btnFollow.hasClass('follow')) {
+					Service.Book.UnFollowAuthor(params.uid, Account.userId, function() {
+						btnFollow.html(self.followHtml.unfollow).removeClass('follow');
+					});					
+				}
+				else {
+					Service.Book.FollowAuthor(params.uid, Account.userId, function() {
+						btnFollow.html(self.followHtml.follow).addClass('follow');
+					});					
+				}
+			});
+			btnAdd.hide();
+		}
+		else {
+			container.find('.box_area').removeClass('vertical').addClass('horizontal').addClass('center_middle');
+			container.find('.stat').addClass('flex1');
+			container.find('.btn_follow').hide();			
+		}
 		
 		// set content data
 		var uid = (params && params.uid)? params.uid: Account.userId;
@@ -27,6 +51,10 @@ Page.Profile = {
 		
 	},
 	totalBook: 0,
+	followHtml: {
+		follow: '<span style="padding-right: 5px;">+</span>FOLLOW',
+		unfollow: '<span style="padding-right: 5px;">&#10003;</span>FOLLOWING'
+	},
 	
 	invoke: function(uid, container) {	
 		var self = this;
