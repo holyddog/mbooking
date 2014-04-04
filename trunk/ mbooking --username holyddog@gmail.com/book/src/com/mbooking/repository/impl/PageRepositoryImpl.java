@@ -30,31 +30,33 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 	private MongoTemplate db;
 
 	@Override
-	public Boolean create(Long bid, Long uid, Long date, String pic, String caption) {
+	public Book create(Long bid, Long uid, Long date, String pic, String caption) {
 		Page page = new Page();
+		Book book = null;
 		try {
-			
+
 			page.setBid(bid);
-			
-			if(caption!=null)
-			page.setCaption(caption);
-			
-			if(date!=null)
-			page.setDate(date);
-			
-			Long create_date = System.currentTimeMillis(); 
-		
+
+			if (caption != null)
+				page.setCaption(caption);
+
+			if (date != null)
+				page.setDate(date);
+
+			Long create_date = System.currentTimeMillis();
+
 			page.setCdate(create_date);
 			page.setUid(uid);
-			
-			if(pic!=null&&!pic.equals("")&&!pic.equals("undefined"))
-			{
-				String img_path = ImageUtils.toImageFile(ConstValue.USER_FOLDER+uid+"/"+ConstValue.BOOK_FOLDER+bid, pic, true);
+
+			if (pic != null && !pic.equals("") && !pic.equals("undefined")) {
+				String img_path = ImageUtils.toImageFile(ConstValue.USER_FOLDER
+						+ uid + "/" + ConstValue.BOOK_FOLDER + bid, pic, true);
 				pic = img_path;
 				page.setPic(pic);
 			}
-			
-			Criteria criteria = Criteria.where("bid").is(bid).and("uid").is(uid);
+
+			Criteria criteria = Criteria.where("bid").is(bid).and("uid")
+					.is(uid);
 			Query query = new Query(criteria);
 			Integer seq = (int) db.count(query, Page.class) + 1;
 
@@ -64,42 +66,35 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 			page.setPid(pid);
 			db.insert(page);
 
-			if (seq == 1&&pic!=null&&!pic.equals("")&&!pic.equals("undefined")) {
+			if (seq == 1 && pic != null && !pic.equals("")
+					&& !pic.equals("undefined")) {
 				Update update = new Update();
 				update.set("pic", pic);
 				db.updateFirst(query, update, Book.class);
 			}
 
 			Update update = new Update();
-			int pcount = (int)db.count(new Query(Criteria.where("bid").is(bid)), Page.class);
+			int pcount = (int) db.count(
+					new Query(Criteria.where("bid").is(bid)), Page.class);
 			update.set("pcount", pcount);
 			update.set("ledate", create_date);
-			
+
 			db.updateFirst(query, update, Book.class);
 
 			Update user_update = new Update();
-			user_update.set("leb", bid);
-			
-			Book book = db.findOne(new Query(Criteria.where("bid").is(bid)), Book.class);
-			if(book!=null){
-				String btitle = book.getTitle();
-				String bpic = book.getPic();
-				
-				if(btitle!=null&&!btitle.isEmpty()&&!btitle.equals("")&&!btitle.equals("undefined")){
-					user_update.set("lebt", btitle);
-				}
-				if(bpic!=null&&!bpic.isEmpty()&&!bpic.equals("")&&!bpic.equals("undefined")){
-					user_update.set("lebp", bpic);
-				}
-			}
-			
-			db.updateFirst(new Query(Criteria.where("uid").is(uid)), user_update, User.class);
-			
+			Query q = new Query(Criteria.where("bid").is(bid));
+			q.fields().include("title").include("pic");
+			book = db.findOne(q, Book.class);
+			user_update.set("leb", book);
+
+			db.updateFirst(new Query(Criteria.where("uid").is(uid)),
+					user_update, User.class);
+
 		} catch (Exception e) {
 			System.out.println("Create page arr: " + e);
-			return false;
+			return null;
 		}
-		return true;
+		return book;
 	}
 
 	@Override

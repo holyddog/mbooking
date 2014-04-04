@@ -6,7 +6,7 @@ import com.mbooking.model.Page;
 
 public interface PageRepostitoryCustom {
 	
-	public Boolean create(
+	public Book create(
 			Long bid,
 			Long uid,
 			Long date,
