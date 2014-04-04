@@ -234,7 +234,7 @@
 	z-index: 1;
 }
 #page_Profile .profile_info {
-	bottom: 175px;
+	bottom: 185px;
 	width: 100%;
 	position: absolute;
 	height: 90px;
@@ -242,7 +242,7 @@
 #page_Profile .profile_info .pimage {
 	width: 70px;
 	height: 70px;
-	margin: 10px 0 10px 10px;
+	margin: 15px 5px 10px 10px;
 	border-radius: 35px;
 	background-color: #ddd;
 }
@@ -256,17 +256,19 @@
 	padding-top: 15px;
 	font-size: 150%;
 	position: absolute;
-	bottom: 270px;
+	bottom: 280px;
 	left: 10px;
 }
 #page_Profile .profile_info .stat {
 	overflow: hidden;
 	margin-top: 10px;
+	height: 40px;
 }
 #page_Profile .profile_info .stat .counter {
 	border-right: solid 1px #fff;
 	color: #fff;
 	text-align: center;
+	padding-top: 2px;
 }
 #page_Profile .profile_info .stat .counter:last-child {
 	border-right: none;
@@ -277,6 +279,26 @@
 #page_Profile .profile_info .stat .label {	
 	font-size: 70%;
 	font-weight: bold;
+}
+#page_Profile .btn_follow {
+	display: block;
+	margin: 10px;
+	text-align: center;
+	font-size: 70%;
+	background-color: transparent;
+	line-height: 28px;
+	color: #fff;
+	border: solid 1px #fff;
+}
+#page_Profile .btn_follow:active, #page_Profile .btn_follow.follow:active {
+	background-color: #fff;
+	color: #333;
+}
+#page_Profile .btn_follow.follow {
+	background: #ccc;
+	line-height: 30px;
+	color: #333;
+	border-style: none;
 }
 
 #page_Book .btitle {
