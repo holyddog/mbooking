@@ -34,7 +34,8 @@ Page.SignIn = {
 							userId: data.uid,
 							email: data.email,
 							displayName: data.dname,
-							userName: data.uname
+							userName: data.uname,
+							lastEditBook: data.leb
 						};
 						localStorage.setItem("u", JSON.stringify(Account));
 						

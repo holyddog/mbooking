@@ -1,6 +1,6 @@
 Page.AddPage = {
 	url: 'pages/html/add_page.html',
-	init: function(params, container) {
+	init: function(params, container) {		
 		var selBook = container.find('.sel_book');
 		var linkCreate = container.find('[data-id=link_c]');
 		if (!params.total) {
@@ -8,6 +8,13 @@ Page.AddPage = {
 		}
 		else {
 			linkCreate.hide();
+			
+			if (!selBook.data('bid')) {
+				var lb = Account.lastEditBook;
+				selBook.find('.bimage img').attr('src', Config.FILE_URL + Util.getImage(lb.pic, Config.FILE_SIZE.COVER));
+				selBook.find('.btitle span').text(lb.title);
+				selBook.data('bid', lb.bid);
+			}
 		}
 		
 		var captionText = container.find('[name=caption]');
@@ -56,6 +63,14 @@ Page.AddPage = {
 				// reset form
 				removeFn();
 				captionText.val(null);
+				
+				// update local user data
+				Account.lastEditBook = {
+					bid: data.bid,
+					pic: data.pic,
+					title: data.title
+				};
+				localStorage.setItem("u", JSON.stringify(Account));
 			};
 			Service.Page.CreatePage(bid, Account.userId, captionText.val(), pic, null, fn);
 		});
