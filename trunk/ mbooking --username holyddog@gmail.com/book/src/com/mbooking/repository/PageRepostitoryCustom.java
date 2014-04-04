@@ -37,7 +37,9 @@ public interface PageRepostitoryCustom {
 	);
 	
 	public List<Page> findFollowingPages(
-			Long uid
+			Long uid,
+			int skip,
+			int limit
 	);
 	
 }

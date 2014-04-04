@@ -65,10 +65,13 @@ public class FollowJson {
 	@RequestMapping(method = RequestMethod.GET, value = "/getFollowBooksByUID.json")
 	public @ResponseBody
 	Object getFollowBooksByUID(
-			@RequestParam(value = "uid") Long uid
-		) {
+			@RequestParam(value = "uid") Long uid,
+			@RequestParam(value = "skip") int skip,
+			@RequestParam(value = "limit") int limit
+		) 
+	{
 		
-		List<Book> books = bookRepo.findFollowingBooks(uid);
+		List<Book> books = bookRepo.findFollowingBooks(uid,skip,limit);
 		if (books != null) {
 			return books;
 		}
@@ -79,10 +82,12 @@ public class FollowJson {
 	@RequestMapping(method = RequestMethod.GET, value = "/getFollowPagessByUID.json")
 	public @ResponseBody
 	Object getFollowPagessByUID(
-			@RequestParam(value = "uid") Long uid
+			@RequestParam(value = "uid") Long uid,
+			@RequestParam(value = "skip") int skip,
+			@RequestParam(value = "limit") int limit
 		) {
 		
-		List<Page> pages = pageRepo.findFollowingPages(uid);
+		List<Page> pages = pageRepo.findFollowingPages(uid,skip,limit);
 		if (pages != null) {
 			return pages;
 		}
