@@ -33,5 +33,14 @@ Service.User = {
 			newpwd : newpassword
 		};
 		Web.post(url, params, callback);
+	},
+	ChangeProfilePic: function(uid,pic, callback) {
+		var url = Service.url + '/changeProfilePic.json';
+		var params = {
+			uid: uid,
+			pic:pic
+		};
+		Web.post(url, params, callback);
 	}
+
 };
