@@ -84,9 +84,9 @@ public class BookJson {
 	@RequestMapping(method = RequestMethod.GET, value = "/getBooksByUid.json")
 	public @ResponseBody
 	Object getBooksByUid(@RequestParam(value = "uid") Long uid,
-						@RequestParam(value = "pbstate", required = false) int pbstate,
-						@RequestParam(value = "skip", required = false) int  skip,
-						@RequestParam(value = "limit", required = false) int limit) { 	// 0:all , 1:publish, 2:un-publish
+						@RequestParam(value = "pbstate", required = false) Integer pbstate,
+						@RequestParam(value = "skip", required = false) Integer  skip,
+						@RequestParam(value = "limit", required = false) Integer limit) { 	// 0:all , 1:publish, 2:un-publish
 		List<Book> books;
 		
 		books = bookRepo.findBooksByUid(uid, pbstate, skip, limit);
@@ -101,8 +101,8 @@ public class BookJson {
 	@RequestMapping(method = RequestMethod.GET, value = "/getPublishBooks.json")
 	public @ResponseBody
 	Object getPublishBooks(
-			@RequestParam(value = "skip", required = false) int  skip,
-			@RequestParam(value = "limit", required = false) int limit)  {
+			@RequestParam(value = "skip", required = false) Integer  skip,
+			@RequestParam(value = "limit", required = false) Integer limit)  {
 		
 		List<Book> books = bookRepo.findByPbdateExists(true,skip,limit);
 		if (books != null && books.size() != 0) {
