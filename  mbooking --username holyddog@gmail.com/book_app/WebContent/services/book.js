@@ -71,17 +71,35 @@ Service.Book = {
 		var params = {
 			uid : userID
 		};
+		
+		Web.get(url, params, callback);
+	},
+
+	GetBooksByUid : function(userID, callback) {
+		var url = Service.url + '/getBooksByUid.json';
+		var params = {
+			uid : userID
+		};
+		
 		Web.get(url, params, callback);
 	},
 	
-	GetBooksByUid : function(userID,pbstate,skip,limit, callback) {
+	GetBooksByUidWithState : function(userID,pbstate,skip,limit, callback) {
 		var url = Service.url + '/getBooksByUid.json';
 		var params = {
-			uid : userID,
-			pbstate:pbstate,	//0||null : all, 1: publish, 2: un-publish (draft)
-			skip:skip,
-			limit:limit
+			uid : userID
 		};
+		//State -> 0 or null :all , 1:publish, 2:un-publish
+		
+		if(pbstate!=null&&pbstate!=undefined)
+			params.pbstate = pbstate;
+					
+		if(skip!=null&&skip!=undefined)
+			params.skip = skip;
+			
+		if(limit!=null&&limit!=undefined)
+			params.limit = limit;
+		
 		Web.get(url, params, callback);
 	},
 
@@ -111,10 +129,14 @@ Service.Book = {
 	
 	GetPublishBooks : function(skip, limit, callback) {
 		var url = Service.url + '/getPublishBooks.json';
-		var params = {
-				skip:skip,
-				limit:limit
-		};
+		var params = {};
+		
+		if(skip!=null&&skip!=undefined)
+			params.skip = skip;
+			
+		if(limit!=null&&limit!=undefined)
+			params.limit = limit;
+		
 		Web.get(url, params, callback);
 	},
 	
@@ -194,20 +216,30 @@ Service.Book = {
 	GetFollowBooksByUID: function(userID,skip,limit,callback){
 		var url = Service.url + '/getFollowBooksByUID.json';
 		var params = {
-				uid	:userID,
-				skip:skip,
-				limit:limit
+				uid	:userID
 		};
+		
+		if(skip!=null&&skip!=undefined)
+			params.skip = skip;
+			
+		if(limit!=null&&limit!=undefined)
+			params.limit = limit;
+		
 		Web.get(url, params, callback);
 	},
 	
 	GetFollowPagessByUID: function(userID,skip,limit,callback){
 		var url = Service.url + '/getFollowPagessByUID.json';
 		var params = {
-				uid	:userID,
-				skip:skip,
-				limit:limit
+				uid	:userID
 		};
+		
+		if(skip!=null&&skip!=undefined)
+			params.skip = skip;
+			
+		if(limit!=null&&limit!=undefined)
+			params.limit = limit;
+			
 		Web.get(url, params, callback);
 	},
 	
