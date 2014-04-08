@@ -1,6 +1,6 @@
 package com.mbooking.repository.impl;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -352,11 +352,11 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 				Query query = new Query(criteria);
 				User user = db.findOne(query,User.class);
 				Long[] followings  = user.getFollowing();
-				ArrayList<Long> arr = new ArrayList<Long>();
-				for(Long f : followings){
-					arr.add(f);
-				}
-				Criteria bcriteria = Criteria.where("uid").in(arr).and("pbdate").exists(true);
+//				ArrayList<Long> arr = new ArrayList<Long>();
+//				for(Long f : followings){
+//					arr.add(f);
+//				}
+				Criteria bcriteria = Criteria.where("uid").in(Arrays.asList(followings)).and("pbdate").exists(true);
 				Query bquery = new Query(bcriteria);
 				bquery.sort().on("pbdate", Order.DESCENDING);
 				
