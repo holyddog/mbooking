@@ -17,10 +17,11 @@ Service.User = {
 		};
 		Web.post(url, params, callback);
 	},		
-	GetProfile: function(uid, callback) {
+	GetProfile: function(uid,follid, callback) {
 		var url = Service.url + '/getProfile.json';
 		var params = {
-			uid: uid
+			uid: uid,
+			follid:follid
 		};
 		Web.get(url, params, callback);
 	},		
