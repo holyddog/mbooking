@@ -10,6 +10,8 @@ public interface ConstValue {
 		"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 	};
 
+	public static final int PROFILE_SIZE = 100;
+	
 	public static final int SMALL_SIZE = 270;
 	public static final int NORMAL_SIZE = 500;
 	public static final int LARGE_SIZE = 800;
@@ -21,6 +23,11 @@ public interface ConstValue {
 	
 	public static final String USER_FOLDER ="u";
 	public static final String BOOK_FOLDER ="b";
+	
+	public static final int NONE_TYPE =0;
+	public static final int PAGE_IMG_TYPE =1;
+	public static final int PROFILE_IMG_TYPE =2;
+	
 	
 
 }

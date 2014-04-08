@@ -6,9 +6,11 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
+import com.mbooking.constant.ConstValue;
 import com.mbooking.model.User;
 import com.mbooking.repository.UserRepostitoryCustom;
 import com.mbooking.util.Convert;
+import com.mbooking.util.ImageUtils;
 import com.mbooking.util.MongoCustom;
 
 public class UserRepositoryImpl implements UserRepostitoryCustom {
@@ -66,7 +68,43 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 
 	@Override
 	public Boolean changeDisplayName(Long uid, String displayName) {
-		db.updateFirst(new Query(Criteria.where("uid").is(uid)), new Update().set("dname", displayName), User.class);
-		return false;
+		try{
+			db.updateFirst(new Query(Criteria.where("uid").is(uid)), new Update().set("dname", displayName), User.class);
+			return true;
+		} catch (Exception e) {
+			System.out.println("Unsuccess Change DisplayName, User Service error: " + e);
+			return false;
+		}
+	}
+
+	@Override
+	public Boolean changePic(Long uid, String pic) {
+		try{
+				User user = db.findOne(new Query(Criteria.where("uid").is(uid)), User.class);
+				String oldpic = user.getPic();	
+				
+				String path = "";
+						
+				if (pic != null && !pic.equals("") && !pic.equals("undefined")) {
+					String img_path = ImageUtils.toImageFile(ConstValue.USER_FOLDER
+							+ uid , pic, ConstValue.PROFILE_IMG_TYPE);
+					path = img_path;
+			
+					db.updateFirst(new Query(Criteria.where("uid").is(uid)), new Update().set("pic", path), User.class);
+					
+					if (oldpic != null && !oldpic.equals("") && !oldpic.equals("undefined")) {
+						ImageUtils.deleteImageFile(oldpic, ConstValue.PROFILE_IMG_TYPE);
+					}	
+					
+					
+					return true;	
+				
+				}
+			
+			return false;
+		} catch (Exception e) {
+			System.out.println("Unsuccess Change Profile Pic, User Service error: " + e);
+			return false;
+		}
 	}
 }
