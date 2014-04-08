@@ -144,7 +144,7 @@ public class ImageUtils {
 		    Graphics g = dest.getGraphics();
 		   
 		    if(portrait&&y!=0){
-		    	g.drawImage(image, 0, 0, size, size, x, y/2, x + size, y + (y/2) + size, null);
+		    	g.drawImage(image, 0, 0, size, size, x, y/2, x + size, y - (y/2) + size, null);
 		    }
 		    else{
 		     	g.drawImage(image, 0, 0, size, size, x, y, x + size, y + size, null);
