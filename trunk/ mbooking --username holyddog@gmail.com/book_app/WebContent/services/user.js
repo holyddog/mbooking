@@ -25,13 +25,6 @@ Service.User = {
 		};
 		Web.get(url, params, callback);
 	},
-	GetProfile : function(uid, callback) {
-		var url = Service.url + '/getProfile.json';
-		var params = {
-			uid : uid
-		};
-		Web.get(url, params, callback);
-	},
 	ChangePassword : function(uid, oldpassword, newpassword, callback) {
 		var url = Service.url + '/changePassword.json';
 		var params = {
