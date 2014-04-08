@@ -39,6 +39,8 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 		book.setTitle(title);
 		book.setDesc(desc);
 		book.setUid(uid);
+		
+		book.setLedate(System.currentTimeMillis());
 
 		if (fdate != null)
 			book.setFdate(fdate);
@@ -309,15 +311,40 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 	}
 
 	@Override
-	public List<Book> findByPbdateExists(boolean exists) {
-		Query query = new Query(Criteria.where("pbdate").exists(true));
+	public List<Book> findByPbdateExists(boolean exists,Integer skip,Integer limit) {
+		
+		Criteria criteria = Criteria.where("pbdate").exists(exists);
+		Query query = new Query(criteria);
+		
 		query.sort().on("pbdate", Order.DESCENDING);
 		query.fields().include("bid").include("title").include("pic");
-		return db.find(query, Book.class);
+		
+		if(skip!=null&&limit!=null&&limit!=0)
+		query.skip(skip).limit(limit);
+		
+		List<Book> books =  db.find(query, Book.class);
+		
+		
+		for(int i = 0;i<books.size();i++){
+			Long uid = books.get(i).getUid();
+			Query user_query = new Query(Criteria.where("uis").is(uid));
+			
+			user_query.fields().include("uid");
+			user_query.fields().include("pic");
+			user_query.fields().include("dname");
+			
+			User user = db.findOne(user_query,User.class);
+			
+			if(user!=null){
+				books.get(i).setAuthor(user);
+			}
+		}
+		
+		return books;
 	}
 	
 	
-	public List<Book> findFollowingBooks(Long uid,int skip,int limit) {
+	public List<Book> findFollowingBooks(Long uid,Integer skip,Integer limit) {
 		
 		try{	
 
@@ -332,6 +359,8 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 				Criteria bcriteria = Criteria.where("uid").in(arr).and("pbdate").exists(true);
 				Query bquery = new Query(bcriteria);
 				bquery.sort().on("pbdate", Order.DESCENDING);
+				
+				if(skip!=null&&limit!=null&&limit!=0)
 				bquery.skip(skip).limit(limit);
 				
 				List<Book> books = db.find(bquery, Book.class);
@@ -390,6 +419,33 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			System.out.println(e);
 			return null;
 		}
+	}
+
+	@Override
+	public List<Book> findBooksByUid(Long uid,Integer pbstate,Integer skip,Integer limit) {
+		
+		Criteria criteria  = Criteria.where("uid").is(uid);
+			
+		if(pbstate==1)
+		criteria.and("pbdate").exists(true);
+		
+		if(pbstate==2)
+		criteria.and("pbdate").exists(false);
+			
+		Query query = new Query(criteria);
+		
+		if(pbstate==null || pbstate==0||pbstate==2)
+			query.sort().on("ledate", Order.DESCENDING);
+		else if(pbstate==1)
+			query.sort().on("pbdate", Order.DESCENDING);
+		
+		
+		if(skip!=null&&limit!=null&&limit!=0)
+		query.skip(skip).limit(limit);
+		
+		query.fields().include("title").include("pic");
+		return db.find(query, Book.class);
+	
 	}
 	
 }

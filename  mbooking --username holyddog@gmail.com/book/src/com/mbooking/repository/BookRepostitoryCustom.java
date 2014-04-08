@@ -24,8 +24,9 @@ public interface BookRepostitoryCustom {
 	
 	public List<Book> findLastBookByUid(Long uid);
 	
-	public List<Book> findByPbdateExists(boolean exists);
+	public List<Book> findByPbdateExists(boolean exists,Integer skip,Integer limit);
 	
-	public List<Book> findFollowingBooks(Long uid,int skip,int limit);
-	
+	public List<Book> findFollowingBooks(Long uid,Integer skip,Integer limit);
+
+	public List<Book> findBooksByUid(Long uid,Integer pbstate,Integer skip,Integer limit);
 }

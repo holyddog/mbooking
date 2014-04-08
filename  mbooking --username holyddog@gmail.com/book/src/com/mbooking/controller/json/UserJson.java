@@ -14,6 +14,7 @@ import com.mbooking.common.ResultResponse;
 import com.mbooking.model.Book;
 import com.mbooking.model.User;
 import com.mbooking.repository.BookRepository;
+import com.mbooking.repository.FollowRepository;
 import com.mbooking.repository.UserRepository;
 
 @Controller
@@ -22,15 +23,23 @@ public class UserJson {
 	UserRepository userRepo;	
 	@Autowired
 	BookRepository bookRepo;
-
+	@Autowired
+	FollowRepository followRepo;
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/getProfile.json")
 	public @ResponseBody Object getProfile(
-			@RequestParam(value = "uid") Long uid
+			@RequestParam(value = "uid") Long uid,
+			@RequestParam(value = "follid", required = false) Long follid	//Follow id
 			) {
 		User user = userRepo.findById(uid);
 		if (user != null) {
 			List<Book> books = bookRepo.findLastBookByUid(uid);
 			user.setBooks(books);
+			
+			if(follid!=null){
+				user.setIsFollow(followRepo.isFollow(follid, uid));
+			}
+			
 			return user;
 		}
 		return ErrorResponse.getError("User not found");
@@ -86,7 +95,7 @@ public class UserJson {
 			@RequestParam(value = "oldpwd") String oldpassword,
 			@RequestParam(value = "newpwd") String newpassword
 			) {
-		return ResultResponse.getResult("result", userRepo.changePassword(uid, oldpassword, newpassword)!= null);
+		return ResultResponse.getResult("result", userRepo.changePassword(uid, oldpassword, newpassword)!= false);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/changeDisplayName.json")
