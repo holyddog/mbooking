@@ -327,7 +327,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 		
 		List<Book> books =  db.find(query, Book.class);
 		
-		
+//		
 		for(int i = 0;i<books.size();i++){
 			Long uid = books.get(i).getUid();
 			Query user_query = new Query(Criteria.where("uis").is(uid));
@@ -342,7 +342,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 				books.get(i).setAuthor(user);
 			}
 		}
-		
+//		
 		return books;
 	}
 	
