@@ -16,4 +16,9 @@ public interface FollowRepostitoryCustom {
 			Long uid,
 			Long auid
 	);
+	
+	public Boolean isFollow(
+			Long uid,	//follid from UserJson
+			Long auid	//uid from UserJson
+	);
 }

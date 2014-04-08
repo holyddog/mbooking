@@ -29,7 +29,7 @@ public class User {
 
 	//Service return
 	List<Book> books;
-
+	Boolean isFollow;
 	
 	public Long getUid() {
 		return uid;
@@ -140,4 +140,13 @@ public class User {
 	public void setBooks(List<Book> books) {
 		this.books = books;
 	}
+	
+	public Boolean getIsFollow() {
+		return isFollow;
+	}
+
+	public void setIsFollow(Boolean isFollow) {
+		this.isFollow = isFollow;
+	}
+
 }
