@@ -69,7 +69,18 @@ Service.Book = {
 	GetBooksByUid : function(userID, callback) {
 		var url = Service.url + '/getBooksByUid.json';
 		var params = {
+			uid : userID
+		};
+		Web.get(url, params, callback);
+	},
+	
+	GetBooksByUid : function(userID,pbstate,skip,limit, callback) {
+		var url = Service.url + '/getBooksByUid.json';
+		var params = {
 			uid : userID,
+			pbstate:pbstate,	//0||null : all, 1: publish, 2: un-publish (draft)
+			skip:skip,
+			limit:limit
 		};
 		Web.get(url, params, callback);
 	},
@@ -95,6 +106,15 @@ Service.Book = {
 	GetPublishBooks : function(callback) {
 		var url = Service.url + '/getPublishBooks.json';
 		var params = {};
+		Web.get(url, params, callback);
+	},
+	
+	GetPublishBooks : function(skip, limit, callback) {
+		var url = Service.url + '/getPublishBooks.json';
+		var params = {
+				skip:skip,
+				limit:limit
+		};
 		Web.get(url, params, callback);
 	},
 	
@@ -157,6 +177,14 @@ Service.Book = {
 	
 	GetFollowAuthors: function(userID,callback){
 		var url = Service.url + '/getFollowAuthors.json';
+		var params = {
+				uid	:userID
+		};
+		Web.get(url, params, callback);
+	},
+	
+	GetFollowBooksByUID: function(userID,callback){
+		var url = Service.url + '/getFollowBooksByUID.json';
 		var params = {
 				uid	:userID
 		};
