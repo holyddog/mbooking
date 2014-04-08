@@ -14,6 +14,7 @@ import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
+import com.mbooking.constant.ConstValue;
 import com.mbooking.model.Book;
 import com.mbooking.model.Page;
 import com.mbooking.model.User;
@@ -130,7 +131,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 
 				String filename = pages.get(i).getPic();
 				if (filename != null && filename != "") {
-					ImageUtils.deleteImageFile(filename, true);
+					ImageUtils.deleteImageFile(filename, ConstValue.PAGE_IMG_TYPE);
 				}
 			}
 			
@@ -327,7 +328,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 		
 		List<Book> books =  db.find(query, Book.class);
 		
-//		
+//		-------------------Wait for tuning 
 		for(int i = 0;i<books.size();i++){
 			Long uid = books.get(i).getUid();
 			Query user_query = new Query(Criteria.where("uis").is(uid));

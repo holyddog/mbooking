@@ -50,7 +50,7 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 
 			if (pic != null && !pic.equals("") && !pic.equals("undefined")) {
 				String img_path = ImageUtils.toImageFile(ConstValue.USER_FOLDER
-						+ uid + "/" + ConstValue.BOOK_FOLDER + bid, pic, true);
+						+ uid + "/" + ConstValue.BOOK_FOLDER + bid, pic, ConstValue.PAGE_IMG_TYPE);
 				pic = img_path;
 				page.setPic(pic);
 			}
@@ -139,7 +139,7 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 			// Remove Image Files
 			String filename = page.getPic();
 			if (filename != null && filename != "")
-				ImageUtils.deleteImageFile(filename, true);
+				ImageUtils.deleteImageFile(filename, ConstValue.PAGE_IMG_TYPE);
 
 			// Update pcount
 			criteria = Criteria.where("bid").is(bid).and("uid").is(uid);

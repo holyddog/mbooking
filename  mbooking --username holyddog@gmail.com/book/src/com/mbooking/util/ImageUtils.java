@@ -94,7 +94,7 @@ public class ImageUtils {
 		 return false;
 	}
 	
-	public static boolean cropSquareAndResize(File input, File output, int square_size) {
+	public static boolean cropSquareAndResize(File input, File output, int square_size,boolean portrait) {
 		try {
 				
 			int maxWidth=square_size;
@@ -142,7 +142,14 @@ public class ImageUtils {
 			
 		    BufferedImage dest = new BufferedImage(size, size, BufferedImage.TYPE_INT_RGB);
 		    Graphics g = dest.getGraphics();
-		    g.drawImage(image, 0, 0, size, size, x, y, x + size, y + size, null);
+		   
+		    if(portrait&&y!=0){
+		    	g.drawImage(image, 0, 0, size, size, x, y/2, x + size, y + (y/2) + size, null);
+		    }
+		    else{
+		     	g.drawImage(image, 0, 0, size, size, x, y, x + size, y + size, null);
+			}
+		    
 		    g.dispose();
 		    
 		    boolean success = ImageIO.write(dest, Convert.getExt(input.getName()), output);
@@ -280,11 +287,11 @@ public class ImageUtils {
 	
 	
 	public static String toImageFile(String image_folder,String base64) {
-		return toImageFile(image_folder,base64, false);
+		return toImageFile(image_folder,base64, ConstValue.NONE_TYPE);
 	}
 	
 	
-	public static String toImageFile(String image_folder,String base64, boolean crop) {
+	public static String toImageFile(String image_folder,String base64, Integer imgtype) {
 		if (isEmpty(base64)) {
 			return null;
 		}
@@ -309,9 +316,15 @@ public class ImageUtils {
 			output.flush();  
 			output.close();
 
-			if (crop) {
+			if (imgtype==ConstValue.PAGE_IMG_TYPE) {
 				
 				cropSquareAndResizeCustom(file,uploadPath,key);
+			}
+			else if(imgtype==ConstValue.PROFILE_IMG_TYPE){
+				
+				 File profilePicFile = new File(uploadPath + "/" + key+ "_sp.jpg");	// Small Profile Pic	
+				
+				cropSquareAndResize(file, profilePicFile, ConstValue.PROFILE_SIZE, true);
 			}
 			
 		} 
@@ -321,7 +334,7 @@ public class ImageUtils {
 		return "/"+image_folder+"/" + image;
 	}
 	
-	public static Boolean deleteImageFile(String filename,boolean has_crop){
+	public static Boolean deleteImageFile(String filename,Integer imgtype){
 		
 		String path = ConfigReader.getProp("upload_path");
 		
@@ -338,7 +351,7 @@ public class ImageUtils {
 			System.out.println( "Can't Delete File "+path+filename+" error:"+ e);
 			return false;
 		}
-		if(has_crop){
+		if(imgtype==ConstValue.PAGE_IMG_TYPE){
 			
 			String small_size_path = path + filename.replace(".jpg","_s.jpg");	
 			String normal_size_path = path + filename.replace(".jpg","_n.jpg");	
@@ -384,7 +397,26 @@ public class ImageUtils {
 				return false;
 			}
 		}
+		else if(imgtype==ConstValue.PROFILE_IMG_TYPE){
+			
+			String profile_img_path = path + filename.replace(".jpg","_sp.jpg");	
 		
+			try{
+				
+				File profile_img_file = new File(profile_img_path);
+			
+				if(profile_img_file.delete()){
+	    			System.out.println(profile_img_file + " is deleted!");
+	    		}else{
+	    			System.out.println("Delete "+profile_img_file +" is failed.");
+	    		}
+				
+			}
+			catch(Exception e){
+				System.out.println( "Can't delete profile image  error:"+ e);
+				return false;
+			}
+		}
 		return true;
 	}
 }
