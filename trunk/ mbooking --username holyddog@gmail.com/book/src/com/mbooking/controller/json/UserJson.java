@@ -36,7 +36,7 @@ public class UserJson {
 			List<Book> books = bookRepo.findLastBookByUid(uid);
 			user.setBooks(books);
 			
-			if(follid!=null){
+			if (follid != null) {
 				user.setIsFollow(followRepo.isFollow(follid, uid));
 			}
 			

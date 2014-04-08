@@ -2,8 +2,6 @@ package com.mbooking.repository;
 
 import java.util.List;
 
-import org.springframework.data.mongodb.repository.Query;
-
 import com.mbooking.model.Book;
 
 public interface BookRepostitoryCustom {
@@ -23,6 +21,7 @@ public interface BookRepostitoryCustom {
 	public Book findBookWithPages(Long bid, Long uid);
 	
 	public List<Book> findLastBookByUid(Long uid);
+	public String findLastCover(Long uid);
 	
 	public List<Book> findByPbdateExists(boolean exists,Integer skip,Integer limit);
 	
