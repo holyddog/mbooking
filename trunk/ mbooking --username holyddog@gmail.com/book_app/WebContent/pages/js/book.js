@@ -3,17 +3,30 @@ Page.Book = {
 	init: function(params, container) {	
 		var self = this;
 		
+		var uid = (params && params.uid)? params.uid: Account.userId;
+		var isGuest = false;
+		if (uid != Account.userId) {
+			isGuest = true;
+		}
+		
 		// set toolbar buttons
 		var btnBack = container.find('[data-id=btn_b]'); 
 		btnBack.tap(function() {
 			Page.back();
 		});
-		container.find('[data-id=btn_c]').tap(function() {
+		var btnComment = container.find('[data-id=btn_c]');
+		btnComment.tap(function() {
 			Page.open('Comments', true);
 		});
-		container.find('[data-id=btn_s]').tap(function() {
+		var btnShare = container.find('[data-id=btn_s]');
+		btnShare.tap(function() {
 			alert('share');
 		});	
+		
+		if (!isGuest) {
+			btnShare.hide();
+			btnComment.hide();
+		}
 		
 		var content = container.find('.content');
 		Page.bodyShowLoading(content);
