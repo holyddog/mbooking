@@ -103,7 +103,15 @@ public class UserJson {
 			@RequestParam(value = "uid") Long uid,
 			@RequestParam(value = "dname") String displayName
 			) {
-		return ResultResponse.getResult("result", userRepo.changeDisplayName(uid, displayName) != null);
+		return ResultResponse.getResult("result", userRepo.changeDisplayName(uid, displayName) != false);
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/changeProfilePic.json")
+	public @ResponseBody Object changeProfilePic(
+			@RequestParam(value = "uid") Long uid,
+			@RequestParam(value = "pic") String pic
+			) {
+		return ResultResponse.getResult("result", userRepo.changePic(uid, pic) != false);
 	}
 	
 }
