@@ -1,8 +1,11 @@
 package com.mbooking.repository.impl;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.collections.ListUtils;
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -356,7 +359,23 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 //				for(Long f : followings){
 //					arr.add(f);
 //				}
-				Criteria bcriteria = Criteria.where("uid").in(Arrays.asList(followings)).and("pbdate").exists(true);
+				
+				
+				List<Long> auids = Arrays.asList(followings);
+				Query auquery = new Query(Criteria.where("uid").in(auids));
+				auquery.sort().on("uid",  Order.ASCENDING);
+				auquery.fields().include("uid");
+				auquery.fields().include("dname");
+				auquery.fields().include("pic");
+				
+				List<User> authors = db.find(auquery, User.class);
+				HashMap<Long,User> users_map = new HashMap<Long, User>();
+				
+				for(int i=0;i<authors.size();i++){
+					users_map.put(user.getUid(), user);
+				}
+				
+				Criteria bcriteria = Criteria.where("uid").in(auids).and("pbdate").exists(true);
 				Query bquery = new Query(bcriteria);
 				bquery.sort().on("pbdate", Order.DESCENDING);
 				
@@ -368,6 +387,11 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 				for(Book book : books){
 					Long pbdate = book.getPbdate();
 					book.setStrtime(TimeUtils.timefromNow(pbdate,System.currentTimeMillis()));
+					Long userid = book.getUid();
+					if(users_map.get(userid)!=null){
+						book.setAuthor(users_map.get(userid));
+					}
+				
 				}
 				
 				return books;
