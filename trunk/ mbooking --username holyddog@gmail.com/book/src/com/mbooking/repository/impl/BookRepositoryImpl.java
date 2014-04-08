@@ -372,7 +372,8 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 				HashMap<Long,User> users_map = new HashMap<Long, User>();
 				
 				for(int i=0;i<authors.size();i++){
-					users_map.put(user.getUid(), user);
+					Long userid = authors.get(i).getUid();
+					users_map.put(userid, authors.get(i));
 				}
 				
 				Criteria bcriteria = Criteria.where("uid").in(auids).and("pbdate").exists(true);
@@ -388,7 +389,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 					Long pbdate = book.getPbdate();
 					book.setStrtime(TimeUtils.timefromNow(pbdate,System.currentTimeMillis()));
 					Long userid = book.getUid();
-					if(users_map.get(userid)!=null){
+					if(users_map.containsKey(userid)){
 						book.setAuthor(users_map.get(userid));
 					}
 				
