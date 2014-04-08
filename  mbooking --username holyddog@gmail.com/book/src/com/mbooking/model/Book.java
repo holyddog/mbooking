@@ -13,7 +13,7 @@ public class Book {
 	String title;
 	String desc;
 	String period;
-	Long uid;
+	Long uid; // author id
 	String pic;
 	Integer pcount;
 	Integer fcount;

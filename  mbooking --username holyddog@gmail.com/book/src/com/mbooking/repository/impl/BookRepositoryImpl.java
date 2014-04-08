@@ -1,8 +1,6 @@
 package com.mbooking.repository.impl;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
 import com.mbooking.model.Book;
-import com.mbooking.model.Follow;
 import com.mbooking.model.Page;
 import com.mbooking.model.User;
 import com.mbooking.repository.BookRepostitoryCustom;
@@ -259,6 +256,8 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			Query query = new Query(criteria);
 			Update update = new Update();
 			update.set("pbdate", current_time);
+			
+			Book b = db.findOne(query, Book.class);
 
 			db.updateFirst(query, update, Book.class);
 			db.updateMulti(query, update, Page.class);
@@ -266,6 +265,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			int pbcount = (int) db.count(new Query(Criteria.where("uid").is(uid).and("pbdate").exists(true)), Book.class);
 			Update user_update = new Update();
 			user_update.set("pbcount", pbcount);
+			user_update.set("cover", b.getPic());
 			
 			db.updateFirst(new Query(Criteria.where("uid").is(uid)), user_update, User.class);
 
@@ -446,6 +446,15 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 		query.fields().include("title").include("pic");
 		return db.find(query, Book.class);
 	
+	}
+
+	@Override
+	public String findLastCover(Long uid) {
+		Query query = new Query(Criteria.where("uid").is(uid).and("pbdate").exists(true));
+		query.fields().include("pic");
+		query.sort().on("pbdate", Order.DESCENDING);
+		Book b = db.findOne(query, Book.class);
+		return b.getPic();
 	}
 	
 }
