@@ -38,8 +38,8 @@ public interface PageRepostitoryCustom {
 	
 	public List<Page> findFollowingPages(
 			Long uid,
-			int skip,
-			int limit
+			Integer skip,
+			Integer limit
 	);
 	
 }

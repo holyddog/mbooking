@@ -66,8 +66,8 @@ public class FollowJson {
 	public @ResponseBody
 	Object getFollowBooksByUID(
 			@RequestParam(value = "uid") Long uid,
-			@RequestParam(value = "skip") int skip,
-			@RequestParam(value = "limit") int limit
+			@RequestParam(value = "skip", required = false) Integer skip,
+			@RequestParam(value = "limit", required = false) Integer limit
 		) 
 	{
 		
@@ -83,8 +83,8 @@ public class FollowJson {
 	public @ResponseBody
 	Object getFollowPagessByUID(
 			@RequestParam(value = "uid") Long uid,
-			@RequestParam(value = "skip") int skip,
-			@RequestParam(value = "limit") int limit
+			@RequestParam(value = "skip", required = false) Integer skip,
+			@RequestParam(value = "limit", required = false) Integer limit
 		) {
 		
 		List<Page> pages = pageRepo.findFollowingPages(uid,skip,limit);

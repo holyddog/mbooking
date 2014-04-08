@@ -426,10 +426,10 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 		
 		Criteria criteria  = Criteria.where("uid").is(uid);
 			
-		if(pbstate==1)
+		if(pbstate!=null&&pbstate==1)
 		criteria.and("pbdate").exists(true);
 		
-		if(pbstate==2)
+		if(pbstate!=null&&pbstate==2)
 		criteria.and("pbdate").exists(false);
 			
 		Query query = new Query(criteria);

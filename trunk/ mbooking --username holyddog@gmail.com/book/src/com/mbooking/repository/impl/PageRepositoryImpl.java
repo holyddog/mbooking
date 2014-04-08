@@ -182,7 +182,7 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 		return null;
 	}
 	
-	public List<Page> findFollowingPages(Long uid,int skip,int limit) {
+	public List<Page> findFollowingPages(Long uid,Integer skip,Integer limit) {
 		try{	
 			
 			Criteria criteria = Criteria.where("uid").is(uid);
@@ -196,6 +196,8 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 			Criteria pcriteria = Criteria.where("uid").in(arr).and("pbdate").exists(true);;
 			Query pquery = new Query(pcriteria);
 			pquery.sort().on("cdate", Order.DESCENDING);
+			
+			if(skip!=null&&limit!=null&&limit!=0)
 			pquery.skip(skip).limit(limit);
 			
 			List<Page> pages = db.find(pquery, Page.class);
