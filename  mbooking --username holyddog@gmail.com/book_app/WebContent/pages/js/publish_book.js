@@ -1,6 +1,8 @@
 Page.PublishBook = {
 	url: 'pages/html/publish_book.html',
 	init: function(params, container) {
+		var self = this;
+		
 		// set toolbar buttons
 		container.find('[data-id=btn_b]').tap(function() {
 			Page.back();
@@ -10,6 +12,8 @@ Page.PublishBook = {
 			Page.btnShowLoading(btnAccept[0]);
 			Service.Book.PublishBook(params.bid, Account.userId, function() {
 				Page.btnHideLoading(btnAccept[0]);
+				
+				Account.cover = self.bookCover;
 				
 				Page.back(function() {
 					Page.back(function(c) {
@@ -39,6 +43,8 @@ Page.PublishBook = {
 			imageDiv.className = 'bimage';
 			var img = document.createElement('img');
 			img.src = Util.getImage(Config.FILE_URL + data.pic, Config.FILE_SIZE.COVER);
+			self.bookCover = data.pic;
+			
 			imageDiv.appendChild(img);
 			boxDiv.appendChild(imageDiv);
 			
@@ -74,5 +80,7 @@ Page.PublishBook = {
 //			container.find('.book_panel .title').text(data.title);
 //			container.find('.book_panel .desc').text(data.desc);
 		});		
-	}
+	},
+	
+	bookCover: '',
 };

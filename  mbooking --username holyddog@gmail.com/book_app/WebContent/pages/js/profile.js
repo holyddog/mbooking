@@ -2,6 +2,11 @@ Page.Profile = {
 	url: 'pages/html/profile.html',
 	init: function(params, container) {
 		var self = this;
+		var uid = (params && params.uid)? params.uid: Account.userId;
+		var isGuest = false;
+		if (uid != Account.userId) {
+			isGuest = true;
+		}
 		
 		// check authen
 		if (!localStorage.getItem('u')) {
@@ -18,6 +23,9 @@ Page.Profile = {
 		btnAdd.tap(function() {
 			Page.open('AddPage', true, { total: self.totalBook });
 		});
+		container.find('[data-id=link_more]').tap(function() {
+			Page.open('AllBooks', true, { uid: uid });
+		});
 		
 		// change some layout for another user
 		if (params && params.uid != Account.userId) {
@@ -25,12 +33,12 @@ Page.Profile = {
 			btnFollow.tap(function() {
 				if (btnFollow.hasClass('follow')) {
 					Service.Book.UnFollowAuthor(params.uid, Account.userId, function() {
-						btnFollow.html(self.followHtml.unfollow).removeClass('follow');
+						btnFollow.html(self.followHtml.follow).removeClass('follow');
 					});					
 				}
 				else {
 					Service.Book.FollowAuthor(params.uid, Account.userId, function() {
-						btnFollow.html(self.followHtml.follow).addClass('follow');
+						btnFollow.html(self.followHtml.unfollow).addClass('follow');
 					});					
 				}
 			});
@@ -43,8 +51,7 @@ Page.Profile = {
 		}
 		
 		// set content data
-		var uid = (params && params.uid)? params.uid: Account.userId;
-		this.invoke(uid, container);
+		this.invoke(uid, container, isGuest);
 	},
 	
 	lastEditBook: {
@@ -56,12 +63,12 @@ Page.Profile = {
 		unfollow: '<span style="padding-right: 5px;">&#10003;</span>FOLLOWING'
 	},
 	
-	invoke: function(uid, container) {	
+	invoke: function(uid, container, isGuest) {	
 		var self = this;
 		var content = container.find('.content');
 		Page.bodyShowLoading(content);
 		
-		Service.User.GetProfile(uid, function(data) {
+		var success = function(data) {
 			Page.bodyHideLoading(content);
 			
 			self.load(container, data);
@@ -71,9 +78,18 @@ Page.Profile = {
 				var b = $(this);
 				Page.open('Book', true, { bid: b.data('bid'), uid: uid });
 			});
-		});
+		};
+		
+		if (!isGuest) {
+			Service.User.GetProfile(uid, null, success);
+		}
+		else {
+			Service.User.GetProfile(uid, Account.userId, success);
+		}
 	},
 	load: function(container, userData) {		
+		var self = this;
+		
 		container.find('.pname').text(userData.dname);
 		container.find('[data-id=bcount]').text((userData.pbcount)? userData.pbcount: 0);
 		container.find('[data-id=fcount]').text((userData.fcount)? userData.fcount: 0);
@@ -84,6 +100,10 @@ Page.Profile = {
 		}		
 		if (!userData.pbcount || userData.pbcount < 4) {
 			container.find('.books_panel .label a').hide();
+		}
+		
+		if (userData.isFollow) {
+			container.find('.btn_follow').html(self.followHtml.unfollow).addClass('follow');
 		}
 		
 		this.loadBook(userData.books, container);

@@ -35,9 +35,15 @@ Page.SignIn = {
 							email: data.email,
 							displayName: data.dname,
 							userName: data.uname,
-							lastEditBook: data.leb
+							lastEditBook: data.leb,
+							cover: data.cover
 						};
 						localStorage.setItem("u", JSON.stringify(Account));
+						
+						if (Account.cover) {
+							var cover = Config.FILE_URL + Util.getImage(Account.cover, Config.FILE_SIZE.COVER); 
+							$('#profile_cover').css('background-image', 'url(' + cover + ')');			
+						}
 						
 						Page.open('Profile');
 					}

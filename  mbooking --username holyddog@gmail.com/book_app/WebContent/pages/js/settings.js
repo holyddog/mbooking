@@ -7,6 +7,9 @@ Page.Settings = {
 		});	
 		
 		// set content links
+		container.find('[data-id=chg_pwd]').tap(function() {
+			Page.open('ChangePwd', true);
+		});
 		container.find('[data-id=sign_out]').tap(function() {
 			localStorage.removeItem('u');
 			Page.open('Home');

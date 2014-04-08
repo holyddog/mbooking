@@ -1,15 +1,27 @@
-Page.Following = {
-	url: 'pages/html/following.html',
-	init: function(params, container) {
+Page.AllBooks = {
+	url: 'pages/html/all_books.html',
+	init: function(params, container) {		
 		// set toolbar buttons
-		container.find('[data-id=btn_m]').tap(function() {
-			Page.slideMenu();
-		});	
+		container.find('[data-id=btn_b]').tap(function() {
+			Page.back();
+		});
+		container.find('[data-id=btn_e]').tap(function() {
+			alert('edit');
+		});
+		container.find('[data-id=btn_a]').tap(function() {			
+			Page.open('AddPage', true);
+		});
+		
+		// set content link
+		container.find('[data-id=link_book]').tap(function() {
+			Page.open('Book', true);
+		});
 		
 		var content = container.find('.content');
 		Page.bodyShowLoading(content);
 		
-		Service.Book.GetFollowBooksByUID(Account.userId, 0, Config.LIMIT_ITEM, function(data) {
+		var uid = params.uid;
+		Service.Book.GetBooksByUid(uid, function(data) {
 			Page.bodyHideLoading(content);
 			
 			var list = container.find('.book_list');
@@ -28,7 +40,6 @@ Page.Following = {
 				
 				var divCover = document.createElement('div');
 				divCover.dataset.bid = b.bid;
-				divCover.dataset.uid = b.author.uid;
 				divCover.className = 'cover';
 				divCover.style.backgroundImage = 'url(' + pic + ')';
 				
@@ -51,7 +62,7 @@ Page.Following = {
 				
 				var divText = document.createElement('div');
 				divText.className = 'text';
-				divText.innerText = b.author.dname;
+				divText.innerText = 'Holy D Dog';
 				
 				divAuthor.appendChild(divText);
 				divLeft.appendChild(img);
@@ -61,18 +72,34 @@ Page.Following = {
 				divCover.appendChild(h3);
 				
 				divB.appendChild(divCover);
-				divB.appendChild(divPanel);
+//				divB.appendChild(divPanel);
 				
 				li.appendChild(divB);
 				
 				list.append(li);
 			}
 			
+			
+//			<li class="book_con">
+//				<div class="b shadow_border">
+//					<div class="cover" style="background-image: url(temp/cv1.jpg);">
+//						<h3 class="title">Laoreet, dui volutpat eiusmod recusandae</h3>
+//					</div>	
+//					<div class="panel flow_hidden">	
+//						<div class="fleft">
+//							<img class="image" src="images/user.jpg" />
+//						</div>
+//						<div class="author">				
+//						  <div class="text">Natus mi wisi</div>
+//						</div>
+//					</div>					
+//				</div>
+//			</li>
+			
 			container.find('.book_con').width(bw);
 			container.find('.book_con .cover').height(bh);
 			container.find('li .cover').tap(function() {
-				var obj = $(this);
-				Page.open('Book', true, { bid: obj.data('bid'), uid: obj.data('uid') });
+				Page.open('Book', true, { bid: $(this).data('bid'), uid: uid });
 			}, true);
 		});
 	}
