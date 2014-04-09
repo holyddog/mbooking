@@ -10,7 +10,7 @@ public interface ConstValue {
 		"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 	};
 
-	public static final int PROFILE_SIZE = 100;
+	public static final int PROFILE_SIZE = 125;
 	
 	public static final int SMALL_SIZE = 270;
 	public static final int NORMAL_SIZE = 500;
