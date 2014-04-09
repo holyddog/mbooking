@@ -74,15 +74,6 @@ Service.Book = {
 		
 		Web.get(url, params, callback);
 	},
-
-	GetBooksByUid : function(userID, callback) {
-		var url = Service.url + '/getBooksByUid.json';
-		var params = {
-			uid : userID
-		};
-		
-		Web.get(url, params, callback);
-	},
 	
 	GetBooksByUidWithState : function(userID,pbstate,skip,limit, callback) {
 		var url = Service.url + '/getBooksByUid.json';
