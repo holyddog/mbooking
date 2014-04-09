@@ -240,6 +240,28 @@ Service.Book = {
 				auid	:authorID
 		};
 		Web.get(url, params, callback);
+	},
+	
+	PostComment: function(bid,uid,comment,callback){
+		var url = Service.url + '/postComment.json';
+		var params = {
+				bid	:bid,
+				uid :uid,
+				comment :comment
+		};
+		Web.post(url, params, callback);
+	},
+	
+	GetComments: function(bid,skip,limit,callback){
+		var url = Service.url + '/findCommentsByBid.json';
+		var params = {
+				bid	:bid
+		};
+		
+		params.skip = skip;
+		params.limit = limit;
+		
+		Web.get(url, params, callback);
 	}
 	
 };
