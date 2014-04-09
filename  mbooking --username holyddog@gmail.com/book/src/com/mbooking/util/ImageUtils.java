@@ -75,7 +75,7 @@ public class ImageUtils {
 				 maxHeight = imageHeight;
 			 }
 			
-			 Image image = buff.getScaledInstance(maxWidth, maxHeight, 72);
+			 Image image = buff.getScaledInstance(maxWidth, maxHeight,100);
 			 BufferedImage newBuff = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_RGB);
 			 Graphics g = newBuff.getGraphics();
 			 g.drawImage(image, 0, 0, null);
@@ -137,14 +137,14 @@ public class ImageUtils {
 				y = (maxHeight / 2) - (size / 2);
 			}
 			
-			Image image = buff.getScaledInstance(maxWidth, maxHeight, 72);
+			Image image = buff.getScaledInstance(maxWidth, maxHeight,100);
 			
 			
 		    BufferedImage dest = new BufferedImage(size, size, BufferedImage.TYPE_INT_RGB);
 		    Graphics g = dest.getGraphics();
 		   
 		    if(portrait&&y!=0){
-		    	g.drawImage(image, 0, 0, size, size, x, y/2, x + size, y - (y/2) + size, null);
+		    	g.drawImage(image, 0, 0, size, size, x, y/2, x + size, y/2 + size, null);
 		    }
 		    else{
 		     	g.drawImage(image, 0, 0, size, size, x, y, x + size, y + size, null);
