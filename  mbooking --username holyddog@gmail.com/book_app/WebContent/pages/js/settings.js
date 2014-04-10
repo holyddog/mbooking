@@ -7,6 +7,9 @@ Page.Settings = {
 		});	
 		
 		// set content links
+		container.find('[data-id=chg_pic]').tap(function() {
+			Page.open('ChangePic', true);
+		});
 		container.find('[data-id=chg_pwd]').tap(function() {
 			Page.open('ChangePwd', true);
 		});

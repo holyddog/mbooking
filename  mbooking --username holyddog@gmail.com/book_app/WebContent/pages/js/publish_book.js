@@ -14,6 +14,8 @@ Page.PublishBook = {
 				Page.btnHideLoading(btnAccept[0]);
 				
 				Account.cover = self.bookCover;
+				Page.loadMenu();
+				localStorage.setItem('u', JSON.stringify(Account));
 				
 				Page.back(function() {
 					Page.back(function(c) {

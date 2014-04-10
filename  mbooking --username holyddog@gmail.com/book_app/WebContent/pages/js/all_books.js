@@ -1,6 +1,12 @@
 Page.AllBooks = {
 	url: 'pages/html/all_books.html',
 	init: function(params, container) {		
+		var uid = (params && params.uid)? params.uid: Account.userId;
+		var isGuest = false;
+		if (uid != Account.userId) {
+			isGuest = true;
+		}
+		
 		// set toolbar buttons
 		container.find('[data-id=btn_b]').tap(function() {
 			Page.back();
@@ -21,7 +27,7 @@ Page.AllBooks = {
 		Page.bodyShowLoading(content);
 		
 		var uid = params.uid;
-		Service.Book.GetBooksByUid(uid, function(data) {
+		Service.Book.GetBooksByUid(uid, 0, Config.LIMIT_ITEM, function(data) {
 			Page.bodyHideLoading(content);
 			
 			var list = container.find('.book_list');

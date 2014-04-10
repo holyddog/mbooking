@@ -3,11 +3,11 @@ Page.Book = {
 	init: function(params, container) {	
 		var self = this;
 		
-		var uid = (params && params.uid)? params.uid: Account.userId;
-		var isGuest = false;
-		if (uid != Account.userId) {
-			isGuest = true;
-		}
+//		var uid = (params && params.uid)? params.uid: Account.userId;
+//		var isGuest = false;
+//		if (uid != Account.userId) {
+//			isGuest = true;
+//		}
 		
 		// set toolbar buttons
 		var btnBack = container.find('[data-id=btn_b]'); 
@@ -23,10 +23,10 @@ Page.Book = {
 			alert('share');
 		});	
 		
-		if (!isGuest) {
-			btnShare.hide();
-			btnComment.hide();
-		}
+//		if (!isGuest) {
+//			btnShare.hide();
+//			btnComment.hide();
+//		}
 		
 		var content = container.find('.content');
 		Page.bodyShowLoading(content);

@@ -268,6 +268,9 @@ textarea {
 .btn span.list {
 	-webkit-mask-image: url(../icons/list.png);
 }
+.btn span.refresh {
+	-webkit-mask-image: url(../icons/refresh.png);
+}
 .btn span.back {
 	-webkit-mask-image: url(../icons/back.png);
 }
@@ -420,7 +423,7 @@ textarea {
 
 #profile_item {
 	height: 70px;
-	background-image: url(../temp/profile_item.png);
+	background-position: center center;
 }
 #sidebar li.item {
 	font-size: 90%;
@@ -533,6 +536,60 @@ textarea {
 	border-bottom: solid 2px #e2e2e2;
 }
 
+.book_list {
+	padding: 5px;
+	overflow: hidden;
+}
+.book_list .book_con {
+	float: left;
+}
+.book_list .b {
+	margin: 5px;
+	background-color: #fff;
+	position: relative;
+}
+.book_list .b .cover {
+	background-color: #ddd;
+	overflow: hidden;
+	background-size: auto 100%;
+}
+.book_list .b .cover .title {
+	text-shadow: 0 2px 0 rgba(0,0,0,0.6);
+	font-size: 110%;
+	padding: 5px;
+	position: relative;
+	z-index: 1;
+	color: #fff;
+}
+.book_list .b .cover:after {
+	content: " ";
+	display: block;
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 75%;
+	background-image: -webkit-linear-gradient(top, rgba(0,0,0,0.6), rgba(0,0,0,0) 100%);
+}
+.book_list .b .panel img {
+	width: 24px;
+	height: 24px;
+	display: block;
+	margin: 5px;
+}
+.book_list .b .panel .author {
+	font-size: 70%;
+	display: flex;
+	line-height: 34px;
+	font-weight: bold;
+}
+.book_list .b .panel .author .text {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	min-width: 0;
+}
+
 #dd_message {
 	position: fixed;
 	z-index: -1;
@@ -553,4 +610,54 @@ textarea {
 }
 #dd_message.show .msg {
 	-webkit-transform: translateY(0px);
+}
+
+#dialog {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 2000;
+	display: -webkit-box;
+}
+#dialog.show {	
+	width: 100%;
+	height: 100%;
+}
+#dialog .d_panel {
+	position: relative;
+	z-index: 2001;
+	display: none;
+}
+#dialog.show .d_panel {
+	display: block;
+}
+#dialog .list_item {
+	background-color: #fff;
+	width: 200px;
+	-webkit-box-shadow: 0px 0px 5px 0px #333;
+}
+#dialog .list_item li {
+	font-size: 90%;
+	line-height: 30px;
+	padding: 10px 15px;
+	background-color: #fff;
+	-webkit-box-shadow: 0px 0px 2px #aaa;
+}
+#dialog .list_item li.highlight {
+	background-color: #6DCAEC;
+}
+#dialog:before {
+	content: " ";
+	display: block;
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #000;
+	opacity: 0;
+	-webkit-transition: .15s opacity ease-in-out;
+}
+#dialog.show:before {
+	opacity: .4;
 }

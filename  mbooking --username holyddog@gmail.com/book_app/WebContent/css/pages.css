@@ -228,7 +228,7 @@
 
 #page_Profile .books_panel .book .title {	
 	text-shadow: 0 2px 0 rgba(0,0,0,0.6);
-	font-size: 100%;
+	font-size: 85%;
 	padding: 5px;
 	position: relative;
 	z-index: 1;
@@ -290,10 +290,10 @@
 	color: #fff;
 	border: solid 1px #fff;
 }
-#page_Profile .btn_follow:active, #page_Profile .btn_follow.follow:active {
+/*#page_Profile .btn_follow:active, #page_Profile .btn_follow.follow:active {
 	background-color: #fff;
 	color: #333;
-}
+}*/
 #page_Profile .btn_follow.follow {
 	background: #ccc;
 	line-height: 30px;
@@ -355,161 +355,47 @@
 #page_Book #tap_nav .flex1.highlight {
 }
 
-/*User Profile*/
-.user_profile{
-		background-image:url('../temp/forest_bg.jpg');
-		background-size:auto 100%;
-		height:100%;
-		width:100%;
-		background-repeat: no-repeat;
+#page_Comments .comment_list .image {
+	width: 50px;
+	padding: 10px;
 }
-.trans_bg{
-	height:100%;
-	width:100%;
-	background:black;
-	opacity:.4;
-	position: absolute;
-top: 0px;
+#page_Comments .comment_list .image img {
+	width: 50px;
+	height: 50px;
+	border-radius: 25px;
 }
-.user_profile .main_panel{
-	position:absolute;
-	width:100%;
-	bottom:0px;
-	
-	display: -moz-box;
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: box;
-		
-	-moz-box-orient: vertical;
-	-webkit-box-orient: vertical;
-	box-orient: vertical;
+#page_Comments .comment_list .cbox {
+	padding: 10px 10px 0 0;
 }
-.user_profile .main_panel .profile_panel{
-	height:60px;
-	padding:10px;
-	
-	-moz-box-flex:1.0; /* Firefox */
-	-webkit-box-flex:1.0; /* Safari and Chrome */
-	-ms-flex:1.0; /* Internet Explorer 10 */
-	box-flex:1.0;
-	
-	display: -moz-box;
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: box;
-	
+#page_Comments .comment_list .dname {
+	font-size: 90%;
+	font-weight: bold;
 }
-
-
-.user_profile .main_panel .profile_panel .profile_icon{
-	width:60px;
-	height:60px;
-	background:url('../temp/person_icon.png');
-	background-size:100%;
-	
+#page_Comments .comment_list .message {
+	margin-top: 5px;
 }
-
-.user_profile .main_panel .profile_panel .info_panel{
-	height:60px;
-	-moz-box-flex:1.0; /* Firefox */
-	-webkit-box-flex:1.0; /* Safari and Chrome */
-	-ms-flex:1.0; /* Internet Explorer 10 */
-	box-flex:1.0;
-	padding-left: 10px;
+#page_Comments .comment_list .time {
+	margin-top: 5px;
+	font-size: 70%;
+	color: #999;
 }
-.user_profile .main_panel .profile_panel .info_panel .name {
-	width: 100%;
-	height: 30px;
-	font-size: 23px;
-	line-height: 30px;
+#page_Comments #input_comment input {
+	font-size: 110%;
 }
-
-.user_profile .main_panel .profile_panel .info_panel .books_followers{
-	width: 100%;
-	height: 50%;
-	line-height: 30px;
-	font-size: 16px;
-}
-
-.user_profile .main_panel .book_panel{
-	background-color: rgba(0,0,0,0.5);
-	height:175px;
-	
-	-moz-box-flex:1.0; /* Firefox */
-	-webkit-box-flex:1.0; /* Safari and Chrome */
-	-ms-flex:1.0; /* Internet Explorer 10 */
-	box-flex:1.0;
-	
-	padding:10px;
-}
-
-
-.user_profile .main_panel .book_panel .top_bar{
-		/*background:white;*/
-	height:40px;
-	width:100%;
-	/*opacity:.2;*/
-}
-
-.user_profile .main_panel .book_panel .top_bar .title{
-	height: 25px;
-	line-height: 25px;
-	font-size: 15px;
-	float: left;
-
-}
-
-.user_profile .main_panel .book_panel .top_bar .see_more_btn{
-	height: 25px;
-	line-height: 25px;
-	font-size: 14px;
-	float: right;
-	background: grey;
-	background-color: rgba(255,255,255,.5);
-	padding-left: 10px;
-	padding-right: 10px;
-	color: black;
-}
-.user_profile .main_panel .book_panel .book_lists{
-	height:100%;
-	
-	-moz-box-flex:1.0; /* Firefox */
-	-webkit-box-flex:1.0; /* Safari and Chrome */
-	-ms-flex:1.0; /* Internet Explorer 10 */
-	box-flex:1.0;
-}
-.user_profile .main_panel .book_panel .book_lists .item{
-	width: 85px;
-	height: 130px;
-	/* display: inline-block; */
-	background-size: auto 100%;
-	background-position: center;
+#page_Comments #input_comment {
 	padding: 5px;
-	color: whitesmoke;
-	text-shadow: 1px 1px black;
-	float: left;
-	margin-left: 3px;
+	background-color: #fff;
 }
 
-.user_profile .main_panel .book_panel .book_lists .item#book1{
-	background-image:url(../temp/Book4.jpg);
+#page_Settings .chg_pic {
+	width: 40px;
+	height: 40px;
+	background-color: #ddd;
+	margin-left: 10px;
+	border-radius: 20px;
 }
-
-.user_profile .main_panel .book_panel .book_lists .item#book2{
-	background-image:url(../temp/Book5.jpg);
-	
-}
-
-.user_profile .main_panel .book_panel .book_lists .item#book3{
-	background-image:url(../temp/Book6.jpg);
-}
-
-.f_white{
-	color:whitesmoke;
-}
-
-.f_white.shadow{
-	color:whitesmoke;
-	text-shadow: 1px 1px black;
+#page_Settings .chg_pic img {
+	width: 40px;
+	height: 40px;
+	border-radius: 20px;
 }
