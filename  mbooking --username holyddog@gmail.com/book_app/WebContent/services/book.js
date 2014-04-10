@@ -66,11 +66,17 @@ Service.Book = {
 		Web.get(url, params, callback);
 	},
 
-	GetBooksByUid : function(userID, callback) {
+	GetBooksByUid : function(userID,skip,limit, callback) {
 		var url = Service.url + '/getBooksByUid.json';
 		var params = {
 			uid : userID
 		};
+		
+		if(skip!=null&&skip!=undefined)
+			params.skip = skip;
+			
+		if(limit!=null&&limit!=undefined)
+			params.limit = limit;
 		
 		Web.get(url, params, callback);
 	},
