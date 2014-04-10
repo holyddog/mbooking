@@ -1,48 +1,24 @@
 Page.ChangePic = {
 	url: 'pages/html/change_pic.html',
-	init: function(params, container) {	
-		var inputPwd = container.find('input[name=pwd]');
-		var inputNPwd = container.find('input[name=npwd]');
-		var inputCPwd = container.find('input[name=cpwd]');
-		
+	init: function(params, container) {			
 		// set toolbar buttons
 		container.find('[data-id=btn_b]').tap(function() {
 			Page.back();
 		});
+		container.find('[data-id=btn_change]').tap(function() {
+			Page.popDialog();
+		});
 		var btnAccept = container.find('[data-id=btn_a]');
 		btnAccept.tap(function() {
-			if (inputNPwd.val() == inputCPwd.val()) {
+			if (!btnAccept.hasClass('disabled')) {
 				Page.btnShowLoading(btnAccept[0]);
-				Service.User.ChangePassword(Account.userId, inputPwd.val(), inputNPwd.val(), function(data) {
+				Service.User.ChangeProfilePic(Account.userId, container.find('img[data-ref]').attr('src'), function(data) {
 					Page.btnHideLoading(btnAccept[0]);
-					MessageBox.drop('Password changed');
+					MessageBox.drop('Picture changed');
 					
 					Page.back();
 				});
 			}
-			else {
-				MessageBox.alert({ message: 'Confirm password did not match' });
-			}
 		});
-		
-		var verify = function() {
-			if (inputPwd.val().length > 0 && inputNPwd.val().length >= 6 && inputCPwd.val().length >= 6) {
-				btnAccept.removeClass('disabled');
-			}
-			else {
-				btnAccept.addClass('disabled');
-			}
-		};
-		
-		// set content binding
-		inputPwd[0].addEventListener('input', function() {
-			verify();
-		}, false);
-		inputNPwd[0].addEventListener('input', function() {
-			verify();
-		}, false);
-		inputCPwd[0].addEventListener('input', function() {
-			verify();
-		}, false);
 	}
 };

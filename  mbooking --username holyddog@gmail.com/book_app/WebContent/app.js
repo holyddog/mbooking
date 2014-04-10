@@ -145,6 +145,8 @@ $(document).ready(function() {
 		var p = $('[data-ref=base64]');
 		p.attr('src', Data.Users['U' + index]);
 		index = (index % 3) + 1;
+		
+		$('.page:last-child [data-id=btn_a]').removeClass('disabled');
 	});
 	dialog.find('[data-link=gallery]').tap(function() {
 		history.back();
@@ -152,6 +154,8 @@ $(document).ready(function() {
 		var p = $('[data-ref=base64]');
 		p.attr('src', Data.Users['U' + index]);
 		index = (index % 3) + 1;
+		
+		$('.page:last-child [data-id=btn_a]').removeClass('disabled');
 	});
 });
 
