@@ -55,6 +55,13 @@ Service.User = {
 			params.limit = limit;
 		
 		Web.get(url, params, callback);
+	},
+	ReadedNotification: function(ntid, callback) {
+		var url = Service.url + '/readedNotification.json';
+		var params = {
+			ntid: ntid
+		};
+		Web.post(url, params, callback);
 	}
 
 };
