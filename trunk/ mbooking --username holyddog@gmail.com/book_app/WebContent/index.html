@@ -18,14 +18,17 @@
 	
 	<!-- Pages UI -->
     <script type="text/javascript" src="pages/js/add_page.js"></script>
+    <script type="text/javascript" src="pages/js/all_books.js"></script>
     <script type="text/javascript" src="pages/js/book_list.js"></script>
 	<script type="text/javascript" src="pages/js/book.js"></script>
+	<script type="text/javascript" src="pages/js/change_name.js"></script>
+	<script type="text/javascript" src="pages/js/change_pic.js"></script>
+	<script type="text/javascript" src="pages/js/change_pwd.js"></script>
 	<script type="text/javascript" src="pages/js/comments.js"></script>
 	<script type="text/javascript" src="pages/js/create_book.js"></script>
 	<script type="text/javascript" src="pages/js/explore.js"></script>
 	<script type="text/javascript" src="pages/js/following.js"></script>
     <script type="text/javascript" src="pages/js/home.js"></script>
-	<script type="text/javascript" src="pages/js/my_books.js"></script>
 	<script type="text/javascript" src="pages/js/notifications.js"></script>
 	<script type="text/javascript" src="pages/js/page.js"></script>
 	<script type="text/javascript" src="pages/js/profile.js"></script>
@@ -45,6 +48,14 @@
 	<div id="dd_message" class="box center_middle">
 		<div class="msg"></div>
 	</div>
+	<div id="dialog" class="box center_middle">
+		<div class="d_panel">
+			<ul class="list_item">
+				<li data-link="camera">Take a Photo</li>
+				<li data-link="gallery">Choose from Gallery</li>
+			</ul>
+		</div>
+	</div>
 	<div id="overlay_loading"></div>
 	<div id="loading_panel">
 		<div class="loading box horizontal">
@@ -56,14 +67,14 @@
 		<div id="overlay"></div>
 		<ul id="sidebar">
 			<li data-page="Profile" class="item" style="padding: 0;">
-				<div class="profile_item box horizontal" style="background-image: url(temp/2.jpg);">
+				<div id="profile_cover" class="profile_item box horizontal" style="background-color: #000">
 					<div class="overlay"></div>
 					<div class="pimage">
 						<img src="temp/u1.jpg">
 					</div>
 					<div class="info flex1">
-					 	<h1>Holy D Dog</h1>
-					  	<div class="stat">20 Books | 30 followers</div>
+					 	<h1></h1>
+					  	<div class="stat"></div>
 					</div>
 				</div>
 			</li>

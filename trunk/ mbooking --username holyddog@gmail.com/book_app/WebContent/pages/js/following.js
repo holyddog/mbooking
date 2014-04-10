@@ -1,18 +1,29 @@
 Page.Following = {
 	url: 'pages/html/following.html',
 	init: function(params, container) {
+		var self = this;
+		
 		// set toolbar buttons
 		container.find('[data-id=btn_m]').tap(function() {
 			Page.slideMenu();
 		});	
+		container.find('[data-id=btn_r]').tap(function() {
+			self.load(container);
+		});	
 		
+		self.load(container);		
+	},
+	
+	load: function(container) {		
 		var content = container.find('.content');
 		Page.bodyShowLoading(content);
+		
+		var list = container.find('.book_list');
+		list.empty();
 		
 		Service.Book.GetFollowBooksByUID(Account.userId, 0, Config.LIMIT_ITEM, function(data) {
 			Page.bodyHideLoading(content);
 			
-			var list = container.find('.book_list');
 			var bcWidth = list.width();
 			var bw = bcWidth / 2;
 			var bh = (bw * 4) / 3;

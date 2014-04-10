@@ -36,15 +36,13 @@ Page.SignIn = {
 							displayName: data.dname,
 							userName: data.uname,
 							lastEditBook: data.leb,
-							cover: data.cover
+							cover: data.cover,
+							followerCount: data.fcount,
+							bookCount: data.pbcount
 						};
-						localStorage.setItem("u", JSON.stringify(Account));
-						
-						if (Account.cover) {
-							var cover = Config.FILE_URL + Util.getImage(Account.cover, Config.FILE_SIZE.COVER); 
-							$('#profile_cover').css('background-image', 'url(' + cover + ')');			
-						}
-						
+						localStorage.setItem("u", JSON.stringify(Account));						
+
+						Page.loadMenu();						
 						Page.open('Profile');
 					}
 				});

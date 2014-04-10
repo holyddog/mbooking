@@ -2,6 +2,7 @@ Config = {
 	PHONEGAP: false,
 	DEBUG_MODE: true,
 	DEFAULT_PAGE: 'Home',
+	LIMIT_ITEM: 20,
 	
 	SLIDE_DELAY: 250,
 	FADE_DELAY: 250,
@@ -31,6 +32,10 @@ Util = {
 		switch (size) {
 			case Config.FILE_SIZE.COVER: {
 				suffix = '_cv';
+				break;
+			}
+			case Config.FILE_SIZE.SMALL: {
+				suffix = '_s';
 				break;
 			}
 			case Config.FILE_SIZE.NORMAL: {
@@ -93,10 +98,11 @@ MessageBox = {
 	}
 };
 
-$(document).ready(function() {
+$(document).ready(function() {	
 	if (localStorage.getItem("u")) {
 		Account = JSON.parse(localStorage.getItem("u"));	
 	}
+	Page.loadMenu();
 	
 	var win = $(window);
 	win.on('resize', function() {
@@ -122,6 +128,30 @@ $(document).ready(function() {
 		else {
 			history.back();
 		}
+	});
+	
+	var dialog = $('#dialog');
+	dialog.bind('click', function() {
+		history.back();
+	});
+	dialog.bind('touchmove', function(e) {
+		e.preventDefault();
+	});
+	
+	var index = 1;
+	dialog.find('[data-link=camera]').tap(function() {
+		history.back();
+		
+		var p = $('[data-ref=base64]');
+		p.attr('src', Data.Users['U' + index]);
+		index = (index % 3) + 1;
+	});
+	dialog.find('[data-link=gallery]').tap(function() {
+		history.back();
+		
+		var p = $('[data-ref=base64]');
+		p.attr('src', Data.Users['U' + index]);
+		index = (index % 3) + 1;
 	});
 });
 
@@ -152,9 +182,21 @@ Device = {
 Page = {	
 	_stackPages: new Array(),
 	_slideMenu: false,
+	_showDialog: false,
 	
 	_tempBack: [],
-
+	
+	loadMenu: function() {
+		if (Account.cover) {
+			var cover = Config.FILE_URL + Util.getImage(Account.cover, Config.FILE_SIZE.SMALL);
+			var profileCover = $('#profile_cover');
+			profileCover.css('background-image', 'url(' + cover + ')');
+			profileCover.find('h1').text(Account.displayName);
+//			var followerCount = (Account.followerCount)? Account.followerCount: 0;
+			var bookCount = (Account.bookCount)? Account.bookCount: 0;
+			profileCover.find('.stat').text(bookCount + ' Books');
+		}
+	},
 	open: function(page, append, params) {
 		var fn = function() {
 			var url = '#' + page;
@@ -188,6 +230,18 @@ Page = {
 		else {
 			history.back();
 		}
+	},
+	popDialog: function() {		
+		if (!Page._showDialog) {
+			window.location = '#dialog';
+		}
+		else {
+			history.back();
+		}
+	},
+	hideDialog: function() {
+		var dialog = document.getElementById('dialog');
+		dialog.className = dialog.className.replace(' show', '');
 	},
 	showLoading: function() {
 		var overlay = document.getElementById('overlay_loading');
@@ -422,6 +476,7 @@ $(function(){
 		var hash = location.hash;	
 		var arr = hash.split('?');
 		var page = arr[0].substring(1);
+		var pageUrl = window.location.hash.substring(1);
 		var params = undefined;
 		var append = false;
 		if (arr.length == 2) {
@@ -446,9 +501,18 @@ $(function(){
 			}, Config.FADE_DELAY);
 		}
 		
-		if (page != 'slide') {		
+		var dialog = false;
+		if (Page._showDialog) {
+			var dd = document.getElementById('dialog');
+			dd.className = dd.className.replace(' show', '');
+			
+			Page._showDialog = false;
+			dialog = true;
+		}
+		
+		if (page != 'slide' && page != 'dialog') {		
 			var currentPage = Page[page];
-			var checkPage = $.inArray(page, Page._stackPages);
+			var checkPage = $.inArray(pageUrl, Page._stackPages);
 			if (currentPage && checkPage == -1) {
 				if (currentPage.url) {
 					Web.html(currentPage.url, function(html) {
@@ -465,7 +529,7 @@ $(function(){
 							Page._stackPages.length = 0;
 							Container.loadPage(container);
 						}
-						Page._stackPages.push(page);
+						Page._stackPages.push(pageUrl);
 						
 						currentPage.init(params, container);
 					});
@@ -476,9 +540,9 @@ $(function(){
 					currentPage.init(params, container);
 				}
 			}
-			else if (!slide && checkPage > -1) {
-				var p = Page._stackPages.pop();
-				var activeContainer = $('[data-page=' + Page._stackPages[Page._stackPages.length - 1] + ']');
+			else if (!slide && !dialog && checkPage > -1) {
+				var p = Page._stackPages.pop().split('?')[0];
+				var activeContainer = $('[data-page=' + Page._stackPages[Page._stackPages.length - 1].split('?')[0] + ']');
 				activeContainer.addClass('active');
 				$('[data-page=' + p + ']').remove();	
 				
@@ -496,7 +560,7 @@ $(function(){
 				//Page.Error.init(404);
 			}
 		}
-		else {			
+		else if (page != 'dialog') {			
 			var slideMenu = function() {
 				setTimeout(function() {  
 					$('#overlay').css('display', 'block').tap(function() {
@@ -507,6 +571,11 @@ $(function(){
 				}, 0);
 			};
 			slideMenu();
+		}
+		else if (page != 'slide') {
+			var dd = document.getElementById('dialog');
+			dd.className = dd.className + ' show';
+			Page._showDialog = true;
 		}
 	});
 	$(window).hashchange();  

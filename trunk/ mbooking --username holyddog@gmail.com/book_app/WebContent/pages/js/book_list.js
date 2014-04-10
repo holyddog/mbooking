@@ -17,7 +17,7 @@ Page.BookList = {
 	},
 	
 	load: function(container) {
-		Service.Book.GetBooksByUid(Account.userId, 0, 0, 20, function(data) {		
+		Service.Book.GetBooksByUid(Account.userId, 0, Config.LIMIT_ITEM, function(data) {		
 			var c = container.find('.container');
 			c.empty();
 			

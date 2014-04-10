@@ -91,7 +91,12 @@ Page.Profile = {
 		var self = this;
 		
 		container.find('.pname').text(userData.dname);
-		container.find('[data-id=bcount]').text((userData.pbcount)? userData.pbcount: 0);
+		
+		var bookCount = (userData.pbcount)? userData.pbcount: 0;
+		container.find('[data-id=bcount]').text(bookCount);
+		Account.bookCount = bookCount;
+		$('#profile_cover').find('.stat').text(bookCount + ' Books');
+		
 		container.find('[data-id=fcount]').text((userData.fcount)? userData.fcount: 0);
 		container.find('[data-id=fgcount]').text((userData.fgcount)? userData.fgcount: 0);
 		
