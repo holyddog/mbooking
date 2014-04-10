@@ -31,8 +31,8 @@ public class NotificationJson {
 	public @ResponseBody
 	Object getNotificationByUid(
 			@RequestParam(value = "uid") Long uid,
-			@RequestParam(value = "skip") Integer skip,
-			@RequestParam(value = "limit") Integer limit
+			@RequestParam(value = "skip", required = false) Integer skip,
+			@RequestParam(value = "limit", required = false) Integer limit
 		) {
 		List<Notification> notification = notificationRepo.findNotificationsByUid(uid, skip, limit);  
 		if(notification!=null){
