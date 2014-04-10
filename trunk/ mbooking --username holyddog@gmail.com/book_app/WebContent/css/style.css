@@ -317,6 +317,23 @@ textarea {
 	-webkit-mask-image: url(../icons/next.png);	
 }
 
+.button {
+	padding: 15px;
+	margin: 10px;
+	color: #fff;
+	display: block;
+	text-align: center;
+	font-size: 80%;
+	font-weight: bold;
+	position: relative;	
+}
+.button.blue {
+	background-color: #33B5E5;	
+}
+.button.blue.highlight {
+	background-color: #6DCAEC;
+}
+
 .link_panel {
 	padding: 10px 0;
 }
