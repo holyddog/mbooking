@@ -41,6 +41,20 @@ Service.User = {
 			pic:pic
 		};
 		Web.post(url, params, callback);
+	},
+	GetNotificationByUid: function(uid,skip,limit, callback) {
+		var url = Service.url + '/getNotificationByUid.json';
+		var params = {
+			uid: uid
+		};
+		
+		if(skip!=null&&skip!=undefined)
+			params.skip = skip;
+			
+		if(limit!=null&&limit!=undefined)
+			params.limit = limit;
+		
+		Web.get(url, params, callback);
 	}
 
 };
