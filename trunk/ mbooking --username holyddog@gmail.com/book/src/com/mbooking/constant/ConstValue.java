@@ -24,10 +24,17 @@ public interface ConstValue {
 	public static final String USER_FOLDER ="u";
 	public static final String BOOK_FOLDER ="b";
 	
+	//Image Type
 	public static final int NONE_TYPE =0;
 	public static final int PAGE_IMG_TYPE =1;
 	public static final int PROFILE_IMG_TYPE =2;
 	
+	//Notification Type
+	public static final int NEW_FOLLOWER =1;
+	public static final int FOLLOWER_COMMENT =2;
 	
-
+	
+	public static final String NEW_FOLLOWER_MSG_FORMAT_EN = "%s is now following your story";
+	public static final String FOLLOWER_COMMENT_MSG_FORMAT_EN = "%s commented on %s :%s";
+	
 }

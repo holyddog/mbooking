@@ -1,10 +1,5 @@
 package com.mbooking.repository.impl;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -12,13 +7,10 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
-import com.mbooking.model.Book;
 import com.mbooking.model.Follow;
-import com.mbooking.model.Page;
 import com.mbooking.model.User;
 import com.mbooking.repository.FollowRepostitoryCustom;
 import com.mbooking.util.MongoCustom;
-import com.mbooking.util.TimeUtils;
 
 public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 	
@@ -85,6 +77,8 @@ public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 				int fgcount = (int) db.count(new Query(criteria), Follow.class);
 				following_update.set("fgcount", fgcount);
 				db.updateFirst(new Query(criteria), following_update, User.class);
+				
+				NotificationRepositoryImpl.sendNewFollowerNotification(auid, uid, foll.getDname(),foll.getPic());
 				
 				return true;
 			}
