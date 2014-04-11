@@ -12,6 +12,7 @@ import com.mbooking.model.Book;
 import com.mbooking.model.Comment;
 import com.mbooking.model.User;
 import com.mbooking.repository.CommentRepostitoryCustom;
+import com.mbooking.util.MongoCustom;
 import com.mbooking.util.TimeUtils;
 
 public class CommentRepositoryImpl implements CommentRepostitoryCustom {
@@ -22,13 +23,12 @@ public class CommentRepositoryImpl implements CommentRepostitoryCustom {
 	@Override
 	public Boolean createComment(Long bid, Long uid,String comment) {
 		
-		try{
-			
+		try{			
 			Book book = db.findOne(new Query(Criteria.where("bid").is(bid)),Book.class);
 			
 			if(book!=null){
 				Comment comment_obj = new Comment();
-				comment_obj.setUid(bid);
+				comment_obj.setBid(bid);
 				comment_obj.setUid(uid);
 				comment_obj.setComment(comment);
 				comment_obj.setPdate(System.currentTimeMillis());
