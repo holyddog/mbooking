@@ -32,7 +32,7 @@ Page.CreateBook = {
 							Page.BookList.load(c);							
 						}
 						else {
-							var src = '';
+							var src = 'images/photo.jpg';
 							
 							var selBook = c.find('.sel_book').show();
 							selBook.data('bid', data.bid);

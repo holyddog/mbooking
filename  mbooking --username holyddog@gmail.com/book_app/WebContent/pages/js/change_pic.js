@@ -5,9 +5,6 @@ Page.ChangePic = {
 		container.find('[data-id=btn_b]').tap(function() {
 			Page.back();
 		});
-		container.find('[data-id=btn_change]').tap(function() {
-			Page.popDialog();
-		});
 		var btnAccept = container.find('[data-id=btn_a]');
 		btnAccept.tap(function() {
 			if (!btnAccept.hasClass('disabled')) {
@@ -30,6 +27,12 @@ Page.ChangePic = {
 					Page.back();
 				});
 			}
+		});
+		container.find('[data-id=btn_change]').tap(function() {
+			Page.popDialog(function(img) {
+				container.find('img[data-ref=base64]').attr('src', img);
+				btnAccept.removeClass('disabled');
+			});
 		});
 		
 		if (Account.picture) {

@@ -18,6 +18,7 @@ Page.Settings = {
 		});
 		container.find('[data-id=sign_out]').tap(function() {
 			localStorage.removeItem('u');
+			Account = {};
 			Page.open('Home');
 		});
 		

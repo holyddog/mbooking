@@ -11,7 +11,12 @@ Page.AddPage = {
 			
 			if (!selBook.data('bid')) {
 				var lb = Account.lastEditBook;
-				selBook.find('.bimage img').attr('src', Config.FILE_URL + Util.getImage(lb.pic, Config.FILE_SIZE.COVER));
+				if (lb.pic) {
+					selBook.find('.bimage img').attr('src', Config.FILE_URL + Util.getImage(lb.pic, Config.FILE_SIZE.COVER));
+				}
+				else {
+					selBook.find('.bimage img').attr('src', 'images/photo.jpg');					
+				}
 				selBook.find('.btitle span').text(lb.title);
 				selBook.data('bid', lb.bid);
 			}
