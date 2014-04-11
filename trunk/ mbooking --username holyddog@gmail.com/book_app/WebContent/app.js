@@ -11,9 +11,11 @@ Config = {
 	
 	FILE_SIZE: {
 		COVER: 0,
-		NORMAL: 1,
-		LARGE: 2,
-		XLARGE: 3
+		SQUARE: 1,
+		SMALL: 2,
+		NORMAL: 3,
+		LARGE: 4,
+		XLARGE: 5
 	}
 };
 
@@ -27,11 +29,29 @@ Util = {
 	getRandomInt: function(min, max) {
 		return Math.floor(Math.random() * (max - min + 1)) + min;
 	},
+	getTime: function(date) {
+		var hours = date.getHours();
+		var minutes = date.getMinutes();
+		var ampm = hours >= 12 ? 'pm' : 'am';
+		hours = hours % 12;
+		hours = hours ? hours : 12; // the hour '0' should be '12'
+		minutes = minutes < 10 ? '0' + minutes : minutes;
+		var strTime = hours + ':' + minutes + ' ' + ampm;
+		return strTime;
+	},
 	getImage: function(file, size) {
+		if (!file) {
+			return '';
+		}
+		
 		var suffix = '';
 		switch (size) {
 			case Config.FILE_SIZE.COVER: {
 				suffix = '_cv';
+				break;
+			}
+			case Config.FILE_SIZE.SQUARE: {
+				suffix = '_sp';
 				break;
 			}
 			case Config.FILE_SIZE.SMALL: {
@@ -191,15 +211,19 @@ Page = {
 	_tempBack: [],
 	
 	loadMenu: function() {
+		var profileCover = $('#profile_cover');
 		if (Account.cover) {
 			var cover = Config.FILE_URL + Util.getImage(Account.cover, Config.FILE_SIZE.SMALL);
-			var profileCover = $('#profile_cover');
 			profileCover.css('background-image', 'url(' + cover + ')');
-			profileCover.find('h1').text(Account.displayName);
-//			var followerCount = (Account.followerCount)? Account.followerCount: 0;
-			var bookCount = (Account.bookCount)? Account.bookCount: 0;
-			profileCover.find('.stat').text(bookCount + ' Books');
 		}
+		if (Account.displayName) {
+			profileCover.find('h1').text(Account.displayName);
+		}
+		if (Account.picture) {
+			profileCover.find('.pimage img').attr('src', Config.FILE_URL + Util.getImage(Account.picture, Config.FILE_SIZE.SQUARE));
+		}
+		var bookCount = (Account.bookCount)? Account.bookCount: 0;
+		profileCover.find('.stat').text(bookCount + ' Books');
 	},
 	open: function(page, append, params) {
 		var fn = function() {
@@ -535,13 +559,13 @@ $(function(){
 						}
 						Page._stackPages.push(pageUrl);
 						
-						currentPage.init(params, container);
+						currentPage.init(params, container, append);
 					});
 				}	
 				else {
 					var container = $('<div data-page="' + page + '" class="page fill_dock active">');
 					
-					currentPage.init(params, container);
+					currentPage.init(params, container, append);
 				}
 			}
 			else if (!slide && !dialog && checkPage > -1) {

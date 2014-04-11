@@ -34,6 +34,14 @@ Service.User = {
 		};
 		Web.post(url, params, callback);
 	},
+	ChangeDisplayName : function(uid, dname, callback) {
+		var url = Service.url + '/changeDisplayName.json';
+		var params = {
+			uid : uid,
+			dname : dname
+		};
+		Web.post(url, params, callback);
+	},
 	ChangeProfilePic: function(uid,pic, callback) {
 		var url = Service.url + '/changeProfilePic.json';
 		var params = {

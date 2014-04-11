@@ -20,5 +20,9 @@ Page.Settings = {
 			localStorage.removeItem('u');
 			Page.open('Home');
 		});
+		
+		if (Account.picture) {
+			container.find('.chg_pic img').attr('src', Config.FILE_URL + Util.getImage(Account.picture, Config.FILE_SIZE.SQUARE));
+		}
 	}
 };

@@ -16,7 +16,7 @@ Page.Book = {
 		});
 		var btnComment = container.find('[data-id=btn_c]');
 		btnComment.tap(function() {
-			Page.open('Comments', true);
+			Page.open('Comments', true, { bid: params.bid });
 		});
 		var btnShare = container.find('[data-id=btn_s]');
 		btnShare.tap(function() {
@@ -43,6 +43,9 @@ Page.Book = {
 		content.find('.btitle').text(bookData.title);
 		content.find('.bdesc').text(bookData.desc);
 		content.find('.author_info .name').text(bookData.author.dname);
+		if (bookData.author.pic) {
+			content.find('.author_info img').attr('src', Config.FILE_URL + Util.getImage(bookData.author.pic, Config.FILE_SIZE.SQUARE));
+		}
 		content.find('.text_bar .fright').text(bookData.pcount + ' Page' + ((bookData.pcount > 1)? 's': ''));
 		
 		var index = 0;
