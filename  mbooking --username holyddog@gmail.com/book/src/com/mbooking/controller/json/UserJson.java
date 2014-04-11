@@ -111,7 +111,7 @@ public class UserJson {
 			@RequestParam(value = "uid") Long uid,
 			@RequestParam(value = "pic") String pic
 			) {
-		return ResultResponse.getResult("result", userRepo.changePic(uid, pic) != false);
+		return ResultResponse.getResult("picture", userRepo.changePic(uid, pic));
 	}
 	
 }
