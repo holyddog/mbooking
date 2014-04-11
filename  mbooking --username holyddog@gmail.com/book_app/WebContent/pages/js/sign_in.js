@@ -37,6 +37,7 @@ Page.SignIn = {
 							userName: data.uname,
 							lastEditBook: data.leb,
 							cover: data.cover,
+							picture: data.pic,
 							followerCount: data.fcount,
 							bookCount: data.pbcount
 						};

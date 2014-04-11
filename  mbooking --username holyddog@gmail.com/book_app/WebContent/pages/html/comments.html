@@ -2,9 +2,11 @@
 <div class="tbar">	
 	<a data-id="btn_b" class="btn" style="left: 0;"><span class="back"></span></a>
 	<div class="title">Comments</div>	
+	<a data-id="btn_r" class="btn" style="right: 0;"><span class="refresh"></span></a>
 </div>
 <div class="content gray flex1 box vertical">
 	<div class="comment_list">
+		<!-- 
 		<div class="comment box horizontal">
 			<div class="image">
 				<img src="images/user.jpg" />
@@ -35,13 +37,14 @@
 				<div class="time">3 hour ago</div>
 			</div>
 		</div>
+		-->
 	</div>
 </div>		
 <div id="input_comment" class="box horizontal">
 	<div class="flex1">
-		<input type="text" />
+		<input name="msg" type="text" />
 	</div>
-	<div class="button">
-		<button data-id="btn_send"></button>
+	<div class="submit">
+		<a data-id="btn_send" class="disabled"><span></span></a>
 	</div>
 </div>

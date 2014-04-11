@@ -1,6 +1,6 @@
 Page.Profile = {	
 	url: 'pages/html/profile.html',
-	init: function(params, container) {
+	init: function(params, container, append) {		
 		var self = this;
 		var uid = (params && params.uid)? params.uid: Account.userId;
 		var isGuest = false;
@@ -16,9 +16,24 @@ Page.Profile = {
 		}
 		
 		// set toolbar buttons
-		container.find('[data-id=btn_m]').tap(function() {
+		var btnMenu = container.find('[data-id=btn_m]');
+		btnMenu.tap(function() {
 			Page.slideMenu();
 		});
+		var btnBack = container.find('[data-id=btn_b]');
+		btnBack.tap(function() {
+			history.back();
+		});
+		
+		if (append) {
+			btnBack.show();
+			btnMenu.hide();
+		}
+		else {
+			btnMenu.show();
+			btnBack.hide();
+		}
+		
 		var btnAdd = container.find('[data-id=btn_a]');
 		btnAdd.tap(function() {
 			Page.open('AddPage', true, { total: self.totalBook });
@@ -91,6 +106,7 @@ Page.Profile = {
 		var self = this;
 		
 		container.find('.pname').text(userData.dname);
+		container.find('.pimage img').attr('src', Config.FILE_URL + Util.getImage(userData.pic, Config.FILE_SIZE.SQUARE));
 		
 		var bookCount = (userData.pbcount)? userData.pbcount: 0;
 		container.find('[data-id=bcount]').text(bookCount);

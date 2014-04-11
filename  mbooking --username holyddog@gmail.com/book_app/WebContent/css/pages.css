@@ -91,10 +91,10 @@
 	width: 50px;
 	height: 50px;
 	margin: 10px 0 10px 10px;
+	overflow: hidden;
 }
 .sel_book .bimage img {
 	width: 50px;
-	height: 50px;
 }
 .sel_book .btitle {
 	padding: 0 10px;
@@ -383,8 +383,31 @@
 	font-size: 110%;
 }
 #page_Comments #input_comment {
-	padding: 5px;
 	background-color: #fff;
+}
+#page_Comments #input_comment .flex1 {	
+	padding: 5px 0;
+}
+#page_Comments #input_comment .submit a {
+	width: 50px;	
+	height: 50px;
+	display: block;
+}
+#page_Comments #input_comment .submit a.disabled {
+	opacity: .5;
+}
+#page_Comments #input_comment .submit a.highlight {
+	background-color: #6DCAEC;
+}
+#page_Comments #input_comment .submit a span {
+	width: 50px;	
+	height: 50px;
+	background-color: #333;
+	display: block;
+	-webkit-mask-size: 20px; 
+	-webkit-mask-position: center center; 
+	-webkit-mask-repeat: no-repeat;
+	-webkit-mask-image: url(../icons/publish.png);
 }
 
 #page_Settings .chg_pic {

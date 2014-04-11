@@ -10,6 +10,10 @@ Page.Following = {
 		container.find('[data-id=btn_r]').tap(function() {
 			self.load(container);
 		});	
+		var btnAdd = container.find('[data-id=btn_a]');
+		btnAdd.tap(function() {
+			Page.open('AddPage', true, { total: Account.bookCount });
+		});
 		
 		self.load(container);		
 	},
@@ -49,13 +53,20 @@ Page.Following = {
 				
 				var divPanel = document.createElement('div');
 				divPanel.className = 'panel flow_hidden';
+				divPanel.dataset.uid = b.author.uid;
 				
 				var divLeft = document.createElement('div');
 				divLeft.className = 'fleft';
 				
 				var img = document.createElement('img');
 				img.className = 'image';
-				img.src = 'images/user.jpg';
+				img.className = 'image';
+				if (b.author.pic) {
+					img.src = Config.FILE_URL + Util.getImage(b.author.pic, Config.FILE_SIZE.SQUARE);
+				}
+				else {
+					img.src = 'images/user.jpg';					
+				}
 				
 				var divAuthor = document.createElement('div');
 				divAuthor.className = 'author';
@@ -84,6 +95,10 @@ Page.Following = {
 			container.find('li .cover').tap(function() {
 				var obj = $(this);
 				Page.open('Book', true, { bid: obj.data('bid'), uid: obj.data('uid') });
+			}, true);
+			container.find('li .panel').tap(function() {
+				var obj = $(this);
+				Page.open('Profile', true, { uid: obj.data('uid') });
 			}, true);
 		});
 	}

@@ -31,7 +31,12 @@ Page.BookList = {
 				var bImage = $(document.createElement('div'));
 				bImage.addClass('bimage');
 				var img = $(document.createElement('img'));
-				img.attr('src', '');
+				if (b.pic) {
+					img.attr('src', Config.FILE_URL + Util.getImage(b.pic, Config.FILE_SIZE.COVER));
+				}
+				else {
+					img.attr('src', 'images/photo.jpg');
+				}
 				bImage.append(img);
 				itemDiv.append(bImage);
 				
@@ -55,7 +60,12 @@ Page.BookList = {
 				Page.back(function(c) {
 					var selBook = c.find('.sel_book');
 					selBook.data('bid', bid);
-					selBook.find('.bimage img').attr('src', src);
+					if (src) {
+						selBook.find('.bimage img').attr('src', src);
+					}
+					else {
+						selBook.find('.bimage img').attr('src', 'images/photo.jpg');
+					}
 					selBook.find('.btitle span').text(title);
 				});
 			}, true);

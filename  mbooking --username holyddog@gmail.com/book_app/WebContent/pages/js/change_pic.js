@@ -13,20 +13,27 @@ Page.ChangePic = {
 			if (!btnAccept.hasClass('disabled')) {
 				Page.btnShowLoading(btnAccept[0]);
 				
-				var temp =   container.find('img[data-ref]').attr('src');
-				
+				var temp = container.find('img[data-ref]').attr('src');
 				var pic = null;
-				
-				pic = temp.replace('data:image/jpg;base64,', '');
-				
+				pic = temp.replace('data:image/jpg;base64,', '');			
 				
 				Service.User.ChangeProfilePic(Account.userId, pic, function(data) {
 					Page.btnHideLoading(btnAccept[0]);
-					MessageBox.drop('Picture changed');
 					
+					Account.picture = data.picture;
+					localStorage.setItem('u', JSON.stringify(Account));
+					
+					var profileCover = $('#profile_cover');
+					profileCover.find('.pimage img').attr('src', Config.FILE_URL + Util.getImage(Account.picture, Config.FILE_SIZE.SQUARE));
+					
+					MessageBox.drop('Picture changed');					
 					Page.back();
 				});
 			}
 		});
+		
+		if (Account.picture) {
+			container.find('.bg_pic img').attr('src', Config.FILE_URL + Util.getImage(Account.picture, Config.FILE_SIZE.SQUARE));
+		}
 	}
 };
