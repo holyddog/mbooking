@@ -320,7 +320,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 		Query query = new Query(criteria);
 		
 		query.sort().on("pbdate", Order.DESCENDING);
-		query.fields().include("bid").include("title").include("pic");
+		query.fields().include("bid").include("title").include("pic").include("uid");
 		
 		if(skip!=null&&limit!=null&&limit!=0)
 		query.skip(skip).limit(limit);
