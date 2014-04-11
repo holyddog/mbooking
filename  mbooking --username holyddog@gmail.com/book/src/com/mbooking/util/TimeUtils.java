@@ -1,10 +1,11 @@
 package com.mbooking.util;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 public class TimeUtils {
 
-	@SuppressWarnings("deprecation")
 	public static String timefromNow(long startdate,long enddate) {
 		DateTime stdate = new DateTime(startdate);
 		DateTime edate = new DateTime(enddate);
@@ -12,29 +13,8 @@ public class TimeUtils {
 		 
 		int styear = stdate.getYear();
 		int eyear = edate.getYear();
-		
-		int stmonth = stdate.getMonthOfYear();
-		int emonth = edate.getMonthOfYear();
-		
 		int y_period = eyear-styear;
-		int m_period = emonth - stmonth;
-		
-		
-		if(y_period>1||(y_period==1&&m_period>-11)){
-	
-			if(m_period<0){
-				y_period-=1;
-				m_period+=12;
-			}
-			
-			if(y_period>0)
-			res.append(y_period).append(" year").append(y_period > 1 ? "s" : "");
-			
-			
-			
-		}else if(m_period<2||(y_period==1&&m_period==-11)){
-			
-			
+
 			long duration = enddate-startdate;
 			long ONE_SECOND = 1000;
 			
@@ -48,54 +28,50 @@ public class TimeUtils {
 		    long ONE_HOUR = ONE_MINUTE * MINUTES;
 		    long HOURS = 24;
 		    long ONE_DAY = ONE_HOUR * HOURS;
+		    long DAYS = 8;
+		    long ONE_WEEK = ONE_DAY * DAYS;
 		    
-		    
-			long DAYS = 30;
-		    if(m_period==0)
-		        DAYS = stdate.dayOfMonth().withMaximumValue().toDate().getDate();
-		    
-		    long ONE_MONTH = ONE_DAY * DAYS;
-
 		    long temp = 0;
 		    
-	          temp = duration / ONE_MONTH;
+	          temp = duration / ONE_WEEK;
 	          if (temp > 0) {
-	            return (res.append(temp).append(" month ago")).toString();
-	               
+	        	  duration =0;
 	          }
+		    
 	          temp = duration / ONE_DAY;
 	          if (temp > 0) {
-	            res.append(temp).append(" day").append(temp > 1 ? "s" : "");
-	            return res.toString()+" ago";  
+	        	if(temp>1){
+	        		res.append(temp).append(" day").append(temp > 1 ? "s" : "");
+	            	return res.toString()+" ago";  
+	        	}
+	        	else {
+	        		return "Yesterday";  
+		        }
 	          }
 
 	          temp = duration / ONE_HOUR;
-	          boolean is_hour=false;
+
 	          if (temp > 0) {
-	            duration -= temp * ONE_HOUR;
 	            res.append(temp).append(" hour").append(temp > 1 ? "s" : "");
-	            is_hour = true;
+	            return res.toString()+" ago";
 	          }
 
 	          temp = duration / ONE_MINUTE;
 	          if (temp > 0) {
-	            duration -= temp * ONE_MINUTE;
-	            res.append(is_hour==true?" and ":"").append(temp).append(" minute").append(temp > 1 ? "s" : "");
-	            if(is_hour==true) return res.toString()+" ago";
+	            res.append(temp).append(" minute").append(temp > 1 ? "s" : "");
+	            return res.toString()+" ago";
 	          }
 
 	          temp = duration / ONE_SECOND;
 	          if (temp > 0) {
-	            res.append(!res.toString().equals("")?" and ":"").append(temp).append(" second").append(temp > 1 ? "s" : "");
+	            res.append(temp).append(" second").append(temp > 1 ? "s" : "");
+	            return res.toString()+" ago";
 	          }
-	          return res.toString()+" ago";
-
-		   
 			
-		}
-		res.append(y_period > 0 ? " and ":"").append(m_period+" month").append(m_period > 1 ? "s" : "");		
-		
-		return res.toString()+" ago";
+		DateTimeFormatter formatter = DateTimeFormat.forPattern("MMMM d"+(y_period>0?", yyyy":""));
+		String formattedDate = formatter.print(startdate);
+		return  formattedDate;	 
+
 	}
 
 }
