@@ -12,7 +12,15 @@ Page.ChangePic = {
 		btnAccept.tap(function() {
 			if (!btnAccept.hasClass('disabled')) {
 				Page.btnShowLoading(btnAccept[0]);
-				Service.User.ChangeProfilePic(Account.userId, container.find('img[data-ref]').attr('src'), function(data) {
+				
+				var temp =   container.find('img[data-ref]').attr('src');
+				
+				var pic = null;
+				
+				pic = temp.replace('data:image/jpg;base64,', '');
+				
+				
+				Service.User.ChangeProfilePic(Account.userId, pic, function(data) {
 					Page.btnHideLoading(btnAccept[0]);
 					MessageBox.drop('Picture changed');
 					
