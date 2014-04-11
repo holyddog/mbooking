@@ -78,7 +78,7 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 	}
 
 	@Override
-	public Boolean changePic(Long uid, String pic) {
+	public String changePic(Long uid, String pic) {
 		try{
 				User user = db.findOne(new Query(Criteria.where("uid").is(uid)), User.class);
 				String oldpic = user.getPic();	
@@ -97,14 +97,14 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 					}	
 					
 					
-					return true;	
+					return path;	
 				
 				}
 			
-			return false;
+			return "";
 		} catch (Exception e) {
 			System.out.println("Unsuccess Change Profile Pic, User Service error: " + e);
-			return false;
+			return "";
 		}
 	}
 }

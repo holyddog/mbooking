@@ -8,5 +8,5 @@ public interface UserRepostitoryCustom {
 	
 	Boolean changePassword(Long uid, String oldpassword, String newpassword);
 	Boolean changeDisplayName(Long uid, String displayName);
-	Boolean changePic(Long uid, String pic);
+	String changePic(Long uid, String pic);
 }
