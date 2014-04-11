@@ -106,7 +106,13 @@ Page.Profile = {
 		var self = this;
 		
 		container.find('.pname').text(userData.dname);
-		container.find('.pimage img').attr('src', Config.FILE_URL + Util.getImage(userData.pic, Config.FILE_SIZE.SQUARE));
+		
+		if (userData.pic) {
+			container.find('.pimage img').attr('src', Config.FILE_URL + Util.getImage(userData.pic, Config.FILE_SIZE.SQUARE));
+		}
+		else {
+			container.find('.pimage img').attr('src', 'images/user.jpg');
+		}
 		
 		var bookCount = (userData.pbcount)? userData.pbcount: 0;
 		container.find('[data-id=bcount]').text(bookCount);

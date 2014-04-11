@@ -162,20 +162,30 @@ $(document).ready(function() {
 	dialog.find('[data-link=camera]').tap(function() {
 		history.back();
 		
-		var p = $('[data-ref=base64]');
-		p.attr('src', Data.Users['U' + index]);
-		index = (index % 3) + 1;
+		if (Page._callbackDialog) {
+			Page._callbackDialog(Data.Users['U' + index]);
+			index = (index % 3) + 1;
+		}
 		
-		$('.page:last-child [data-id=btn_a]').removeClass('disabled');
+//		var p = $('[data-ref=base64]');
+//		p.attr('src', Data.Users['U' + index]);
+//		index = (index % 3) + 1;
+//		
+//		$('.page:last-child [data-id=btn_a]').removeClass('disabled');
 	});
 	dialog.find('[data-link=gallery]').tap(function() {
 		history.back();
 		
-		var p = $('[data-ref=base64]');
-		p.attr('src', Data.Users['U' + index]);
-		index = (index % 3) + 1;
+		if (Page._callbackDialog) {
+			Page._callbackDialog(Data.Users['U' + index]);
+			index = (index % 3) + 1;
+		}
 		
-		$('.page:last-child [data-id=btn_a]').removeClass('disabled');
+//		var p = $('[data-ref=base64]');
+//		p.attr('src', Data.Users['U' + index]);
+//		index = (index % 3) + 1;
+//		
+//		$('.page:last-child [data-id=btn_a]').removeClass('disabled');
 	});
 });
 
@@ -259,8 +269,11 @@ Page = {
 			history.back();
 		}
 	},
-	popDialog: function() {		
+	popDialog: function(fn) {		
 		if (!Page._showDialog) {
+			if (typeof fn == 'function') {
+				Page._callbackDialog = fn; 
+			}
 			window.location = '#dialog';
 		}
 		else {
@@ -535,6 +548,7 @@ $(function(){
 			dd.className = dd.className.replace(' show', '');
 			
 			Page._showDialog = false;
+			Page._callbackDialog = undefined;
 			dialog = true;
 		}
 		
