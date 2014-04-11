@@ -28,6 +28,7 @@ public class CommentRepositoryImpl implements CommentRepostitoryCustom {
 			
 			if(book!=null){
 				Comment comment_obj = new Comment();
+				comment_obj.setCmid(MongoCustom.generateMaxSeq(Comment.class, db));
 				comment_obj.setBid(bid);
 				comment_obj.setUid(uid);
 				comment_obj.setComment(comment);
