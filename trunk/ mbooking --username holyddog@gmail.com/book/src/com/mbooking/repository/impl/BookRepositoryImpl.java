@@ -2,6 +2,7 @@ package com.mbooking.repository.impl;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -326,22 +327,26 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 		
 		List<Book> books =  db.find(query, Book.class);
 		
+		HashMap<Long,User> authors_map = new HashMap<Long,User>();
+			
 //		-------------------Wait for tuning 
 		for(int i = 0;i<books.size();i++){
+			
 			Long uid = books.get(i).getUid();
-			Query user_query = new Query(Criteria.where("uis").is(uid));
-			
-			user_query.fields().include("uid");
-			user_query.fields().include("pic");
-			user_query.fields().include("dname");
-			
-			User user = db.findOne(user_query,User.class);
-			
-			if(user!=null){
-				books.get(i).setAuthor(user);
+			if(authors_map.get(uid)==null){
+				Query user_query = new Query(Criteria.where("uid").is(uid));
+				user_query.fields().include("uid");
+				user_query.fields().include("pic");
+				user_query.fields().include("dname");
+				User user = db.findOne(user_query,User.class);
+				authors_map.put(uid, user);
+			}
+			User author = authors_map.get(uid);
+			if(author!=null){
+				books.get(i).setAuthor(author);
 			}
 		}
-//		
+
 		return books;
 	}
 	
