@@ -71,9 +71,16 @@ public class BookJson {
 	public @ResponseBody
 	Object getBook(
 			@RequestParam(value = "bid") Long bid,
-			@RequestParam(value = "uid") Long uid) {
+			@RequestParam(value = "uid", required = false) Long uid) {
 
-		Book book = bookRepo.findBookWithPages(bid, uid);
+		Book book = null;
+		if (uid != null && uid > 0) {
+			book = bookRepo.findBookWithPages(bid, uid);	
+		}
+		else {
+			book = bookRepo.findByBid(bid);	
+		}
+		
 		if (book != null) {
 			return book;
 		}
