@@ -100,6 +100,9 @@
 	margin: 0;
 	-webkit-box-shadow: 0px 0px 2px #b6b6b6;
 }
+.sel_book .edit_book.highlight {
+	background-color: #6DCAEC;		
+}
 .sel_book .bimage {
 	background-color: #ddd;
 	width: 50px;
@@ -189,12 +192,22 @@
 	color: #555;
 	font-weight: bold;
 }
+#page_PublishBook .btn_panel .btn.highlight {
+	background-color: #6DCAEC;
+}
 #page_PublishBook .check_label {
 	font-size: 80%;
 	color: #777;
 	-webkit-box-align: center;
 }
-#page_PublishBook .check_icon {
+#page_PublishBook .btn_check {
+	display: block;
+	padding: 10px;
+}
+#page_PublishBook .btn_check.highlight {
+	background-color: #6DCAEC;	
+}
+#page_PublishBook .btn_check .check_icon {
 	width: 20px; 
 	height: 20px;
 	display: block;
@@ -202,10 +215,10 @@
 	-webkit-mask-size: 20px; 
 	-webkit-mask-position: center center; 
 	-webkit-mask-repeat: no-repeat;
-	-webkit-mask-image: url(../icons/check.png);
+	-webkit-mask-image: url(../icons/uncheck.png);
 }
-#page_PublishBook .check_icon.highlight {
-	background-color: #6DCAEC;
+#page_PublishBook .btn_check.check .check_icon {
+	-webkit-mask-image: url(../icons/check.png);
 }
 
 #page_Profile .profile_bg, #page_Book .book_bg {

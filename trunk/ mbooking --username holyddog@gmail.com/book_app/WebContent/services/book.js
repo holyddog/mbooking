@@ -14,27 +14,37 @@ Service.Book = {
 		};
 		Web.post(url, params, callback);
 	},
+	
+	EditBook: function(bid, bookName, desc, callback) {
+		var url = Service.url + '/createBook.json';
+		var params = {
+			bid: bid,
+			title : bookName,
+			desc : desc
+		};
+		Web.post(url, params, callback);
+	},
 
 	CreateBookSimple : function(bookName, desc, userID, callback) {
 		Service.Book.CreateBook(bookName, desc, userID, null, null, null, null,
 				callback);
 	},
 
-	EditBook : function(bookID, bookName, desc, userID, picName, startDate,
-			endDate, tags, callback) {
-		var url = Service.url + '/editBook.json';
-		var params = {
-			bid : bookID,
-			title : bookName,
-			desc : desc,
-			fdate : startDate, // Non - Require Field
-			tdatep : endDate, // Non - Require Field
-			tags : tags, // Non - Require Field
-			uid : userID,
-			pic : picName // Non - Require Field
-		};
-		Web.post(url, params, callback);
-	},
+//	EditBook : function(bookID, bookName, desc, userID, picName, startDate,
+//			endDate, tags, callback) {
+//		var url = Service.url + '/editBook.json';
+//		var params = {
+//			bid : bookID,
+//			title : bookName,
+//			desc : desc,
+//			fdate : startDate, // Non - Require Field
+//			tdatep : endDate, // Non - Require Field
+//			tags : tags, // Non - Require Field
+//			uid : userID,
+//			pic : picName // Non - Require Field
+//		};
+//		Web.post(url, params, callback);
+//	},
 
 	EditBookBookSimple : function(bookID, bookName, desc, userID, picName,
 			callback) {
@@ -62,8 +72,18 @@ Service.Book = {
 		var params = {
 			bid : bookID,
 			uid : userID,
+			
 		};
 		Web.get(url, params, callback);
+	},
+	
+	GetBookByBid: function(bid, callback) {
+		var url = Service.url + '/getBook.json';
+		var params = {
+			bid : bid
+		};
+		Web.get(url, params, callback);
+		
 	},
 
 	GetBooksByUid : function(userID,skip,limit, callback) {
@@ -100,11 +120,12 @@ Service.Book = {
 		Web.get(url, params, callback);
 	},
 
-	PublishBook : function(bookID, userID, callback) {
+	PublishBook : function(bookID, userID, pub, callback) {
 		var url = Service.url + '/publishBook.json';
 		var params = {
 			bid : bookID,
 			uid : userID,
+			pub: pub
 		};
 		Web.post(url, params, callback);
 	},
