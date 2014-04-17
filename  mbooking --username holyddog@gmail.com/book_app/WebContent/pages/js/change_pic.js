@@ -30,7 +30,7 @@ Page.ChangePic = {
 		});
 		container.find('[data-id=btn_change]').tap(function() {
 			Page.popDialog(function(img) {
-				container.find('img[data-ref=base64]').attr('src', img);
+				container.find('img[data-ref=base64]').attr('src', 'data:image/jpg;base64,' + img);
 				btnAccept.removeClass('disabled');
 			});
 		});

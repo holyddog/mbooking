@@ -7,6 +7,20 @@
 	font-size: 80%;
 }
 
+#page_AddPage .page_label {
+	margin-top: 10px;
+	margin-right: 10px;
+	color: #777;
+	text-align: right;
+	font-size: 70%;
+	font-weight: bold;
+}
+#page_AddPage #bottom_panel {
+	position: fixed;
+	bottom: 0;
+	height: 50px;
+	width: 100%;
+}
 #page_AddPage .photo_panel {
 	background-color: #fff;
 	margin: 10px;
@@ -163,6 +177,35 @@
 	background-color: #ddd;
 	line-height: 40px;
 	font-size: 85%;
+}
+#page_PublishBook .btn_panel .sep {
+	width: 1px;
+	height: 40px;
+	background-color: #fff;
+}
+#page_PublishBook .btn_panel .btn {
+	display: block;
+	font-size: 80%;
+	color: #555;
+	font-weight: bold;
+}
+#page_PublishBook .check_label {
+	font-size: 80%;
+	color: #777;
+	-webkit-box-align: center;
+}
+#page_PublishBook .check_icon {
+	width: 20px; 
+	height: 20px;
+	display: block;
+	background-color: #555;
+	-webkit-mask-size: 20px; 
+	-webkit-mask-position: center center; 
+	-webkit-mask-repeat: no-repeat;
+	-webkit-mask-image: url(../icons/check.png);
+}
+#page_PublishBook .check_icon.highlight {
+	background-color: #6DCAEC;
 }
 
 #page_Profile .profile_bg, #page_Book .book_bg {
@@ -421,7 +464,6 @@
 	width: 40px;
 	height: 40px;
 	border-radius: 20px;
-<<<<<<< .mine
 }
 
 
@@ -477,9 +519,6 @@
 	top: 0;
 }
 #page_BookFlip #tap_nav .flex1.highlight {
-}
-
-
 }
 
 #page_ChangePic .bg_pic {

@@ -43,11 +43,12 @@ Page.PublishBook = {
 			boxDiv.className = 'box horizontal';			
 			var imageDiv = document.createElement('div');
 			imageDiv.className = 'bimage';
-			var img = document.createElement('img');
-			img.src = Util.getImage(Config.FILE_URL + data.pic, Config.FILE_SIZE.COVER);
-			self.bookCover = data.pic;
-			
-			imageDiv.appendChild(img);
+			if (data.pic) {
+				var img = document.createElement('img');
+				img.src = Util.getImage(Config.FILE_URL + data.pic, Config.FILE_SIZE.COVER);
+				self.bookCover = data.pic;			
+				imageDiv.appendChild(img);
+			}
 			boxDiv.appendChild(imageDiv);
 			
 			var infoDiv = document.createElement('div');
@@ -57,13 +58,15 @@ Page.PublishBook = {
 			descDiv.innerText = data.desc;
 			var countDiv = document.createElement('div');
 			countDiv.className = 'pcount';
-			countDiv.innerText = data.pcount + ' Pages';
+			countDiv.innerText = (data.pcount)? (data.pcount + ' Pages'): 'No Page';
 			infoDiv.appendChild(descDiv);
 			infoDiv.appendChild(countDiv);
 			boxDiv.appendChild(infoDiv);
 			
 			panelDiv.appendChild(boxDiv);
-			content.append(panelDiv);
+			$(panelDiv).prependTo(content);
+			
+			content.find('.hid_panel').show();
 			
 //			<div class="book_panel shadow_border">		
 //				<h2 class="title"></h2>
