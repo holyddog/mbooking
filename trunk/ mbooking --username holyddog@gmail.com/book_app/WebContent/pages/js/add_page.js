@@ -11,17 +11,19 @@ Page.AddPage = {
 			
 			if (!selBook.data('bid')) {
 				var lb = Account.lastEditBook;
-				if (lb.pic) {
-					selBook.find('.bimage img').attr('src', Config.FILE_URL + Util.getImage(lb.pic, Config.FILE_SIZE.COVER));
-				}
-				else {
-					selBook.find('.bimage img').attr('src', 'images/photo.jpg');			
-				}
-				selBook.find('.btitle span').text(lb.title);
-				selBook.data('bid', lb.bid);
-				
-				if (lb.pageCount) {
-					document.getElementById('bottom_panel').style.display = 'block';
+					if (lb) {
+					if (lb.pic) {
+						selBook.find('.bimage img').attr('src', Config.FILE_URL + Util.getImage(lb.pic, Config.FILE_SIZE.COVER));
+					}
+					else {
+						selBook.find('.bimage img').attr('src', 'images/photo.jpg');			
+					}
+					selBook.find('.btitle span').text(lb.title);
+					selBook.data('bid', lb.bid);
+					
+					if (lb.pageCount) {
+						document.getElementById('bottom_panel').style.display = 'block';
+					}
 				}
 			}
 		}
