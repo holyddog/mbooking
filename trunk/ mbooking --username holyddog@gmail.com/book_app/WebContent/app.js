@@ -137,7 +137,7 @@ $(document).ready(function() {
 	});
 	
 	sb.find('.item').tap(function() {
-		var page = $(this).data('page');
+		var page = $(this).data('link');
 		
 		var hash = location.hash;	
 		var arr = hash.split('?');
