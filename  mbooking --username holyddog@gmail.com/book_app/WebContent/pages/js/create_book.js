@@ -23,7 +23,7 @@ Page.CreateBook = {
 						bid: data.bid,
 						pic: data.pic,
 						title: data.title,
-						pageCount: 0
+						pageCount: (data.pcount)? data.pcount: 0
 					};
 					localStorage.setItem("u", JSON.stringify(Account));
 					
@@ -34,18 +34,40 @@ Page.CreateBook = {
 						}
 						else {
 							var src = 'images/photo.jpg';
+							if (data.pic) {
+								src = Config.FILE_URL + Util.getImage(data.pic, Config.FILE_SIZE.COVER);
+							}
 							
-							var selBook = c.find('.sel_book').show();
-							selBook.data('bid', data.bid);
-							selBook.find('.bimage img').attr('src', src);
-							selBook.find('.btitle span').text(data.title);							
+							var updateBook = function(con) {								
+								var selBook = con.find('.sel_book').show();
+								selBook.data('bid', data.bid);
+								selBook.find('.bimage img').attr('src', src);
+								selBook.find('.btitle span').text(data.title);							
 
-							var linkCreate = c.find('[data-id=link_c]');
-							linkCreate.hide();
+								var linkCreate = con.find('[data-id=link_c]');
+								linkCreate.hide();		
+							};
+							
+							if (c.data('page') == 'PublishBook') {
+								var bookPanel = c.find('.book_panel');
+								bookPanel.find('.title').text(data.title);
+								bookPanel.find('.desc').text(data.desc);
+								
+								updateBook($('[data-page=AddPage]'));
+							}
+							else if (c.data('page') == 'AddPage') {	
+								updateBook(c);
+							}
 						}
 					});
 				};
-				Service.Book.CreateBook(inputTitle.val(), inputDesc.val(), Account.userId, null, null, null, null, fn);
+				
+				if (params.bid) {
+					Service.Book.EditBook(params.bid, inputTitle.val(), inputDesc.val(), fn);					
+				}
+				else {
+					Service.Book.CreateBook(inputTitle.val(), inputDesc.val(), Account.userId, null, null, null, null, fn);					
+				}
 			}
 		});
 		
@@ -62,5 +84,14 @@ Page.CreateBook = {
 		inputTitle[0].addEventListener('input', function() {
 			checkInput();
 		}, false);
+		
+		if (params.bid) {
+			container.find('.tbar .title').text('Edit Book');
+			Service.Book.GetBookByBid(params.bid, function(data) { 
+				inputTitle.val(data.title);
+				inputDesc.val(data.desc);
+				checkInput();
+			});
+		}
 	}
 };

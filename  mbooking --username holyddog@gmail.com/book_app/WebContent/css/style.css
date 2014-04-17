@@ -298,6 +298,9 @@ textarea {
 .btn span.preview {
 	-webkit-mask-image: url(../icons/preview.png);
 }
+.btn span.setting {
+	-webkit-mask-image: url(../icons/setting.png);
+}
 
 .btn_box span.accept {
 	-webkit-mask-image: url(../icons/accept.png);

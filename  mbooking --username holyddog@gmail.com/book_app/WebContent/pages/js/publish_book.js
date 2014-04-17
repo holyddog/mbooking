@@ -7,10 +7,15 @@ Page.PublishBook = {
 		container.find('[data-id=btn_b]').tap(function() {
 			Page.back();
 		});
+		var btnCheck = container.find('[data-id=btn_c]'); 
+		btnCheck.tap(function() {
+			btnCheck.toggleClass('check');
+		});
 		var btnAccept = container.find('[data-id=btn_a]');
 		btnAccept.tap(function() {
 			Page.btnShowLoading(btnAccept[0]);
-			Service.Book.PublishBook(params.bid, Account.userId, function() {
+			var pub = btnCheck.hasClass('check');
+			Service.Book.PublishBook(params.bid, Account.userId, pub, function() {
 				Page.btnHideLoading(btnAccept[0]);
 				
 				Account.cover = self.bookCover;
@@ -24,11 +29,18 @@ Page.PublishBook = {
 				});
 			});
 		});
+		container.find('[data-id=btn_e]').tap(function() {
+			Page.open('CreateBook', true, { ret: true, bid: params.bid });
+		});
+		var btnPreview = container.find('[data-id=btn_p]');
+		btnPreview.tap(function() {
+			Page.open('Book', true, { bid: params.bid, uid: Account.userId, preview: true });
+		});
 		
 		// set content data
 		var content = container.find('.content');
 		Page.bodyShowLoading(content);
-		Service.Book.GetBook(params.bid, Account.userId, function(data) { 
+		Service.Book.GetBookByBid(params.bid, function(data) { 
 			Page.bodyHideLoading(content);
 			
 			var panelDiv = document.createElement('div');
@@ -67,6 +79,13 @@ Page.PublishBook = {
 			$(panelDiv).prependTo(content);
 			
 			content.find('.hid_panel').show();
+			if (data.pub) {
+				btnCheck.addClass('check');
+			}
+			
+			if ($('[data-page=Book]').length) {
+				container.find('.btn_panel .hid').hide(); 
+			}
 			
 //			<div class="book_panel shadow_border">		
 //				<h2 class="title"></h2>

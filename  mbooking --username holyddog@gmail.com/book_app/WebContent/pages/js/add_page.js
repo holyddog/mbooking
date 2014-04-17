@@ -3,7 +3,7 @@ Page.AddPage = {
 	init: function(params, container) {		
 		var selBook = container.find('.sel_book');
 		var linkCreate = container.find('[data-id=link_c]');
-		if (!params.total) {
+		if (!params.total && !Account.lastEditBook) {
 			selBook.hide();
 		}
 		else {
@@ -11,7 +11,7 @@ Page.AddPage = {
 			
 			if (!selBook.data('bid')) {
 				var lb = Account.lastEditBook;
-					if (lb) {
+				if (lb) {
 					if (lb.pic) {
 						selBook.find('.bimage img').attr('src', Config.FILE_URL + Util.getImage(lb.pic, Config.FILE_SIZE.COVER));
 					}
@@ -46,6 +46,9 @@ Page.AddPage = {
 		container.find('[data-id=btn_c]').tap(function() {
 			Page.back();
 		});	
+		container.find('[data-id=link_p]').tap(function() {
+			Page.open('CreateBook', true, { bid: selBook.data('bid'), ret: true });
+		}, true);
 		container.find('[data-id=btn_s]').tap(function() {
 			var bid = container.find('.sel_book').data('bid');			
 			var bgImage = $('#add_photo').css('background-image');

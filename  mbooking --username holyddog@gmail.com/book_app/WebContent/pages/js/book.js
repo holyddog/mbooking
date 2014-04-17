@@ -3,11 +3,11 @@ Page.Book = {
 	init: function(params, container) {	
 		var self = this;
 		
-//		var uid = (params && params.uid)? params.uid: Account.userId;
-//		var isGuest = false;
-//		if (uid != Account.userId) {
-//			isGuest = true;
-//		}
+		var uid = (params && params.uid)? params.uid: Account.userId;
+		var isGuest = false;
+		if (uid != Account.userId) {
+			isGuest = true;
+		}
 		
 		// set toolbar buttons
 		var btnBack = container.find('[data-id=btn_b]'); 
@@ -22,6 +22,20 @@ Page.Book = {
 		btnShare.tap(function() {
 			alert('share');
 		});	
+		var btnSetting = container.find('[data-id=btn_st]');
+		btnSetting.tap(function() {
+			Page.open('PublishBook', true, { bid: params.bid });
+		});
+		
+		if (params.preview) {
+			btnComment.hide();
+			btnSetting.hide();
+		}
+		
+		if (isGuest) {
+			btnSetting.hide();
+			btnComment.css('right', '0px');
+		}
 		
 //		if (!isGuest) {
 //			btnShare.hide();
