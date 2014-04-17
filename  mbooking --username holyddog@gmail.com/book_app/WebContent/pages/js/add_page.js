@@ -93,14 +93,20 @@ Page.AddPage = {
 		});
 		
 		addPhoto.tap(function() {			
-			var imgs = ['Img1', 'Img2', 'Img3', 'Img4', 'Img5'];
-			
-			photoLabel.addClass('no_display');
-			removeBg.removeClass('no_display');
-			removeBtn.removeClass('no_display');
-			addPhoto.css('background-image', 'url(' + Data.Images[imgs[index]] + ')');
-			index = (index + 1) % 5;
-		}, true);
+                     Page.popDialog(function(img) {
+                                    addPhoto.css('background-image', 'url(' + img + ')');
+                                    photoLabel.addClass('no_display');
+                                    removeBg.removeClass('no_display');
+                                    removeBtn.removeClass('no_display');
+                                    });
+//			var imgs = ['Img1', 'Img2', 'Img3', 'Img4', 'Img5'];
+//			
+//			photoLabel.addClass('no_display');
+//			removeBg.removeClass('no_display');
+//			removeBtn.removeClass('no_display');
+//			addPhoto.css('background-image', 'url(' + Data.Images[imgs[index]] + ')');
+//			index = (index + 1) % 5;
+		}, false);
 		removeBtn.tap(removeFn);
 	}
 };

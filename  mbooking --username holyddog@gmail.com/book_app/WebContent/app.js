@@ -129,9 +129,7 @@ $(document).ready(function() {
 	var win = $(window);
 	win.on('resize', function() {
 		var h = win.height() - 50;
-		console.log('aaa');
 		custom_style.innerHTML = '#sidebar { height: ' + h + 'px } #overlay { height: ' + h + 'px }';
-		console.log(custom_style.innerHTML);
 	});
 	win.trigger('resize');
 	
@@ -141,7 +139,7 @@ $(document).ready(function() {
 	});
 	
 	sb.find('.item').tap(function() {
-		var page = $(this).data('link');
+		var page = $(this).data('page');
 		
 		var hash = location.hash;	
 		var arr = hash.split('?');
@@ -164,11 +162,19 @@ $(document).ready(function() {
 	
 	var index = 1;
 	dialog.find('[data-link=camera]').tap(function() {
-		history.back();
+//		history.back();
 		
 		if (Page._callbackDialog) {
-			Page._callbackDialog(Data.Users['U' + index]);
-			index = (index % 3) + 1;
+          Phonegap.takePhoto({
+              success: function (data) {
+                   var base64 = 'data:image/jpg;base64,'+data.base64;
+                   history.back();
+                   Page._callbackDialog(base64);
+              }
+          });
+                                          
+//			Page._callbackDialog(Data.Users['U' + index]);
+//			index = (index % 3) + 1;
 		}
 		
 //		var p = $('[data-ref=base64]');
@@ -178,11 +184,19 @@ $(document).ready(function() {
 //		$('.page:last-child [data-id=btn_a]').removeClass('disabled');
 	});
 	dialog.find('[data-link=gallery]').tap(function() {
-		history.back();
-		
+//        history.back();
 		if (Page._callbackDialog) {
-			Page._callbackDialog(Data.Users['U' + index]);
-			index = (index % 3) + 1;
+            
+        Phonegap.choosePhoto({
+            success: function (data) {
+                var base64 = 'data:image/jpg;base64,'+data.base64;
+                history.back();
+                Page._callbackDialog(base64);
+            }
+        });
+                                           
+//			Page._callbackDialog(Data.Users['U' + index]);
+//			index = (index % 3) + 1;
 		}
 		
 //		var p = $('[data-ref=base64]');
@@ -203,6 +217,47 @@ Container = {
 	addPage: function(container) {
 		this.getBody().append(container);
 	}
+};
+
+Phonegap = {
+	Ready : false,
+	PictureSourceType : null,
+	DestinationType : null,
+    
+	_getPhoto : function(opts) { 
+		var options = {
+			quality : 50,
+			targetWidth : 600,
+			targetHeight : 600,
+			correctOrientation : true,
+			encodingType : navigator.camera.EncodingType.JPEG,
+			destinationType : navigator.camera.DestinationType.DATA_URL
+		};
+        
+		if (!opts.camera) {
+			options.sourceType = navigator.camera.PictureSourceType.PHOTOLIBRARY;
+		}
+        
+		function onSuccess(imageData) {
+			opts.success({
+                         src : 'data:image/jpeg;base64,' + imageData,
+                         base64 : imageData
+                         });
+		}
+		
+		navigator.camera.getPicture(onSuccess, function(message) {}, options);
+	},
+    
+	choosePhoto : function(opts) {
+		this._getPhoto(opts);
+	},
+    
+	takePhoto : function(opts) {
+		opts.camera = true;
+        
+		this._getPhoto(opts);
+	}
+	
 };
 
 Device = {
