@@ -21,10 +21,10 @@ public class NotificationJson {
 	@RequestMapping(method = RequestMethod.POST, value = "/readedNotification.json")
 	public @ResponseBody
 	Object readedNotification(
-			@RequestParam(value = "ntid") Long ntid
+			
 		) {
 		
-		return ResultResponse.getResult("success",  notificationRepo.hadBeenRead(ntid));
+		return ResultResponse.getResult("success",  notificationRepo.hadBeenRead());
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/getNotificationByUid.json")

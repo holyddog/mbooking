@@ -22,8 +22,8 @@
     	<!-- <param-value>http://localhost:8080/book</param-value>-->
   	</context-param>
 	<context-param>
-		<param-name>images</param-name>
-		<param-value>http://localhost/images/book_dev_files</param-value>
+		<param-name>book_dev_files</param-name>
+		<param-value>http://localhost/book_dev_files</param-value>
 		<!-- <param-value>http://localhost/images/book</param-value> -->
 	</context-param>
   	<context-param>    

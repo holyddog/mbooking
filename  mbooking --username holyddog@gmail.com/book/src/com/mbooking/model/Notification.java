@@ -1,13 +1,15 @@
 package com.mbooking.model;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "notifications")
+@Document(collection = "notices")
 public class Notification {
-	@Id
-	Long ntid;
 
+	@Id
+	ObjectId _id;
+	
 	Long uid;	
 	Long bid;
 	
@@ -26,17 +28,15 @@ public class Notification {
 	
 	Long adate;		//Action date
 
-	Boolean hide;	//If notification had been read
-	
 	//Service return
 	String strtime;
-
-	public Long getNtid() {
-		return ntid;
+	
+	public ObjectId get_id() {
+		return _id;
 	}
 
-	public void setNtid(Long ntid) {
-		this.ntid = ntid;
+	public void set_id(ObjectId _id) {
+		this._id = _id;
 	}
 
 	public Long getUid() {
@@ -134,13 +134,4 @@ public class Notification {
 	public void setStrtime(String strtime) {
 		this.strtime = strtime;
 	}
-	
-	public Boolean getHide() {
-		return hide;
-	}
-
-	public void setHide(Boolean hide) {
-		this.hide = hide;
-	}
-
 }
