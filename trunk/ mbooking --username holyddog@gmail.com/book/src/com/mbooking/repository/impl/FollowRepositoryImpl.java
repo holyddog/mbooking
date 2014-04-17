@@ -7,7 +7,9 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
+import com.mbooking.constant.ConstValue;
 import com.mbooking.model.Follow;
+import com.mbooking.model.Notification;
 import com.mbooking.model.User;
 import com.mbooking.repository.FollowRepostitoryCustom;
 import com.mbooking.util.MongoCustom;
@@ -78,7 +80,15 @@ public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 				following_update.set("fgcount", fgcount);
 				db.updateFirst(new Query(criteria), following_update, User.class);
 				
-				NotificationRepositoryImpl.sendNewFollowerNotification(auid, uid, foll.getDname(),foll.getPic());
+				Notification notification = new Notification();
+				notification.setUid(auid);
+				notification.setFollid(uid);
+				notification.setAdate(System.currentTimeMillis());
+				notification.setPic(foll.getPic());
+				notification.setDname(foll.getDname());
+				notification.setMessage(String.format(ConstValue.NEW_FOLLOWER_MSG_FORMAT_EN, foll.getDname()));
+				notification.setNtype(ConstValue.NEW_FOLLOWER);
+				db.insert(notification);
 				
 				return true;
 			}

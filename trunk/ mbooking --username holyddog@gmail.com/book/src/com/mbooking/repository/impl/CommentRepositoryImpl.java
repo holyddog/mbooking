@@ -8,8 +8,10 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.data.mongodb.core.query.Query;
 
+import com.mbooking.constant.ConstValue;
 import com.mbooking.model.Book;
 import com.mbooking.model.Comment;
+import com.mbooking.model.Notification;
 import com.mbooking.model.User;
 import com.mbooking.repository.CommentRepostitoryCustom;
 import com.mbooking.util.MongoCustom;
@@ -43,9 +45,30 @@ public class CommentRepositoryImpl implements CommentRepostitoryCustom {
 					
 				}
 		
-				db.insert(comment_obj);
+				db.insert(comment_obj);	
+				
+				Notification notification = new Notification();	
+				notification.setUid(uid);
 			
-				NotificationRepositoryImpl.sendCommentFromFollowerNotification(uid, bid,user.getDname(),user.getPic(), comment, book.getTitle(), book.getPic());
+				notification.setBid(bid);
+				notification.setBname(book.getTitle());
+				notification.setBpic(book.getPic());
+				
+				notification.setAdate(System.currentTimeMillis());
+			
+				notification.setPic(user.getPic());
+				notification.setDname(user.getDname());
+				notification.setMessage(String.format(ConstValue.FOLLOWER_COMMENT_MSG_FORMAT_EN, user.getDname(),book.getTitle(),comment));
+				
+				notification.setNtype(ConstValue.FOLLOWER_COMMENT);
+				
+				db.insert(notification);
+				
+				
+				
+				
+				
+				
 				return true;	
 			}
 			else
