@@ -22,7 +22,8 @@ Page.CreateBook = {
 					Account.lastEditBook = {
 						bid: data.bid,
 						pic: data.pic,
-						title: data.title
+						title: data.title,
+						pageCount: 0
 					};
 					localStorage.setItem("u", JSON.stringify(Account));
 					

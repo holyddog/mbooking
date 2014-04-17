@@ -1,5 +1,4 @@
-Config = { 
-	PHONEGAP: false,
+Config = {
 	DEBUG_MODE: true,
 	DEFAULT_PAGE: 'Home',
 	LIMIT_ITEM: 20,
@@ -7,8 +6,7 @@ Config = {
 	SLIDE_DELAY: 250,
 	FADE_DELAY: 250,
 	
-//	FILE_URL: 'http://' + window.location.hostname + '/res/book',
-	FILE_URL: 'http://119.59.122.38/book_dev_files',
+	FILE_URL: 'http://' + window.location.hostname + '/res/book',
 	
 	FILE_SIZE: {
 		COVER: 0,
@@ -21,8 +19,7 @@ Config = {
 };
 
 Service = {
-//	url: 'http://' + window.location.hostname + ':8080/book/data'
-		url: 'http://119.59.122.38/book/data'
+	url: 'http://' + window.location.hostname + ':8080/book/data'		
 };
 
 Account = {};
@@ -30,6 +27,11 @@ Account = {};
 Util = {
 	getRandomInt: function(min, max) {
 		return Math.floor(Math.random() * (max - min + 1)) + min;
+	},
+	getAndroidVersion: function() {
+	    var ua = navigator.userAgent; 
+	    var match = ua.match(/Android\s([0-9\.]*)/);
+	    return match ? match[1] : false;
 	},
 	getTime: function(date) {
 		var hours = date.getHours();
@@ -79,7 +81,7 @@ Util = {
 
 MessageBox = {
 	confirm: function(config) {
-		if (Config.PHONEGAP) {
+		if (Device.PhoneGap.isReady) {
 			navigator.notification.confirm(config.message, function(index) {
 				if (index == 1 && typeof config.callback == 'function') {
 					config.callback();
@@ -94,7 +96,7 @@ MessageBox = {
 		}
 	},
 	alert: function(config) {
-		if (Config.PHONEGAP) {
+		if (Device.PhoneGap.isReady) {
 			navigator.notification.alert(config.message, config.callback, config.title);
 		}
 		else {
@@ -139,7 +141,7 @@ $(document).ready(function() {
 	});
 	
 	sb.find('.item').tap(function() {
-		var page = $(this).data('page');
+		var page = $(this).data('link');
 		
 		var hash = location.hash;	
 		var arr = hash.split('?');
@@ -160,50 +162,35 @@ $(document).ready(function() {
 		e.preventDefault();
 	});
 	
-	var index = 1;
 	dialog.find('[data-link=camera]').tap(function() {
-//		history.back();
-		
+		history.back();		
 		if (Page._callbackDialog) {
-          Phonegap.takePhoto({
-              success: function (data) {
-                   var base64 = 'data:image/jpg;base64,'+data.base64;
-                   history.back();
-                   Page._callbackDialog(base64);
-              }
-          });
-                                          
-//			Page._callbackDialog(Data.Users['U' + index]);
-//			index = (index % 3) + 1;
+			if (Device.PhoneGap.isReady) {
+				Device.PhoneGap.takePhoto({
+					success: function(imageData) {
+						Page._callbackDialog(imageData);
+					}
+				});
+			}
+			else {
+				Page._callbackDialog(Data.Images.Img3);				
+			}
 		}
-		
-//		var p = $('[data-ref=base64]');
-//		p.attr('src', Data.Users['U' + index]);
-//		index = (index % 3) + 1;
-//		
-//		$('.page:last-child [data-id=btn_a]').removeClass('disabled');
 	});
 	dialog.find('[data-link=gallery]').tap(function() {
-//        history.back();
-		if (Page._callbackDialog) {
-            
-        Phonegap.choosePhoto({
-            success: function (data) {
-                var base64 = 'data:image/jpg;base64,'+data.base64;
-                history.back();
-                Page._callbackDialog(base64);
-            }
-        });
-                                           
-//			Page._callbackDialog(Data.Users['U' + index]);
-//			index = (index % 3) + 1;
+        history.back();
+        if (Page._callbackDialog) {
+        	if (Device.PhoneGap.isReady) {
+	        	Device.PhoneGap.choosePhoto({
+					success: function(imageData) {
+						Page._callbackDialog(imageData);
+					}
+				});
+        	}
+        	else {
+        		Page._callbackDialog(Data.Images.Img2);
+        	}
 		}
-		
-//		var p = $('[data-ref=base64]');
-//		p.attr('src', Data.Users['U' + index]);
-//		index = (index % 3) + 1;
-//		
-//		$('.page:last-child [data-id=btn_a]').removeClass('disabled');
 	});
 });
 
@@ -219,54 +206,47 @@ Container = {
 	}
 };
 
-Phonegap = {
-	Ready : false,
-	PictureSourceType : null,
-	DestinationType : null,
-    
-	_getPhoto : function(opts) { 
-		var options = {
-			quality : 50,
-			targetWidth : 600,
-			targetHeight : 600,
-			correctOrientation : true,
-			encodingType : navigator.camera.EncodingType.JPEG,
-			destinationType : navigator.camera.DestinationType.DATA_URL
-		};
-        
-		if (!opts.camera) {
-			options.sourceType = navigator.camera.PictureSourceType.PHOTOLIBRARY;
-		}
-        
-		function onSuccess(imageData) {
-			opts.success({
-                         src : 'data:image/jpeg;base64,' + imageData,
-                         base64 : imageData
-                         });
-		}
-		
-		navigator.camera.getPicture(onSuccess, function(message) {}, options);
-	},
-    
-	choosePhoto : function(opts) {
-		this._getPhoto(opts);
-	},
-    
-	takePhoto : function(opts) {
-		opts.camera = true;
-        
-		this._getPhoto(opts);
-	}
-	
-};
-
 Device = {
 	isMobile: function() {
-		var ua = navigator.userAgent.toLowerCase();
-		if (ua.indexOf("windows") > -1) {
-			return false;
+		if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+			return true;
 		}
-		return true;
+		return false;
+	},
+	PhoneGap: {
+		isReady : false,
+	    
+		_getPhoto : function(opts) { 
+			var options = {
+				quality : 50,
+				targetWidth : 600,
+				targetHeight : 600,
+				correctOrientation : true,
+				encodingType : navigator.camera.EncodingType.JPEG,
+				destinationType : navigator.camera.DestinationType.DATA_URL
+			};
+	        
+			if (!opts.camera) {
+				options.sourceType = navigator.camera.PictureSourceType.PHOTOLIBRARY;
+			}
+	        
+			function onSuccess(imageData) {
+				opts.success(imageData);
+			}
+			
+			navigator.camera.getPicture(onSuccess, function(message) {}, options);
+		},
+	    
+		choosePhoto : function(opts) {
+			this._getPhoto(opts);
+		},
+	    
+		takePhoto : function(opts) {
+			opts.camera = true;
+	        
+			this._getPhoto(opts);
+		}
+		
 	},
 	screenWidth: $(window).innerWidth(),
 	screenHeight: $(window).innerHeight()
@@ -681,3 +661,9 @@ $(function(){
 	});
 	$(window).hashchange();  
 });
+
+document.addEventListener("deviceready", function() {
+	Device.PhoneGap.isReady = true;
+	Device.PhoneGap.PictureSourceType = navigator.camera.PictureSourceType;
+	Device.PhoneGap.DestinationType = navigator.camera.DestinationType;
+}, false);
