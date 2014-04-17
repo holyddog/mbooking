@@ -421,6 +421,65 @@
 	width: 40px;
 	height: 40px;
 	border-radius: 20px;
+<<<<<<< .mine
+}
+
+
+#page_BookFlip .btitle {
+	padding: 10px;
+	font-size: 180%;
+	color: #fff;
+	line-height: 35px;
+}
+#page_BookFlip .grad_overlay {
+	z-index: -2;
+	background-color: #000;
+	opacity: .5;
+}
+#page_BookFlip .bdesc {
+	font-size: 80%;
+	color: #eee;
+	padding: 0 10px;
+}
+#page_BookFlip .bline {
+	height: 1px;
+	margin: 10px;
+	width: 70%;
+	background-color: #fff;
+}
+#page_BookFlip .author_info {
+}
+#page_BookFlip .author_info .pimage {
+	width: 50px;
+	height: 50px;
+	margin: 0 10px;
+	border-radius: 25px;
+	background-color: #ddd;
+}
+#page_BookFlip .author_info .pimage img {
+	width: 50px;
+	height: 50px;
+	border-radius: 25px;
+}
+#page_BookFlip .author_info .name {
+	color: #fff;
+}
+#page_BookFlip .text_bar {
+	padding: 10px;
+}
+#page_BookFlip .bottom_info {
+	position: absolute;
+	bottom: 0;
+	color: #fff;
+	width: 100%;
+}
+#page_BookFlip .page_nav {
+	top: 0;
+}
+#page_BookFlip #tap_nav .flex1.highlight {
+}
+
+
 }
 
 #page_ChangePic .bg_pic {

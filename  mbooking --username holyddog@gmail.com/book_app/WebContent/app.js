@@ -7,7 +7,8 @@ Config = {
 	SLIDE_DELAY: 250,
 	FADE_DELAY: 250,
 	
-	FILE_URL: 'http://' + window.location.hostname + '/res/book',
+//	FILE_URL: 'http://' + window.location.hostname + '/res/book',
+	FILE_URL: 'http://119.59.122.38/book_dev_files',
 	
 	FILE_SIZE: {
 		COVER: 0,
@@ -20,7 +21,8 @@ Config = {
 };
 
 Service = {
-	url: 'http://' + window.location.hostname + ':8080/book/data'
+//	url: 'http://' + window.location.hostname + ':8080/book/data'
+		url: 'http://119.59.122.38/book/data'
 };
 
 Account = {};
@@ -127,7 +129,9 @@ $(document).ready(function() {
 	var win = $(window);
 	win.on('resize', function() {
 		var h = win.height() - 50;
+		console.log('aaa');
 		custom_style.innerHTML = '#sidebar { height: ' + h + 'px } #overlay { height: ' + h + 'px }';
+		console.log(custom_style.innerHTML);
 	});
 	win.trigger('resize');
 	
