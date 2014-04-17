@@ -6,7 +6,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "books")
-
 public class Book {
 	@Id
 	Long bid;
@@ -23,13 +22,13 @@ public class Book {
 	Long pbdate;
 	Integer seq;
 
-	Long ledate;	//Last Edit Date
+	Long ledate; // Last Edit Date
 
 	// Return from Service Only , Not in db
 	User author;
 	List<Page> pages;
 	String strtime;
-	
+
 	public void setBid(Long bid) {
 		this.bid = bid;
 	}
@@ -150,7 +149,7 @@ public class Book {
 	public void setPages(List<Page> pages) {
 		this.pages = pages;
 	}
-	
+
 	public String getStrtime() {
 		return strtime;
 	}
@@ -158,6 +157,7 @@ public class Book {
 	public void setStrtime(String strtime) {
 		this.strtime = strtime;
 	}
+
 	public Long getLedate() {
 		return ledate;
 	}

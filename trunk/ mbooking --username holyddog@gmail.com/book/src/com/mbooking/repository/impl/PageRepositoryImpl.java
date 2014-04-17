@@ -1,8 +1,6 @@
 package com.mbooking.repository.impl;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +13,9 @@ import org.springframework.data.mongodb.core.query.Update;
 
 import com.mbooking.constant.ConstValue;
 import com.mbooking.model.Book;
-import com.mbooking.model.Follow;
 import com.mbooking.model.Page;
 import com.mbooking.model.User;
 import com.mbooking.repository.PageRepostitoryCustom;
-import com.mbooking.util.Convert;
 import com.mbooking.util.ImageUtils;
 import com.mbooking.util.MongoCustom;
 import com.mbooking.util.TimeUtils;
@@ -61,6 +57,7 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 			Integer seq = (int) db.count(query, Page.class) + 1;
 
 			page.setSeq(seq);
+			
 
 			Long pid = MongoCustom.generateMaxSeq(Page.class, db);
 			page.setPid(pid);
@@ -83,7 +80,7 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 
 			Update user_update = new Update();
 			Query q = new Query(Criteria.where("bid").is(bid));
-			q.fields().include("title").include("pic");
+			q.fields().include("title").include("pic").include("pcount");
 			book = db.findOne(q, Book.class);
 			user_update.set("leb", book);
 
