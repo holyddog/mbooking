@@ -330,35 +330,31 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 	}
 
 	@Override
-	public List<Book> findByPbdateExists(boolean exists,Integer skip,Integer limit) {
-		
-		Criteria criteria = Criteria.where("pbdate").exists(exists);
+	public List<Book> findByPbdateExists(boolean exists, Integer skip, Integer limit) {
+		Criteria criteria = Criteria.where("pbdate").exists(exists).and("pub").is(true);
 		Query query = new Query(criteria);
-		
+
 		query.sort().on("pbdate", Order.DESCENDING);
 		query.fields().include("bid").include("title").include("pic").include("uid");
-		
-		if(skip!=null&&limit!=null&&limit!=0)
-		query.skip(skip).limit(limit);
-		
-		List<Book> books =  db.find(query, Book.class);
-		
-		HashMap<Long,User> authors_map = new HashMap<Long,User>();
-			
-//		-------------------Wait for tuning 
-		for(int i = 0;i<books.size();i++){
-			
+
+		if (skip != null && limit != null && limit != 0)
+			query.skip(skip).limit(limit);
+
+		List<Book> books = db.find(query, Book.class);
+
+		HashMap<Long, User> authors_map = new HashMap<Long, User>();
+		for (int i = 0; i < books.size(); i++) {
 			Long uid = books.get(i).getUid();
-			if(authors_map.get(uid)==null){
+			if (authors_map.get(uid) == null) {
 				Query user_query = new Query(Criteria.where("uid").is(uid));
 				user_query.fields().include("uid");
 				user_query.fields().include("pic");
 				user_query.fields().include("dname");
-				User user = db.findOne(user_query,User.class);
+				User user = db.findOne(user_query, User.class);
 				authors_map.put(uid, user);
 			}
 			User author = authors_map.get(uid);
-			if(author!=null){
+			if (author != null) {
 				books.get(i).setAuthor(author);
 			}
 		}
