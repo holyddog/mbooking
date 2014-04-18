@@ -22,15 +22,16 @@ public class BookJson {
 	@RequestMapping(method = RequestMethod.POST, value = "/createBook.json")
 	public @ResponseBody
 	Object createBook(
+			@RequestParam(value = "bid", required = false) Long bid,
 			@RequestParam(value = "title") String title,
-			@RequestParam(value = "desc") String desc,
-			@RequestParam(value = "uid") Long uid,
-			@RequestParam(value = "pic") String pic,
+			@RequestParam(value = "desc", required = false) String desc,
+			@RequestParam(value = "uid", required = false) Long uid,
+			@RequestParam(value = "pic", required = false) String pic,
 			@RequestParam(value = "fdate", required = false) Long fdate,
 			@RequestParam(value = "tdate", required = false) Long tdate,
 			@RequestParam(value = "tags", required = false) String[] tags) {
 		
-		Book book = bookRepo.create(title, desc, fdate, tdate, tags, uid, pic);
+		Book book = bookRepo.create(bid, title, desc, fdate, tdate, tags, uid, pic);
 		if (book != null) {
 			return book;
 		}
@@ -123,9 +124,10 @@ public class BookJson {
 	public @ResponseBody
 	Object publishBook(
 			@RequestParam(value = "bid") Long bid,
-			@RequestParam(value = "uid") Long uid) {
+			@RequestParam(value = "uid") Long uid,
+			@RequestParam(value = "pub") Boolean pub) {
 
-		return ResultResponse.getResult("success", bookRepo.publish_book(bid, uid));
+		return ResultResponse.getResult("success", bookRepo.publish_book(bid, uid, pub));
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/unpublishBook.json")
