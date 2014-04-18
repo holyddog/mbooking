@@ -162,33 +162,35 @@ $(document).ready(function() {
 		e.preventDefault();
 	});
 	
-	dialog.find('[data-link=camera]').tap(function() {
-		history.back();		
+	dialog.find('[data-link=camera]').tap(function() {		
 		if (Page._callbackDialog) {
 			if (Device.PhoneGap.isReady) {
 				Device.PhoneGap.takePhoto({
 					success: function(imageData) {
+						history.back();
 						Page._callbackDialog(imageData);
 					}
 				});
 			}
 			else {
-				Page._callbackDialog(Data.Images.Img3);				
+				history.back();
+				Page._callbackDialog(Data.Image1);
 			}
 		}
 	});
 	dialog.find('[data-link=gallery]').tap(function() {
-        history.back();
         if (Page._callbackDialog) {
         	if (Device.PhoneGap.isReady) {
 	        	Device.PhoneGap.choosePhoto({
 					success: function(imageData) {
+						history.back();
 						Page._callbackDialog(imageData);
 					}
 				});
         	}
         	else {
-        		Page._callbackDialog(Data.Images.Img2);
+				history.back();
+				Page._callbackDialog(Data.Image1);
         	}
 		}
 	});
@@ -218,9 +220,9 @@ Device = {
 	    
 		_getPhoto : function(opts) { 
 			var options = {
-				quality : 50,
-				targetWidth : 600,
-				targetHeight : 600,
+//				quality : 75,
+//				targetWidth : 100,
+//				targetHeight : 100,
 				correctOrientation : true,
 				encodingType : navigator.camera.EncodingType.JPEG,
 				destinationType : navigator.camera.DestinationType.DATA_URL
@@ -234,7 +236,9 @@ Device = {
 				opts.success(imageData);
 			}
 			
-			navigator.camera.getPicture(onSuccess, function(message) {}, options);
+			navigator.camera.getPicture(onSuccess, function(message) {
+				history.back();
+			}, options);
 		},
 	    
 		choosePhoto : function(opts) {
