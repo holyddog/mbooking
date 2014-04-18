@@ -2,7 +2,6 @@ package com.mbooking.repository.impl;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,58 +27,74 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 	private MongoTemplate db;
 
 	@Override
-	public Book create(String title, String desc, Long fdate, Long tdate,
+	public Book create(Long bookId, String title, String desc, Long fdate, Long tdate,
 			String[] tags, Long uid, String pic) {
-
-		Book book = new Book();
-
-		Long bid = MongoCustom.generateMaxSeq(Book.class, db);
-		book.setBid(bid);
-
-		book.setTitle(title);
-		book.setDesc(desc);
-		book.setUid(uid);
 		
-		book.setLedate(System.currentTimeMillis());
+		if (bookId != null) {			
+			Query query = new Query(Criteria.where("bid").is(bookId));
+			query.fields().include("title");
+			query.fields().include("desc");
+			query.fields().include("pic");
+			query.fields().include("pcount");
+			
+			Update update = new Update();
+			update.set("title", title);
+			update.set("desc", desc);
+			
+			Book b = db.findAndModify(query, update, new FindAndModifyOptions().returnNew(true),Book.class);			
+			return b;
+		}
+		else {
+			Book book = new Book();
 
-		if (fdate != null)
-			book.setFdate(fdate);
-
-		if (tdate != null)
-			book.setTdate(tdate);
-
-		if (tags != null && tags.length != 0)
-			book.setTags(tags);
-
-		if (pic != null && !pic.equals("") && !pic.equals("undefined"))
-			book.setPic(pic);
-
-		Criteria criteria = Criteria.where("uid").is(uid);
-		Query query = new Query(criteria);
-		Integer seq = (int) db.count(query, Book.class) + 1;
-
-		book.setSeq(seq);
-
-		db.insert(book);
-
-		Book rbook = new Book();
-		rbook.setBid(bid);
-		rbook.setTitle(title);
-
-		int tcount = (int) db.count(query, Book.class);
-		Update user_update = new Update();
-		user_update.set("tcount", tcount);
-
-		Book b = new Book();
-		b.setBid(bid);
-		b.setTitle(book.getTitle());
-		b.setPic(book.getPic());
-		
-		user_update.set("leb", b);
-		
-		db.updateFirst(query, user_update, User.class);
-
-		return rbook;
+			Long bid = MongoCustom.generateMaxSeq(Book.class, db);
+			book.setBid(bid);
+	
+			book.setTitle(title);
+			book.setDesc(desc);
+			book.setUid(uid);
+	
+			book.setLedate(System.currentTimeMillis());
+	
+			if (fdate != null)
+				book.setFdate(fdate);
+	
+			if (tdate != null)
+				book.setTdate(tdate);
+	
+			if (tags != null && tags.length != 0)
+				book.setTags(tags);
+	
+			if (pic != null && !pic.equals("") && !pic.equals("undefined"))
+				book.setPic(pic);
+	
+			Criteria criteria = Criteria.where("uid").is(uid);
+			Query query = new Query(criteria);
+			Integer seq = (int) db.count(query, Book.class) + 1;
+	
+			book.setSeq(seq);
+	
+			db.insert(book);
+	
+			Book rbook = new Book();
+			rbook.setBid(bid);
+			rbook.setTitle(title);
+	
+			int tcount = (int) db.count(query, Book.class);
+			Update user_update = new Update();
+			user_update.set("tcount", tcount);
+	
+			Book b = new Book();
+			b.setBid(bid);
+			b.setTitle(book.getTitle());
+			b.setPic(book.getPic());
+	
+			user_update.set("leb", b);
+	
+			db.updateFirst(query, user_update, User.class);
+	
+			return rbook;
+		}
 	}
 
 	@Override
@@ -251,7 +266,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 	}
 
 	@Override
-	public Boolean publish_book(Long bid, Long uid) {
+	public Boolean publish_book(Long bid, Long uid, Boolean pub) {
 		Long current_time = System.currentTimeMillis();
 		try {
 			Criteria criteria = Criteria.where("bid").is(bid).and("uid")
@@ -259,6 +274,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			Query query = new Query(criteria);
 			Update update = new Update();
 			update.set("pbdate", current_time);
+			update.set("pub", pub);
 			
 			Book b = db.findOne(query, Book.class);
 

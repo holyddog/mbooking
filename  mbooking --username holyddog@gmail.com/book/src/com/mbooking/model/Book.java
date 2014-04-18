@@ -21,6 +21,7 @@ public class Book {
 	String[] tags;
 	Long pbdate;
 	Integer seq;
+	Boolean pub; // public to everyone
 
 	Long ledate; // Last Edit Date
 
@@ -164,6 +165,14 @@ public class Book {
 
 	public void setLedate(Long ledate) {
 		this.ledate = ledate;
+	}
+
+	public Boolean getPub() {
+		return pub;
+	}
+
+	public void setPub(Boolean pub) {
+		this.pub = pub;
 	}
 
 }
