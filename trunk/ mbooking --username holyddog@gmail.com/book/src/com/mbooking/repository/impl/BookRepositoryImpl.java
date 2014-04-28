@@ -484,7 +484,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 		if(skip!=null&&limit!=null&&limit!=0)
 		query.skip(skip).limit(limit);
 		
-		query.fields().include("title").include("pic");
+		query.fields().include("title").include("pic").include("pcount");
 		return db.find(query, Book.class);
 	
 	}
