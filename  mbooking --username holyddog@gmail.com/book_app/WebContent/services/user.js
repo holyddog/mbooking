@@ -17,6 +17,55 @@ Service.User = {
 		};
 		Web.post(url, params, callback);
 	},
+	unLinkFB : function(uid, callback) {
+		var url = Service.url + '/unlinkFB.json';
+		var params = {
+			uid : uid
+		};
+		Web.post(url, params, callback);
+	},
+	linkFB : function(uid,fbid,fbpic,fbname,fbemail, callback) {
+		var url = Service.url + '/linkFB.json';
+		var params = {
+			uid : uid,
+	        fbid : fbid,
+	        fbpic : fbpic,
+	        fbname : fbname
+		};
+	        
+        if(fbemail!=null&&fbemail&&fbemail!=undefined)
+        {
+	        params.fbemail  = fbemail;
+	    }
+	            
+		Web.post(url, params, callback);
+	},
+	SignInFB : function(fbid, callback) {
+		var url = Service.url + '/signInFB.json';
+		var params = {
+			fbid : fbid
+		};
+		Web.post(url, params, callback);
+	},
+	SignUpFB : function(email,fullName,userName, password,fbid,fbpic,fbname,fbemail, callback) {
+		var url = Service.url + '/signUpFB.json';
+		var params = {
+			email : email,
+			dname : fullName,
+	        uname : userName,
+			pwd : password,
+	        fbid : fbid,
+	        fbpic : fbpic,
+	        fbname : fbname
+		};
+	        
+	    if(fbemail!=null&&fbemail&&fbemail!=undefined)
+	    {
+	    	params.fbemail  = fbemail;
+	    }
+	        
+		Web.post(url, params, callback);
+	},
 	GetProfile : function(uid, follid, callback) {
 		var url = Service.url + '/getProfile.json';
 		var params = {

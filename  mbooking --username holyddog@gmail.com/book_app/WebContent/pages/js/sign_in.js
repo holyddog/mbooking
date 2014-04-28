@@ -26,10 +26,17 @@ Page.SignIn = {
 				Service.User.SignIn(inputText.val(), inputPwd.val(), function(data) {
 					Page.btnHideLoading(btnAccept[0]);
 					
+                                    
 					if (data.error) {
 						MessageBox.alert({ message: data.error.message });
 					}
 					else {
+                        var fbobj = {};
+                        if(data.fbobj){
+                            if(data.fbobj.fbid)
+                            fbobj = {fbpic:data.fbobj.pic,fbname:data.fbobj.dname};
+                        }
+                                    
 						Account = {
 							userId: data.uid,
 							email: data.email,
@@ -39,8 +46,17 @@ Page.SignIn = {
 							cover: data.cover,
 							picture: data.pic,
 							followerCount: data.fcount,
-							bookCount: data.pbcount
+							bookCount: data.pbcount,
+                            fbObject:fbobj
 						};
+                                    
+                        if(data.fbobj&&data.fbobj.email&&data.fbobj.email!=undefined&&data.fbobj.email!=null&&data.fbobj.email!=""){
+                            Account.fbObject.fbemail = data.fbobj.email;
+                        }
+                                    
+						if (data.leb && data.leb.pcount) {
+							Account.lastEditBook.pageCount = data.leb.pcount;
+						}
 						localStorage.setItem("u", JSON.stringify(Account));						
 
 						Page.loadMenu();						
