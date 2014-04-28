@@ -71,7 +71,7 @@ public class UserJson {
 	@RequestMapping(method = RequestMethod.POST, value = "/signIn.json")
 	public @ResponseBody Object signIn(
 			@RequestParam(value = "login") String loginName,
-			@RequestParam(value = "pwd") String password
+			@RequestParam(value = "pwd",required = false) String password
 			) {
 		User user = userRepo.signIn(loginName, password);
 		if (user != null) {
@@ -81,12 +81,73 @@ public class UserJson {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/signUp.json")
-	public @ResponseBody User signUp(
+	public @ResponseBody Object signUp(
 			@RequestParam(value = "email") String email,
-			@RequestParam(value = "pwd") String password,
 			@RequestParam(value = "dname") String displayName,
-			@RequestParam(value = "uname") String userName) {
-		return userRepo.signUp(email, password, displayName, userName);
+			@RequestParam(value = "uname") String userName,
+			@RequestParam(value = "pwd") String password
+			)
+			{
+		User user = userRepo.signUp(email, password, displayName, userName);
+		if (user != null) {
+			return user;
+		}
+		return ErrorResponse.getError("Sign Up unsuccess ");
+	}
+	
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/signInFB.json")
+	public @ResponseBody Object signInFB(
+			@RequestParam(value = "email") String email,
+			@RequestParam(value = "fbid") Long fbid			
+			)
+	{
+		User user = userRepo.signInFB(email, fbid);
+		if (user != null) {
+			return user;
+		}
+		else{
+			return ErrorResponse.getError("Have no fb account");
+		}
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/signUpFB.json")
+	public @ResponseBody Object signUpFB(
+			@RequestParam(value = "email") String email,
+			@RequestParam(value = "dname") String displayName,
+			@RequestParam(value = "uname") String userName,
+			@RequestParam(value = "pwd") String password,
+			@RequestParam(value = "fbid") Long fbid,
+			@RequestParam(value = "fbpic") String fbpic,
+			@RequestParam(value = "fbname") String fbname,
+			@RequestParam(value = "fbemail") String fbemail
+			)
+			{
+		User user = userRepo.signUpFB(email, displayName, userName, password, fbid, fbpic, fbname, fbemail);
+		if (user != null) {
+			return user;
+		}
+		return ErrorResponse.getError("Sign Up unsuccess ");
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/unlinkFB.json")
+	public @ResponseBody Object unlinkFB(
+			@RequestParam(value = "uid") Long uid
+			)
+	{
+		return ResultResponse.getResult("result", userRepo.unlinkFB(uid)!= false);
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/linkFB.json")
+	public @ResponseBody Object linkFB(
+			@RequestParam(value = "uid") Long uid,
+			@RequestParam(value = "fbid") Long fbid,
+			@RequestParam(value = "fbpic") String fbpic,
+			@RequestParam(value = "fbname") String fbname,
+			@RequestParam(value = "fbemail") String fbemail
+			)
+	{
+		return ResultResponse.getResult("result", userRepo.linkFB(uid,fbid,fbpic,fbname,fbemail)!= false);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/changePassword.json")
