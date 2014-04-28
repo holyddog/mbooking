@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
 import com.mbooking.constant.ConstValue;
+import com.mbooking.model.FBobj;
 import com.mbooking.model.User;
 import com.mbooking.repository.UserRepostitoryCustom;
 import com.mbooking.util.Convert;
@@ -23,20 +24,25 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 			Criteria.where("uname").is(loginName), 
 			Criteria.where("email").is(loginName)
 		);
-		password = Convert.toMD5Password(password);
 		
-		Criteria criteria = Criteria.where("pwd").is(password).and("inactive").ne(true).andOperator(loginCriteria);
+		password = Convert.toMD5Password(password);
+		Criteria criteria = Criteria.where("inactive").ne(true).andOperator(loginCriteria).and("pwd").is(password);
+			
+			
 		Query query = new Query(criteria);
 		query.fields().exclude("pwd");
+		query.fields().exclude("fb.fbid");
+		
 		return db.findOne(query, User.class);
 	}
 
 	@Override
 	public User signUp(String email, String password, String displayName, String userName) {
 		User user = new User();
+		
+		user.setPwd(Convert.toMD5Password(password));	
 		user.setUid(MongoCustom.generateMaxSeq(User.class, db));
 		user.setEmail(email);
-		user.setPwd(Convert.toMD5Password(password));
 		user.setDname(displayName);
 		user.setUname(userName);
 		
@@ -46,6 +52,40 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		return user;
 	}
 
+	@Override
+	public User signInFB(String email, Long fbid) {
+			Criteria criteria = Criteria.where("fbobj.email").is(email).and("fbobj.fbid").is(fbid).and("inactive").ne(true).and("unlinkfb").exists(false);
+			Query query = new Query(criteria);
+			query.fields().exclude("pwd");
+			query.fields().exclude("fbobj.fbid");
+			return db.findOne(query, User.class);
+	}
+
+	@Override
+	public User signUpFB(String email, String displayName, String userName,String password,
+			Long fbid, String fbpic,String fbname,String fbemail) {
+		
+		User user = new User();
+		user.setUid(MongoCustom.generateMaxSeq(User.class, db));
+		user.setEmail(email);
+		user.setDname(displayName);
+		user.setUname(userName);
+		user.setPwd(Convert.toMD5Password(password));	
+
+		if(fbid!=null){
+			FBobj fbobj = new FBobj();
+			fbobj.setFbid(fbid);
+			fbobj.setPic(fbpic);
+			fbobj.setDname(fbname);
+			fbobj.setEmail(fbemail);
+			user.setFbobj(fbobj);
+		}
+		
+		db.insert(user);
+
+		return user;
+	}
+	
 	@Override
 	public Boolean changePassword(Long uid, String oldpassword,
 			String newpassword) {
@@ -107,4 +147,45 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 			return "";
 		}
 	}
+
+	@Override
+	public Boolean unlinkFB(Long uid) {
+		try{
+			Update update = new Update();
+			update.set("unlinkfb", true);
+			update.unset("fbobj");
+			db.updateFirst(new Query(Criteria.where("uid").is(uid)), update, User.class);
+			return true;
+		}catch(Exception e){
+			System.out.println("Unsuccess unlink fb, User Service error: " + e);
+			return false;
+		
+		}
+	}
+
+	@Override
+	public Boolean linkFB(Long uid,Long fbid,String fbpic,String fbname,String fbemail) {
+		try{
+			Update update = new Update();
+			update.unset("unlinkfb");
+			
+			if(fbid!=null){
+				FBobj fbobj = new FBobj();
+				fbobj.setFbid(fbid);
+				fbobj.setPic(fbpic);
+				fbobj.setDname(fbname);
+				fbobj.setEmail(fbemail);
+				update.set("fbobj",fbobj);
+			}
+			
+			
+			db.updateFirst(new Query(Criteria.where("uid").is(uid)), update, User.class);
+			return true;
+		}catch(Exception e){
+			System.out.println("Unsuccess unlink fb, User Service error: " + e);
+			return false;
+		
+		}
+	}
+
 }

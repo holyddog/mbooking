@@ -27,11 +27,18 @@ public class User {
 
 	Long[] following;
 
+	Long lstin;		//last login
+	FBobj fbobj;
+	
+	Boolean unlinkfb;
+
 	// Service return
 	List<Book> books;
 	Boolean isFollow;
 	String cover; // cover image from last publish book
-
+	
+	
+	
 	public Long getUid() {
 		return uid;
 	}
@@ -163,5 +170,28 @@ public class User {
 	public void setFollowing(Long[] following) {
 		this.following = following;
 	}
+	
+	public Long getLstin() {
+		return lstin;
+	}
 
+	public void setLstin(Long lstin) {
+		this.lstin = lstin;
+	}
+	public FBobj getFbobj() {
+		return fbobj;
+	}
+
+	public void setFbobj(FBobj fbobj) {
+		this.fbobj = fbobj;
+	}
+	
+	public Boolean getUnlinkfb() {
+		return unlinkfb;
+	}
+
+	public void setUnlinkfb(Boolean unlinkfb) {
+		this.unlinkfb = unlinkfb;
+	}
+	
 }
