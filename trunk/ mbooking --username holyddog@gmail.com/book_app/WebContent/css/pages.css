@@ -480,6 +480,20 @@
 }
 
 
+#page_Settings .ch_logfb {
+	width: 40px;
+	height: 40px;
+	background-color: #ddd;
+	margin-left: 125px;
+	border-radius: 20px;
+}
+
+#page_Settings .ch_logfb .checked {
+
+	background-color: green !important;
+
+}
+
 #page_BookFlip .btitle {
 	padding: 10px;
 	font-size: 180%;

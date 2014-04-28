@@ -249,8 +249,68 @@ Device = {
 			opts.camera = true;
 	        
 			this._getPhoto(opts);
-		}
+		},
+	    loginFacebook: function(callback){
+
+	        FB.login( function(response) {
+	                 if (response.authResponse) {
+	                 var access_token =   FB.getAuthResponse()['accessToken'];
+	                        FB.api('/me?fields=picture,name,email', function(user) {
+	                            if(user){
+	                               if(user.id&&user.email)
+	                                callback({fbid:user.id,fbpic:user.picture.data.url,token:access_token,fbname:user.name,fbemail:user.email});
+	                            }
+	                        });
+	                 } else {
+	                 console.log('login response:' + response.error);
+	                 }
+	        },
+	        { scope: "email" }
+	        );
+	    
+	    },
+//	    postLinkToFacbook: function(title,caption,desc,pic,link,callback){
+//	        FB.ui({
+//		          method: 'feed',
+//		          link: link,
+//		          caption: caption,
+//		          name:title,
+//		          picture:pic,
+//		          description: desc
+//		        },
+//		        function(response){
+//		             if (response && response.post_id) {
+//		            	 callback();	        
+//		             } else {
+//		            	 console.log('login response:' + response.error);
+//		             }
+//		        }
+//		     );
+//	    }
 		
+	    postBookToFacebook : function(title,caption,desc,pic,link,message,callback){
+            var privacy={"value":"EVERYONE"};//default
+           //ALL_FRIENDS, NETWORKS_FRIENDS, FRIENDS_OF_FRIENDS, CUSTOM .
+           //var privacy={"value":"CUSTOM", "friends": "SOME_FRIENDS", "allow":"{UID},{UID}"};
+            FB.api("/me/feed", 'post',
+                   { message: message,
+                     link: link,
+                     caption: caption,
+                     name:title,
+                     picture:pic,
+                     description: desc,
+                     privacy: privacy
+                   },
+                   function(response) {
+                       if (!response || response.error) {
+                           alert(response.error);
+                       } else {
+                           alert('Message sent!');
+                       }
+                   }
+            );
+	    }
+	    
 	},
 	screenWidth: $(window).innerWidth(),
 	screenHeight: $(window).innerHeight()
@@ -670,4 +730,10 @@ document.addEventListener("deviceready", function() {
 	Device.PhoneGap.isReady = true;
 	Device.PhoneGap.PictureSourceType = navigator.camera.PictureSourceType;
 	Device.PhoneGap.DestinationType = navigator.camera.DestinationType;
+	
+	 FB.init({
+         appId: "370184839777084",
+         nativeInterface: CDV.FB,
+         useCachedDialogs: false
+     });
 }, false);
