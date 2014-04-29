@@ -6,7 +6,7 @@ public interface UserRepostitoryCustom {
 	User signIn(String email, String password);
 	User signUp(String email, String password, String displayName, String userName);
 	
-	User signInFB(String email, Long fbid);
+	User signInFB(Long fbid);
 	User signUpFB(String email, String displayName, String userName,String password,Long fbid,String fbpic,String fbname,String fbemail);
 	
 	

@@ -98,11 +98,10 @@ public class UserJson {
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/signInFB.json")
 	public @ResponseBody Object signInFB(
-			@RequestParam(value = "email") String email,
 			@RequestParam(value = "fbid") Long fbid			
 			)
 	{
-		User user = userRepo.signInFB(email, fbid);
+		User user = userRepo.signInFB(fbid);
 		if (user != null) {
 			return user;
 		}
@@ -120,7 +119,7 @@ public class UserJson {
 			@RequestParam(value = "fbid") Long fbid,
 			@RequestParam(value = "fbpic") String fbpic,
 			@RequestParam(value = "fbname") String fbname,
-			@RequestParam(value = "fbemail") String fbemail
+			@RequestParam(value = "fbemail", required = false) String fbemail
 			)
 			{
 		User user = userRepo.signUpFB(email, displayName, userName, password, fbid, fbpic, fbname, fbemail);
@@ -144,7 +143,7 @@ public class UserJson {
 			@RequestParam(value = "fbid") Long fbid,
 			@RequestParam(value = "fbpic") String fbpic,
 			@RequestParam(value = "fbname") String fbname,
-			@RequestParam(value = "fbemail") String fbemail
+			@RequestParam(value = "fbemail",required = false) String fbemail
 			)
 	{
 		return ResultResponse.getResult("result", userRepo.linkFB(uid,fbid,fbpic,fbname,fbemail)!= false);
