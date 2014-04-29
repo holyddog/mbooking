@@ -6,7 +6,8 @@ Config = {
 	SLIDE_DELAY: 250,
 	FADE_DELAY: 250,
 	
-	FILE_URL: 'http://' + window.location.hostname + '/res/book',
+//	FILE_URL: 'http://' + window.location.hostname + '/res/book',
+	FILE_URL: 'http://119.59.122.38/res/book',
 	
 	FILE_SIZE: {
 		COVER: 0,
@@ -269,6 +270,34 @@ Device = {
 	        );
 	    
 	    },
+	    logoutFacebook: function(callback){
+
+	        FB.login( function(response) {
+	                 if (response.authResponse) {
+	                 var access_token =   FB.getAuthResponse()['accessToken'];
+	                        FB.api('/me?fields=picture,name,email', function(user) {
+	                            if(user){
+	                               if(user.id&&user.email)
+	                                callback({fbid:user.id,fbpic:user.picture.data.url,token:access_token,fbname:user.name,fbemail:user.email});
+	                            }
+	                        });
+	                 } else {
+	                 console.log('login response:' + response.error);
+	                 }
+	        },
+	        { scope: "email" }
+	        );
+	    
+	    },
+	    logoutFacebook: function(callback){
+	        FB.getLoginStatus(function(response) {
+	                          if (response && response.status === 'connected') {
+	                                FB.logout(function(response) {
+	                                    callback();
+	                                });
+	                          }
+	                          });
+	    },
 //	    postLinkToFacbook: function(title,caption,desc,pic,link,callback){
 //	        FB.ui({
 //		          method: 'feed',
@@ -356,7 +385,6 @@ Page = {
 		else {
 			fn();
 		}
-		
 	},
 	back: function(fn) {
 		if (typeof fn == 'function') {
