@@ -53,8 +53,8 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 	}
 
 	@Override
-	public User signInFB(String email, Long fbid) {
-			Criteria criteria = Criteria.where("fbobj.email").is(email).and("fbobj.fbid").is(fbid).and("inactive").ne(true).and("unlinkfb").exists(false);
+	public User signInFB(Long fbid) {
+			Criteria criteria = Criteria.where("fbobj.fbid").is(fbid).and("inactive").ne(true).and("unlinkfb").exists(false);
 			Query query = new Query(criteria);
 			query.fields().exclude("pwd");
 			query.fields().exclude("fbobj.fbid");
@@ -77,6 +77,7 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 			fbobj.setFbid(fbid);
 			fbobj.setPic(fbpic);
 			fbobj.setDname(fbname);
+			if(fbemail!=null)
 			fbobj.setEmail(fbemail);
 			user.setFbobj(fbobj);
 		}
@@ -174,6 +175,7 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 				fbobj.setFbid(fbid);
 				fbobj.setPic(fbpic);
 				fbobj.setDname(fbname);
+				if(fbemail!=null)
 				fbobj.setEmail(fbemail);
 				update.set("fbobj",fbobj);
 			}
