@@ -28,7 +28,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 
 	@Override
 	public Book create(Long bookId, String title, String desc, Long fdate, Long tdate,
-			String[] tags, Long uid, String pic) {
+			String[] tags, Long uid, String pic, Boolean pub) {
 		
 		if (bookId != null) {			
 			Query query = new Query(Criteria.where("bid").is(bookId));
@@ -36,64 +36,89 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			query.fields().include("desc");
 			query.fields().include("pic");
 			query.fields().include("pcount");
+			query.fields().include("pub");
 			
 			Update update = new Update();
 			update.set("title", title);
 			update.set("desc", desc);
+			update.set("pub", pub);
 			
 			Book b = db.findAndModify(query, update, new FindAndModifyOptions().returnNew(true),Book.class);			
 			return b;
 		}
 		else {
+//			Book book = new Book();
+//
+//			Long bid = MongoCustom.generateMaxSeq(Book.class, db);
+//			book.setBid(bid);
+//	
+//			book.setTitle(title);
+//			book.setDesc(desc);
+//			book.setUid(uid);
+//	
+//			book.setLedate(System.currentTimeMillis());
+//	
+//			if (fdate != null)
+//				book.setFdate(fdate);
+//	
+//			if (tdate != null)
+//				book.setTdate(tdate);
+//	
+//			if (tags != null && tags.length != 0)
+//				book.setTags(tags);
+//	
+//			if (pic != null && !pic.equals("") && !pic.equals("undefined"))
+//				book.setPic(pic);
+//	
+//			Criteria criteria = Criteria.where("uid").is(uid);
+//			Query query = new Query(criteria);
+//			Integer seq = (int) db.count(query, Book.class) + 1;
+//	
+//			book.setSeq(seq);
+//	
+//			db.insert(book);
+//	
+//			Book rbook = new Book();
+//			rbook.setBid(bid);
+//			rbook.setTitle(title);
+//	
+//			int tcount = (int) db.count(query, Book.class);
+//			Update user_update = new Update();
+//			user_update.set("tcount", tcount);
+//	
+//			Book b = new Book();
+//			b.setBid(bid);
+//			b.setTitle(book.getTitle());
+//			b.setPic(book.getPic());
+//	
+//			user_update.set("leb", b);
+//	
+//			db.updateFirst(query, user_update, User.class);
+			
+			// create book object with data
 			Book book = new Book();
-
 			Long bid = MongoCustom.generateMaxSeq(Book.class, db);
-			book.setBid(bid);
-	
+			
+			book.setBid(bid);	
 			book.setTitle(title);
 			book.setDesc(desc);
 			book.setUid(uid);
-	
-			book.setLedate(System.currentTimeMillis());
-	
-			if (fdate != null)
-				book.setFdate(fdate);
-	
-			if (tdate != null)
-				book.setTdate(tdate);
-	
-			if (tags != null && tags.length != 0)
-				book.setTags(tags);
-	
-			if (pic != null && !pic.equals("") && !pic.equals("undefined"))
-				book.setPic(pic);
-	
-			Criteria criteria = Criteria.where("uid").is(uid);
-			Query query = new Query(criteria);
-			Integer seq = (int) db.count(query, Book.class) + 1;
-	
-			book.setSeq(seq);
-	
+			book.setPub(pub);
+
+			Query query = new Query(Criteria.where("uid").is(uid));
+			query.fields().include("dname").include("uname").include("pic");
+			User user = db.findOne(query, User.class);
+			book.setAuthor(user);
+			
 			db.insert(book);
-	
-			Book rbook = new Book();
-			rbook.setBid(bid);
-			rbook.setTitle(title);
-	
-			int tcount = (int) db.count(query, Book.class);
-			Update user_update = new Update();
-			user_update.set("tcount", tcount);
-	
-			Book b = new Book();
-			b.setBid(bid);
-			b.setTitle(book.getTitle());
-			b.setPic(book.getPic());
-	
-			user_update.set("leb", b);
-	
-			db.updateFirst(query, user_update, User.class);
-	
-			return rbook;
+			
+			// update book count to author (User.class)
+			Update update = new Update();
+			// set draft book count
+			update.inc("drcount", 1);
+			db.updateFirst(query, update, User.class);
+			
+			return book;
 		}
 	}
 
@@ -266,56 +291,58 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 	}
 
 	@Override
-	public Boolean publish_book(Long bid, Long uid, Boolean pub) {
-		Long current_time = System.currentTimeMillis();
+	public Boolean publishBook(Long bid, Long uid, String cover) {
 		try {
-			Criteria criteria = Criteria.where("bid").is(bid).and("uid")
-					.is(uid);
+			// update book status to publish
+			Criteria criteria = Criteria.where("bid").is(bid);
 			Query query = new Query(criteria);
 			Update update = new Update();
-			update.set("pbdate", current_time);
-			update.set("pub", pub);
-			
-			Book b = db.findOne(query, Book.class);
+			update.set("pbdate", System.currentTimeMillis());
 
-			db.updateFirst(query, update, Book.class);
-			db.updateMulti(query, update, Page.class);
+			db.updateFirst(query, update, Book.class);			
 			
-			int pbcount = (int) db.count(new Query(Criteria.where("uid").is(uid).and("pbdate").exists(true)), Book.class);
-			Update user_update = new Update();
-			user_update.set("pbcount", pbcount);
-			user_update.set("cover", b.getPic());
-			
-			db.updateFirst(new Query(Criteria.where("uid").is(uid)), user_update, User.class);
+			int bookCount = (int) db.count(new Query(Criteria.where("uid").is(uid).and("pbdate").exists(true)), Book.class);
+			update = new Update();
+			update.set("pbcount", bookCount);
+			update.set("cover", cover);
 
-			
+			db.updateFirst(new Query(Criteria.where("uid").is(uid)), update, User.class);
+
 			return true;
 		} catch (Exception e) {
-			System.out.println("Publish Book Service error: " + e);
 			return false;
 		}
 	}
 
 	@Override
-	public Boolean unpublish_book(Long bid, Long uid) {
+	public Boolean unpublishBook(Long bid, Long uid) {
 		try {
-			Criteria criteria = Criteria.where("bid").is(bid).and("uid")
-					.is(uid);
+			Criteria criteria = Criteria.where("bid");
 			Query query = new Query(criteria);
 			Update update = new Update();
 			update.unset("pbdate");
 
 			db.updateFirst(query, update, Book.class);
-			db.updateMulti(query, update, Page.class);
 			
-			int pbcount = (int) db.count(new Query(Criteria.where("uid").is(uid).and("pbdate").exists(true)), Book.class);
-			Update user_update = new Update();
-			user_update.set("pbcount", pbcount);
-			db.updateFirst(new Query(Criteria.where("uid").is(uid)), user_update, User.class);
+			int bookCount = (int) db.count(new Query(Criteria.where("uid").is(uid).and("pbdate").exists(true)), Book.class);
+			update = new Update();
+			update.set("pbcount", bookCount);
+			
+			query = new Query(Criteria.where("pbdate").exists(true));
+			query.fields().include("pic");
+			query.sort().on("pbdate", Order.DESCENDING);
+			Book book = db.findOne(query, Book.class);
+			if (book != null) {
+				update.set("cover", book.getPic());
+			}
+			else {
+				update.unset("cover");
+			}
+			
+			db.updateFirst(new Query(Criteria.where("uid").is(uid)), update, User.class);
 			
 			return true;
 		} catch (Exception e) {
-			System.out.println("Unpublish Book Service error: " + e);
 			return false;
 		}
 	}

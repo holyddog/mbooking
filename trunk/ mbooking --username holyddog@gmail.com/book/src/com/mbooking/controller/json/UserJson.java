@@ -32,14 +32,10 @@ public class UserJson {
 			@RequestParam(value = "follid", required = false) Long follid	//Follow id
 			) {
 		User user = userRepo.findById(uid);
-		if (user != null) {
-			List<Book> books = bookRepo.findLastBookByUid(uid);
-			user.setBooks(books);
-			
+		if (user != null) {			
 			if (follid != null) {
 				user.setIsFollow(followRepo.isFollow(follid, uid));
-			}
-			
+			}			
 			return user;
 		}
 		return ErrorResponse.getError("User not found");

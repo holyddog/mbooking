@@ -19,7 +19,9 @@ public class Book {
 	Long fdate;
 	Long tdate;
 	String[] tags;
-	Long pbdate;
+	
+	Long pbdate; // publish date
+	
 	Integer seq;
 	Boolean pub; // public to everyone
 

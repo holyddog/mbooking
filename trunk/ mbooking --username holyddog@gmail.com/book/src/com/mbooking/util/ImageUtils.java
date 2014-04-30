@@ -3,8 +3,6 @@ package com.mbooking.util;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.awt.image.WritableRaster;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -14,7 +12,9 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 
 import sun.misc.BASE64Encoder;
+
 import org.apache.commons.codec.binary.Base64;
+
 import com.mbooking.constant.ConstValue;
 
 
@@ -317,6 +317,128 @@ public class ImageUtils {
 	
 	public static String toImageFile(String image_folder,String base64) {
 		return toImageFile(image_folder,base64, ConstValue.NONE_TYPE);
+	}
+	
+	private static String getExt(String fileName) {
+		if (fileName == null) {
+			return "";
+		}
+		return fileName.substring(fileName.lastIndexOf('.') + 1, fileName.length());
+	}
+	
+	public static int cropAndResize(File input, File outputDir, double imgSize, double cropPos) {
+		int count = 0;
+		try {
+			BufferedImage src = ImageIO.read(input);
+			int imageWidth = ((Image)src).getWidth(null);
+			int imageHeight = ((Image)src).getHeight(null);
+			
+			if (!outputDir.exists()) {
+				outputDir.mkdirs();
+			}
+			
+			String fileName = input.getName().substring(0, input.getName().lastIndexOf('.'));
+			String fileExt = getExt(input.getName());
+			
+			// resize to 640px		
+		    int imageDir = 0; // 0 = horizontal, 1 = vertical
+			int maxHeight = 640;
+			int maxWidth = 640;
+			double imageRatio = (double) imageWidth / (double) imageHeight;	
+			if (imageWidth > imageHeight) {
+				maxWidth = (int) (maxHeight * imageRatio);
+			}
+			else if (imageWidth < imageHeight) {
+				maxHeight = (int) (maxWidth / imageRatio);
+				imageDir = 1;
+			}			
+			
+			Image image = src.getScaledInstance(maxWidth, maxHeight, Image.SCALE_SMOOTH);
+			BufferedImage newBuff = new BufferedImage(image.getWidth(null), image.getHeight(null), src.getType());
+			Graphics g = newBuff.getGraphics();
+			g.drawImage(image, 0, 0, null);
+			g.dispose();		    
+			
+		    String cImg = outputDir.getAbsolutePath() + "\\" + fileName + "_" + "c." + fileExt;
+		    if (ImageIO.write(newBuff, getExt(input.getName()), new File(cImg))) {
+		    	count++;
+		    }
+			
+			// crop to square 640x640
+			int size = 640;
+			int x = 0;
+			int y = 0;
+			
+			if (imageDir == 0) {
+				x = (int) ((cropPos * size) / imgSize);
+			}
+			else {
+				y = (int) ((cropPos * size) / imgSize);
+			}
+			
+			BufferedImage dest = new BufferedImage(size, size, src.getType());
+			g = dest.getGraphics();
+			g.drawImage(newBuff, 0, 0, size, size, x, y, x + size, y + size, null);
+			g.dispose();
+		    
+		    if (ImageIO.write(dest, getExt(input.getName()), new File(cImg))) {
+		    	count++;
+		    }
+			
+			// resize to 320x320
+		    BufferedImage si = ImageIO.read(new File(cImg));
+		    Image sImage = si.getScaledInstance(320, 320, Image.SCALE_SMOOTH);
+			BufferedImage sBuff = new BufferedImage(sImage.getWidth(null), sImage.getHeight(null), src.getType());
+			g = sBuff.getGraphics();
+			g.drawImage(sImage, 0, 0, null);
+			g.dispose();
+
+		    String sImg = outputDir.getAbsolutePath() + "\\" + fileName + "_" + "s." + fileExt;
+		    if (ImageIO.write(sBuff, getExt(input.getName()), new File(sImg))) {
+		    	count++;
+		    }
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			return -1;
+		}
+		return count;
+	}
+	
+	public static String generatePicture(String base64, Integer imageSize, Integer cropPos, String imgPath) {
+		if (isEmpty(base64)) {
+			return null;
+		}
+		
+		if (base64.indexOf(',') > -1) {
+			base64 = base64.split(",")[1];
+		}
+
+		try {			
+			String uploadPath = ConfigReader.getProp("upload_path") + "/" + imgPath;
+			File output = new File(uploadPath);
+			if (!output.exists()) {
+				output.mkdirs();
+			}
+
+			String key = uniqueString(8);
+			String image = key + ".jpg";
+			byte[] b = new Base64().decode(base64.getBytes());
+			File file = new File(uploadPath + "/" + image);
+			FileOutputStream out = new FileOutputStream(file);  
+			out.write(b);  
+			out.flush();  
+			out.close();
+			
+			cropAndResize(file, output, imageSize, cropPos);
+			
+			return "/" + imgPath + "/" + image;
+			
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		
+		return null;
 	}
 	
 	

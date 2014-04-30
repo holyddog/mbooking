@@ -18,6 +18,25 @@ public class PageJson {
 	@Autowired
 	PageRepository pageRepo;
 
+	@RequestMapping(method = RequestMethod.POST, value = "/addPage.json")
+	public @ResponseBody
+	Object addPage(
+			@RequestParam(value = "pic") String picture,
+			@RequestParam(value = "size") Integer imageSize,
+			@RequestParam(value = "crop") Integer cropPos,
+			@RequestParam(value = "caption", required = false) String caption,
+			@RequestParam(value = "bid") Long bookId,
+			@RequestParam(value = "uid") Long addBy
+
+	) 
+	{
+		Page page = pageRepo.add(picture, imageSize, cropPos, caption, bookId, addBy);
+		if (page != null) {
+			return page;
+		}
+		return ErrorResponse.getError("This page cannot be saved");
+	}
+
 	@RequestMapping(method = RequestMethod.POST, value = "/createPage.json")
 	public @ResponseBody
 	Object createPage(
