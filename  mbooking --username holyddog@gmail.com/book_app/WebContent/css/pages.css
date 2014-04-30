@@ -527,20 +527,35 @@
 	border-radius: 60px;
 }
 
+#page_EditBook .btn_pub {
+	width: auto;
+	height: 50px;
+	background-color: #99CC00;
+	color: #fff;
+	right: 0px;
+	line-height: 50px;
+	padding: 0 15px;
+	font-size: 80%;
+	width: 100px;
+	text-align: center;
+}
+#page_EditBook .btn_pub.unpub {
+	background-color: #FFBB33;
+}
 #page_EditBook .cmd_panel {
 	-webkit-box-shadow: 0px 1px 0px 0px rgba(50, 50, 50, 0.25);
+	padding-bottom: 10px;
 }
 #page_EditBook .cmd_panel .box {
 	height: 40px;
 	line-height: 40px;
 	text-align: center;
-	margin: 0 10px 10px 10px;
+	margin: 0 10px 0 10px;
 	font-size: 70%;
 	font-weight: bold;
-	background-color: #ddd;
+	background-color: #e2e2e2;
 }
 #page_EditBook .cmd_panel .box .flex1 {	
-	background-color: #ddd;
 }
 #page_EditBook .cmd_panel .box .flex1.highlight {	
 	background-color: #6DCAEC;
@@ -673,4 +688,9 @@
 #page_EditBook .link_add .label {
 	font-size: 75%;
 	color: #777;
+}
+
+#page_ChangeCover .book_panel {
+	overflow: hidden;
+	padding: 5px;
 }

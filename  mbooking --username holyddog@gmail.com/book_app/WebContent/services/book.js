@@ -132,21 +132,21 @@ Service.Book = {
 		Web.get(url, params, callback);
 	},
 
-	PublishBook : function(bookID, userID, pub, callback) {
+	PublishBook : function(bookId, userId, cover, callback) {
 		var url = Service.url + '/publishBook.json';
 		var params = {
-			bid : bookID,
-			uid : userID,
-			pub: pub
+			bid : bookId,
+			uid : userId,
+			cover: cover
 		};
 		Web.post(url, params, callback);
 	},
 
-	UnPublishBook : function(userID, callback) {
+	UnpublishBook : function(bookId, userId, callback) {
 		var url = Service.url + '/unpublishBook.json';
 		var params = {
-			bid : bookID,
-			uid : userID,
+			bid : bookId,
+			uid : userId,
 		};
 		Web.post(url, params, callback);
 	},

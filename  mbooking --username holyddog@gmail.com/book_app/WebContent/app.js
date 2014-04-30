@@ -64,7 +64,7 @@ Util = {
 				break;
 			}
 		}
-		return Config.FILE_URL + '/' + file.substring(0, file.lastIndexOf('.')) + suffix + file.substring(file.lastIndexOf('.'), file.length);
+		return Config.FILE_URL + file.substring(0, file.lastIndexOf('.')) + suffix + file.substring(file.lastIndexOf('.'), file.length);
 	}
 };
 
@@ -436,13 +436,16 @@ Page = {
 		var dialog = document.getElementById('dialog');
 		dialog.className = dialog.className.replace(' show', '');
 	},
-	showLoading: function() {
+	showLoading: function(text) {
 		var overlay = document.getElementById('overlay_loading');
 		overlay.style.display = '-webkit-box';
 		
 		setTimeout(function() {			
 			overlay.className = 'show';
-			document.getElementById('loading_panel').className = 'show';
+			loading_panel.className = 'show';
+			if (text) {
+				loading_panel.children[0].children[1].innerText = text;
+			}
 			
 			var cv = document.getElementById('cv_loading');
 			var ctx = cv.getContext('2d');
@@ -469,7 +472,8 @@ Page = {
 		var overlay = document.getElementById('overlay_loading');
 		overlay.className = '';
 		overlay.style.display = 'none';
-		document.getElementById('loading_panel').className = '';
+		loading_panel.className = '';
+		loading_panel.children[0].children[1].innerText = '';
 	},
 	
 	bodyShowLoading: function(content) {
