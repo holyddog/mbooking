@@ -6,8 +6,7 @@ Config = {
 	SLIDE_DELAY: 250,
 	FADE_DELAY: 250,
 	
-//	FILE_URL: 'http://' + window.location.hostname + '/res/book',
-	FILE_URL: 'http://119.59.122.38/res/book',
+	FILE_URL: 'http://' + window.location.hostname + '/res/book',
 	
 	FILE_SIZE: {
 		COVER: 1,
