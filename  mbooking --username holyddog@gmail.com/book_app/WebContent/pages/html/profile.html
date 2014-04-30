@@ -1,84 +1,85 @@
-<img id="profile_bg" class="profile_bg absolute fade_out show" src="images/home.jpg" />
-<div class="tbar_bg trans"></div>
-<div class="grad_overlay fill_dock hid_loading"></div>
+<div class="tbar_bg gray"></div>
 <div class="tbar">	
 	<a data-id="btn_b" class="btn" style="left: 0; display: none;"><span class="back"></span></a>
 	<a data-id="btn_m" class="btn" style="left: 0;"><span class="list"></span></a>
 	<div class="title"></div>
 	<a data-id="btn_a" class="btn_box" style="right: 0;"><span class="quill"></span></a>
 </div>
-<div class="content gray flex1 box vertical">
-	<div class="hid_loading">
-		<h1 class="pname"></h1>
-		<div class="profile_info box horizontal">
-			<div class="pimage">
-				<img src="images/user.jpg">
+<div class="content no_color flex1 box vertical">
+	<div id="profile_header" style="background-image: url(temp/4.jpg);">
+		<div class="header_overlay fill_dock"></div>
+		<div class="fill_dock" style="z-index: 1;">
+			<div class="header_title">
+				<span>Anonymous</span>
+				<a>EDIT</a>
 			</div>
-			<div class="box_area box vertical flex1">
-				<div class="stat box horizontal">
-					<div class="counter flex1  flex_lock">
-						<div data-id="bcount" class="value"></div>
-						<div class="label">Books</div>
-					</div>
-					<div class="counter flex1  flex_lock">
-						<div data-id="fcount" class="value"></div>
-						<div class="label">Followers</div>
-					</div>
-					<div class="counter flex1 flex_lock">
-						<div data-id="fgcount" class="value"></div>
-						<div class="label">Following</div>
+			<div class="box horizontal" style="margin-top: 145px;">
+				<div class="pbox">
+					<div class="pimage">
+						<img src="images/user.jpg" />
 					</div>
 				</div>
-				<!-- <span style="padding-right: 5px;">&#10003;</span>FOLLOWING -->
-				<a class="btn_follow"><span style="padding-right: 5px;">+</span>FOLLOW</a>
+				<div class="stat_panel flex1">
+					<div class="flow_hidden">
+						<div class="label">
+							<div data-count="book" class="count">0</div>
+							<div class="text">Books</div>
+						</div>
+						<div class="label">
+							<div class="count">0</div>
+							<div data-count="follower" class="text">Followers</div>
+						</div>
+						<div class="label">
+							<div class="count">0</div>
+							<div data-count="following" class="text">Following</div>
+						</div>
+					</div>
+				</div>
 			</div>
-		</div>
-		<div class="books_grad"></div>
-		<div class="books_panel">
-			<div class="label flow_hidden">
-				<div class="fleft">My Books</div>
-				<a data-id="link_more" class="fright">More</a>
-			</div>
-			<div class="books box horizontal"></div>
 		</div>
 	</div>
-</div>	
-	
-	<!-- 
-	<div class = "user_profile" style="position:absolute; top:0px; left:0px;">
-		<div class = "trans_bg"></div>
-		<div class="main_panel">
-				<div class = "profile_panel">
-					<div class = "profile_icon"></div>
-					<div class = "info_panel">
-							<div class = "name f_white">Yagami Light</div>
-							<div class = "books_followers f_white">10 Books | 210 Followers</div>
-					</div>
-				</div>
-				
-				<div class = "book_panel">
-					<div class = "top_bar">
-						<div class = "title f_white">
-							My Books
-						</div>
-						<div class = "see_more_btn">
-							See More
-						</div>
-					</div>
-					<div class = "book_lists">
-						<div class="item" id="book1">
-							Nation Partk
-						</div>
-						<div class="item" id="book2">
-							Wat Arun
-						</div>
-						<div class="item" id="book3">
-							Cha-am Beach
-						</div>
-						
-					</div>
-				</div>
+	<div id="xbar" class="box horizontal">
+		<div class="ptab active flex1 flex_lock">
+			<a style="-webkit-mask-image: url(icons/earth.png);" class="mask_icon"></a>
+		</div>		
+		<div class="ptab flex1 flex_lock">
+			<a style="-webkit-mask-image: url(icons/lock.png);" class="mask_icon"></a>
+		</div>	
+		<div class="ptab flex1 flex_lock" style="position: relative;">
+			<a style="-webkit-mask-image: url(icons/pencil.png);" class="mask_icon"></a>
+			<div class="notf">2</div>
+		</div>	
+	</div>
+	<div id="ptab1" class="tpage">
+		<div class="book_size" style="background-color: #FF4444; background-image: url(temp/cv1.jpg);">
+			<h2>Aptent magnis voluptatibus</h2>
+			<div class="pcount">17</div>
 		</div>
-	</div>	
-	 -->
+		<div class="book_size" style="background-color: #FFBB33; background-image: url(temp/cv2.jpg);">
+			<h2>Suspendisse lectus hic</h2>
+			<div style="position: absolute; bottom: 5px; right: 10px; color: #fff; font-size: 80%; text-align: center; z-index: 1;">30</div>
+		</div>
+		<div class="book_size" style="background-color: #99CC00; background-image: url(temp/cv3.jpg);">
+			<h2>Consequuntur curabitur</h2>
+			<div style="position: absolute; bottom: 5px; right: 10px; color: #fff; font-size: 80%; text-align: center; z-index: 1;">8</div>
+		</div>
+		<div class="book_size" style="background-color: #AA66CC; background-image: url(temp/cv4.jpg);">
+			<h2>Eveniet ducimus autem</h2>
+			<div style="position: absolute; bottom: 5px; right: 10px; color: #fff; font-size: 80%; text-align: center; z-index: 1;">24</div>
+		</div>
+	</div>
+	<div id="ptab2" class="tpage" style="display: none;">
+		<div class="book_size" style="background-image: url(temp/cv2.jpg);">
+			<h2>Suspendisse lectus hic</h2>
+		</div>
+	</div>
+	<div id="ptab3" class="tpage" style="display: none;">
+		<div class="book_size" style="background-image: url(temp/cv3.jpg);">
+			<h2>Consequuntur curabitur</h2>
+		</div>
+		<div class="book_size" style="background-image: url(temp/cv4.jpg);">
+			<h2>Eveniet ducimus autem</h2>
+		</div>
+	</div>
+</div>
 	

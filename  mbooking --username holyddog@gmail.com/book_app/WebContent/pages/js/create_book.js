@@ -1,8 +1,9 @@
 Page.CreateBook = {
 	url: 'pages/html/create_book.html',
 	
-	init: function(params, container) {	
-		var ret = params.ret;
+	init: function(params, container) {			
+		var ret = params? params.ret: undefined;
+		var pub = params? params.pub: false;
 		
 		// declare elements
 		var inputTitle = container.find('input[name=title]');
@@ -17,59 +18,42 @@ Page.CreateBook = {
 			if (!btnAccept.hasClass('disabled')) {
 				Page.btnShowLoading(btnAccept[0]);
 				
+				var title = inputTitle.val();
+				var desc = inputDesc.val();
+				
 				var fn = function(data) {	
-					// update local user data
-					Account.lastEditBook = {
-						bid: data.bid,
-						pic: data.pic,
-						title: data.title,
-						pageCount: (data.pcount)? data.pcount: 0
-					};
-					localStorage.setItem("u", JSON.stringify(Account));
+					var bid = data.bid;
 					
 					Page.btnHideLoading(btnAccept[0]);
-					Page.back(function(c) {
-						if (!ret) {
-							Page.BookList.load(c);							
-						}
-						else {
-							var src = 'images/photo.jpg';
-							if (data.pic) {
-								src = Config.FILE_URL + Util.getImage(data.pic, Config.FILE_SIZE.COVER);
-							}
-							
-							var updateBook = function(con) {								
-								var selBook = con.find('.sel_book').show();
-								selBook.data('bid', data.bid);
-								selBook.find('.bimage img').attr('src', src);
-								selBook.find('.btitle span').text(data.title);							
-
-								var linkCreate = con.find('[data-id=link_c]');
-								linkCreate.hide();		
-							};
-							
-							if (c.data('page') == 'PublishBook') {
-								var bookPanel = c.find('.book_panel');
-								bookPanel.find('.title').text(data.title);
-								bookPanel.find('.desc').text(data.desc);
-								
-								updateBook($('[data-page=AddPage]'));
-							}
-							else if (c.data('page') == 'AddPage') {	
-								updateBook(c);
-							}
-						}
+					Page.back(function() {
+						Page.open('EditBook', true, { bid: bid, title: title, desc: desc });						
 					});
 				};
 				
-				if (params.bid) {
-					Service.Book.EditBook(params.bid, inputTitle.val(), inputDesc.val(), fn);					
+				pub = btnCheck.hasClass('check');
+				if (params && params.bid) {
+					Service.Book.EditBook(params.bid, title, desc, pub, function() {
+						Page.back(function(c, page) {
+							page.updateBook(c, title, desc);
+						});
+					});					
 				}
 				else {
-					Service.Book.CreateBook(inputTitle.val(), inputDesc.val(), Account.userId, null, null, null, null, fn);					
+					Service.Book.CreateBook(inputTitle.val(), inputDesc.val(), Account.userId, pub, fn);					
 				}
 			}
 		});
+		var btnCheck = container.find('[data-id=btn_c]'); 
+		btnCheck.tap(function() {
+			btnCheck.toggleClass('check');
+		});
+		
+		if (pub) {
+			btnCheck.addClass('check');
+		}
+		else {
+			btnCheck.removeClass('check');
+		}
 		
 		// check required field
 		var checkInput = function() {
@@ -85,11 +69,14 @@ Page.CreateBook = {
 			checkInput();
 		}, false);
 		
-		if (params.bid) {
+		if (params && params.bid) {
 			container.find('.tbar .title').text('Edit Book');
 			Service.Book.GetBookByBid(params.bid, function(data) { 
 				inputTitle.val(data.title);
 				inputDesc.val(data.desc);
+				if (data.pub) {
+					btnCheck.addClass('check');
+				}
 				checkInput();
 			});
 		}

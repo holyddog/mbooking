@@ -1,6 +1,8 @@
 Page.Settings = {
 	url: 'pages/html/settings.html',
 	init: function(params, container) {
+		var self = this;
+		
 		// set toolbar buttons
 		container.find('[data-id=btn_m]').tap(function() {
 			Page.slideMenu();
@@ -87,8 +89,12 @@ Page.Settings = {
         
         },false);
 
+		self.setImage(container);
+	},
+	
+	setImage: function(container) {		
 		if (Account.picture) {
-			container.find('.chg_pic img').attr('src', Config.FILE_URL + Util.getImage(Account.picture, Config.FILE_SIZE.SQUARE));
+			container.find('.chg_pic img').attr('src', Util.getImage(Account.picture, 3));
 		}
 	}
 };

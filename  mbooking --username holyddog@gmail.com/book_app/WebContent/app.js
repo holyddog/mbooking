@@ -10,12 +10,9 @@ Config = {
 	FILE_URL: 'http://119.59.122.38/res/book',
 	
 	FILE_SIZE: {
-		COVER: 0,
-		SQUARE: 1,
+		COVER: 1,
 		SMALL: 2,
-		NORMAL: 3,
-		LARGE: 4,
-		XLARGE: 5
+		PROFILE: 3
 	}
 };
 
@@ -52,31 +49,23 @@ Util = {
 		var suffix = '';
 		switch (size) {
 			case Config.FILE_SIZE.COVER: {
-				suffix = '_cv';
-				break;
-			}
-			case Config.FILE_SIZE.SQUARE: {
-				suffix = '_sp';
+				suffix = '_c';
 				break;
 			}
 			case Config.FILE_SIZE.SMALL: {
 				suffix = '_s';
 				break;
 			}
-			case Config.FILE_SIZE.NORMAL: {
-				suffix = '_n';
+			case Config.FILE_SIZE.PROFILE: {
+				suffix = '_sp';
 				break;
 			}
-			case Config.FILE_SIZE.LARGE: {
-				suffix = '_l';
-				break;
-			}
-			case Config.FILE_SIZE.XLARGE: {
-				suffix = '_xl';
+			default: {
+				suffix = '';
 				break;
 			}
 		}
-		return file.substring(0, file.lastIndexOf('.')) + suffix + file.substring(file.lastIndexOf('.'), file.length);
+		return Config.FILE_URL + '/' + file.substring(0, file.lastIndexOf('.')) + suffix + file.substring(file.lastIndexOf('.'), file.length);
 	}
 };
 
@@ -163,6 +152,7 @@ $(document).ready(function() {
 		e.preventDefault();
 	});
 	
+	var dIndex = 1;
 	dialog.find('[data-link=camera]').tap(function() {		
 		if (Page._callbackDialog) {
 			if (Device.PhoneGap.isReady) {
@@ -175,7 +165,8 @@ $(document).ready(function() {
 			}
 			else {
 				history.back();
-				Page._callbackDialog(Data.Image1);
+				Page._callbackDialog(Data['Image' + dIndex]);
+				dIndex = (dIndex % 4) + 1;
 			}
 		}
 	});
@@ -191,7 +182,8 @@ $(document).ready(function() {
         	}
         	else {
 				history.back();
-				Page._callbackDialog(Data.Image1);
+				Page._callbackDialog(Data['Image' + dIndex]);
+				dIndex = (dIndex % 4) + 1;
         	}
 		}
 	});
@@ -203,6 +195,11 @@ Container = {
 	},
 	loadPage: function(container) {
 		this.getBody().empty().append(container);
+	},
+	changePage: function(container) {
+		var bd = this.getBody();
+		bd.find('.page:last-child').remove();
+		bd.append(container);
 	},
 	addPage: function(container) {
 		this.getBody().append(container);
@@ -224,6 +221,8 @@ Device = {
 //				quality : 75,
 //				targetWidth : 100,
 //				targetHeight : 100,
+				targetWidth : 960,
+				targetHeight : 960,
 				correctOrientation : true,
 				encodingType : navigator.camera.EncodingType.JPEG,
 				destinationType : navigator.camera.DestinationType.DATA_URL
@@ -361,8 +360,9 @@ Page = {
 		if (Account.displayName) {
 			profileCover.find('h1').text(Account.displayName);
 		}
+		var profileCover = $('#profile_cover');
 		if (Account.picture) {
-			profileCover.find('.pimage img').attr('src', Config.FILE_URL + Util.getImage(Account.picture, Config.FILE_SIZE.SQUARE));
+			profileCover.find('.pimage img').attr('src', Util.getImage(Account.picture, 3));
 		}
 		var bookCount = (Account.bookCount)? Account.bookCount: 0;
 		profileCover.find('.stat').text(bookCount + ' Books');
@@ -385,6 +385,28 @@ Page = {
 		else {
 			fn();
 		}
+	},
+	load: function(page, params) {
+		var currentPage = Page[page];
+		Web.html(currentPage.url, function(html) {
+			var container = $('<div id="page_' + page + '" data-page="' + page + '" class="page fill_dock box vertical active">' + html + '</div>');
+			container.data('page', page);
+			
+			$('.page').removeClass('active');
+			container.addClass('active');			
+
+			Container.changePage(container);			
+			currentPage.init(params, container);
+			
+//			var p = Page._stackPages.pop();
+//			
+//			var pageUrl = page;
+//			if (params) {
+//				pageUrl += '?' + $.param(params);
+//			}
+//			Page._stackPages.push(pageUrl);
+//			Page._tempUrl[p] = pageUrl;
+		});
 	},
 	back: function(fn) {
 		if (typeof fn == 'function') {
@@ -640,116 +662,120 @@ Web = {
 	};
 })(jQuery);
 
-$(function(){
-	$(window).hashchange(function() {
-		Page.hideLoading();
-		Page.bodyHideLoading();
+var pageLoad = function() {
+	Page.hideLoading();
+	Page.bodyHideLoading();
+	
+	var hash = location.hash;	
+	var arr = hash.split('?');
+	var page = arr[0].substring(1);
+	var pageUrl = window.location.hash.substring(1);
+	
+	var params = undefined;
+	var append = false;
+	if (arr.length == 2) {
+		params = $.deparam(arr[1], true);
+		append = params.append;
+		delete params['append'];
+	}
+	
+	var overlay = $('#overlay');
+	var sidebar = $('#sidebar');
+	
+	var slide = false;
+	if (Page._slideMenu) {		
+		overlay.removeClass('slide');
+		sidebar.removeClass('slide');
 		
-		var hash = location.hash;	
-		var arr = hash.split('?');
-		var page = arr[0].substring(1);
-		var pageUrl = window.location.hash.substring(1);
-		var params = undefined;
-		var append = false;
-		if (arr.length == 2) {
-			params = $.deparam(arr[1], true);
-			append = params.append;
-			delete params['append'];
-		}
+		Page._slideMenu = false;
+		slide = true;
 		
-		var overlay = $('#overlay');
-		var sidebar = $('#sidebar');
+		setTimeout(function() {
+			overlay.css('display', 'none');
+		}, Config.FADE_DELAY);
+	}
+	
+	var dialog = false;
+	if (Page._showDialog) {
+		var dd = document.getElementById('dialog');
+		dd.className = dd.className.replace(' show', '');
 		
-		var slide = false;
-		if (Page._slideMenu) {		
-			overlay.removeClass('slide');
-			sidebar.removeClass('slide');
-			
-			Page._slideMenu = false;
-			slide = true;
-			
-			setTimeout(function() {
-				overlay.css('display', 'none');
-			}, Config.FADE_DELAY);
-		}
-		
-		var dialog = false;
-		if (Page._showDialog) {
-			var dd = document.getElementById('dialog');
-			dd.className = dd.className.replace(' show', '');
-			
-			Page._showDialog = false;
-			Page._callbackDialog = undefined;
-			dialog = true;
-		}
-		
-		if (page != 'slide' && page != 'dialog') {		
-			var currentPage = Page[page];
-			var checkPage = $.inArray(pageUrl, Page._stackPages);
-			if (currentPage && checkPage == -1) {
-				if (currentPage.url) {
-					Web.html(currentPage.url, function(html) {
-						var container = $('<div id="page_' + page + '" data-page="' + page + '" class="page fill_dock box vertical active">' + html + '</div>');
-						container.data('page', page);
-						
-						$('.page').removeClass('active');
-						container.addClass('active');
-						
-						if (append) {
-							Container.addPage(container);
-						}
-						else {						
-							Page._stackPages.length = 0;
-							Container.loadPage(container);
-						}
-						Page._stackPages.push(pageUrl);
-						
-						currentPage.init(params, container, append);
-					});
-				}	
-				else {
-					var container = $('<div data-page="' + page + '" class="page fill_dock active">');
+		Page._showDialog = false;
+		Page._callbackDialog = undefined;
+		dialog = true;
+	}
+	
+	if (page != 'slide' && page != 'dialog') {		
+		var currentPage = Page[page];
+		var checkPage = $.inArray(pageUrl, Page._stackPages);
+		if (currentPage && checkPage == -1) {
+			if (currentPage.url) {
+				Web.html(currentPage.url, function(html) {
+					var container = $('<div id="page_' + page + '" data-page="' + page + '" class="page fill_dock box vertical active">' + html + '</div>');
+					container.data('page', page);
+					
+					$('.page').removeClass('active');
+					container.addClass('active');
+					
+					if (append) {
+						Container.addPage(container);
+					}
+					else {						
+						Page._stackPages.length = 0;
+						Container.loadPage(container);
+					}
+					Page._stackPages.push(pageUrl);
 					
 					currentPage.init(params, container, append);
-				}
-			}
-			else if (!slide && !dialog && checkPage > -1) {
-				var p = Page._stackPages.pop().split('?')[0];
-				var activeContainer = $('[data-page=' + Page._stackPages[Page._stackPages.length - 1].split('?')[0] + ']');
-				activeContainer.addClass('active');
-				$('[data-page=' + p + ']').remove();	
+				});
+			}	
+			else {
+				var container = $('<div data-page="' + page + '" class="page fill_dock active">');
 				
-//				if (typeof Page._tempBack == 'function') {
-//					Page._tempBack(activeContainer);
-//					Page._tempBack = undefined;
-//				}
-				if (Page._tempBack && Page._tempBack.length) {
-					var fn = Page._tempBack.pop();
-					fn(activeContainer);
-				}
-			}
-			else if (checkPage == -1) {
-				Page.open(Config.DEFAULT_PAGE);
-				//Page.Error.init(404);
+				currentPage.init(params, container, append);
 			}
 		}
-		else if (page != 'dialog') {			
-			var slideMenu = function() {
-				setTimeout(function() {  
-					$('#overlay').css('display', 'block').tap(function() {
-						history.back();
-					}).toggleClass('slide');
-					$('#sidebar').toggleClass('slide');
-					Page._slideMenu = true;
-				}, 0);
-			};
-			slideMenu();
+		else if (!slide && !dialog && checkPage > -1) {
+			var p = Page._stackPages.pop().split('?')[0];
+			var activeContainer = $('[data-page=' + Page._stackPages[Page._stackPages.length - 1].split('?')[0] + ']');
+			activeContainer.addClass('active');
+			$('[data-page=' + p + ']').remove();	
+			
+//			if (typeof Page._tempBack == 'function') {
+//				Page._tempBack(activeContainer);
+//				Page._tempBack = undefined;
+//			}
+			if (Page._tempBack && Page._tempBack.length) {
+				var fn = Page._tempBack.pop();
+				fn(activeContainer, Page[activeContainer.data('page')]);
+			}
 		}
-		else if (page != 'slide') {
-			var dd = document.getElementById('dialog');
-			dd.className = dd.className + ' show';
-			Page._showDialog = true;
+		else if (checkPage == -1) {
+			Page.open(Config.DEFAULT_PAGE);
+			//Page.Error.init(404);
 		}
+	}
+	else if (page != 'dialog') {			
+		var slideMenu = function() {
+			setTimeout(function() {  
+				$('#overlay').css('display', 'block').tap(function() {
+					history.back();
+				}).toggleClass('slide');
+				$('#sidebar').toggleClass('slide');
+				Page._slideMenu = true;
+			}, 0);
+		};
+		slideMenu();
+	}
+	else if (page != 'slide') {
+		var dd = document.getElementById('dialog');
+		dd.className = dd.className + ' show';
+		Page._showDialog = true;
+	}
+};
+$(function(){
+	$(window).hashchange(function() {
+		pageLoad();
 	});
 	$(window).hashchange();  
 });

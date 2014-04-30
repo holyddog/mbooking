@@ -21,10 +21,12 @@ Page.ChangePic = {
 					localStorage.setItem('u', JSON.stringify(Account));
 					
 					var profileCover = $('#profile_cover');
-					profileCover.find('.pimage img').attr('src', Config.FILE_URL + Util.getImage(Account.picture, Config.FILE_SIZE.SQUARE));
+					profileCover.find('.pimage img').attr('src', Util.getImage(Account.picture, 3));
 					
 					MessageBox.drop('Picture changed');					
-					Page.back();
+					Page.back(function(c, page) {
+						page.setImage(c);
+					});
 				});
 			}
 		});
@@ -36,7 +38,7 @@ Page.ChangePic = {
 		});
 		
 		if (Account.picture) {
-			container.find('.bg_pic img').attr('src', Config.FILE_URL + Util.getImage(Account.picture, Config.FILE_SIZE.SQUARE));
+			container.find('.bg_pic img').attr('src', Util.getImage(Account.picture, 3));
 		}
 	}
 };

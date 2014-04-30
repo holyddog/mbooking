@@ -1,26 +1,38 @@
 Service.Book = {
-	CreateBook : function(bookName, desc, userID, picName, startDate, endDate,
-			tags, callback) {
+//	CreateBook : function(bookName, desc, userID, picName, startDate, endDate,
+//			tags, pub, callback) {
+//		var url = Service.url + '/createBook.json';
+//		var params = {
+//			title : bookName,
+//			desc : desc,
+//			fdate : startDate, // Non - Require Field
+//			tdatep : endDate, // Non - Require Field
+//			tags : tags, // Non - Require Field
+//			uid : userID,
+//			pic : picName,
+//			pub: pub
+//		};
+//		Web.post(url, params, callback);
+//	},
+		
+	CreateBook: function(title, desc, userId, pub, callback) {
 		var url = Service.url + '/createBook.json';
 		var params = {
-			title : bookName,
+			title : title,
 			desc : desc,
-			fdate : startDate, // Non - Require Field
-			tdatep : endDate, // Non - Require Field
-			tags : tags, // Non - Require Field
-			uid : userID,
-			pic : picName
-		// Non - Require Field
+			uid : userId,
+			pub: pub
 		};
 		Web.post(url, params, callback);
 	},
 	
-	EditBook: function(bid, bookName, desc, callback) {
+	EditBook: function(bid, title, desc, pub, callback) {
 		var url = Service.url + '/createBook.json';
 		var params = {
 			bid: bid,
-			title : bookName,
-			desc : desc
+			title : title,
+			desc : desc,
+			pub: pub
 		};
 		Web.post(url, params, callback);
 	},

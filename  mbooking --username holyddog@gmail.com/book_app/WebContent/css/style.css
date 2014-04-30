@@ -487,11 +487,20 @@ textarea {
 	left: 0;
 	opacity: .3;
 }
+.profile_item .info:after {
+	/*content: " ";
+	position: absolute;
+	width: 100%;
+	height: 80px;
+	background-color: #000;
+	top: 0;
+	left: 0;
+	opacity: .3;*/
+}
 
 .profile_item {
 	line-height: 0;
 	color: #fff;
-	position: relative;
 	padding: 15px;
 	background-size: 100% auto;
 	background-position: center center;
@@ -499,7 +508,6 @@ textarea {
 .profile_item .pimage {
 	background-color: #ddd;
 	border-radius: 25px;
-	position: relative;
 }
 .profile_item .pimage img {
 	width: 50px;
@@ -508,7 +516,6 @@ textarea {
 }
 .profile_item .info {
 	padding-left: 10px;
-	position: relative;
 }
 .profile_item .info h1 {
 	 line-height: 30px;	 
@@ -619,6 +626,7 @@ textarea {
 #dd_message {
 	position: fixed;
 	z-index: -1;
+	visibility: hidden;
 	top: 60px;
 	height: 50px;
 	overflow: hidden;
@@ -633,6 +641,9 @@ textarea {
 	
 	-webkit-transform: translateY(-50px);
 	-webkit-transition: .3s -webkit-transform ease-in-out;
+}
+#dd_message.show {
+	visibility: visible;
 }
 #dd_message.show .msg {
 	-webkit-transform: translateY(0px);
@@ -686,4 +697,65 @@ textarea {
 }
 #dialog.show:before {
 	opacity: .4;
+}
+
+.book_size {
+	position: relative;
+	float: left; 
+	margin: 5px; 
+	background-color: #FF4444; 
+	background-size: 100%;
+}
+.book_size h2 {
+	color: #fff;
+	position: relative;
+	z-index: 1;
+	padding: 10px;
+}
+.book_size .pcount {
+	position: absolute;
+	bottom: 5px;
+	right: 10px;
+	color: #fff;
+	font-size: 80%;
+	text-align: center;
+	z-index: 1;
+}
+.book_size:after {
+	content: " ";
+	display: block;
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-image: -webkit-linear-gradient(top, rgba(0,0,0,0.6), rgba(0,0,0,0) 100%);
+}
+
+.check_label {
+	font-size: 80%;
+	font-weight: bold;
+	color: #444;
+	-webkit-box-align: center;
+}
+
+.btn_check {
+	display: block;
+	padding: 10px;
+}
+.btn_check.highlight {
+	background-color: #6DCAEC;	
+}
+.btn_check .check_icon {
+	width: 20px; 
+	height: 20px;
+	display: block;
+	background-color: #555;
+	-webkit-mask-size: 20px; 
+	-webkit-mask-position: center center; 
+	-webkit-mask-repeat: no-repeat;
+	-webkit-mask-image: url(../icons/uncheck.png);
+}
+.btn_check.check .check_icon {
+	-webkit-mask-image: url(../icons/check.png);
 }

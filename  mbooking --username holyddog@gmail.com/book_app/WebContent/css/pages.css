@@ -7,46 +7,17 @@
 	font-size: 80%;
 }
 
-#page_AddPage .page_label {
-	margin-top: 10px;
-	margin-right: 10px;
-	color: #777;
-	text-align: right;
-	font-size: 70%;
-	font-weight: bold;
+#page_AddPage .tbar_btn.highlight {
+	background-color: #6DCAEC;
 }
-#page_AddPage #bottom_panel {
-	position: fixed;
-	bottom: 0;
-	height: 50px;
-	width: 100%;
+#page_AddPage .tbar_icon {
+	width: 30px; height: 30px; -webkit-mask-size: 16px; background-color: #555;
 }
-#page_AddPage .photo_panel {
-	background-color: #fff;
-	margin: 10px;
-	height: 200px;
-	position: relative;
+#page_AddPage .tbar_label {
+	font-size: 90%; line-height: 30px; color: #555; padding-left: 5px;
 }
-#page_AddPage .photo_panel .mask_camera {
-	width: 40px;
-	height: 40px;
-	margin: 0 auto;
-	background-color: #999999;
-	-webkit-mask-size: 30px; 
-	-webkit-mask-position: center center; 
-	-webkit-mask-repeat: no-repeat;
-	-webkit-mask-image: url(../icons/camera.png);
-}
-#page_AddPage .photo_panel .label {
-	font-size: 80%;
-	color: #999;
-}
-#page_AddPage .caption_panel {
-	background-color: #fff;
-	margin: 0 10px 10px;
-}
-#page_AddPage #add_photo {
-	background-size: 100%;
+#page_AddPage .tbar_sep {
+	width: 1px; background-color: #555; height: 30px; margin-top: 10px;
 }
 #page_AddPage .remove {
 	width: 50px; 
@@ -55,9 +26,7 @@
 	right: 0; 
 	display: block;
 	position: absolute;
-}
-#page_AddPage .remove.no_display {
-	display: none;
+	z-index: 2;
 }
 #page_AddPage .remove_bg {
 	width: 50px; 
@@ -67,6 +36,7 @@
 	position: absolute;
 	background-color: #fff;
 	opacity: .8;
+	z-index: 1;
 }
 #page_AddPage .remove .icon {
 	-webkit-mask-size: 20px; 
@@ -77,6 +47,40 @@
 	width: 50px;
 	height: 50px;
 	display: block;
+}
+#page_AddPage #box_photo {
+	position: relative;
+	height: 0;
+	margin: 10px;
+	background-color: #fff;
+	background-position: center center;
+	background-repeat: no-repeat;
+}
+#page_AddPage #photo_label .icon {
+	margin: 0 auto;
+	width: 40px;
+	height: 40px;
+	background-color: #777;
+	-webkit-mask-size: 30px;
+	-webkit-mask-position: center center;
+	-webkit-mask-repeat: no-repeat;
+	-webkit-mask-image: url(../icons/camera.png);
+}
+#page_AddPage #photo_label .label {
+	font-size: 80%;
+	color: #777;
+}
+#page_AddPage #box_desc {
+	-webkit-box-align: center; height: 0; margin: 0 10px 10px; background-color: #fff;
+}
+#page_AddPage #box_photo {
+	-webkit-box-align: center; height: 0; margin: 10px; background-color: #fff;
+}
+#page_AddPage #desc_label {
+	color: #999; text-align: center; width: 100%;
+}
+#page_AddPage #desc_text {
+	padding: 10px;
 }
 
 #page_BookList .book_list {
@@ -221,140 +225,98 @@
 	-webkit-mask-image: url(../icons/check.png);
 }
 
-#page_Profile .profile_bg, #page_Book .book_bg {
-	z-index: -3;	
-}
-#page_Profile .grad_overlay {
-	z-index: -2;
-	background-color: #000;
-	opacity: .5;
-}
-#page_Profile .books_panel {
-	position: absolute;
-	height: 175px;
-	width: 100%;
-	bottom: 0;
-}
-#page_Profile .books_grad {
-	position: absolute;
-	height: 175px;
-	width: 100%;
-	background-color: #000;
-	opacity: .5;
-	bottom: 0;
-	z-index: -1;
-}
-#page_Profile .books_panel .label {
-	color: #fff;
-	font-size: 90%;
-}
-#page_Profile .books_panel .label div {
-	padding: 10px;
-}
-#page_Profile .books_panel .label a {
-	color: #ccc;
-	display: block;
-	padding: 10px;
-}
-#page_Profile .books_panel .bitem {
-	margin: 0 5px;
-}
-#page_Profile .books_panel .books {
-	padding: 0 5px;
-}
-#page_Profile .books_panel .book {
-	background-color: #ddd;
-	color: #fff;
-	height: 125px;
+#page_Profile #profile_header {
+	height: 303px;
+	background-color: #aaa;
+	position: relative;
+	background-size: 100%;
 	background-position: center center;
-	background-size: auto 100%;
-	position: relative;
-	overflow: hidden;
 }
-#page_Profile .books_panel .book:after {
-	content: " ";
-	display: block;
-	position: absolute;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 75%;
-	background-image: -webkit-linear-gradient(top, rgba(0,0,0,0.6), rgba(0,0,0,0) 100%);
+#page_Profile .header_overlay {
+	background-color: #000; 
+	opacity: .3; 
+	z-index: 0;
 }
-
-#page_Profile .books_panel .book .title {	
-	text-shadow: 0 2px 0 rgba(0,0,0,0.6);
-	font-size: 85%;
-	padding: 5px;
-	position: relative;
-	z-index: 1;
+#page_Profile .header_title {
+	padding: 25px 10px; overflow: hidden;
 }
-#page_Profile .profile_info {
-	bottom: 185px;
-	width: 100%;
-	position: absolute;
-	height: 90px;
-}
-#page_Profile .profile_info .pimage {
-	width: 70px;
-	height: 70px;
-	margin: 15px 5px 10px 10px;
-	border-radius: 35px;
-	background-color: #ddd;
-}
-#page_Profile .profile_info .pimage img {
-	width: 70px;
-	height: 70px;
-	border-radius: 35px;
-}
-#page_Profile .pname {
+#page_Profile .header_title span {
+	font-size: 180%; 
 	color: #fff;
-	padding-top: 15px;
-	font-size: 150%;
-	position: absolute;
-	bottom: 280px;
-	left: 10px;
 }
-#page_Profile .profile_info .stat {
-	overflow: hidden;
-	margin-top: 10px;
-	height: 40px;
-}
-#page_Profile .profile_info .stat .counter {
-	border-right: solid 1px #fff;
-	color: #fff;
-	text-align: center;
-	padding-top: 2px;
-}
-#page_Profile .profile_info .stat .counter:last-child {
-	border-right: none;
-}
-#page_Profile .profile_info .stat .counter .value {
-	font-family: HNC;
-}
-#page_Profile .profile_info .stat .label {	
+#page_Profile .header_title a {
+	float: right;
 	font-size: 70%;
 	font-weight: bold;
-}
-#page_Profile .btn_follow {
-	display: block;
-	margin: 10px;
-	text-align: center;
-	font-size: 70%;
-	background-color: transparent;
-	line-height: 28px;
+	padding: 0 5px;
 	color: #fff;
-	border: solid 1px #fff;
+	display: none;
 }
-/*#page_Profile .btn_follow:active, #page_Profile .btn_follow.follow:active {
+#page_Profile .pbox {
+	margin: 0 10px 10px 10px;
+}
+#page_Profile .pbox .pimage {
 	background-color: #fff;
-	color: #333;
-}*/
-#page_Profile .btn_follow.follow {
-	background: #ccc;
-	line-height: 30px;
-	color: #333;
-	border-style: none;
+	width: 68px;
+	height: 68px;
+	border-radius: 35px;
+	padding: 1px;
+}
+#page_Profile .pbox .pimage img {
+	line-height: 0;
+	display: block;
+	width: 68px;
+	height: 68px;
+	border-radius: 34px;
+}
+#page_Profile .stat_panel {
+	padding: 10px 10px 10px 0;
+}
+#page_Profile .stat_panel .label {
+	float: left;
+	width: 66px;
+	text-align: center;
+	padding-top: 5px;
+}
+#page_Profile .stat_panel .count {
+	padding-bottom: 5px;
+	color: #fff;
+}
+#page_Profile .stat_panel .text {
+	font-size: 70%; 
+	color: #eee;
+}
+#page_Profile #xbar {
+	background-color: #fff;
+	height: 50px;
+	margin-top: 2px;
+	-webkit-box-shadow: 0px 1px 0px 0px rgba(50, 50, 50, 0.25);
+}
+#page_Profile .ptab a {
+	display: block;
+	width: 100%;
+	height: 50px;
+	background-color: #999;
+}
+#page_Profile .ptab.active a {	
+	background-color: #33B5E5;
+}
+#page_Profile .ptab .notf {
+	border-radius: 8px;
+	width: 16px;
+	height: 16px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	background-color: #CC0000;
+	color: #fff;
+	line-height: 16px;
+	text-align: center;
+	font-size: 65%;
+}
+#page_Profile .tpage {
+	overflow: hidden; 
+	padding: 5px;
 }
 
 #page_Book .btitle {
@@ -373,6 +335,9 @@
 	color: #eee;
 	padding: 0 10px;
 }
+#page_Book .book_bg {
+	z-index: -3;
+}
 #page_Book .bline {
 	height: 1px;
 	margin: 10px;
@@ -386,7 +351,8 @@
 	height: 50px;
 	margin: 0 10px;
 	border-radius: 25px;
-	background-color: #ddd;
+	background-color: #fff;
+	padding: 1px;
 }
 #page_Book .author_info .pimage img {
 	width: 50px;
@@ -559,4 +525,151 @@
 	width: 120px;
 	height: 120px;
 	border-radius: 60px;
+}
+
+#page_EditBook .cmd_panel {
+	-webkit-box-shadow: 0px 1px 0px 0px rgba(50, 50, 50, 0.25);
+}
+#page_EditBook .cmd_panel .box {
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+	margin: 0 10px 10px 10px;
+	font-size: 80%;
+	background-color: #ddd;
+}
+#page_EditBook .cmd_panel .box .flex1 {	
+	background-color: #ddd;
+}
+#page_EditBook .cmd_panel .box .flex1.highlight {	
+	background-color: #6DCAEC;
+}
+#page_EditBook .cmd_panel .sep {
+	width: 1px;
+	height: 20px;
+	margin-top: 10px;
+	background-color: #fff;
+}
+
+#page_EditBook #book_header {
+	background-color: #fff;	
+}
+#page_EditBook .book_size {
+	margin: 10px;
+	background-color: #ddd;
+	background-size: auto 100%;
+	background-position: center center;
+}
+
+#page_EditBook .book_det {
+	padding: 10px 10px 10px 0;
+}
+
+#page_EditBook .book_det .desc {
+	font-size: 80%;
+	color: #999;
+	overflow: hidden;
+	height: 85px;
+}
+
+#page_EditBook .book_det .pcount {
+	line-height: 30px;
+	height: 30px;
+	text-align: right;
+}
+
+#page_EditBook .link_edit {
+	float: right;
+	margin-bottom: 5px;
+	font-size: 70%;
+	font-weight: bold;
+	color: #555;
+}
+
+#page_EditBook .tab_page {
+	background-color: #fff;
+	height: 50px;
+	margin-top: 2px;
+	-webkit-box-shadow: 0px 1px 0px 0px rgba(50, 50, 50, 0.25);
+}
+
+#page_EditBook .tab_page .sep {
+	width: 1px;
+	background-color: #e2e2e2;
+	height: 30px;
+	margin-top: 10px;
+}
+
+#page_EditBook .tab_page a {
+	display: block;
+	width: 100%;
+	height: 50px;
+	font-size: 80%;
+	line-height: 50px;
+	color: #777;
+	text-align: center;
+}
+
+#page_EditBook .tab_page a.active {
+	display: block;
+	width: 100%;
+	height: 50px;
+	font-size: 80%;
+	line-height: 50px;
+	color: #33B5E5;
+	text-align: center;
+}
+
+#page_EditBook .page_size {
+	float: left;
+	margin: 5px;
+	background-size: 100%;
+}
+
+#page_EditBook #book_panel {
+	overflow: hidden;
+	padding: 5px;
+}
+#page_EditBook #share_panel {
+	padding: 10px;
+}
+#page_EditBook .share_cap {
+	background-color: #eee;
+	height: auto;
+}
+#page_EditBook .link_fb {
+	background-color: #3B5998;
+	color: #fff;
+	display: block;
+	text-align: center;
+	font-size: 80%;
+	font-weight: bold;
+	padding: 15px;
+	margin-top: 10px;
+	opacity: .5;
+}
+#page_EditBook .link_fb.connect {
+	opacity: 1;
+}
+
+#page_EditBook .link_add {
+	float: left;
+	margin: 5px;
+	background-color: #e2e2e2;
+}
+
+#page_EditBook .link_add .icon {
+	margin: 0 auto;
+	width: 40px;
+	height: 40px;
+	background-color: #777;
+	-webkit-mask-size: 20px;
+	-webkit-mask-position: center center;
+	-webkit-mask-repeat: no-repeat;
+	-webkit-mask-image: url(../icons/add.png);
+}
+
+#page_EditBook .link_add .label {
+	font-size: 75%;
+	color: #777;
 }
