@@ -22,7 +22,11 @@ public class User {
 	Book leb; // last edit book
 	Integer fcount; // Follower book count
 	Integer fgcount; // Following book count
-	Integer pbcount; // Public book count
+	
+	Integer pbcount; // public book count
+	Integer prcount; // private book count
+	Integer drcount; // draft book count
+	
 	Integer tcount; // Total book count
 
 	Long[] following;
@@ -133,6 +137,22 @@ public class User {
 
 	public void setTcount(Integer tcount) {
 		this.tcount = tcount;
+	}
+
+	public Integer getPrcount() {
+		return prcount;
+	}
+
+	public void setPrcount(Integer prcount) {
+		this.prcount = prcount;
+	}
+
+	public Integer getDrcount() {
+		return drcount;
+	}
+
+	public void setDrcount(Integer drcount) {
+		this.drcount = drcount;
 	}
 
 	public Long[] getFollowing() {

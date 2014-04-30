@@ -29,9 +29,10 @@ public class BookJson {
 			@RequestParam(value = "pic", required = false) String pic,
 			@RequestParam(value = "fdate", required = false) Long fdate,
 			@RequestParam(value = "tdate", required = false) Long tdate,
-			@RequestParam(value = "tags", required = false) String[] tags) {
+			@RequestParam(value = "tags", required = false) String[] tags,
+			@RequestParam(value = "pub", required = false) Boolean pub) {
 		
-		Book book = bookRepo.create(bid, title, desc, fdate, tdate, tags, uid, pic);
+		Book book = bookRepo.create(bid, title, desc, fdate, tdate, tags, uid, pic, pub);
 		if (book != null) {
 			return book;
 		}
@@ -125,16 +126,17 @@ public class BookJson {
 	Object publishBook(
 			@RequestParam(value = "bid") Long bid,
 			@RequestParam(value = "uid") Long uid,
-			@RequestParam(value = "pub") Boolean pub) {
+			@RequestParam(value = "cover") String cover) {
 
-		return ResultResponse.getResult("success", bookRepo.publish_book(bid, uid, pub));
+		return ResultResponse.getResult("success", bookRepo.publishBook(bid, uid, cover));
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/unpublishBook.json")
 	public @ResponseBody
-	Object unpublishBook(@RequestParam(value = "bid") Long bid,
+	Object unpublishBook(
+			@RequestParam(value = "bid") Long bid,
 			@RequestParam(value = "uid") Long uid) {
 
-		return ResultResponse.getResult("success", bookRepo.unpublish_book(bid, uid));
+		return ResultResponse.getResult("success", bookRepo.unpublishBook(bid, uid));
 	}
 }

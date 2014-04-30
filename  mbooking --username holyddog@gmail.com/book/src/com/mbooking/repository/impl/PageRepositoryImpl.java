@@ -93,6 +93,111 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 		}
 		return book;
 	}
+	
+	@Override
+	public Page add(String picture, Integer imgSize, Integer cropPos, String caption, Long bookId, Long addBy) {
+		Query query = new Query(Criteria.where("bid").is(bookId));
+		
+		// insert new page data
+		Page page = new Page();
+		Long pid = MongoCustom.generateMaxSeq(Page.class, db);
+		Integer seq = (int) db.count(query, Page.class) + 1;
+		
+		page.setPid(pid);
+		page.setSeq(seq);
+		page.setCaption(caption);
+		page.setBid(bookId);
+		page.setUid(addBy);
+		page.setCdate(System.currentTimeMillis());
+		
+		// generate picture to directory
+		String pic = ImageUtils.generatePicture(picture, imgSize, cropPos, "u" + addBy + "/b" + bookId);
+		page.setPic(pic);
+		
+		db.insert(page);		
+		
+		// update book (page count, 
+		Update update = new Update();
+		update.inc("pcount", 1);
+		
+		// set picture to cover image for seq = 1
+		if (seq.intValue() == 1) {
+			update.set("pic", pic);
+		}
+		db.updateFirst(query, update, Book.class);
+		
+//		Page page = new Page();
+//		Book book = null;
+//		try {
+//
+//			page.setBid(bid);
+//
+//			if (caption != null)
+//				page.setCaption(caption);
+//
+//			if (date != null)
+//				page.setDate(date);
+//
+//			Long create_date = System.currentTimeMillis();
+//
+//			page.setCdate(create_date);
+//			page.setUid(uid);
+//
+//			if (pic != null && !pic.equals("") && !pic.equals("undefined")) {
+//				String img_path = ImageUtils.toImageFile(ConstValue.USER_FOLDER
+//						+ uid + "/" + ConstValue.BOOK_FOLDER + bid, pic, ConstValue.PAGE_IMG_TYPE);
+//				pic = img_path;
+//				page.setPic(pic);
+//			}
+//
+//			Criteria criteria = Criteria.where("bid").is(bid).and("uid")
+//					.is(uid);
+//			Query query = new Query(criteria);
+//			Integer seq = (int) db.count(query, Page.class) + 1;
+//
+//			page.setSeq(seq);
+//			
+//
+//			Long pid = MongoCustom.generateMaxSeq(Page.class, db);
+//			page.setPid(pid);
+//			db.insert(page);
+//
+//			if (seq == 1 && pic != null && !pic.equals("")
+//					&& !pic.equals("undefined")) {
+//				Update update = new Update();
+//				update.set("pic", pic);
+//				db.updateFirst(query, update, Book.class);
+//			}
+//
+//			Update update = new Update();
+//			int pcount = (int) db.count(
+//					new Query(Criteria.where("bid").is(bid)), Page.class);
+//			update.set("pcount", pcount);
+//			update.set("ledate", create_date);
+//
+//			db.updateFirst(query, update, Book.class);
+//
+//			Update user_update = new Update();
+//			Query q = new Query(Criteria.where("bid").is(bid));
+//			q.fields().include("title").include("pic").include("pcount");
+//			book = db.findOne(q, Book.class);
+//			user_update.set("leb", book);
+//
+//			db.updateFirst(new Query(Criteria.where("uid").is(uid)),
+//					user_update, User.class);
+//
+//		} catch (Exception e) {
+//			System.out.println("Create page arr: " + e);
+//			return null;
+//		}
+//		return book;
+		
+		Page retPage = new Page();
+		retPage.setPid(pid);
+		retPage.setSeq(seq);
+		retPage.setPic(pic);
+		return retPage;
+	}
 
 	@Override
 	public Page edit(Long pid, Long uid, Long bid, Long date, String pic,

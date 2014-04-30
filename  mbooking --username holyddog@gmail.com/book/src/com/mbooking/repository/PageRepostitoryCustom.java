@@ -13,6 +13,14 @@ public interface PageRepostitoryCustom {
 			String pic,
 			String caption
 	);
+	public Page add(
+			String picture,
+			Integer imageSize,
+			Integer cropPos,
+			String caption,
+			Long bookId,
+			Long addBy
+	);
 	
 	public Page edit(
 			Long pid,
