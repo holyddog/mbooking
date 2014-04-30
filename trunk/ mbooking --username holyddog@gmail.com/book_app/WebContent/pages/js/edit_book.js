@@ -10,6 +10,26 @@ Page.EditBook = {
 			history.back();
 		});
 		
+		var btnPub = container.find('[data-id=btn_pub]');
+		btnPub.tap(function() {
+			if (!btnPub.hasClass('unpub')) {
+				Page.showLoading('Publishing...');
+				
+				var img = container.find('.book_size').css('background-image');
+				img = img.replace('url(' + Config.FILE_URL, '').replace(')', '').replace('_s', '');
+				Service.Book.PublishBook(bid, Account.userId, img, function(data) {
+					Page.hideLoading();
+				});
+			}
+			else {
+				Page.showLoading('Updating...');
+				
+				Service.Book.UnpublishBook(bid, Account.userId, function(data) {
+					Page.hideLoading();
+				});				
+			}
+		});
+		
 		var w = Math.floor((book_header.offsetWidth / 2) - 15);
 		var h = Math.floor((w * 4) / 3);
 		container.find('.book_size').css({
@@ -43,6 +63,9 @@ Page.EditBook = {
 		container.find('[data-link=preview]').click(function() {
 			Page.open('Book', true, { bid: bid, uid: Account.userId, preview: true });
 		});
+		container.find('[data-link=chg_cover]').click(function() {
+			Page.open('ChangeCover', true);
+		});
 		
 		if (bid) {
 			Service.Book.GetBook(bid, Account.userId, function(data) { 
@@ -50,9 +73,15 @@ Page.EditBook = {
 				container.find('.pcount span').text(data.pcount);
 				container.find('.book_size').css('background-image', 'url(' + Util.getImage(data.pic, 2) + ')');
 				
-				var pages = data.pages;
-				for (var i = 0; i < pages.length; i++) {
-					self.addPage(container, pages[i]);
+				btnPub.show();
+				if (data.pbdate) {
+					btnPub.addClass('unpub');
+					btnPub.text('UNPUBLISH');
+				}
+				
+				self.bookPages = data.pages;
+				for (var i = 0; i < self.bookPages.length; i++) {
+					self.addPage(container, self.bookPages[i]);
 				}
 				self.reScale(container);
 			});
@@ -63,6 +92,8 @@ Page.EditBook = {
 //			container.find('.book_size h2').text(params.title);
 //		}
 	},
+	
+	bookPages: [],
 	
 	updateBook: function(container, title, desc) {
 		container.find('.book_title').text(title);

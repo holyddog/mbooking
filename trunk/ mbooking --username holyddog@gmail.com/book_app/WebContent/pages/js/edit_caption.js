@@ -11,6 +11,12 @@ Page.EditCaption = {
 			inputText.val(params.text);
 		}
 		
+		var focus = function(el) {
+		  el.focus();
+		  el.setSelectionRange && el.setSelectionRange(0, 0);
+		};
+		focus(inputText[0]);
+		
 		var btnAdd = container.find('[data-id=link_a]');
 		btnAdd.tap(function() {
 			var val = inputText.val();
