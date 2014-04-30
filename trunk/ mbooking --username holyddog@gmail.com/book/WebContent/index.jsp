@@ -13,10 +13,8 @@
 	
 	<script type="text/javascript">
 		var Context = {
-			path: "#{initParam['context']}",
-			domain: "#{initParam['domain']}",
 			root: "#{initParam['root']}",
-			images: "#{initParam['images']}"
+			file: "#{initParam['file']}"
 		};
 	</script>
 	
@@ -24,24 +22,18 @@
 	<link rel="stylesheet" href="#{initParam['root']}/res/css/style.css" />
 	
 	<script type="text/javascript" src="#{initParam['root']}/res/lib/jquery-1.10.2.min.js"></script>
-	<script type="text/javascript" src="#{initParam['root']}/res/lib/jquery.mousewheel.js"></script>
-	
-	<script type="text/javascript" src="#{initParam['root']}/res/lib/jquery.jscrollpane.js"></script>
-	<script type="text/javascript" src="#{initParam['root']}/res/lib/jquery.form.js"></script>
-	<script type="text/javascript" src="#{initParam['root']}/res/lib/jquery.elastic.js"></script>
 </head>	
 	<body>	
 		<f:view>
-			<div id="wrapper">
-				<h1 id="title"><ui:insert name="title"></ui:insert></h1>
-				<div id="content">
-					<ui:insert name="view"></ui:insert>
+			<f:subview id="book_view" rendered="#{bookView.book != null}">
+				<div id="book_view">
+					<div>#{bookView.book.title}</div>
+					<div><img style="width: 200px;" src="#{initParam['file']}/#{bookView.book.pic}" /></div>
 				</div>
-			</div>
+			</f:subview>
+			<f:subview id="no_book" rendered="#{bookView.book == null}">
+				<div>No Book</div>
+			</f:subview>
 		</f:view>
-		<script type="text/javascript" src="#{initParam['root']}/res/js/app.js"></script>
-		<script type="text/javascript">
-			<ui:insert name="script"></ui:insert>
-		</script>
 	</body>
 </html>

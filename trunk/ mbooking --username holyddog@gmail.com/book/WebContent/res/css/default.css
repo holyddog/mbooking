@@ -1,0 +1,120 @@
+*,html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,label,fieldset,input,p,blockquote,th,td {
+	margin: 0;
+	padding: 0
+}
+
+html { height: 100% }
+body { height: 100%; margin: 0; padding: 0 }
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0
+}
+
+fieldset,img {
+	border: 0
+}
+
+address,caption,cite,code,dfn,em,strong,th,var {
+	font-style: normal;
+	font-weight: normal
+}
+
+ol,ul,li {
+	list-style: none
+}
+
+caption,th {
+	text-align: left
+}
+
+h1,h2,h3,h4,h5,h6 {
+	font-weight: normal
+}
+
+q:before,q:after {
+	content: ''
+}
+
+strong {
+	font-weight: bold
+}
+
+em {
+	font-style: italic
+}
+
+a img {
+	border: none
+}
+
+a {
+	color: #36C;
+	text-decoration: none;
+}
+
+h1 {
+	font-size: 24px;
+}
+
+input[type=file], input[type=text], input[type=password], textarea, button {
+	border: solid 1px #dcdcdc;
+	background-color: #fff;
+	
+	padding: 10px 10px;
+	font-family: "helvetica neue",helvetica,Verdana, Arial, Helvetica, sans-serif, tahoma;
+	font-size: 110%;
+	color: #333;
+	outline: 0;
+	display: block;
+	
+	display: block;
+	width: 100%;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+button {
+	background-color: #eee;
+}
+input[type=file] {
+	padding: 8px 0;
+	border-style: none;
+}
+textarea {
+	height: 100px;
+}
+
+select {
+	cursor: pointer;
+	padding-left: 5px;
+	height: 38px;
+	border: solid 1px #dcdcdc;
+	font-family: "helvetica neue",helvetica,Verdana, Arial, Helvetica, sans-serif, tahoma;
+	font-size: 110%;
+	color: #333;
+	outline: 0;
+	display: block;
+	
+	display: block;
+	width: 100%;
+	box-sizing: border-box;
+	background-color: #fff;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+select[disabled] {	
+	background-color: #e2e2e2;
+}
+
+.fright {
+	float: right;
+}
+.fleft {
+	float: left;
+}
+.hidden {
+	display: none;
+}

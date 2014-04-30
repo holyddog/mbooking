@@ -18,18 +18,19 @@
   	</context-param>
   	<context-param>
     	<param-name>root</param-name>
-    	<param-value>http://localhost/book</param-value>
-    	<!-- <param-value>http://localhost:8080/book</param-value>-->
+    	<param-value>http://localhost:8080/book</param-value>
   	</context-param>
+  	<context-param>
+    	<param-name>file</param-name>
+    	<param-value>http://localhost/res/book</param-value>
+    </context-param>
 	<context-param>
 		<param-name>book_dev_files</param-name>
 		<param-value>http://localhost/book_dev_files</param-value>
-		<!-- <param-value>http://localhost/images/book</param-value> -->
 	</context-param>
   	<context-param>    
     	<param-name>upload</param-name>
-    	<param-value>C:/Resources/Book_Dev/images</param-value>
-  		<!-- <param-value>D:/Resources/book</param-value> -->
+  		<param-value>D:/Resources/book</param-value>
   	</context-param>
 	
 	<servlet>
