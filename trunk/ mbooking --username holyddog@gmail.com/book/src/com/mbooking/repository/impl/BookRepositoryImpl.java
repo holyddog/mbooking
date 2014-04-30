@@ -302,8 +302,11 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			db.updateFirst(query, update, Book.class);			
 			
 			int bookCount = (int) db.count(new Query(Criteria.where("uid").is(uid).and("pbdate").exists(true)), Book.class);
+			int draftCount = (int) db.count(new Query(Criteria.where("uid").is(uid).and("pbdate").exists(false)), Book.class);
+			
 			update = new Update();
 			update.set("pbcount", bookCount);
+			update.set("drcount", draftCount);
 			update.set("cover", cover);
 
 			db.updateFirst(new Query(Criteria.where("uid").is(uid)), update, User.class);
@@ -323,10 +326,13 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			update.unset("pbdate");
 
 			db.updateFirst(query, update, Book.class);
-			
+
 			int bookCount = (int) db.count(new Query(Criteria.where("uid").is(uid).and("pbdate").exists(true)), Book.class);
+			int draftCount = (int) db.count(new Query(Criteria.where("uid").is(uid).and("pbdate").exists(false)), Book.class);
+			
 			update = new Update();
 			update.set("pbcount", bookCount);
+			update.set("drcount", draftCount);
 			
 			query = new Query(Criteria.where("pbdate").exists(true));
 			query.fields().include("pic");
