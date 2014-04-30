@@ -26,6 +26,7 @@ Page.BookList = {
 				
 				var itemDiv = $(document.createElement('div'));
 				itemDiv.data('bid', b.bid);
+				itemDiv.data('pcount', (b.pcount)? b.pcount: 0);
 				itemDiv.addClass('sel_book item box horizontal');
 				
 				var bImage = $(document.createElement('div'));
@@ -51,11 +52,12 @@ Page.BookList = {
 			}
 			
 			// set content links
-			container.find('.item').tap(function() {
+			container.find('.item').click(function() {
 				var item = $(this);
 				var bid = item.data('bid');
 				var src = item.find('.bimage img').attr('src');
 				var title = item.find('.btitle span').text();
+				var pcount = item.data('pcount');
 				
 				Page.back(function(c) {
 					var selBook = c.find('.sel_book');
@@ -67,8 +69,14 @@ Page.BookList = {
 						selBook.find('.bimage img').attr('src', 'images/photo.jpg');
 					}
 					selBook.find('.btitle span').text(title);
+					if (pcount) {
+						document.getElementById('bottom_panel').style.display = 'block';
+					}
+					else {
+						document.getElementById('bottom_panel').style.display = 'none';
+					}
 				});
-			}, true);
+			});
 		});
 	}
 };

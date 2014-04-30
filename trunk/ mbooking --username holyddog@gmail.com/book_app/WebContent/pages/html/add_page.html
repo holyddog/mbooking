@@ -1,98 +1,45 @@
-<div class="tbar_bg dark"></div>
-<div class="tbar">
-<!-- 
-	<div class="flex1 flex_lock box center_middle">
-		<a data-id="btn_c" class="btn_img">
-			<span class="icon cancel"></span>
-			<span class="label">Cancel</span>
-		</a>
+<div class="tbar_bg gray"></div>
+<div class="tbar box horizontal">
+	<!-- 
+	<div data-id="btn_c" class="tbar_btn flex1 flex_lock box center_middle">
+		<div class="box horizontal">
+			<div class="mask_icon tbar_icon" style="-webkit-mask-image: url(icons/cancel.png);"></div>
+			<div class="tbar_label">Cancel</div>
+		</div>
 	</div>
-	<div class="flex1 flex_lock box center_middle relative">
-		<div class="sep absolute aleft"></div>
-		<a data-id="btn_s" class="btn_img">
-			<span class="icon save"></span>
-			<span class="label">Save</span>
-		</a>		
-		<div class="sep absolute aright"></div>
+	<div class="tbar_sep">
 	</div>
-	<div class="flex1 flex_lock box center_middle">
-		<a data-id="btn_p" class="btn_img">
-			<span class="icon publish"></span>
-			<span class="label">Publish</span>
-		</a>
-	</div>	
- -->
-	<a data-id="btn_c" class="btn" style="left: 0;"><span class="cancel" style="background-color: #fff;"></span></a>
-	<div class="fright">
-		<a data-id="btn_s" class="btn_img"><span class="label">SAVE</span></a>
-		<!-- 
-		<div class="sep"></div>
-		<a data-id="btn_p" class="btn_img"><span class="label">MAKE A BOOK</span></a>
-		 -->
+	<div data-id="btn_a" class="tbar_btn flex1 flex_lock box center_middle">
+		<div class="box horizontal">
+			<div class="mask_icon tbar_icon" style="-webkit-mask-image: url(icons/publish.png);"></div>
+			<div class="tbar_label">Save</div>
+		</div>
 	</div>
+	-->	
+	<a data-id="btn_c" class="btn" style="left: 0;"><span class="back"></span></a>
+	<div class="title">New Page</div>
+	<a data-id="btn_a" class="btn_box disabled" style="right: 0;"><span class="accept"></span></a>
 </div>
 <div class="content gray flex1 box vertical">	
-	<!-- 
-	<div class="box horizontal shadow_border" style="background-color: #fff; margin: 10px 10px 0 10px;">
-		<div class="box flex1 vertical">
-			<div class="box horizontal" style="overflow: hidden; padding: 10px 10px 0 10px;">
-				<div style="line-height: 0; margin-right: 10px;">
-					<img style="width: 50px; height: 50px;" src="temp/book_sq.jpg" />
-				</div>
-				<div style="-webkit-box-align: center;" class="box flex1">Neuschwansten Castle</div>
-			</div>
-			<div style="color: #777; font-size: 80%; line-height: 30px; margin: 0 10px; overflow: hidden;">
-				<div class="fleft">UNPUBLISH</div>
-				<div class="fright">42 Pages</div>
-			</div>
-		</div>
-		<div style="width: 50px; border-left: solid 1px #B3B3B3; margin: 10px 0;" class="box center_middle">
-			<div style="width: 20px; height: 20px; background-color: #333; -webkit-mask-size: 20px; 
-	-webkit-mask-position: center center; 
-	-webkit-mask-repeat: no-repeat;
-	-webkit-mask-image: url(icons/next.png);"></div>
-		</div>
-	</div>
-	 --> 
-	<a data-id="link_c" class="link">
-		<span class="overlay blue"></span>
-		<span class="label">Create Book</span>
-	</a>
-	<div class="sel_book box horizontal shadow_border">
-		<div data-id="link_p" class="edit_book flex1 box horizontal">
-			<div class="bimage">
-				<img src="" />
-			</div>
-			<div class="btitle flex1 box"><span></span></div>
-		</div>
-		<div class="show_all box">
-			<div class="sep"></div>
-			<a data-id="link_b" href="javascript:void(0);" class="link_icon">
-				<span class="mask_icon next"></span>
-			</a>
-		</div>
-	</div>
-	<div class="page_label" style="display: none;">Page 1</div>
-	<div class="photo_panel shadow_border">
+	<div id="box_photo">
 		<div id="add_photo" class="fill_dock box center_middle">
-			<div class="photo_label ">
-				<div class="mask_camera"></div>
+			<div id="photo_label">
+				<div class="icon"></div>
 				<div class="label">Add Photo</div>
 			</div>
 		</div>
-		<div class="remove_bg no_display"></div>
-		<a class="remove no_display">
-			<span class="icon"></span>
-		</a>
+		<div id="adj_photo" style="display: none;" class="fill_dock flow_hidden">
+			<div data-id="btn_rem" class="remove_bg">	
+				<a class="remove">
+					<span class="icon"></span>
+				</a>
+			</div>		
+		</div>
+		
+		 <!-- <div class="fill_dock flow_hidden"><img id="drag_img" src="temp/img_4.jpg" /></div>  -->			 
 	</div>
-	<div class="caption_panel shadow_border">
-		<textarea name="caption"></textarea>
-	</div>
-	<div style="height: 50px;"></div>
-	<div id="bottom_panel" style="display: none;">		
-		<a data-id="btn_p" class="link" style="margin: 0;">
-			<span class="overlay blue"></span>
-			<span class="label">Make a Book</span>
-		</a>
+	<div id="box_desc" class="flex1 box">
+		<div id="desc_label">Tap to add a description</div>
+		<div id="desc_text" style="display: none;"></div>
 	</div>
 </div>		

@@ -11,6 +11,19 @@ Service.Page = {
 		};
 		Web.post(url, params, callback);
 	},
+	
+	AddPage: function(picture, imageSize, cropPos, caption, bookId, addBy, callback) {
+		var url = Service.url + '/addPage.json';
+		var params = {
+			pic : picture,
+			size: imageSize,
+			crop: cropPos,
+			caption : caption,
+			bid : bookId, 
+			uid : addBy
+		};
+		Web.post(url, params, callback);
+	},
 
 	EditPage : function(pageID, bookID, userID, desc, picByteArray, date,
 			callback) {

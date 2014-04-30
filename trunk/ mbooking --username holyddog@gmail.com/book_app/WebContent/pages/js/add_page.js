@@ -1,118 +1,271 @@
 Page.AddPage = {
 	url: 'pages/html/add_page.html',
-	init: function(params, container) {		
-		var selBook = container.find('.sel_book');
-		var linkCreate = container.find('[data-id=link_c]');
-		if (!params.total && !Account.lastEditBook) {
-			selBook.hide();
-		}
-		else {
-			linkCreate.hide();
-			
-			if (!selBook.data('bid')) {
-				var lb = Account.lastEditBook;
-				if (lb) {
-					if (lb.pic) {
-						selBook.find('.bimage img').attr('src', Config.FILE_URL + Util.getImage(lb.pic, Config.FILE_SIZE.COVER));
-					}
-					else {
-						selBook.find('.bimage img').attr('src', 'images/photo.jpg');			
-					}
-					selBook.find('.btitle span').text(lb.title);
-					selBook.data('bid', lb.bid);
-					
-					if (lb.pageCount) {
-						document.getElementById('bottom_panel').style.display = 'block';
-					}
-				}
-			}
-		}
+	init: function(params, container) {
+		var self = this;
+		var bid = (params)? params.bid: undefined;
 		
-		var captionText = container.find('[name=caption]');
-		var content = container.find('.content');
-		var addPhoto = content.find('#add_photo');
-		var photoLabel = addPhoto.find('.photo_label');
-		var removeBg = content.find('.remove_bg');
-		var removeBtn = content.find('.remove');
+		var adjPhoto = container.find('#adj_photo');
+		var btnAddPhoto = container.find('#add_photo');
+		btnAddPhoto.tap(function() {
+			Page.popDialog(function(img) {
+				btnAddPhoto.hide();
+				adjPhoto.show();
+				
+				img = 'data:image/jpg;base64,' + img;
+				
+				var imgObj = document.createElement('img');
+				imgObj.setAttribute('id', 'drag_img');
+				imgObj.src = img;
+				
+				adjPhoto.append(imgObj);
+				self.editPhoto(container);					
+				self.checkAccept(container);
+			});
+		});				
+		var descText = container.find('#desc_text');
+		container.find('#box_desc').tap(function() {
+			Page.open('EditCaption', true, { text: descText.text() });
+		});
 		
-		var removeFn = function() {
-			photoLabel.removeClass('no_display');
-			removeBg.addClass('no_display');
-			removeBtn.addClass('no_display');
-			addPhoto.css('background-image', '');
-		};
-		
-		// set toolbar buttons
 		container.find('[data-id=btn_c]').tap(function() {
 			Page.back();
-		});	
-		container.find('[data-id=link_p]').tap(function() {
-			Page.open('CreateBook', true, { bid: selBook.data('bid'), ret: true });
-		}, true);
-		container.find('[data-id=btn_s]').tap(function() {
-			var bid = container.find('.sel_book').data('bid');			
-			var bgImage = $('#add_photo').css('background-image');
-			var pic = null;
-			if (bgImage != 'none') {
-				pic = bgImage.split(',')[1].replace(')', '');
-			}
-			
-			if (!bid) {
-				MessageBox.alert({ message: 'Please select a book' });
-				return;
-			}
-			else if (!pic && !captionText.val()) {
-				MessageBox.alert({ message: 'Please insert photo or caption' });
-				return;				
-			}
-			
-			Page.showLoading();
-			
-			var fn = function(data) {
-				Page.hideLoading();
+		});
+		var btnAccept = container.find('[data-id=btn_a]');
+		btnAccept.tap(function() {
+			if (!btnAccept.hasClass('disabled')) {
+				Page.btnShowLoading(btnAccept[0]);
 				
-				MessageBox.drop('New page added');
-
-				// reset form
-				removeFn();
-				captionText.val(null);
+				var pos = 0;
+				var dir = $(drag_img).data('dir');
+				if (dir == 0) {
+					pos = -1 * parseInt(drag_img.style.webkitTransform.split('(')[1].split('px, ')[0]);
+				}
+				else if (dir == 1) {
+					pos = -1 * parseInt(drag_img.style.webkitTransform.split('(')[1].split('px, ')[1]);
+				}
 				
-				// update local user data
-				Account.lastEditBook = {
-					bid: data.bid,
-					pic: data.pic,
-					title: data.title,
-					pageCount: data.pcount
-				};
-				localStorage.setItem("u", JSON.stringify(Account));
-				
-				if (data.pcount) {
-					document.getElementById('bottom_panel').style.display = 'block';
+				Service.Page.AddPage(drag_img.src, drag_img.parentNode.offsetWidth, pos, desc_text.innerText, bid, Account.userId, function(data) {
+					Page.btnHideLoading(btnAccept[0]);
+					
+					Page.back(function(c, page) {
+						page.addPage(c, data);
+						
+						// set cover
+						if (data.seq == 1) {
+							c.find('.book_size').css('background-image', 'url(' + Util.getImage(data.pic, 2) + ')');
+						}
+						
+						var counter = c.find('.pcount span');
+						counter.text(parseInt(counter.text()) + 1);
+					});
+				});
+			}
+		});
+		
+		container.find('[data-id=btn_rem]').tap(function() {
+			adjPhoto.find('img').remove();
+			adjPhoto.hide();
+			btnAddPhoto.show();
+			
+			self.checkAccept(container);
+		});
+		
+		box_photo.style.height = box_photo.offsetWidth + 'px';
+		self.editPhoto(container);
+	},
+	
+	checkAccept: function(container) {
+		var btnAccept = container.find('[data-id=btn_a]'); 
+		var img = container.find('#drag_img');
+		if (img.length > 0 && img.attr('src')) {
+			btnAccept.removeClass('disabled');
+		}
+		else {
+			btnAccept.addClass('disabled');
+		}
+	},
+	
+	updateDesc: function(container, text) {
+		container.find('#desc_text').show().text(text);
+		container.find('#desc_label').hide();
+		this.checkAccept(container);
+	},
+	
+	editPhoto: function(container) {
+		var drag = container.find('#drag_img');
+		
+		var target = undefined;
+		if (Device.isMobile()) {
+			target = {
+				x: function(e) {
+					return e.originalEvent.touches[0].pageX;
+				},
+				y: function(e) {
+					return e.originalEvent.touches[0].pageY;				
 				}
 			};
-			Service.Page.CreatePage(bid, Account.userId, captionText.val(), pic, null, fn);
-		});
-		container.find('[data-id=btn_p]').tap(function() {		
-			var bid = selBook.data('bid');
-			Page.open('PublishBook', true, { bid: bid });
+		}
+		else {
+			target = {
+				x: function(e) {
+					return e.pageX;
+				},
+				y: function(e) {
+					return e.pageY;				
+				}
+			};			
+		}
+		
+		var img_dir = 0; // horizontal = 0, vertical = 1
+		var start = false;
+		var pos = { x: 0, y: 0, sx: 0, sy: 0 };
+		var max = 0;
+		drag.load(function() {			
+			var iw = drag.width();
+			var ih = drag.height();
+			var pw = drag.parent().width();
+			var ph = drag.parent().height();
+			
+			if (ih > iw) {
+				img_dir = 1;
+				drag.data('dir', 1);
+				drag_img.style.width = drag.parent().height() + 'px';
+			}
+			else {
+				drag.data('dir', 0);
+				drag_img.style.height = drag.parent().height() + 'px';
+			}
+			iw = drag.width();
+			ih = drag.height();
+			
+			switch (img_dir) {
+				case 0: {
+					drag_img.style.webkitTransform = 'translate3d(-' + ((iw / 2) - (pw / 2)) + 'px, 0px, 0px)';
+					max = -1 * (pw - iw / 2);
+					break;
+				}
+				case 1: {
+					drag_img.style.webkitTransform = 'translate3d(0px, -' + ((ih / 2) - (ph / 2)) + 'px, 0px)';
+					max = -1 * (ph - ih / 2);
+					break;
+				}
+			}
 		});
 		
-		// set content links
-		container.find('[data-id=link_b]').tap(function() {
-			Page.open('BookList', true);
-		});
-		linkCreate.tap(function() {
-			Page.open('CreateBook', true, { ret: 1 });
-		});
-		
-		addPhoto.tap(function() {			
-			Page.popDialog(function(img) {
-				addPhoto.css('background-image', 'url(' + 'data:image/jpg;base64,' + img + ')');
-				photoLabel.addClass('no_display');
-				removeBg.removeClass('no_display');
-				removeBtn.removeClass('no_display');
+		drag.bind('mousedown touchstart', function(e) {
+			e.preventDefault();
+			
+			start = true;							
+			
+			switch (img_dir) {
+				case 0: {
+					pos.x = target.x(e);
+					pos.sx = drag_img.style.webkitTransform.split('(')[1].split('px')[0];	
+					break;
+				}
+				case 1: {
+					pos.y = target.y(e);
+					pos.sy = drag_img.style.webkitTransform.split('(')[1].split('px, ')[1];
+					break;
+				}
+			}
+			
+			$(document).bind('mouseup touchend', function() {
+				start = false;
 			});
-		}, true);
-		removeBtn.tap(removeFn);
+		});
+		drag.bind('mousemove touchmove', function(e) {
+			e.preventDefault();
+			
+			if (start) {				
+				switch (img_dir) {
+					case 0: {
+						var sx = pos.x; 				
+						var x = pos.x - target.x(e);				
+						var posX = (pos.sx - x);
+						var curX = drag_img.style.webkitTransform.split('(')[1].split('px')[0];
+						
+						if (sx < target.x(e)) { // drag right 
+							if (posX <= 0) {
+								drag_img.style.webkitTransform = 'translate3d(' + posX + 'px, 0px, 0px)';
+							}
+							else if (curX <= 0) {
+								drag_img.style.webkitTransform = 'translate3d(' + 0 + 'px, 0px, 0px)';						
+							}
+						}
+						else { // drag left 
+							if (posX >= max) {
+								drag_img.style.webkitTransform = 'translate3d(' + posX + 'px, 0px, 0px)';
+							}
+							else if (curX >= max) {
+								drag_img.style.webkitTransform = 'translate3d(' + max + 'px, 0px, 0px)';						
+							}					
+						}	
+						break;
+					}
+					case 1: {
+						var sy = pos.y; 				
+						var y = pos.y - target.y(e);				
+						var posY = (pos.sy - y);
+						var curY = drag_img.style.webkitTransform.split('(')[1].split('px, ')[1];
+						
+						if (sy < target.y(e)) { // drag down 
+							if (posY <= 0) {
+								drag_img.style.webkitTransform = 'translate3d(0px, ' + posY + 'px, 0px)';
+							}
+							else if (curY <= 0) {
+								drag_img.style.webkitTransform = 'translate3d(0px, ' + 0 + 'px, 0px)';						
+							}
+						}
+						else { // drag up 
+							if (posY >= max) {
+								drag_img.style.webkitTransform = 'translate3d(0px, ' + posY + 'px, 0px)';
+							}
+							else if (curY >= max) {
+								drag_img.style.webkitTransform = 'translate3d(0px, ' + max + 'px, 0px)';						
+							}					
+						}
+						break;
+					}
+				}
+			}
+		});
+		drag.bind('mouseup touchend', function(e) {
+			e.preventDefault();
+			
+			start = false;
+		});
+		
+//		if (Device.isMobile()) {
+//			drag.bind('touchstart', function(e) {
+//				e.preventDefault();
+//				
+//				start = true;			
+//				pos.x = e.originalEvent.touches[0].pageX;
+//				pos.sx = drag.css('-webkit-transform').split(', ')[4];
+//				
+//				$(document).addEventListener('touchend', function() {
+//					start = false;
+//				});
+//			});
+//
+//			drag.bind('touchmove', function(e) {
+//				e.preventDefault();
+//				
+//				if (start) {				
+//					var x = pos.x - e.originalEvent.touches[0].pageX;
+//					drag_img.style.webkitTransform = 'translate3d(' + (pos.sx - x) + 'px, 0px, 0px)';
+//				}
+//			});			
+//
+//			drag.bind('touchend', function(e) {
+//				e.preventDefault();
+//				
+//				start = false;
+//			});
+//		}
+//		else {
+//			
+//		}
 	}
 };

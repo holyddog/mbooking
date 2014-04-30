@@ -42,11 +42,13 @@ Page.SignIn = {
 							email: data.email,
 							displayName: data.dname,
 							userName: data.uname,
-							lastEditBook: data.leb,
-							cover: data.cover,
 							picture: data.pic,
-							followerCount: data.fcount,
-							bookCount: data.pbcount,
+							
+//							cover: data.cover,
+//							picture: data.pic,
+//							followerCount: data.fcount,
+//							bookCount: data.pbcount
+							
                             fbObject:fbobj
 						};
                                     
