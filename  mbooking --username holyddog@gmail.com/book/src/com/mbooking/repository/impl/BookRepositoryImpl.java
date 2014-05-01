@@ -270,6 +270,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			query.fields().include("desc");
 			query.fields().include("pic");
 			query.fields().include("pcount");
+			query.fields().include("pbdate");
 
 			Book book = db.findOne(query, Book.class);
 
@@ -291,7 +292,8 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 	}
 
 	@Override
-	public Boolean publishBook(Long bid, Long uid, String cover) {
+	public User publishBook(Long bid, Long uid, String cover) {
+		User user = null;
 		try {
 			// update book status to publish
 			Criteria criteria = Criteria.where("bid").is(bid);
@@ -310,17 +312,22 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			update.set("cover", cover);
 
 			db.updateFirst(new Query(Criteria.where("uid").is(uid)), update, User.class);
-
-			return true;
+			
+			user = new User();
+			user.setPbcount(bookCount);
+			user.setDrcount(draftCount);
+			user.setCover(cover);
 		} catch (Exception e) {
-			return false;
+			e.printStackTrace();
 		}
+		return user;
 	}
 
 	@Override
-	public Boolean unpublishBook(Long bid, Long uid) {
+	public User unpublishBook(Long bid, Long uid) {
+		User user = null;
 		try {
-			Criteria criteria = Criteria.where("bid");
+			Criteria criteria = Criteria.where("bid").is(bid);
 			Query query = new Query(criteria);
 			Update update = new Update();
 			update.unset("pbdate");
@@ -338,8 +345,14 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			query.fields().include("pic");
 			query.sort().on("pbdate", Order.DESCENDING);
 			Book book = db.findOne(query, Book.class);
+			
+			user = new User();
+			user.setPbcount(bookCount);
+			user.setDrcount(draftCount);
+			
 			if (book != null) {
 				update.set("cover", book.getPic());
+				user.setCover(book.getPic());
 			}
 			else {
 				update.unset("cover");
@@ -347,9 +360,9 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			
 			db.updateFirst(new Query(Criteria.where("uid").is(uid)), update, User.class);
 			
-			return true;
+			return user;
 		} catch (Exception e) {
-			return false;
+			return user;
 		}
 	}
 
@@ -530,5 +543,13 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 		Book b = db.findOne(query, Book.class);
 		return b.getPic();
 	}
-	
+
+	@Override
+	public Boolean changeCover(Long bid, String newCover) {
+		Query query = new Query(Criteria.where("bid").is(bid));
+		Update update = new Update();
+		update.set("pic", newCover);
+		db.updateFirst(query , update, Book.class);
+		return true;
+	}	
 }

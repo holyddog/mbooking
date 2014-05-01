@@ -175,14 +175,7 @@ public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 	}
 
 	@Override
-	public Boolean isFollow(Long uid, Long auid) {
-		
-		return db.count(new Query(Criteria.where("auid").is(auid).and("uid").is(uid)), Follow.class)>0;
-		
-		
+	public Boolean isFollow(Long uid, Long auid) {		
+		return db.count(new Query(Criteria.where("auid").is(auid).and("uid").is(uid)), Follow.class) > 0;
 	}
-	
-	
-	
-
 }

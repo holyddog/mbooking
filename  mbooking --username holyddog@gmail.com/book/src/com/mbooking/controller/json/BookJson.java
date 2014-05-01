@@ -128,7 +128,7 @@ public class BookJson {
 			@RequestParam(value = "uid") Long uid,
 			@RequestParam(value = "cover") String cover) {
 
-		return ResultResponse.getResult("success", bookRepo.publishBook(bid, uid, cover));
+		return ResultResponse.getResult("user", bookRepo.publishBook(bid, uid, cover));
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/unpublishBook.json")
@@ -137,6 +137,15 @@ public class BookJson {
 			@RequestParam(value = "bid") Long bid,
 			@RequestParam(value = "uid") Long uid) {
 
-		return ResultResponse.getResult("success", bookRepo.unpublishBook(bid, uid));
+		return ResultResponse.getResult("user", bookRepo.unpublishBook(bid, uid));
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/changeCover.json")
+	public @ResponseBody
+	Object changeCover(
+			@RequestParam(value = "bid") Long bid,
+			@RequestParam(value = "cover") String newCover) {
+
+		return ResultResponse.getResult("success", bookRepo.changeCover(bid, newCover));
 	}
 }
