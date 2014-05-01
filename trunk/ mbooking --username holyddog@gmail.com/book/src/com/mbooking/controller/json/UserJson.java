@@ -1,7 +1,5 @@
 package com.mbooking.controller.json;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +9,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mbooking.common.ErrorResponse;
 import com.mbooking.common.ResultResponse;
-import com.mbooking.model.Book;
 import com.mbooking.model.User;
 import com.mbooking.repository.BookRepository;
 import com.mbooking.repository.FollowRepository;
@@ -29,16 +26,9 @@ public class UserJson {
 	@RequestMapping(method = RequestMethod.GET, value = "/getProfile.json")
 	public @ResponseBody Object getProfile(
 			@RequestParam(value = "uid") Long uid,
-			@RequestParam(value = "follid", required = false) Long follid	//Follow id
+			@RequestParam(value = "gid", required = false) Long guestId
 			) {
-		User user = userRepo.findById(uid);
-		if (user != null) {			
-			if (follid != null) {
-				user.setIsFollow(followRepo.isFollow(follid, uid));
-			}			
-			return user;
-		}
-		return ErrorResponse.getError("User not found");
+		return userRepo.getUserProfile(uid, guestId);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/getMyLastBooks.json")

@@ -3,6 +3,7 @@ package com.mbooking.repository;
 import java.util.List;
 
 import com.mbooking.model.Book;
+import com.mbooking.model.User;
 
 public interface BookRepostitoryCustom {
 
@@ -14,9 +15,9 @@ public interface BookRepostitoryCustom {
 
 	public List<Book> edit_seq(Long[] bid, Integer[] seq, Long uid);
 
-	public Boolean publishBook(Long bid, Long uid, String cover);
-
-	public Boolean unpublishBook(Long bid, Long uid);
+	public User publishBook(Long bid, Long uid, String cover);
+	public User unpublishBook(Long bid, Long uid);
+	public Boolean changeCover(Long bid, String newCover);
 
 	public Book findBookWithPages(Long bid, Long uid);
 	

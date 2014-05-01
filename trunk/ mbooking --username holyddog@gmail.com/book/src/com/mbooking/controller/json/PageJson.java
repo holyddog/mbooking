@@ -1,5 +1,7 @@
 package com.mbooking.controller.json;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -84,5 +86,18 @@ public class PageJson {
 			@RequestParam(value = "uid") Long uid) 
 	{
 		return ResultResponse.getResult("success", pageRepo.delete(pid, bid, uid));
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/getBookPages.json")
+	public @ResponseBody
+	Object getBookPages(
+			@RequestParam(value = "bid") Long bid) 
+	{
+		List<Page> pages = pageRepo.findByBid(bid);
+		if (pages != null) {
+			return pages;
+		}
+
+		return ErrorResponse.getError("Book page not found");
 	}
 }

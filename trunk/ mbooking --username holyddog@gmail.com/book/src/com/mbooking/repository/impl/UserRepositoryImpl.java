@@ -1,5 +1,9 @@
 package com.mbooking.repository.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -7,7 +11,9 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
 import com.mbooking.constant.ConstValue;
+import com.mbooking.model.Book;
 import com.mbooking.model.FBobj;
+import com.mbooking.model.Follow;
 import com.mbooking.model.User;
 import com.mbooking.repository.UserRepostitoryCustom;
 import com.mbooking.util.Convert;
@@ -188,6 +194,69 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 			return false;
 		
 		}
+	}
+
+	@Override
+	public HashMap<String, Object> getUserProfile(Long uid, Long guestId) {
+		if (guestId == null) {
+			guestId = uid;
+		}
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		
+		// get user info
+		Query query = new Query(Criteria.where("uid").is(uid));
+		
+		query.fields().include("email");
+		query.fields().include("dname");
+		query.fields().include("uname");
+		query.fields().include("pic");
+		query.fields().include("cover");
+		
+		query.fields().include("fcount"); // followers
+		query.fields().include("fgcount"); // following
+		query.fields().include("pbcount"); // book count
+		query.fields().include("drcount"); // draft count
+		
+		User user = db.findOne(query, User.class);
+		map.put("user", user);
+		
+		// find public book
+		query = new Query(Criteria.where("uid").is(uid).and("pub").is(true).and("pbdate").exists(true));
+		
+		query.fields().include("title");
+		query.fields().include("pic");
+		query.fields().include("pcount");
+		
+		List<Book> pubBooks = db.find(query, Book.class);
+		map.put("pubBooks", pubBooks);
+		
+		// find private/draft book for author
+		if (uid.equals(guestId)) {
+			query = new Query(Criteria.where("uid").is(uid).and("pub").is(false).and("pbdate").exists(true));
+			
+			query.fields().include("title");
+			query.fields().include("pic");
+			query.fields().include("pcount");
+			
+			List<Book> priBooks = db.find(query, Book.class);
+			map.put("priBooks", priBooks);
+			
+			query = new Query(Criteria.where("uid").is(uid).and("pbdate").exists(false));
+			
+			query.fields().include("title");
+			query.fields().include("pic");
+			query.fields().include("pcount");
+			
+			List<Book> drBooks = db.find(query, Book.class);
+			map.put("drBooks", drBooks);
+		}
+		else {			
+			boolean isFollow = db.count(new Query(Criteria.where("auid").is(uid).and("uid").is(guestId)), Follow.class) > 0;
+			map.put("isFollow", isFollow);			
+		}
+		
+		return map;
 	}
 
 }
