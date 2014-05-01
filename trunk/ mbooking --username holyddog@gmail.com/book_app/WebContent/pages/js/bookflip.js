@@ -6,7 +6,11 @@ Page.Book = {
 		Page.bodyShowLoading(content);
 		
 		// set content data		
-		Service.Book.GetBook(params.bid, params.uid, function(data) {
+//		Service.Book.GetBook(params.bid, params.uid, function(data) {
+//			Page.bodyHideLoading(content);
+//			self.load(container, data);
+//		});
+		Service.Book.GetBook(5, 3, function(data) {
 			Page.bodyHideLoading(content);
 			self.load(container, data);
 		});
@@ -14,7 +18,7 @@ Page.Book = {
 	
 	load: function(container, bookData) {		
 		var index = 0;
-		var delay_flip =400 ;//ms
+		var delay_flip =0 ;//ms
 		// generate book pages
 		var data = bookData.pages;
 		if (data.length) {		
@@ -27,8 +31,19 @@ Page.Book = {
 						f_ev_str='';
 					}
 					
-					var page =  $('<div class="page_nav fill_dock box vertical" style="pointer-events: none; visibility: hidden; -webkit-transform-origin: left center; left: 50%; -webkit-transform-style: preserve-3d;'
+					var page;
+					if(i==-1)
+					{
+						 page =  $('<div class="page_nav fill_dock box vertical" style="z-index:1000; pointer-events: none; visibility: hidden; -webkit-transform-origin: left center; left: 50%; -webkit-transform-style: preserve-3d;'
+									+tran_str+'"></div>');					
+						
+						
+					}
+					else{	
+					
+					   page =  $('<div class="page_nav fill_dock box vertical" style="pointer-events: none; visibility: hidden; -webkit-transform-origin: left center; left: 50%; -webkit-transform-style: preserve-3d;'
 								+tran_str+'"></div>');					
+					}
 					
 					var frontpage='';
 					var fpic=null;
@@ -166,7 +181,7 @@ Page.Book = {
 						index = data.length;
 					
 						// set background image
-						var bgImage = Config.FILE_URL + Util.getImage(bookData.pic, Config.FILE_SIZE.LARGE);
+						var bgImage = /*Config.FILE_URL +*/ Util.getImage(bookData.pic, Config.FILE_SIZE.LARGE);
 						var img = $('<img class="book_bg absolute fade_out show" src="' + bgImage + '" />');
 						img.load(function() {
 
@@ -202,73 +217,12 @@ Page.Book = {
 				container.find('.bdesc').text(bookData.desc);
 				container.find('.author_info .name').text(bookData.author.dname);
 				if (bookData.author.pic) {
-					container.find('.author_info img').attr('src', Config.FILE_URL + Util.getImage(bookData.author.pic, Config.FILE_SIZE.SQUARE));
+					container.find('.author_info img').attr('src', /*Config.FILE_URL + */Util.getImage(bookData.author.pic, Config.FILE_SIZE.SQUARE));
 				}
 				container.find('.text_bar .fright').text(bookData.pcount + ' Page' + ((bookData.pcount > 1)? 's': ''));
 				
-				if (Device.isMobile()) {
-					
-//					self.bind('touchstart', function(e) {	
-//						if (!allowDefault)
-//							e.preventDefault();
-//
-//						self.pos = self.offset();
-//						self.size = { w: self.width(), h: self.height() };
-//						self.addClass('highlight');
-//					});
-//					self.bind('touchmove', function(e) {
-//						if (!allowDefault)
-//							e.preventDefault();
-//						
-//						var x = e.originalEvent.touches[0].pageX;
-//						var y = e.originalEvent.touches[0].pageY;
-//						
-//						if (x > self.pos.left + self.size.w || y > self.pos.top + self.size.h) {
-//							self.removeClass('highlight');
-//						}
-//						else if (x < self.pos.left || y < self.pos.top) {
-//							self.removeClass('highlight');
-//						}
-//					});
-//					self.bind('touchend', function(e) {
-//						if (!allowDefault)
-//							e.preventDefault();
-//						
-//						if (self.hasClass('highlight')) {
-//							self.callback();
-//							self.removeClass('highlight');
-//						}
-//					});
-				}
-				else {
-					container.find('.f_ev').bind('mousedown', function(e) {
-						if (e.button == 0) {
-							e.preventDefault();
-							var x = e.originalEvent.touches[0].pageX;
-							var y = e.originalEvent.touches[0].pageY;
-							
-							console.log("mousedown x:"+x+"  y:"+y);
-						}
-					});
-					container.find('.f_ev').bind('mouseout', function(e) {
-						if (e.button == 0) {
-							e.preventDefault();
-							var x = e.originalEvent.touches[0].pageX;
-							var y = e.originalEvent.touches[0].pageY;
-							
-							console.log("mouseout x:"+x+"  y:"+y);
-						}
-					});
-					container.find('.f_ev').bind('mouseup', function(e) {
-						if (e.button == 0) {
-							e.preventDefault();
-							var x = e.originalEvent.touches[0].pageX;
-							var y = e.originalEvent.touches[0].pageY;
-							
-							console.log("mouseup x:"+x+"  y:"+y);
-						}
-					});
-				}
+				
+				
 				
 //				var zcount=0;
 //				var lock_forward_touch =false;
@@ -364,6 +318,131 @@ Page.Book = {
 //					}
 //					
 //				});
+			
+				var zcount=0;
+				
+				var stop = true;
+				var ang_tmp = 0;
+				var w = $(window).width();
+				var direct = 1; // 1 next 0 back
+				
+				function start(x){
+					container.find('.page_nav').eq(index)[0].style.webkitTransition=  '';
+					if(x>=w/2){
+						//alert("next");
+						direct = 1;
+						
+						if (index > 0) {
+
+//							zcount++;
+//		
+//							var next_nav  = container.find('.page_nav').eq(index-1);
+//							next_nav[0].style.zIndex = zcount+2;
+////							
+//							var page_nav  = container.find('.page_nav').eq(index);
+//							page_nav[0].style.zIndex = zcount+1;
+//							page_nav.addClass('zindex_over');
+//							
+//							var prev_nav  = container.find('.page_nav').eq(index+1);
+//							
+//							prev_nav.removeClass('zindex_over');
+//							prev_nav.className = "page_nav fill_dock box vertical";
+//							
+//							var two_step_next_nav  = container.find('.page_nav').eq(index-2);
+//							if(two_step_next_nav)two_step_next_nav.removeClass('no_display');
+//							
+//							var two_step_prev_nav  = container.find('.page_nav').eq(index+2);
+//							if((index+2<=data.length+1)&&two_step_prev_nav)two_step_prev_nav.addClass('no_display');
+//							
+//							
+//							
+//							lock_forward_touch = true;
+//							page_nav.css('-webkit-transform', 'rotateY(-180deg)');
+//							
+//					
+//						
+//							setTimeout(function() {
+//								lock_forward_touch = false;	
+//							}, delay_flip*.4);
+//							
+//							setTimeout(function() {
+//								page_nav.removeClass('zindex_over');
+//							}, delay_flip*.8);
+//										
+//							index--;
+//						
+						}
+					}else{
+						//alert("back");
+						direct = 0;
+					}
+					stop = false;
+				}
+				
+				function move(x){
+					if(!stop){
+						var cdx = ((2*x)/w - 1);
+						var angle =Math.round(Math.acos(cdx)* (180 / Math.PI));
+						if(angle !=ang_tmp){
+							ang_tmp = angle;
+							container.find('.page_nav').eq(index)[0].style.webkitTransform = "rotateY("+ang_tmp+"deg)";
+						}
+					}
+				}
+				
+				function end(){
+					
+					container.find('.page_nav').eq(index)[0].style.webkitTransition=  '200ms ease-in-out';
+					
+					if(ang_tmp>=90){
+						container.find('.page_nav').eq(index)[0].style.webkitTransform = "rotateY(180deg)";
+					}else{
+						container.find('.page_nav').eq(index)[0].style.webkitTransform = "rotateY(0deg)";
+					}
+					 stop = true;
+				}
+				
+				if (Device.isMobile()) {
+					container.bind('touchstart', function(e) {
+						e.preventDefault();
+						var x = e.originalEvent.touches[0].pageX;
+						start(x);
+					});
+					container.bind('touchmove', function(e) {
+							if(!stop){
+								e.preventDefault();
+								var x = e.originalEvent.touches[0].pageX;
+								move(x);
+							}
+					});
+					container.bind('touchend', function(e) {
+						e.preventDefault();
+						end();
+					});
+				}
+				else {
+					container.bind('mousedown', function(e) {
+						if (e.button == 0) {
+							e.preventDefault();
+							var x = e.originalEvent.offsetX;
+							start(x);
+						}
+					});
+					container.bind('mousemove', function(e) {
+							if(!stop&&e.button == 0){
+								e.preventDefault();
+								var x = e.originalEvent.offsetX;
+								move(x);
+							}
+					});
+					container.bind('mouseup', function(e) {
+						if (e.button == 0) {
+							e.preventDefault();
+							end();
+						}
+					});
+				}
+				
 				
 				var count = 0;
 				container.find('.page_nav .pic_box img').load(function() {

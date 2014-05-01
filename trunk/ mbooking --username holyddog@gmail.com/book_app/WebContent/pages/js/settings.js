@@ -26,7 +26,7 @@ Page.Settings = {
                       
             Device.PhoneGap.logoutFacebook(function(){});
 		});
-        
+
         if(Account.fbObject.fbname){
             document.getElementById("fblogin_check").className = "ch_logfb checked";
             document.getElementById("fblogin_check").style.background="green";
@@ -42,24 +42,18 @@ Page.Settings = {
                   
                 if(button==2){
                   Device.PhoneGap.logoutFacebook(
-                                                 function(){
-                    document.getElementById("fblogin_check").className = "ch_logfb";
-                    document.getElementById("fblogin_check").style.background="";
+                    function(){
+                       document.getElementById("fblogin_check").className = "ch_logfb";
+                       document.getElementById("fblogin_check").style.background="";
                   
-                    Service.User.unLinkFB(Account.userId, function(data) {
+                       Service.User.unLinkFB(Account.userId, function(data) {
                                   
                                      var fbobj = {};
-                                     if(data.fbobj){
-                                        if(data.fbobj.fbid)
-                                            fbobj = {fbpic:data.fbobj.pic,fbname:data.fbobj.dname,fbemail:data.fbobj.email};
-                                     }
-
-                                     
                                      Account.fbObject = fbobj;
                                      localStorage.setItem('u', JSON.stringify(Account));
                                      
                                     });
-                                                 }
+                    }
                    );
                 }
                      
@@ -81,7 +75,18 @@ Page.Settings = {
                      
                 Device.PhoneGap.loginFacebook(
                     function(user){
-                            Service.User.linkFB(Account.userId,user.fbid,user.fbpic,user.fbname,user.fbemail,function(data) {});
+                            Service.User.linkFB(Account.userId,user.fbid,user.fbpic,user.fbname,user.fbemail,function(data) {
+                                                
+                                                var fbobj = {fbpic:user.fbpic,fbname:user.fbname};
+                                                
+                                                if(user.fbemail!=undefined){
+                                                    fbobj.fbemail = user.fbemail;
+                                                }
+                                                
+                                                Account.fbObject = fbobj;
+                                                localStorage.setItem('u', JSON.stringify(Account));
+                                                
+                            });
 
                        }
                     );
