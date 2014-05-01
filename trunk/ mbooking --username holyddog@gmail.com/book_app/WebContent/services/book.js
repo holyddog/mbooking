@@ -97,6 +97,16 @@ Service.Book = {
 		Web.get(url, params, callback);
 		
 	},
+	
+	ChangeCover: function(bid, cover, callback) {
+		var url = Service.url + '/changeCover.json';
+		var params = {
+			bid: bid,
+			cover: cover
+		};
+		Web.post(url, params, callback);
+		
+	},
 
 	GetBooksByUid : function(userID,skip,limit, callback) {
 		var url = Service.url + '/getBooksByUid.json';

@@ -301,6 +301,33 @@ textarea {
 .btn span.setting {
 	-webkit-mask-image: url(../icons/setting.png);
 }
+.btn span.edit {
+	-webkit-mask-image: url(../icons/pencil.png);
+}
+
+.btn_text {
+	width: auto;
+	height: 50px;
+	background-color: #99CC00;
+	color: #fff;
+	right: 0px;
+	line-height: 50px;
+	padding: 0 15px;
+	font-size: 80%;
+	width: 100px;
+	text-align: center;
+}
+.btn_text.gray {
+	background-color: #ccc;
+	color: #333;
+}
+.btn_text.gray.follow {
+	background-color: #99CC00;
+	color: #fff;
+}
+.btn_text.used {
+	background-color: #FFBB33;
+}
 
 .btn_box span.accept {
 	-webkit-mask-image: url(../icons/accept.png);
@@ -699,6 +726,34 @@ textarea {
 	opacity: .4;
 }
 
+.book_con {
+	overflow: hidden; 
+	padding: 5px;
+}
+.book_con .b {	
+	margin: 5px;
+	background-color: #fff;
+	position: relative;
+	float: left;
+}
+.book_con .b .panel img {
+	width: 24px;
+	height: 24px;
+	display: block;
+	margin: 5px;
+}
+.book_con .b .panel .author {
+	font-size: 70%;
+	display: flex;
+	line-height: 34px;
+	font-weight: bold;
+}
+.book_con .b .panel .author .text {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	min-width: 0;
+}
 .book_size {
 	position: relative;
 	float: left; 
@@ -729,7 +784,7 @@ textarea {
 	left: 0;
 	top: 0;
 	width: 100%;
-	height: 100%;
+	height: 75%;
 	background-image: -webkit-linear-gradient(top, rgba(0,0,0,0.6), rgba(0,0,0,0) 100%);
 }
 .book_size.cover:after {

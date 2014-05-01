@@ -22,9 +22,9 @@ Page.Book = {
 		btnShare.tap(function() {
 			alert('share');
 		});	
-		var btnSetting = container.find('[data-id=btn_st]');
+		var btnSetting = container.find('[data-id=btn_e]');
 		btnSetting.tap(function() {
-			Page.open('PublishBook', true, { bid: params.bid });
+			Page.open('EditBook', true, { bid: params.bid });
 		});
 		
 		if (params.preview) {
