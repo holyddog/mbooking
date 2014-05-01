@@ -17,7 +17,11 @@ Page.Comments = {
 		var btnSend = container.find('[data-id=btn_send]');
 		btnSend.tap(function() {
 			if (!btnSend.hasClass('disabled')) {
-				var c = $(self.createComment('images/user.jpg', Account.displayName, inputMsg.val(), 'Sending...'));
+				var pic = 'images/user.jpg';
+				if (Account.picture) {
+					pic = Util.getImage(Account.picture, 3);
+				}
+				var c = $(self.createComment(pic, Account.displayName, inputMsg.val(), 'Sending...'));
 				c.prependTo(list);
 				
 				Service.Book.PostComment(params.bid, Account.userId, inputMsg.val(), function(data) {
@@ -51,7 +55,7 @@ Page.Comments = {
 			for (var i = 0; i < data.length; i++) {
 				var c = data[i];
 				
-				list.append(self.createComment('images/user.jpg', c.dname, c.comment, c.strtime));
+				list.append(self.createComment(c.pic, c.dname, c.comment, c.strtime));
 			} 
 		});
 	},
@@ -64,7 +68,12 @@ Page.Comments = {
 		imageDiv.className = 'image';
 		
 		var img = document.createElement('img');
-		img.src = image;
+		if (image) {
+			img.src = Util.getImage(image, 3);
+		}
+		else {
+			img.src = 'images/user.jpg';
+		}
 		
 		var cbox = document.createElement('div');
 		cbox.className = 'cbox flex1';

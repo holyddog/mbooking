@@ -232,17 +232,44 @@
 	background-size: 100%;
 	background-position: center center;
 }
+#page_Profile .link_add {
+	float: left;
+	margin: 5px;
+	background-color: #e2e2e2;
+}
+
+#page_Profile .link_add .icon {
+	margin: 0 auto;
+	width: 40px;
+	height: 40px;
+	background-color: #777;
+	-webkit-mask-size: 20px;
+	-webkit-mask-position: center center;
+	-webkit-mask-repeat: no-repeat;
+	-webkit-mask-image: url(../icons/add.png);
+}
+
+#page_Profile .link_add .label {
+	font-size: 75%;
+	color: #777;
+}
 #page_Profile .header_overlay {
 	background-color: #000; 
 	opacity: .3; 
 	z-index: 0;
 }
 #page_Profile .header_title {
-	padding: 25px 10px; overflow: hidden;
+	padding: 15px 10px; 
+	overflow: hidden;
 }
 #page_Profile .header_title span {
-	font-size: 180%; 
+	font-size: 180%;
 	color: #fff;
+	overflow: hidden;
+	white-space: nowrap;
+	display: block;
+	text-overflow: ellipsis;
+	line-height: 40px;
 }
 #page_Profile .header_title a {
 	float: right;
@@ -527,33 +554,19 @@
 	border-radius: 60px;
 }
 
-#page_EditBook .btn_pub {
-	width: auto;
-	height: 50px;
-	background-color: #99CC00;
-	color: #fff;
-	right: 0px;
-	line-height: 50px;
-	padding: 0 15px;
-	font-size: 80%;
-	width: 100px;
-	text-align: center;
-}
-#page_EditBook .btn_pub.unpub {
-	background-color: #FFBB33;
-}
 #page_EditBook .cmd_panel {
 	-webkit-box-shadow: 0px 1px 0px 0px rgba(50, 50, 50, 0.25);
 	padding-bottom: 10px;
 }
 #page_EditBook .cmd_panel .box {
-	height: 40px;
-	line-height: 40px;
+	height: 50px;
+	line-height: 50px;
 	text-align: center;
 	margin: 0 10px 0 10px;
 	font-size: 70%;
 	font-weight: bold;
-	background-color: #e2e2e2;
+	background-color: #6DCAEC;
+	color: #fff;
 }
 #page_EditBook .cmd_panel .box .flex1 {	
 }
@@ -562,7 +575,7 @@
 }
 #page_EditBook .cmd_panel .sep {
 	width: 1px;
-	height: 20px;
+	height: 30px;
 	margin-top: 10px;
 	background-color: #fff;
 }

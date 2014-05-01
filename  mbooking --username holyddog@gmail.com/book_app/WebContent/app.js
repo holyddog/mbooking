@@ -7,8 +7,8 @@ Config = {
 	FADE_DELAY: 250,
 	
 
-//	FILE_URL: 'http://' + window.location.hostname + '/res/book',
-	FILE_URL: 'http://119.59.122.38/book_dev_files',
+	FILE_URL: 'http://' + window.location.hostname + '/res/book',
+//	FILE_URL: 'http://119.59.122.38/book_dev_files',
 
 	
 	FILE_SIZE: {
@@ -272,22 +272,29 @@ Device = {
 	    
 	    },
 	    logoutFacebook: function(callback){
-
-	        FB.login( function(response) {
-	                 if (response.authResponse) {
-	                 var access_token =   FB.getAuthResponse()['accessToken'];
-	                        FB.api('/me?fields=picture,name,email', function(user) {
-	                            if(user){
-	                               if(user.id&&user.email)
-	                                callback({fbid:user.id,fbpic:user.picture.data.url,token:access_token,fbname:user.name,fbemail:user.email});
-	                            }
-	                        });
-	                 } else {
-	                 console.log('login response:' + response.error);
-	                 }
-	        },
-	        { scope: "email" }
-	        );
+	    	if (FB) {
+	    		FB.login(function(response) {
+					if (response.authResponse) {
+						var access_token = FB.getAuthResponse()['accessToken'];
+						FB.api('/me?fields=picture,name,email', function(user) {
+							if (user) {
+								if (user.id && user.email)
+									callback({
+										fbid : user.id,
+										fbpic : user.picture.data.url,
+										token : access_token,
+										fbname : user.name,
+										fbemail : user.email
+									});
+							}
+						});
+					} else {
+						console.log('login response:' + response.error);
+					}
+				}, {
+					scope : "email"
+				});
+	    	}
 	    
 	    },
 	    logoutFacebook: function(callback){
@@ -390,7 +397,7 @@ Page = {
 	loadMenu: function() {
 		var profileCover = $('#profile_cover');
 		if (Account.cover) {
-			var cover = Config.FILE_URL + Util.getImage(Account.cover, Config.FILE_SIZE.SMALL);
+			var cover = Util.getImage(Account.cover, 2);
 			profileCover.css('background-image', 'url(' + cover + ')');
 		}
 		if (Account.displayName) {

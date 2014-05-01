@@ -10,9 +10,21 @@ Page.EditBook = {
 			history.back();
 		});
 		
+		var updateAccount = function(u) {
+			if (u) {
+				Account.cover = u.cover;
+				Account.bookCount = u.pbcount;
+				Account.draftCount = u.drcount;
+				
+				localStorage.setItem('u', JSON.stringify(Account));
+				
+				Page.Profile.updateCover();
+			}
+		};
+		
 		var btnPub = container.find('[data-id=btn_pub]');
 		btnPub.tap(function() {
-			if (!btnPub.hasClass('unpub')) {
+			if (!btnPub.hasClass('used')) {
 				Page.showLoading('Publishing...');
 				
 				var img = container.find('.book_size').css('background-image');
@@ -27,6 +39,10 @@ Page.EditBook = {
 		              }
 		              else
 					  Page.hideLoading();
+					
+					updateAccount(data.user);
+					
+					Page.back();
 				});
 			}
 			else {
@@ -34,6 +50,10 @@ Page.EditBook = {
 				
 				Service.Book.UnpublishBook(bid, Account.userId, function(data) {
 					Page.hideLoading();
+
+					updateAccount(data.user);
+					
+					Page.back();
 				});				
 			}
 		});
@@ -72,7 +92,9 @@ Page.EditBook = {
 			Page.open('Book', true, { bid: bid, uid: Account.userId, preview: true });
 		});
 		container.find('[data-link=chg_cover]').click(function() {
-			Page.open('ChangeCover', true);
+			var img = container.find('.book_size').css('background-image');
+			img = img.replace('url(' + Config.FILE_URL, '').replace(')', '').replace('_s', '');
+			Page.open('ChangeCover', true, { bid: bid, cover: img });
 		});
 		
 		if (bid) {
@@ -83,7 +105,7 @@ Page.EditBook = {
 				
 				btnPub.show();
 				if (data.pbdate) {
-					btnPub.addClass('unpub');
+					btnPub.addClass('used');
 					btnPub.text('UNPUBLISH');
 				}
 				

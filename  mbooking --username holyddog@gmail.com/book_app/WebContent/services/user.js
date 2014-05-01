@@ -66,11 +66,11 @@ Service.User = {
 	        
 		Web.post(url, params, callback);
 	},
-	GetProfile : function(uid, follid, callback) {
+	GetProfile : function(userId, guestId, callback) {
 		var url = Service.url + '/getProfile.json';
 		var params = {
-			uid : uid,
-			follid : follid
+			uid : userId,
+			gid : guestId
 		};
 		Web.get(url, params, callback);
 	},

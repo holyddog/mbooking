@@ -42,22 +42,19 @@ Page.SignIn = {
 							email: data.email,
 							displayName: data.dname,
 							userName: data.uname,
-							picture: data.pic,
+							picture: data.pic,							
+							cover: data.cover,
+							bookCount: data.pbcount,
+							draftCount: data.drcount,
 							
-//							cover: data.cover,
-//							picture: data.pic,
 //							followerCount: data.fcount,
 //							bookCount: data.pbcount
 							
-                            fbObject:fbobj
-						};
-                                    
-                        if(data.fbobj&&data.fbobj.email&&data.fbobj.email!=undefined&&data.fbobj.email!=null&&data.fbobj.email!=""){
-                            Account.fbObject.fbemail = data.fbobj.email;
-                        }
-                                    
-						if (data.leb && data.leb.pcount) {
-							Account.lastEditBook.pageCount = data.leb.pcount;
+                            fbObject: fbobj
+						};                                    
+
+						if (data.fbobj && data.fbobj.email) {
+							Account.fbObject.fbemail = data.fbobj.email;
 						}
 						localStorage.setItem("u", JSON.stringify(Account));						
 

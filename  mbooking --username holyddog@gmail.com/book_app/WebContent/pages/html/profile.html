@@ -3,82 +3,105 @@
 	<a data-id="btn_b" class="btn" style="left: 0; display: none;"><span class="back"></span></a>
 	<a data-id="btn_m" class="btn" style="left: 0;"><span class="list"></span></a>
 	<div class="title"></div>
+	<a data-id="btn_f" class="btn_text gray" style="float: right;">+ FOLLOW</a>
+	<!-- 
 	<a data-id="btn_a" class="btn_box" style="right: 0;"><span class="quill"></span></a>
+	 -->
 </div>
-<div class="content no_color flex1 box vertical">
-	<div id="profile_header" style="background-image: url(temp/4.jpg);">
-		<div class="header_overlay fill_dock"></div>
-		<div class="fill_dock" style="z-index: 1;">
-			<div class="header_title">
-				<span>Anonymous</span>
-				<a>EDIT</a>
-			</div>
-			<div class="box horizontal" style="margin-top: 145px;">
-				<div class="pbox">
-					<div class="pimage">
-						<img src="images/user.jpg" />
-					</div>
+<div class="content gray flex1 box vertical">
+	<div id="profile_view" style="display: none;">
+		<div id="profile_header">
+			<div class="header_overlay fill_dock"></div>
+			<div class="fill_dock" style="z-index: 1;">
+				<div class="header_title">
+					<span>Anonymous</span>
+					<a>EDIT</a>
 				</div>
-				<div class="stat_panel flex1">
-					<div class="flow_hidden">
-						<div class="label">
-							<div data-count="book" class="count">0</div>
-							<div class="text">Books</div>
-						</div>
-						<div class="label">
-							<div class="count">0</div>
-							<div data-count="follower" class="text">Followers</div>
-						</div>
-						<div class="label">
-							<div class="count">0</div>
-							<div data-count="following" class="text">Following</div>
+				<div class="box horizontal" style="margin-top: 145px;">
+					<div class="pbox">
+						<div class="pimage">
+							<img src="images/user.jpg" />
 						</div>
 					</div>
+					<div class="stat_panel flex1">
+						<div class="flow_hidden">
+							<div class="label">
+								<div data-count="book" class="count">0</div>
+								<div class="text">Books</div>
+							</div>
+							<div class="label">
+								<div data-count="follower" class="count">0</div>
+								<div class="text">Followers</div>
+							</div>
+							<div class="label">
+								<div data-count="following" class="count">0</div>
+								<div class="text">Following</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<div id="xbar" class="box horizontal">
-		<div class="ptab active flex1 flex_lock">
-			<a style="-webkit-mask-image: url(icons/earth.png);" class="mask_icon"></a>
-		</div>		
-		<div class="ptab flex1 flex_lock">
-			<a style="-webkit-mask-image: url(icons/lock.png);" class="mask_icon"></a>
-		</div>	
-		<div class="ptab flex1 flex_lock" style="position: relative;">
-			<a style="-webkit-mask-image: url(icons/pencil.png);" class="mask_icon"></a>
-			<div class="notf">2</div>
-		</div>	
-	</div>
-	<div id="ptab1" class="tpage">
-		<div class="book_size" style="background-color: #FF4444; background-image: url(temp/cv1.jpg);">
-			<h2>Aptent magnis voluptatibus</h2>
-			<div class="pcount">17</div>
+		<div id="xbar" class="box horizontal">
+			<div class="ptab active flex1 flex_lock">
+				<a style="-webkit-mask-image: url(icons/earth.png);" class="mask_icon"></a>
+			</div>		
+			<div class="ptab flex1 flex_lock">
+				<a style="-webkit-mask-image: url(icons/lock.png);" class="mask_icon"></a>
+			</div>	
+			<div class="ptab flex1 flex_lock" style="position: relative;">
+				<a style="-webkit-mask-image: url(icons/pencil.png);" class="mask_icon"></a>
+				<div class="notf" style="display: none;"></div>
+			</div>	
 		</div>
-		<div class="book_size" style="background-color: #FFBB33; background-image: url(temp/cv2.jpg);">
-			<h2>Suspendisse lectus hic</h2>
-			<div style="position: absolute; bottom: 5px; right: 10px; color: #fff; font-size: 80%; text-align: center; z-index: 1;">30</div>
+		<div id="ptab1" class="tpage">
+			<div data-id="link_a" data-pub="true" class="link_add book_size cover box center_middle">
+				<div>
+					<div class="icon"></div>
+					<div class="label">Create Book</div>
+				</div>
+			</div>
+			<!-- 
+			<div class="book_size" style="background-color: #FF4444; background-image: url(temp/cv1.jpg);">
+				<h2>Aptent magnis voluptatibus</h2>
+				<div class="pcount">17</div>
+			</div>
+			<div class="book_size" style="background-color: #FFBB33; background-image: url(temp/cv2.jpg);">
+				<h2>Suspendisse lectus hic</h2>
+				<div style="position: absolute; bottom: 5px; right: 10px; color: #fff; font-size: 80%; text-align: center; z-index: 1;">30</div>
+			</div>
+			<div class="book_size" style="background-color: #99CC00; background-image: url(temp/cv3.jpg);">
+				<h2>Consequuntur curabitur</h2>
+				<div style="position: absolute; bottom: 5px; right: 10px; color: #fff; font-size: 80%; text-align: center; z-index: 1;">8</div>
+			</div>
+			<div class="book_size" style="background-color: #AA66CC; background-image: url(temp/cv4.jpg);">
+				<h2>Eveniet ducimus autem</h2>
+				<div style="position: absolute; bottom: 5px; right: 10px; color: #fff; font-size: 80%; text-align: center; z-index: 1;">24</div>
+			</div>
+			 -->
 		</div>
-		<div class="book_size" style="background-color: #99CC00; background-image: url(temp/cv3.jpg);">
-			<h2>Consequuntur curabitur</h2>
-			<div style="position: absolute; bottom: 5px; right: 10px; color: #fff; font-size: 80%; text-align: center; z-index: 1;">8</div>
+		<div id="ptab2" class="tpage" style="display: none;">
+			<div data-id="link_a" data-pub="false" class="link_add book_size cover box center_middle">
+				<div>
+					<div class="icon"></div>
+					<div class="label">Create Book</div>
+				</div>
+			</div>
+			<!-- 
+			<div class="book_size" style="background-image: url(temp/cv2.jpg);">
+				<h2>Suspendisse lectus hic</h2>
+			</div>
+			-->
 		</div>
-		<div class="book_size" style="background-color: #AA66CC; background-image: url(temp/cv4.jpg);">
-			<h2>Eveniet ducimus autem</h2>
-			<div style="position: absolute; bottom: 5px; right: 10px; color: #fff; font-size: 80%; text-align: center; z-index: 1;">24</div>
-		</div>
-	</div>
-	<div id="ptab2" class="tpage" style="display: none;">
-		<div class="book_size" style="background-image: url(temp/cv2.jpg);">
-			<h2>Suspendisse lectus hic</h2>
-		</div>
-	</div>
-	<div id="ptab3" class="tpage" style="display: none;">
-		<div class="book_size" style="background-image: url(temp/cv3.jpg);">
-			<h2>Consequuntur curabitur</h2>
-		</div>
-		<div class="book_size" style="background-image: url(temp/cv4.jpg);">
-			<h2>Eveniet ducimus autem</h2>
+		<div id="ptab3" class="tpage" style="display: none;">
+			<!-- 
+			<div class="book_size" style="background-image: url(temp/cv3.jpg);">
+				<h2>Consequuntur curabitur</h2>
+			</div>
+			<div class="book_size" style="background-image: url(temp/cv4.jpg);">
+				<h2>Eveniet ducimus autem</h2>
+			</div>
+			 -->
 		</div>
 	</div>
 </div>

@@ -27,10 +27,11 @@ Page.Settings = {
             Device.PhoneGap.logoutFacebook(function(){});
 		});
 
-        if(Account.fbObject.fbname){
-            document.getElementById("fblogin_check").className = "ch_logfb checked";
-            document.getElementById("fblogin_check").style.background="green";
-        }
+
+		if (Account.fbObject && Account.fbObject.fbname) {
+			document.getElementById("fblogin_check").className = "ch_logfb checked";
+			document.getElementById("fblogin_check").style.background = "green";
+		}
         
 		var checkbox = $('#fblogin_check');
         checkbox.tap(function() {
