@@ -18,7 +18,15 @@ Page.EditBook = {
 				var img = container.find('.book_size').css('background-image');
 				img = img.replace('url(' + Config.FILE_URL, '').replace(')', '').replace('_s', '');
 				Service.Book.PublishBook(bid, Account.userId, img, function(data) {
-					Page.hideLoading();
+				      
+		              if(container.find('[data-id=btn_c]').hasClass('check')){
+		            	  var publish_fn = function(){
+							  Page.hideLoading();
+						  }; 
+		            	  Device.PhoneGap.postBookToFacebook(data.title,"The Story Application",data.desc,data.pic,"www.google.com",container.find('.share_cap').val(),publish_fn);
+		              }
+		              else
+					  Page.hideLoading();
 				});
 			}
 			else {
@@ -37,7 +45,7 @@ Page.EditBook = {
 			height: h + 'px'
 		});
 		self.reScale(container);
-		
+        
 		container.find('[data-id=link_a]').click(function() {
 			Page.open('AddPage', true, { bid: bid });
 		});
@@ -84,6 +92,7 @@ Page.EditBook = {
 					self.addPage(container, self.bookPages[i]);
 				}
 				self.reScale(container);
+                     
 			});
 		}
 		

@@ -6,7 +6,10 @@ Config = {
 	SLIDE_DELAY: 250,
 	FADE_DELAY: 250,
 	
-	FILE_URL: 'http://' + window.location.hostname + '/res/book',
+
+//	FILE_URL: 'http://' + window.location.hostname + '/res/book',
+	FILE_URL: 'http://119.59.122.38/book_dev_files',
+
 	
 	FILE_SIZE: {
 		COVER: 1,
@@ -318,24 +321,58 @@ Device = {
 	    postBookToFacebook : function(title,caption,desc,pic,link,message,callback){
             var privacy={"value":"EVERYONE"};//default
            //ALL_FRIENDS, NETWORKS_FRIENDS, FRIENDS_OF_FRIENDS, CUSTOM .
-           //var privacy={"value":"CUSTOM", "friends": "SOME_FRIENDS", "allow":"{UID},{UID}"};
-            FB.api("/me/feed", 'post',
-                   { message: message,
-                     link: link,
-                     caption: caption,
-                     name:title,
-                     picture:pic,
-                     description: desc,
-                     privacy: privacy
-                   },
-                   function(response) {
-                       if (!response || response.error) {
-                           alert(response.error);
-                       } else {
-                           alert('Message sent!');
-                       }
-                   }
-            );
+//           var privacy={"value":"CUSTOM", "friends": "SOME_FRIENDS"};
+            
+            if(pic==undefined){
+                pic = "https://fbcdn-profile-a.akamaihd.net/hprofile-ak-frc1/t1.0-1/p160x160/10171181_1399600216986895_2357837022372529589_n.jpg";
+            }
+            
+            FB.getLoginStatus(function(response) {
+                 
+               var postfb = function(){
+                              FB.api("/me/feed", 'post',
+                                     { message: message,
+                                     link: link,
+                                     caption: caption,
+                                     name:title,
+                                     picture:pic,
+                                     description: desc,
+                                     privacy: privacy
+                                     },
+                                     function(response) {
+                                     if (!response || response.error) {
+                                     alert(response.error);
+                                     } else {
+                                            callback();
+                                            alert('Message sent!');
+                                     }
+                                     }
+                                     );
+                              };
+                              
+                              
+                  if (response && response.status === 'connected') {
+                    postfb();
+                  }else{
+                       Device.PhoneGap.loginFacebook(
+                        function(user){
+                            Service.User.linkFB(Account.userId,user.fbid,user.fbpic,user.fbname,user.fbemail,function(data) {
+                                var fbobj = {fbpic:user.fbpic,fbname:user.fbname};
+                                                                                
+                                if(user.fbemail!=undefined){
+                                    fbobj.fbemail = user.fbemail;
+                                }
+                                                                                
+                                Account.fbObject = fbobj;
+                                localStorage.setItem('u', JSON.stringify(Account));
+                                postfb();
+                            });
+                                                            
+                        }
+                      );
+                  }
+            });
+            
 	    }
 	    
 	},
