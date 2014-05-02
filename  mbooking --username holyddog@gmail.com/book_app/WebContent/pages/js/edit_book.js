@@ -38,7 +38,6 @@ Page.EditBook = {
 							  Page.back();
 							
 		            	  };
-						  console.log(book);
 						
 						  if(book!=null)
 						  Device.PhoneGap.postBookToFacebook(data.title,"The Story Application",data.desc,data.pic,"www.google.com",container.find('.share_cap').val(),publish_fn);
