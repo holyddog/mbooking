@@ -21,7 +21,7 @@ Page.EditBook = {
 				Page.Profile.updateCover();
 			}
 		};
-		
+		var book=null;
 		var btnPub = container.find('[data-id=btn_pub]');
 		btnPub.tap(function() {
 			if (!btnPub.hasClass('used')) {
@@ -34,15 +34,23 @@ Page.EditBook = {
 		              if(container.find('[data-id=btn_c]').hasClass('check')){
 		            	  var publish_fn = function(){
 							  Page.hideLoading();
-						  }; 
-		            	  Device.PhoneGap.postBookToFacebook(data.title,"The Story Application",data.desc,data.pic,"www.google.com",container.find('.share_cap').val(),publish_fn);
-		              }
-		              else
-					  Page.hideLoading();
+							  updateAccount(data.user);
+							  Page.back();
+							
+		            	  };
+						  console.log(book);
+						
+						  if(book!=null)
+						  Device.PhoneGap.postBookToFacebook(data.title,"The Story Application",data.desc,data.pic,"www.google.com",container.find('.share_cap').val(),publish_fn);
+						
+		               }
+		              else{
+		            	Page.hideLoading();
 					
-					updateAccount(data.user);
+					  	updateAccount(data.user);
 					
-					Page.back();
+						Page.back();
+					}
 				});
 			}
 			else {
@@ -102,7 +110,7 @@ Page.EditBook = {
 				self.updateBook(container, data.title, data.desc);
 				container.find('.pcount span').text(data.pcount);
 				container.find('.book_size').css('background-image', 'url(' + Util.getImage(data.pic, 2) + ')');
-				
+				book = data;
 				btnPub.show();
 				if (data.pbdate) {
 					btnPub.addClass('used');
