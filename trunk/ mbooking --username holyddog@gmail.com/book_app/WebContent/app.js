@@ -7,8 +7,8 @@ Config = {
 	FADE_DELAY: 250,
 	
 
-	FILE_URL: 'http://' + window.location.hostname + '/res/book',
-//	FILE_URL: 'http://119.59.122.38/book_dev_files',
+//	FILE_URL: 'http://' + window.location.hostname + '/res/book',
+	FILE_URL: 'http://119.59.122.38/book_dev_files',
 
 	
 	FILE_SIZE: {
@@ -269,32 +269,6 @@ Device = {
 	        },
 	        { scope: "email" }
 	        );
-	    
-	    },
-	    logoutFacebook: function(callback){
-	    	if (FB) {
-	    		FB.login(function(response) {
-					if (response.authResponse) {
-						var access_token = FB.getAuthResponse()['accessToken'];
-						FB.api('/me?fields=picture,name,email', function(user) {
-							if (user) {
-								if (user.id && user.email)
-									callback({
-										fbid : user.id,
-										fbpic : user.picture.data.url,
-										token : access_token,
-										fbname : user.name,
-										fbemail : user.email
-									});
-							}
-						});
-					} else {
-						console.log('login response:' + response.error);
-					}
-				}, {
-					scope : "email"
-				});
-	    	}
 	    
 	    },
 	    logoutFacebook: function(callback){
