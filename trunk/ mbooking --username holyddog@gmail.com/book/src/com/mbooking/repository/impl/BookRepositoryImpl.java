@@ -290,6 +290,44 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			return null;
 		}
 	}
+	
+	@Override
+	public Book findBookWithPagesByBid(Long bid) {
+		try {
+			Criteria criteria = Criteria.where("bid").is(bid);
+			Query query = new Query(criteria);
+			query.fields().include("title");
+			query.fields().include("desc");
+			query.fields().include("pic");
+			query.fields().include("pcount");
+			query.fields().include("pbdate");
+			query.fields().include("uid");
+
+			Book book = db.findOne(query, Book.class);
+
+			query = new Query(Criteria.where("bid").is(bid));
+			query.fields().include("seq");
+			query.fields().include("pic");
+			query.fields().include("caption");
+			query.sort().on("seq", Order.ASCENDING);
+			List<Page> pages = db.find(query, Page.class);
+
+			Criteria criteria_user = Criteria.where("uid").is(book.getUid());
+			Query query_user = new Query(criteria_user);
+			query_user.fields().include("dname");
+			query_user.fields().include("pic");
+
+			User user = db.findOne(query_user, User.class);
+			
+			book.setAuthor(user);
+			book.setPages(pages);
+
+			return book;
+		} catch (Exception e) {
+			System.out.println("Find Book With Page Service error : " + e);
+			return null;
+		}
+	}
 
 	@Override
 	public User publishBook(Long bid, Long uid, String cover) {

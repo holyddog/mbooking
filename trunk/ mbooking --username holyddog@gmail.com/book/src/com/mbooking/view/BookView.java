@@ -21,7 +21,7 @@ public class BookView {
 	
 	@PostConstruct
 	public void init() {
-		book = bookRepo.findByBid(bookId);
+		book = bookRepo.findBookWithPagesByBid(bookId);
 	}
 	
 	private Book book;

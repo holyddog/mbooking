@@ -90,6 +90,21 @@ public class BookJson {
 		return ErrorResponse.getError("Find book id: " + bid + " was not found");
 	}
 
+	//Web View Mode
+	@RequestMapping(method = RequestMethod.GET, value = "/getBookByUid.json")
+	public @ResponseBody
+	Object getBookByUid(
+			@RequestParam(value = "bid") Long bid) {
+
+		Book book = bookRepo.findBookWithPagesByBid(bid);	
+		
+		if (book != null) {
+			return book;
+		}
+
+		return ErrorResponse.getError("Find book id: " + bid + " was not found");
+	}
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/getBooksByUid.json")
 	public @ResponseBody
 	Object getBooksByUid(@RequestParam(value = "uid") Long uid,

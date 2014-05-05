@@ -14,19 +14,19 @@
   	</context-param>
   	<context-param>
     	<param-name>domain</param-name>
-    	<param-value>localhost</param-value>
+    	<param-value>119.59.122.38/</param-value>
   	</context-param>
   	<context-param>
     	<param-name>root</param-name>
-    	<param-value>http://localhost:8080/book</param-value>
+    	<param-value>http://119.59.122.38/book</param-value>
   	</context-param>
   	<context-param>
     	<param-name>file</param-name>
-    	<param-value>http://localhost/res/book</param-value>
+    	<param-value>http://119.59.122.38/res/book</param-value>
     </context-param>
 	<context-param>
 		<param-name>book_dev_files</param-name>
-		<param-value>http://localhost/book_dev_files</param-value>
+		<param-value>http://119.59.122.38/book_dev_files</param-value>
 	</context-param>
   	<context-param>    
     	<param-name>upload</param-name>
