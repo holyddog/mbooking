@@ -100,9 +100,19 @@ Page.EditBook = {
 		container.find('[data-link=preview]').click(function() {
 			Page.open('Book', true, { bid: bid, uid: Account.userId, preview: true });
 		});
+		
+		self.bookPages = [];
 		container.find('[data-link=chg_cover]').click(function() {
 			var img = container.find('.book_size').css('background-image');
 			img = img.replace('url(' + Config.FILE_URL, '').replace(')', '').replace('_s', '');
+			container.find('.pp').each(function() {
+				var p = $(this);
+				self.bookPages.push({
+					pid: p.data('pid'),
+					pic: p.data('pic'),
+					seq: p.data('seq')
+				});			
+			});
 			Page.open('ChangeCover', true, { bid: bid, cover: img });
 		});
 		
@@ -118,9 +128,8 @@ Page.EditBook = {
 					btnPub.text('UNPUBLISH');
 				}
 				
-				self.bookPages = data.pages;
-				for (var i = 0; i < self.bookPages.length; i++) {
-					self.addPage(container, self.bookPages[i]);
+				for (var i = 0; i < data.pages.length; i++) {
+					self.addPage(container, data.pages[i]);
 				}
 				self.reScale(container);
                      
@@ -152,8 +161,10 @@ Page.EditBook = {
 		var w = Math.floor((book_header.offsetWidth / 2) - 15);
 		
 		var div = document.createElement('div');
-		div.className = 'page_size';
+		div.className = 'pp page_size';
 		div.dataset.pid = data.pid;
+		div.dataset.pic = data.pic;
+		div.dataset.seq = data.seq;
 		div.style.backgroundImage = 'url(' + Util.getImage(data.pic, 2) + ')';
 		div.style.width = w + 'px';
 		div.style.height = w + 'px';

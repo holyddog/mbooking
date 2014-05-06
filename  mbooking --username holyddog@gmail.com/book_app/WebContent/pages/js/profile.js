@@ -57,6 +57,12 @@ Page.Profile = {
 			container.find('.tpage').eq($(this).index()).show();
 		});
 		
+		self.load(uid, isGuest, container);
+	},
+	
+	load: function(uid, isGuest, container) {
+		var self = this;
+		
 		var content = container.find('.content');
 		Page.bodyShowLoading(content);
 		Service.User.GetProfile(uid, Account.userId, function(data) {
@@ -95,7 +101,9 @@ Page.Profile = {
 				}
 			};
 			
-			var ptab1 = content.find('#ptab1');
+			content.find('.b').remove();
+			
+			var ptab1 = content.find('#ptab1');			
 			var pubBooks = data.pubBooks;
 			for (var i = 0; i < pubBooks.length; i++) {
 				var b = pubBooks[i];
@@ -144,7 +152,7 @@ Page.Profile = {
 	
 	getBook: function(bid, title, cover, count, author) {
 		var div = document.createElement('div');
-		div.className = 'book_size';
+		div.className = 'b book_size';
 		div.dataset.bid = bid;
 		if (author) {
 			div.dataset.uid = author.uid;
