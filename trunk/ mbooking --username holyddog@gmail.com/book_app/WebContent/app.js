@@ -7,8 +7,8 @@ Config = {
 	FADE_DELAY: 250,
 	
 
-//	FILE_URL: 'http://' + window.location.hostname + '/res/book',
-	FILE_URL: 'http://119.59.122.38/book_dev_files',
+	FILE_URL: 'http://' + '192.168.0.118' + '/res/book',
+//	FILE_URL: 'http://119.59.122.38/book_dev_files',
 
 	
 	FILE_SIZE: {
@@ -19,7 +19,7 @@ Config = {
 };
 
 Service = {
-	url: 'http://' + window.location.hostname + ':8080/book/data'		
+	url: 'http://' + '192.168.0.118' + ':8080/book/data'		
 };
 
 Account = {};

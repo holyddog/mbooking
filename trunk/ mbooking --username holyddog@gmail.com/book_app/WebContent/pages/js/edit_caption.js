@@ -18,7 +18,7 @@ Page.EditCaption = {
 		focus(inputText[0]);
 		
 		var btnAdd = container.find('[data-id=link_a]');
-		btnAdd.tap(function() {
+		btnAdd.click(function() {
 			var val = inputText.val();
 			if (val && val.length > 0)
 			Page.back(function(c, page) {

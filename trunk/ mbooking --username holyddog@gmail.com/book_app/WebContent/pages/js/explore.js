@@ -15,7 +15,7 @@ Page.Explore = {
 			Page.open('AddPage', true, { total: Account.bookCount });
 		});
 		
-		self.load(container);
+//		self.load(container);
 	},
 	
 	load: function(container) {		
