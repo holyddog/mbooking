@@ -126,28 +126,25 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 
 	@Override
 	public String changePic(Long uid, String pic) {
-		try{
-				User user = db.findOne(new Query(Criteria.where("uid").is(uid)), User.class);
-				String oldpic = user.getPic();	
-				
-				String path = "";
-						
-				if (pic != null && !pic.equals("") && !pic.equals("undefined")) {
-					String img_path = ImageUtils.toImageFile(ConstValue.USER_FOLDER
-							+ uid , pic, ConstValue.PROFILE_IMG_TYPE);
-					path = img_path;
-			
-					db.updateFirst(new Query(Criteria.where("uid").is(uid)), new Update().set("pic", path), User.class);
-					
-					if (oldpic != null && !oldpic.equals("") && !oldpic.equals("undefined")) {
-						ImageUtils.deleteImageFile(oldpic, ConstValue.PROFILE_IMG_TYPE);
-					}	
-					
-					
-					return path;	
-				
+		try {
+			User user = db.findOne(new Query(Criteria.where("uid").is(uid)), User.class);
+			String oldpic = user.getPic();
+
+			String path = "";
+
+			if (pic != null && !pic.equals("") && !pic.equals("undefined")) {
+				String img_path = ImageUtils.toImageFile(ConstValue.USER_FOLDER + uid, pic, ConstValue.PROFILE_IMG_TYPE);
+				path = img_path;
+
+				db.updateFirst(new Query(Criteria.where("uid").is(uid)), new Update().set("pic", path), User.class);
+				db.updateMulti(new Query(Criteria.where("uid").is(uid)), new Update().set("author.pic", path), Book.class);
+
+				if (oldpic != null && !oldpic.equals("") && !oldpic.equals("undefined")) {
+					ImageUtils.deleteImageFile(oldpic, ConstValue.PROFILE_IMG_TYPE);
 				}
-			
+				return path;
+
+			}
 			return "";
 		} catch (Exception e) {
 			System.out.println("Unsuccess Change Profile Pic, User Service error: " + e);
