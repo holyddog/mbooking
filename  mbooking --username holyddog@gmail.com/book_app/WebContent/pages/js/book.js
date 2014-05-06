@@ -48,6 +48,7 @@ Page.Book = {
 		Page.bodyShowLoading(content);
 		
 		// set content data		
+//		Service.Book.GetBook(params.bid, params.uid, function(data) {
 		Service.Book.GetBook(params.bid, params.uid, function(data) {
 			Page.bodyHideLoading(content);
 			self.load(container, data);

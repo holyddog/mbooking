@@ -31,24 +31,26 @@ Page.EditBook = {
 				img = img.replace('url(' + Config.FILE_URL, '').replace(')', '').replace('_s', '');
 				Service.Book.PublishBook(bid, Account.userId, img, function(data) {
 				      
-		              if(container.find('[data-id=btn_c]').hasClass('check')){
-		            	  var publish_fn = function(){
-							  Page.hideLoading();
+		              if(container.find('[data-id=btn_c]').hasClass('check')&&Device.isMobile()){
+		            	  var publish_fn = function(success){
+		            		  if(success){
+								  alert('success');
+		            		  }else{
+		            			  alert('fail');
+		            		  }
+		            		  Page.hideLoading();
 							  updateAccount(data.user);
 							  Page.back();
-							
 		            	  };
 						
 						  if(book!=null)
-						  Device.PhoneGap.postBookToFacebook(book.title,"The Story Application",book.desc,book.pic,"www.google.com",container.find('.share_cap').val(),publish_fn);
+						  Device.PhoneGap.postBookToFacebook(book.title,"The Story Application",book.desc,book.pic,(WEB_BOOK_URL+"?bid="+book.id),container.find('.share_cap').val(),publish_fn);
 						
 		               }
 		              else{
 		            	Page.hideLoading();
-					
-					  	updateAccount(data.user);
-					
-						Page.back();
+		            	updateAccount(data.user);
+		            	Page.back();
 					}
 				});
 			}

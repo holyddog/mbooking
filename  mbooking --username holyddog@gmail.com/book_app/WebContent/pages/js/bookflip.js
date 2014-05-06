@@ -10,40 +10,34 @@ Page.Book = {
 //			Page.bodyHideLoading(content);
 //			self.load(container, data);
 //		});
-		Service.Book.GetBook(5, 3, function(data) {
+		Service.Book.GetBook(params.bid, params.uid, function(data) {
 			Page.bodyHideLoading(content);
-			self.load(container, data);
+			self.load(container, data,params);
 		});
 	},
 	
-	load: function(container, bookData) {		
+	load: function(container, bookData,params) {		
 		var index = 0;
-		var delay_flip =0 ;//ms
 		// generate book pages
 		var data = bookData.pages;
 		if (data.length) {		
 				for (var i = data.length - 1; i > -3; i--) {
-						
-//					var tran_str = 'transition: '+delay_flip+'ms ease-in-out; -webkit-transition: '+delay_flip+'ms ease-in-out;';
-					var tran_str = '';
 					var f_ev_str = 'f_ev';
 					if(i==-2){	
-						tran_str='';
+						
 						f_ev_str='';
 					}
 					
 					var page;
 					if(i==-1)
 					{
-						 page =  $('<div class="page_nav fill_dock box vertical" style="z-index:1000; pointer-events: none; visibility: hidden; -webkit-transform-origin: left center; left: 50%; -webkit-transform-style: preserve-3d;'
-									+tran_str+'"></div>');					
+						 page =  $('<div class="page_nav fill_dock box vertical" style="z-index:0; pointer-events: none; visibility: hidden; -webkit-transform-origin: left center; left: 50%; -webkit-transform-style: preserve-3d;"></div>');					
 						
 						
 					}
 					else{	
 					
-					   page =  $('<div class="page_nav fill_dock box vertical" style="pointer-events: none; visibility: hidden; -webkit-transform-origin: left center; left: 50%; -webkit-transform-style: preserve-3d;'
-								+tran_str+'"></div>');					
+					   page =  $('<div class="page_nav fill_dock box vertical" style="pointer-events: none; visibility: hidden; -webkit-transform-origin: left center; left: 50%; -webkit-transform-style: preserve-3d;"></div>');					
 					}
 					
 					var frontpage='';
@@ -55,11 +49,12 @@ Page.Book = {
 		
 					var cover_page = '<div class="tbar_bg trans cover_book"></div>'
 						+'<div class="grad_overlay fill_dock hid_loading"></div>'
-						+'<div class="tbar">	'
-						+'	<a data-id="btn_b" class="btn" style="left: 0; z-index: 1001;pointer-events:all;"><span class="back"></span></a>'
-						+'	<div class="title" style="z-index: 100100;"></div>'
-						+'	<a data-id="btn_c" class="btn" style="right: 0; pointer-events:all;"><span class="comment"></span></a>'
-						+'	<a data-id="btn_s" class="btn" style="right: 0; display: none;pointer-events:all;"><span class="share"></span></a>	'
+						+'<div class="tbar" style="pointer-events:none;">	'
+						+'<a data-id="btn_b" class="btn" style="left: 0; pointer-events:all;"><span class="cancel"></span></a>'
+						+'<div class="title"></div>'
+						+'<a data-id="btn_e" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="edit"></span></a>	'
+						+'<a data-id="btn_s" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="share"></span></a>	'
+						+'<a data-id="btn_c" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="comment"></span></a> '
 						+'</div>'
 						+'<div class="content gray flex1 box vertical '+f_ev_str+'" style="pointer-events:all;">'
 						+'	<div class="hid_loading">'
@@ -83,7 +78,16 @@ Page.Book = {
 						+'</div>	';
 					
 					var btn_b_str = '<a data-id="btn_b" class="btn" style="pointer-events:all; position:absolute; left: 0; top: 0; z-index: 1001;"><span class="back"></span></a>';
-									
+								
+					var title_bar_left =$('<div class="tbar" style="pointer-events:none;"><div class="title"></div>'
+						+'<a data-id="btn_b" class="btn" style="left: 0; pointer-events:all;"><span class="cancel"></span></a>'
+						+'</div>');
+					
+					var title_bar_right =$('<div class="tbar" style="pointer-events:none;"><div class="title"></div>'
+							+'<a data-id="btn_e" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="edit"></span></a>	'
+							+'<a data-id="btn_s" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="share"></span></a>	'
+							+'<a data-id="btn_c" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="comment"></span></a> '
+							+'</div>');
 					
 					if( i != - 2){
 									
@@ -91,9 +95,9 @@ Page.Book = {
 						var foutframe = $('<div class="fill_dock box vertical" style="width:200%; position:absolute;"></div>');
 						var finframe = $('<div class="fill_dock box vertical" style="position:absolute; left:-100%;"></div>');
 						if( i > - 1){
-							fpic = $('<div class="pic_box flex1 relative f_ev" style="pointer-events:all; background-color: #ccc; overflow: hidden;"><img style="position: absolute; width: 0px; height: 0px;" src="' + (Config.FILE_URL +(data[i].pic)) + '"></div>');
-							var fcaption = $('<div class="f_ev" style="pointer-events:all; padding: 10px;">' + data[i].caption + '</div><div style="line-height: 15px; padding: 0 10px 10px; font-size: 80%; text-align: right;">' + (i+1) + ' of ' + data.length + '</div>');
-							foutframe.append(fpic).append(fcaption);
+							fpic = $('<div class="pic_box relative f_ev" style="pointer-events:all; background-color: #ccc; overflow: hidden;"><img style="position: absolute; width: 100%; height: 100%;" src="' + Util.getImage(data[i].pic, 1) + '"></div>');
+							var fcaption = $('<div class="flex1 box f_ev" style="pointer-events:all; padding: 10px; -webkit-box-align: center;">' + data[i].caption + '</div><div style="line-height: 15px; padding: 0 10px 10px; font-size: 80%; text-align: right;">' + (i+1) + ' of ' + data.length + '</div>');
+							foutframe.append(title_bar_right).append(fpic).append(fcaption);
 						}
 						else if(i==-1){
 							
@@ -114,9 +118,9 @@ Page.Book = {
 						var outframe = $('<div class="fill_dock box vertical" style="width:200%; position:absolute;"></div>');
 						
 						if( i !=-2){
-							pic = $('<div class="pic_box flex1 relative bk_ev" style="pointer-events:all; background-color: #ccc; overflow: hidden;"><img style="position: absolute; width: 0px; height: 0px;" src="' + (Config.FILE_URL +(data[i+1].pic)) + '"></div>');
-							var caption = $('<div class ="bk_ev" style="pointer-events:all; padding: 10px;">' + data[i+1].caption + '</div><div style="line-height: 15px; padding: 0 10px 10px; font-size: 80%; text-align: right;">' + (i + 2) + ' of ' + data.length + '</div>');
-							outframe.append(pic).append(caption).append($(btn_b_str));
+							pic = $('<div class="pic_box relative bk_ev" style="pointer-events:all; background-color: #ccc; overflow: hidden;"><img style="position: absolute; width: 100%; height: 100%;" src="' + Util.getImage(data[i+1].pic, 1) + '"></div>');
+							var caption = $('<div class ="flex1 box bk_ev" style="pointer-events:all; padding: 10px; -webkit-box-align: center;">' + data[i+1].caption + '</div><div style="line-height: 15px; padding: 0 10px 10px; font-size: 80%; text-align: right;">' + (i + 2) + ' of ' + data.length + '</div>');
+							outframe.append(title_bar_left).append(pic).append(caption);//.append($(btn_b_str));
 						}else{
 							outframe.append($(cover_page));
 						}
@@ -136,31 +140,37 @@ Page.Book = {
 					
 					container.append(page);
 					
-					if(pic!=null)
+					if(pic!=null){
 					pic.find('img').data('height', pic.height());
-
-					if(fpic!=null)
-					fpic.find('img').data('height', fpic.height());
-					
-					
-					if(i==-2){
-						
-						// set toolbar buttons
-						var btnBack = container.find('[data-id=btn_b]'); 
-						btnBack.tap(function() {
-							Page.back();
-						});
-						var btnComment = container.find('[data-id=btn_c]');
-						btnComment.tap(function() {
-							Page.open('Comments', true, { bid: data.bid });
-						});
-						var btnShare = container.find('[data-id=btn_s]');
-						btnShare.tap(function() {
-							alert('share');
-						});	
-						
-						
+					pic.css('height', pic.width());
 					}
+					if(fpic!=null){
+					fpic.find('img').data('height', fpic.height());
+					fpic.css('height', fpic.width());
+					}
+					
+						if(i==-2){
+							// set toolbar buttons
+							var btnBack = container.find('[data-id=btn_b]'); 
+							btnBack.tap(function() {
+								Page.back();
+							});
+						}
+						if(i==-1){
+							var btnComment = container.find('[data-id=btn_c]');
+							btnComment.tap(function() {
+								Page.open('Comments', true, { bid: params.bid });
+								
+							});
+							var btnShare = container.find('[data-id=btn_s]');
+							btnShare.tap(function() {
+								alert('share');
+							});	
+							var btnSetting = container.find('[data-id=btn_e]');
+							btnSetting.tap(function() {
+								Page.open('EditBook', true, { bid: params.bid });
+							});						
+						}
 					
 					
 				}
@@ -182,7 +192,7 @@ Page.Book = {
 						index = data.length;
 					
 						// set background image
-						var bgImage = /*Config.FILE_URL +*/ Util.getImage(bookData.pic, Config.FILE_SIZE.LARGE);
+						var bgImage = Util.getImage(bookData.pic, 1);
 						var img = $('<img class="book_bg absolute fade_out show" src="' + bgImage + '" />');
 						img.load(function() {
 
@@ -832,30 +842,6 @@ Page.Book = {
 				
 				var count = 0;
 				container.find('.page_nav .pic_box img').load(function() {
-					var img = $(this);
-					var pic = img.parent();
-					
-					var pw = pic.width();
-					var ph = pic.height();
-					
-					if (ph >= pw) {
-						img.css({
-							height: ph + 'px',
-							width: 'auto'
-						});
-						img.css({
-							left: -1 * (img.width() / 2 - pw / 2) + 'px'
-						});
-					}
-					else {
-						img.css({
-							width: pw + 'px',
-							height: 'auto'
-						});
-						img.css({
-							top: -1 * (img.height() / 2 - ph / 2) + 'px'
-						});				
-					}
 					finish(count++);
 				});
 			}
