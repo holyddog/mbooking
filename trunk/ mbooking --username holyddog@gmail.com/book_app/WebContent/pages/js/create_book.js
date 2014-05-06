@@ -2,7 +2,6 @@ Page.CreateBook = {
 	url: 'pages/html/create_book.html',
 	
 	init: function(params, container) {			
-		var ret = params? params.ret: undefined;
 		var pub = params? params.pub: false;
 		
 		// declare elements
@@ -41,6 +40,8 @@ Page.CreateBook = {
 				else {
 					Service.Book.CreateBook(inputTitle.val(), inputDesc.val(), Account.userId, pub, fn);					
 				}
+				
+				Page.Profile.load(Account.userId, false, $(page_Profile));
 			}
 		});
 		var btnCheck = container.find('[data-id=btn_c]'); 
