@@ -19,7 +19,7 @@ Page.Comments = {
 			if (!btnSend.hasClass('disabled')) {
 				var pic = 'images/user.jpg';
 				if (Account.picture) {
-					pic = Util.getImage(Account.picture, 3);
+					pic = Account.picture;//Util.getImage(Account.picture, 3);
 				}
 				var c = $(self.createComment(pic, Account.displayName, inputMsg.val(), 'Sending...'));
 				c.prependTo(list);
