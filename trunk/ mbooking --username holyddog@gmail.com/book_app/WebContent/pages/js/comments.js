@@ -54,7 +54,6 @@ Page.Comments = {
 			
 			for (var i = 0; i < data.length; i++) {
 				var c = data[i];
-				
 				list.append(self.createComment(c.pic, c.dname, c.comment, c.strtime));
 			} 
 		});

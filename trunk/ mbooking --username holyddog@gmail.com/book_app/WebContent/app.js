@@ -6,7 +6,7 @@ Config = {
 	SLIDE_DELAY: 250,
 	FADE_DELAY: 250,
 	
-
+	WEB_BOOK_URL:'http://localhost:8080/book',
 	FILE_URL: 'http://' + '192.168.0.118' + '/res/book',
 //	FILE_URL: 'http://119.59.122.38/book_dev_files',
 
@@ -303,10 +303,10 @@ Device = {
                                      },
                                      function(response) {
                                      if (!response || response.error) {
-                                     alert(response.error);
+                                    	 console.log(response.error);
+                                    	 callback(false);
                                      } else {
-                                            callback();
-                                            alert('Message sent!');
+                                         callback(true);
                                      }
                                      }
                                      );
