@@ -141,7 +141,7 @@ Page.Profile = {
 			}
 			else {
 				if (data.isFollow) {
-					btnFollow.html('FOLLOWING').addClass('follow');
+					container.find('[data-id=btn_f]').html('FOLLOWING').addClass('follow');
 				}
 			}
 
