@@ -1,6 +1,6 @@
 $(document).ready(function() {	
 	
-	var SERVICE = "http://localhost:8080/book/data" ;
+	var SERVICE = "http://119.59.122.38/book/data" ;
 	var FILE = "http://119.59.122.38/book_dev_files" ;
 	
 	Device = {
