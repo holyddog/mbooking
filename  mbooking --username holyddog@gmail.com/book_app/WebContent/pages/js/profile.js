@@ -136,7 +136,8 @@ Page.Profile = {
 					btnFollow.html('FOLLOWING').addClass('follow');
 				}
 			}
-			
+
+			profile_header.style.height = profile_header.offsetWidth + 'px';
 			self.resizeBook(container);
 		});
 	},

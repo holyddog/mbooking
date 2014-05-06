@@ -226,11 +226,15 @@
 }
 
 #page_Profile #profile_header {
-	height: 303px;
+	max-height: 480px;
 	background-color: #aaa;
 	position: relative;
 	background-size: 100%;
 	background-position: center center;
+}
+#page_Profile #profile_info {
+	position: absolute;
+	bottom: 5px;
 }
 #page_Profile .link_add {
 	float: left;
