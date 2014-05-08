@@ -8,6 +8,8 @@ Config = {
 	
 	WEB_BOOK_URL:'http://localhost:8080/book',
 	FILE_URL: 'http://' + '192.168.0.118' + '/res/book',
+	FB_APP_ID: '370184839777084',
+	
 //	FILE_URL: 'http://119.59.122.38/book_dev_files',
 
 	
@@ -253,25 +255,34 @@ Device = {
 			this._getPhoto(opts);
 		},
 	    loginFacebook: function(callback){
+	    	if (!FB) return;
 
-	        FB.login( function(response) {
-	                 if (response.authResponse) {
-	                 var access_token =   FB.getAuthResponse()['accessToken'];
-	                        FB.api('/me?fields=picture,name,email', function(user) {
-	                            if(user){
-	                               if(user.id)
-	                                callback({fbid:user.id,fbpic:user.picture.data.url,token:access_token,fbname:user.name,fbemail:user.email});
-	                            }
-	                        });
-	                 } else {
-	                 console.log('login response:' + response.error);
-	                 }
+	    	FB.login(function(response) {
+				if (response.authResponse) {
+					var access_token = FB.getAuthResponse()['accessToken'];
+					FB.api('/me?fields=picture,name,email', function(user) {
+						if (user) {
+							if (user.id)
+								callback({
+									fbid : user.id,
+									fbpic : user.picture.data.url,
+									token : access_token,
+									fbname : user.name,
+									fbemail : user.email
+								});
+						}
+					});
+				} else {
+					console.log('login response:' + response.error);
+				}
 	        },
 	        { scope: "email" }
 	        );
 	    
 	    },
 	    logoutFacebook: function(callback){
+	    	if (!FB) return;
+	    	
 	        FB.getLoginStatus(function(response) {
 	                          if (response && response.status === 'connected') {
 	                                FB.logout(function(response) {
@@ -281,60 +292,101 @@ Device = {
 	                          });
 	    },
 		
-	    postBookToFacebook : function(title,caption,desc,pic,link,message,callback){
+	    postBookToFacebook : function(title,caption,desc,pic,link,message,callback){            
+            if (!FB) return;
+            
             var privacy={"value":"EVERYONE"};//default
             
             if(pic==undefined){
                 pic = "https://fbcdn-profile-a.akamaihd.net/hprofile-ak-frc1/t1.0-1/p160x160/10171181_1399600216986895_2357837022372529589_n.jpg";
             }
             
-            
             FB.getLoginStatus(function(response) {
-                 
-               var postfb = function(){
-                              FB.api("/me/feed", 'post',
-                                     { message: message,
-                                     link: link,
-                                     caption: caption,
-                                     name:title,
-                                     picture:pic,
-                                     description: desc,
-                                     privacy: privacy
-                                     },
-                                     function(response) {
-                                     if (!response || response.error) {
-                                    	 console.log(response.error);
-                                    	 callback(false);
-                                     } else {
-                                         callback(true);
-                                     }
-                                     }
-                                     );
-                              };
-                              
-                              
-                  if (response && response.status === 'connected') {
-                    postfb();
-                  }else{
-                       Device.PhoneGap.loginFacebook(
-                        function(user){
-                            Service.User.linkFB(Account.userId,user.fbid,user.fbpic,user.fbname,user.fbemail,function(data) {
-                                var fbobj = {fbpic:user.fbpic,fbname:user.fbname};
-                                                                                
-                                if(user.fbemail!=undefined){
-                                    fbobj.fbemail = user.fbemail;
-                                }
-                                                                                
-                                Account.fbObject = fbobj;
-                                localStorage.setItem('u', JSON.stringify(Account));
-                                postfb();
-                            });
-                                                            
-                        }
-                      );
-                  }
-            });
+				var postfb = function() {
+					FB.api("/me/feed", 'post', {
+						message : message,
+						link : link,
+						caption : caption,
+						name : title,
+						picture : pic,
+						description : desc,
+						privacy : privacy
+					}, function(response) {
+						if (!response || response.error) {
+							alert(response.error);
+						} else {
+							callback();
+							alert('Message sent!');
+						}
+					});
+				};
+
+				if (response && response.status === 'connected') {
+					postfb();
+				} else {
+					Device.PhoneGap.loginFacebook(function(user) {
+						var linkToFb = function(data) {
+							var fbobj = {
+								fbpic : user.fbpic,
+								fbname : user.fbname
+							};
+
+							if (user.fbemail != undefined) {
+								fbobj.fbemail = user.fbemail;
+							}
+
+							Account.fbObject = fbobj;
+							localStorage.setItem('u', JSON
+									.stringify(Account));
+							postfb();
+						};
+						Service.User.linkFB(Account.userId, user.fbid, user.fbpic, user.fbname, user.fbemail, linkToFb);
+					});
+				}
+			}); 
             
+            var postfb = function() {
+            	var opt = { message: message,
+	                link: link,
+	                caption: caption,
+	                name:title,
+	                picture:pic,
+	                description: desc,
+	                privacy: privacy
+                };
+            	var cb = function(response) {
+                    if (!response || response.error) { 
+                    	console.log(response.error);
+						 callback(false);
+                    } else {
+                    	callback(true);
+                    }
+                };
+            	FB.api("/me/feed", 'post', opt, cb);                              
+            };                
+
+            if (response && response.status === 'connected') {
+				postfb();
+			} else {
+				Device.PhoneGap.loginFacebook(function(user) {
+					Service.User.linkFB(Account.userId, user.fbid, user.fbpic,
+					user.fbname, user.fbemail, function(data) {
+						var fbobj = {
+							fbpic : user.fbpic,
+							fbname : user.fbname
+						};
+
+						if (user.fbemail != undefined) {
+							fbobj.fbemail = user.fbemail;
+						}
+
+						Account.fbObject = fbobj;
+						localStorage.setItem('u', JSON
+								.stringify(Account));
+						postfb();
+					});
+				});
+			}
 	    }
 	    
 	},
@@ -788,7 +840,7 @@ document.addEventListener("deviceready", function() {
 	Device.PhoneGap.DestinationType = navigator.camera.DestinationType;
 	
 	 FB.init({
-         appId: "370184839777084",
+         appId: Config.FB_APP_ID,
          nativeInterface: CDV.FB,
          useCachedDialogs: false
      });
