@@ -444,7 +444,7 @@ textarea {
 	background-color: #eee;
 }
 .content.no_color {
-	background-color: #fff;
+	background-color: transparent;
 }
 
 .flip_panel {
