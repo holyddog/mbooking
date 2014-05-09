@@ -52,12 +52,15 @@ public class CommentRepositoryImpl implements CommentRepostitoryCustom {
 
 				Notification notf = new Notification();
 				notf.setUid(book.getUid()); // set notify to book author
-				notf.setBid(bid);
-				notf.setBname(book.getTitle());
-				notf.setBpic(book.getPic());
+				
+				Book b = new Book();
+				b.setBid(book.getBid());
+				b.setPic(book.getPic());
+				b.setTitle(book.getTitle());
+				notf.setBook(b);
+				notf.setWho(user);
+				
 				notf.setAdate(now);
-				notf.setPic(user.getPic());
-				notf.setDname(user.getDname());
 				
 				String fullMessage = String.format(ConstValue.FOLLOWER_COMMENT_MSG_FORMAT_EN, user.getDname(), book.getTitle(), message);
 				notf.setMessage(fullMessage);

@@ -20,6 +20,7 @@ import com.mbooking.repository.UserRepostitoryCustom;
 import com.mbooking.util.Convert;
 import com.mbooking.util.ImageUtils;
 import com.mbooking.util.MongoCustom;
+import com.mbooking.util.TimeUtils;
 
 public class UserRepositoryImpl implements UserRepostitoryCustom {
 	@Autowired
@@ -266,7 +267,15 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 			query.skip(skip);
 			query.limit(limit);
 		}
-		return db.find(query, Notification.class);
+		
+		List<Notification> list = db.find(query, Notification.class);
+		if (list != null) {
+			long now = System.currentTimeMillis();
+			for (int i = 0; i < list.size(); i++) {
+				Notification n = list.get(i);
+				n.setTime(TimeUtils.timefromNow(n.getAdate(), now));				
+			}
+		}
+		return list;		
 	}
-
 }

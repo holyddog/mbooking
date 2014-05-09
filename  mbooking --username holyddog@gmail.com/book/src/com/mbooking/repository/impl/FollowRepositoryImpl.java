@@ -80,15 +80,21 @@ public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 				following_update.set("fgcount", fgcount);
 				db.updateFirst(new Query(criteria), following_update, User.class);
 				
-				Notification notification = new Notification();
-				notification.setUid(auid);
-				notification.setFollid(uid);
-				notification.setAdate(System.currentTimeMillis());
-				notification.setPic(foll.getPic());
-				notification.setDname(foll.getDname());
-				notification.setMessage(String.format(ConstValue.NEW_FOLLOWER_MSG_FORMAT_EN, foll.getDname()));
-				notification.setNtype(ConstValue.NEW_FOLLOWER);
-				db.insert(notification);
+				Notification notf = new Notification();
+				notf.setUid(auid);
+				notf.setAdate(System.currentTimeMillis());
+				
+				User who = new User();
+				who.setUid(foll.getUid());
+				who.setDname(foll.getDname());
+				who.setPic(foll.getPic());
+				notf.setWho(who);
+				
+				String fullMessage = String.format(ConstValue.NEW_FOLLOWER_MSG_FORMAT_EN, foll.getDname());
+				notf.setMessage(fullMessage);
+				notf.setNtype(ConstValue.NEW_FOLLOWER);
+				
+				db.insert(notf);
 				
 				return true;
 			}
