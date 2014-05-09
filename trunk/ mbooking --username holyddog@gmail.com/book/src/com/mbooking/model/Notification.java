@@ -11,25 +11,15 @@ public class Notification {
 	ObjectId _id;
 	
 	Long uid;	
-	Long bid;
-	
-	Long follid;	//Follower id
-	Long auid;		//Author (book writer) id
-	
-	Integer ntype;	// 1 : Has new follower, 2: Follower comment book
-	
+	Integer ntype;	// 1 = new follower, 2 = new comment on my book	
 	String message;
+	Long adate;	// alert date
 	
-	String dname;	// Name of someone who do action
-	String pic;		// Picture of someone who do action
-	
-	String bpic;	// Book picture
-	String bname;	// Book name
-	
-	Long adate;		//Action date
+	Book book; // book reference
+	User who; // user reference (who notified)
 
-	//Service return
-	String strtime;
+	// pretty time
+	String time;
 	
 	public ObjectId get_id() {
 		return _id;
@@ -45,30 +35,6 @@ public class Notification {
 
 	public void setUid(Long uid) {
 		this.uid = uid;
-	}
-
-	public Long getBid() {
-		return bid;
-	}
-
-	public void setBid(Long bid) {
-		this.bid = bid;
-	}
-
-	public Long getFollid() {
-		return follid;
-	}
-
-	public void setFollid(Long follid) {
-		this.follid = follid;
-	}
-
-	public Long getAuid() {
-		return auid;
-	}
-
-	public void setAuid(Long auid) {
-		this.auid = auid;
 	}
 
 	public Integer getNtype() {
@@ -87,38 +53,6 @@ public class Notification {
 		this.message = message;
 	}
 
-	public String getDname() {
-		return dname;
-	}
-
-	public void setDname(String dname) {
-		this.dname = dname;
-	}
-
-	public String getPic() {
-		return pic;
-	}
-
-	public void setPic(String pic) {
-		this.pic = pic;
-	}
-
-	public String getBpic() {
-		return bpic;
-	}
-
-	public void setBpic(String bpic) {
-		this.bpic = bpic;
-	}
-
-	public String getBname() {
-		return bname;
-	}
-
-	public void setBname(String bname) {
-		this.bname = bname;
-	}
-
 	public Long getAdate() {
 		return adate;
 	}
@@ -127,11 +61,27 @@ public class Notification {
 		this.adate = adate;
 	}
 
-	public String getStrtime() {
-		return strtime;
+	public Book getBook() {
+		return book;
 	}
 
-	public void setStrtime(String strtime) {
-		this.strtime = strtime;
+	public void setBook(Book book) {
+		this.book = book;
+	}
+
+	public User getWho() {
+		return who;
+	}
+
+	public void setWho(User who) {
+		this.who = who;
+	}
+
+	public String getTime() {
+		return time;
+	}
+
+	public void setTime(String time) {
+		this.time = time;
 	}
 }
