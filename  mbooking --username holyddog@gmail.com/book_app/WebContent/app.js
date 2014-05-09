@@ -255,7 +255,7 @@ Device = {
 			this._getPhoto(opts);
 		},
 	    loginFacebook: function(callback){
-	    	if (!FB) return;
+	    	if (!Device.PhoneGap.isReady) return;
 
 	    	FB.login(function(response) {
 				if (response.authResponse) {
@@ -281,7 +281,7 @@ Device = {
 	    
 	    },
 	    logoutFacebook: function(callback){
-	    	if (!FB) return;
+	    	if (!Device.PhoneGap.isReady) return;
 	    	
 	        FB.getLoginStatus(function(response) {
 	                          if (response && response.status === 'connected') {
@@ -293,7 +293,7 @@ Device = {
 	    },
 		
 	    postBookToFacebook : function(title,caption,desc,pic,link,message,callback){            
-            if (!FB) return;
+            if (!Device.PhoneGap.isReady) return;
             
             var privacy={"value":"EVERYONE"};//default
             
@@ -527,7 +527,7 @@ Page = {
 		loading_panel.children[0].children[1].innerText = '';
 	},
 	
-	bodyShowLoading: function(content) {
+	bodyShowLoading: function(content, white) {
 		var cv = document.createElement('canvas');
 		cv.className = 'content_loading';
 		cv.width = 40;
@@ -545,7 +545,12 @@ Page = {
 				i++;
 			}, 80);
 		};
-		img.src = 'images/circle_g.png';
+		if (white) {
+			img.src = 'images/circle.png';
+		}
+		else {
+			img.src = 'images/circle_g.png';			
+		}
 	},
 	
 	bodyHideLoading: function(content) {

@@ -47,7 +47,7 @@ Page.Comments = {
 		list.empty();
 		
 		var content = container.find('.content');
-		Page.bodyShowLoading(content);
+		Page.bodyShowLoading(content, true);
 		
 		Service.Book.GetComments(bid, 0, Config.LIMIT_ITEM, function(data) { 
 			Page.bodyHideLoading(content);
