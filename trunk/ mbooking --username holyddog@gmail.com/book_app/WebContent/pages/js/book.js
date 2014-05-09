@@ -39,16 +39,10 @@ Page.Book = {
 			btnComment.css('right', '0px');
 		}
 		
-//		if (!isGuest) {
-//			btnShare.hide();
-//			btnComment.hide();
-//		}
-		
 		var content = container.find('.content');
 		Page.bodyShowLoading(content);
 		
 		// set content data		
-//		Service.Book.GetBook(params.bid, params.uid, function(data) {
 		Service.Book.GetBook(params.bid, params.uid, function(data) {
 			Page.bodyHideLoading(content);
 			self.load(container, data);
@@ -121,30 +115,6 @@ Page.Book = {
 			
 			var count = 0;
 			container.find('.page_nav .pic_box img').load(function() {
-//				var img = $(this);
-//				var pic = img.parent();
-//				
-//				var pw = pic.width();
-//				var ph = pic.height();
-//				
-//				if (ph >= pw) {
-//					img.css({
-//						height: ph + 'px',
-//						width: 'auto'
-//					});
-//					img.css({
-//						left: -1 * (img.width() / 2 - pw / 2) + 'px'
-//					});
-//				}
-//				else {
-//					img.css({
-//						width: pw + 'px',
-//						height: 'auto'
-//					});
-//					img.css({
-//						top: -1 * (img.height() / 2 - ph / 2) + 'px'
-//					});				
-//				}
 				finish(count++);
 			});
 		}
