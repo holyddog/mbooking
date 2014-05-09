@@ -1,12 +1,12 @@
 package com.mbooking.repository.impl;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
@@ -14,6 +14,7 @@ import com.mbooking.constant.ConstValue;
 import com.mbooking.model.Book;
 import com.mbooking.model.FBobj;
 import com.mbooking.model.Follow;
+import com.mbooking.model.Notification;
 import com.mbooking.model.User;
 import com.mbooking.repository.UserRepostitoryCustom;
 import com.mbooking.util.Convert;
@@ -254,6 +255,18 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		}
 		
 		return map;
+	}
+	
+	@Override
+	public List<Notification> notifications(Long uid,Integer skip, Integer limit) {
+		Query query = new Query(Criteria.where("uid").is(uid));
+		query.sort().on("adate", Order.DESCENDING);
+
+		if (skip != null && limit != null && limit != 0) {
+			query.skip(skip);
+			query.limit(limit);
+		}
+		return db.find(query, Notification.class);
 	}
 
 }

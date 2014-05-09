@@ -9,24 +9,12 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.data.mongodb.core.query.Query;
 
-import com.mbooking.constant.ConstValue;
 import com.mbooking.model.Notification;
 import com.mbooking.repository.NotificationRepositoryCustom;
 
-public class NotificationRepositoryImpl implements NotificationRepositoryCustom{
+public class NotificationRepositoryImpl implements NotificationRepositoryCustom {
 	@Autowired
 	private static MongoTemplate db;
-
-	@Override
-	public Boolean hadBeenRead() {
-		try{
-
-			return true;
-		}
-		catch(Exception e){
-			return false;
-		}
-	}
 
 	@Override
 	public List<Notification> findNotificationsByUid(Long uid,Integer skip, Integer limit) {
