@@ -1,5 +1,7 @@
 package com.mbooking.controller.json;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,9 +11,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mbooking.common.ErrorResponse;
 import com.mbooking.common.ResultResponse;
+import com.mbooking.model.Notification;
 import com.mbooking.model.User;
 import com.mbooking.repository.BookRepository;
 import com.mbooking.repository.FollowRepository;
+import com.mbooking.repository.NotificationRepository;
 import com.mbooking.repository.UserRepository;
 
 @Controller
@@ -160,4 +164,18 @@ public class UserJson {
 		return ResultResponse.getResult("picture", userRepo.changePic(uid, pic));
 	}
 	
+	@RequestMapping(method = RequestMethod.GET, value = "/getNotificationByUid.json")
+	public @ResponseBody
+	Object getNotifications(
+			@RequestParam(value = "uid") Long uid,
+			@RequestParam(value = "skip", required = false) Integer skip,
+			@RequestParam(value = "limit", required = false) Integer limit) {
+		List<Notification> notf = userRepo.notifications(uid, skip, limit);
+		if (notf != null) {
+			return notf;
+		}
+
+		return ErrorResponse.getError("Unsuccess to find notication by uid: " + uid);
+
+	}
 }
