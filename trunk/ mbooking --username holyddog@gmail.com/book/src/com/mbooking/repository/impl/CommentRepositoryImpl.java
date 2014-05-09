@@ -59,7 +59,7 @@ public class CommentRepositoryImpl implements CommentRepostitoryCustom {
 				notf.setPic(user.getPic());
 				notf.setDname(user.getDname());
 				
-				String fullMessage = String.format(ConstValue.FOLLOWER_COMMENT_MSG_FORMAT_EN, user.getDname(), book.getTitle(), comment);
+				String fullMessage = String.format(ConstValue.FOLLOWER_COMMENT_MSG_FORMAT_EN, user.getDname(), book.getTitle(), message);
 				notf.setMessage(fullMessage);
 				notf.setNtype(ConstValue.FOLLOWER_COMMENT);
 
