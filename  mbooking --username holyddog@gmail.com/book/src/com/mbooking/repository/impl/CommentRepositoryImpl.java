@@ -23,63 +23,55 @@ public class CommentRepositoryImpl implements CommentRepostitoryCustom {
 	private MongoTemplate db;
 
 	@Override
-	public Boolean createComment(Long bid, Long uid,String comment) {
-		
-		try{			
-			Book book = db.findOne(new Query(Criteria.where("bid").is(bid)),Book.class);
-			
-			if(book!=null){
-				Comment comment_obj = new Comment();
-				comment_obj.setCmid(MongoCustom.generateMaxSeq(Comment.class, db));
-				comment_obj.setBid(bid);
-				comment_obj.setUid(uid);
-				comment_obj.setComment(comment);
-				comment_obj.setPdate(System.currentTimeMillis());
+	public Boolean createComment(Long bid, Long uid,String message) {
+
+		try {
+			Query query = new Query(Criteria.where("bid").is(bid));
+			query.fields().include("title").include("pic").include("uid");
+			Book book = db.findOne(query, Book.class);			
+
+			if (book != null) {
+				Long now = System.currentTimeMillis();
 				
-				User user = db.findOne(new Query(Criteria.where("uid").is(uid)), User.class);
-				comment_obj.setDname(user.getDname());
-				
-				if(user.getPic()!=null&&!user.getPic().equals("")&&!user.getPic().equals("undefined"))
-				{
-					comment_obj.setPic(user.getPic());
-					
+				Comment comment = new Comment();
+				comment.setCmid(MongoCustom.generateMaxSeq(Comment.class, db));
+				comment.setBid(bid);
+				comment.setUid(uid);
+				comment.setComment(message);
+				comment.setPdate(now);
+
+				query = new Query(Criteria.where("uid").is(uid));
+				query.fields().include("dname").include("pic");
+				User user = db.findOne(query, User.class);
+				comment.setDname(user.getDname());
+
+				if (user.getPic() != null) {
+					comment.setPic(user.getPic());
 				}
-		
-				db.insert(comment_obj);	
+				db.insert(comment);
+
+				Notification notf = new Notification();
+				notf.setUid(book.getUid()); // set notify to book author
+				notf.setBid(bid);
+				notf.setBname(book.getTitle());
+				notf.setBpic(book.getPic());
+				notf.setAdate(now);
+				notf.setPic(user.getPic());
+				notf.setDname(user.getDname());
 				
-				Notification notification = new Notification();	
-				notification.setUid(uid);
-			
-				notification.setBid(bid);
-				notification.setBname(book.getTitle());
-				notification.setBpic(book.getPic());
-				
-				notification.setAdate(System.currentTimeMillis());
-			
-				notification.setPic(user.getPic());
-				notification.setDname(user.getDname());
-				notification.setMessage(String.format(ConstValue.FOLLOWER_COMMENT_MSG_FORMAT_EN, user.getDname(),book.getTitle(),comment));
-				
-				notification.setNtype(ConstValue.FOLLOWER_COMMENT);
-				
-				db.insert(notification);
-				
-				
-				
-				
-				
-				
-				return true;	
-			}
-			else
+				String fullMessage = String.format(ConstValue.FOLLOWER_COMMENT_MSG_FORMAT_EN, user.getDname(), book.getTitle(), comment);
+				notf.setMessage(fullMessage);
+				notf.setNtype(ConstValue.FOLLOWER_COMMENT);
+
+				db.insert(notf);
+
+				return true;
+			} else
 				return false;
-			
-		}catch(Exception e){
-			System.out.println(e);
+
+		} catch (Exception e) {
 			return false;
-			
 		}
-		
 	}
 
 	@Override
