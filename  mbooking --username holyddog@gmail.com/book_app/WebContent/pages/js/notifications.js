@@ -1,9 +1,14 @@
 Page.Notifications = {
 	url: 'pages/html/notifications.html',
 	init: function(params, container) {
+		var self = this;
+		
 		// set toolbar buttons
 		container.find('[data-id=btn_m]').tap(function() {
 			Page.slideMenu();
+		});	
+		container.find('[data-id=btn_r]').tap(function() {
+			self.load(container);
 		});	
 		
 		this.load(container);
