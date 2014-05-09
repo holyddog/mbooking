@@ -34,7 +34,7 @@ public class CommentJson {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/findCommentsByBid.json")
 	public @ResponseBody
-	Object unfollowAuthor(
+	Object findComments(
 			@RequestParam(value = "bid") Long bid,
 			@RequestParam(value = "skip", required = false) Integer skip,
 			@RequestParam(value = "limit", required = false) Integer limit
