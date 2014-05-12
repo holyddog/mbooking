@@ -1,6 +1,6 @@
 Page.Profile = {	
 	url: 'pages/html/profile.html',
-	init: function(params, container, append) {
+	init: function(params, container, append) {		
 		var self = this;
 		
 		var isGuest = false;
@@ -20,6 +20,11 @@ Page.Profile = {
 		var btnBack = container.find('[data-id=btn_b]');
 		btnBack.tap(function() {
 			Page.back();
+		});	
+		var btnNotf = container.find('[data-id=btn_n]');
+		btnNotf.tap(function() {
+			btnNotf.find('.notf_count').removeClass('show');
+			Page.open('Notifications', true);
 		});		
 		
 		if (params && params.back) {
@@ -43,9 +48,11 @@ Page.Profile = {
 		
 		if (!isGuest) {
 			btnFollow.hide();
+			btnNotf.show();
 		}
 		else {
 			btnFollow.show();
+			btnNotf.hide();
 		}
 		
 		container.find('.ptab').click(function() {

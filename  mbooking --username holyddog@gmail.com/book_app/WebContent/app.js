@@ -5,9 +5,10 @@ Config = {
 	
 	SLIDE_DELAY: 250,
 	FADE_DELAY: 250,
+	INTERVAL_DELAY: 1000, //60000, // 1 minute
 	
 	WEB_BOOK_URL:'http://localhost:8080/book',
-	FILE_URL: 'http://' + '192.168.0.118' + '/res/book',
+	FILE_URL: 'http://' + window.location.hostname + '/res/book',
 	FB_APP_ID: '370184839777084',
 	
 //	FILE_URL: 'http://119.59.122.38/book_dev_files',
@@ -21,7 +22,7 @@ Config = {
 };
 
 Service = {
-	url: 'http://' + '192.168.0.118' + ':8080/book/data'		
+	url: 'http://' + window.location.hostname + ':8080/book/data'		
 };
 
 Account = {};
@@ -401,6 +402,24 @@ Page = {
 	
 	_tempBack: [],
 	
+	getNotifications: function(page) {
+		if (Page.bgService) {
+			Service.User.CountNotifications(Account.userId, function(data) {
+				var count = parseInt(data.result);
+				if (count > 0) {
+					$('.tbar .notf_count').text(count).addClass('show');			
+				}
+				else {
+					$('.tbar .notf_count').text(count).removeClass('show');
+				}
+				console.log(count + ', ' + new Date().getTime());
+				setTimeout(function() {
+					Page.getNotifications();						
+				}, Config.INTERVAL_DELAY);
+			});
+		}
+	},
+	
 	loadMenu: function() {
 		var profileCover = $('#profile_cover');
 		if (Account.cover) {
@@ -768,6 +787,16 @@ var pageLoad = function() {
 		var currentPage = Page[page];
 		var checkPage = $.inArray(pageUrl, Page._stackPages);
 		if (currentPage && checkPage == -1) {
+			if ($.inArray(page, ['Profile', 'Following', 'Explore']) > -1) {
+				if (!Page.bgService) {
+					Page.bgService = true;
+					Page.getNotifications();
+				}				
+			}
+			else {
+				Page.bgService = false;
+			}
+			
 			if (currentPage.url) {
 				Web.html(currentPage.url, function(html) {
 					var container = $('<div id="page_' + page + '" data-page="' + page + '" class="page fill_dock box vertical active">' + html + '</div>');
@@ -807,6 +836,13 @@ var pageLoad = function() {
 			if (Page._tempBack && Page._tempBack.length) {
 				var fn = Page._tempBack.pop();
 				fn(activeContainer, Page[activeContainer.data('page')]);
+			}
+			
+			if ($.inArray(page, ['Profile', 'Following', 'Explore']) > -1) {
+				if (!Page.bgService) {
+					Page.bgService = true;
+					Page.getNotifications();
+				}				
 			}
 		}
 		else if (checkPage == -1) {

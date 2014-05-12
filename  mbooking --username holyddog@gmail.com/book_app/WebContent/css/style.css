@@ -274,6 +274,9 @@ textarea {
 .btn span.list {
 	-webkit-mask-image: url(../icons/list.png);
 }
+.btn span.bell {
+	-webkit-mask-image: url(../icons/bell.png);
+}
 .btn span.refresh {
 	-webkit-mask-image: url(../icons/refresh.png);
 }
@@ -303,6 +306,23 @@ textarea {
 }
 .btn span.edit {
 	-webkit-mask-image: url(../icons/pencil.png);
+}
+.btn .notf_count {
+	border-radius: 8px;
+	width: 16px;
+	height: 16px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	background-color: #CC0000;
+	color: #fff;
+	line-height: 16px;
+	text-align: center;
+	font-size: 65%;
+	display: none;
+}
+.btn .notf_count.show {	
+	display: block;
 }
 
 .btn_text {
