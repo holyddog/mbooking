@@ -412,7 +412,6 @@ Page = {
 				else {
 					$('.tbar .notf_count').text(count).removeClass('show');
 				}
-				console.log(count + ', ' + new Date().getTime());
 				setTimeout(function() {
 					Page.getNotifications();						
 				}, Config.INTERVAL_DELAY);

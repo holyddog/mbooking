@@ -25,7 +25,7 @@ Page.Profile = {
 		btnNotf.tap(function() {
 			btnNotf.find('.notf_count').removeClass('show');
 			Page.open('Notifications', true);
-		});		
+		});
 		
 		if (params && params.back) {
 			btnBack.show();
@@ -46,13 +46,17 @@ Page.Profile = {
 			}
 		});
 		
+		var linkAdd = container.find('[data-id=link_a]');
+		
 		if (!isGuest) {
 			btnFollow.hide();
 			btnNotf.show();
+			linkAdd.show();
 		}
 		else {
 			btnFollow.show();
 			btnNotf.hide();
+			linkAdd.hide();
 		}
 		
 		container.find('.ptab').click(function() {
@@ -61,13 +65,78 @@ Page.Profile = {
 			ptab.addClass('active');
 			
 			container.find('.tpage').hide();
-			container.find('.tpage').eq($(this).index()).show();
+			container.find('.tpage').eq($(this).index() - 1).show();
 		});
 		
-		self.load(uid, isGuest, container);
+		self.loadProfile(uid, isGuest, container);
 	},
 	
-	load: function(uid, isGuest, container) {
+	openBook: function(b, uid) {
+		var bid = b.data('bid');
+		if (bid) {
+			Page.open('Book', true, { bid: bid, uid: uid });
+		}
+		else {
+			Page.open('CreateBook', true, { pub: b.data('pub') });
+		}
+	},
+	
+	loadPublicBooks: function(pubBooks, uid, container, append) {		
+		var self = this;
+		var ptab1 = container.find('#ptab1');	
+
+		if (!append) {
+			ptab1.find('.b').remove();
+		}
+		
+		for (var i = 0; i < pubBooks.length; i++) {
+			var b = pubBooks[i];
+			ptab1.append(self.getBook(b.bid, b.title, b.pic, b.pcount));
+		}
+		ptab1.find('.book_size').click(function() {
+			self.openBook($(this), uid);
+		});
+		self.resizeBook(ptab1);
+	},
+	
+	loadPrivateBooks: function(priBooks, uid, container, append) {
+		var self = this;
+		var ptab2 = container.find('#ptab2');
+
+		if (!append) {
+			ptab2.find('.b').remove();
+		}
+		
+		for (var i = 0; i < priBooks.length; i++) {
+			var b = priBooks[i];
+			ptab2.append(self.getBook(b.bid, b.title, b.pic, b.pcount));
+		}
+		ptab2.find('.book_size').click(function() {
+			self.openBook($(this), uid);
+		});
+		self.resizeBook(ptab2);
+	},
+	
+	loadDraftBooks: function(drBooks, uid, container, append) {
+		var self = this;
+		var ptab3 = container.find('#ptab3');
+
+		if (!append) {
+			ptab3.find('.b').remove();
+		}
+		
+		for (var i = 0; i < drBooks.length; i++) {
+			var b = drBooks[i];
+			ptab3.append(self.getBook(b.bid, b.title, b.pic, b.pcount));
+		}
+		ptab3.find('.book_size').click(function() {
+			var b = $(this);
+			Page.open('EditBook', true, { bid: b.data('bid') });
+		});	
+		self.resizeBook(ptab3);	
+	},
+	
+	loadProfile: function(uid, isGuest, container) {
 		var self = this;
 		
 		var content = container.find('.content');
@@ -97,63 +166,29 @@ Page.Profile = {
 			if (user.fgcount) {
 				statPanel.find('[data-count=following]').text(user.fgcount);				
 			}
-			
-			var openBook = function(b) {
-				var bid = b.data('bid');
-				if (bid) {
-					Page.open('Book', true, { bid: bid, uid: uid });
-				}
-				else {
-					Page.open('CreateBook', true, { pub: b.data('pub') });
-				}
-			};
-			
-			content.find('.b').remove();
-			
-			var ptab1 = content.find('#ptab1');			
-			var pubBooks = data.pubBooks;
-			for (var i = 0; i < pubBooks.length; i++) {
-				var b = pubBooks[i];
-				ptab1.append(self.getBook(b.bid, b.title, b.pic, b.pcount));
-			}
-			ptab1.find('.book_size').click(function() {
-				openBook($(this));
-			});
-			
+								
+			self.loadPublicBooks(data.pubBooks, uid, container);
+
+			container.find('#xbar .flex1').hide();
+			var textBar = container.find('#xbar .text');
 			if (!isGuest) {
 				if (user.drcount) {
-					$('#xbar .notf').show().text(user.drcount);
+					container.find('#xbar .notf').show().text(user.drcount);
 				}
+				container.find('#xbar .flex1').show();
+				textBar.hide();
 				
-				var ptab2 = content.find('#ptab2');
-				var priBooks = data.priBooks;
-				for (var i = 0; i < priBooks.length; i++) {
-					var b = priBooks[i];
-					ptab2.append(self.getBook(b.bid, b.title, b.pic, b.pcount));
-				}
-				ptab2.find('.book_size').click(function() {
-					openBook($(this));
-				});
-				
-				var ptab3 = content.find('#ptab3');
-				var drBooks = data.drBooks;
-				for (var i = 0; i < drBooks.length; i++) {
-					var b = drBooks[i];
-					ptab3.append(self.getBook(b.bid, b.title, b.pic, b.pcount));
-				}
-				ptab3.find('.book_size').click(function() {
-					var b = $(this);
-					Page.open('EditBook', true, { bid: b.data('bid') });
-				});
+				self.loadPrivateBooks(data.priBooks, uid, container);
+				self.loadDraftBooks(data.drBooks, uid, container);
 			}
 			else {
 				if (data.isFollow) {
 					container.find('[data-id=btn_f]').html('FOLLOWING').addClass('follow');
 				}
+				textBar.text('Books by ' + user.dname).show();
 			}
 
 			profile_header.style.height = profile_header.offsetWidth + 'px';
-			self.resizeBook(container);
 		});
 	},
 	

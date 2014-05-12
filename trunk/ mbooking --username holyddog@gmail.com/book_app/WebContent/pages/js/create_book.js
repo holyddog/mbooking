@@ -24,7 +24,19 @@ Page.CreateBook = {
 					var bid = data.bid;
 					
 					Page.btnHideLoading(btnAccept[0]);
-					Page.back(function() {
+					Page.back(function(c, page) {
+						var b = [{
+							bid: 9,
+							title: "Proin praesent"
+						}];
+						page.loadDraftBooks(b, Account.userId, c, true);
+						var notf = c.find('#xbar .notf').show();
+						var count = 1;
+						if (notf.text().length) {
+							count = parseInt(notf.text()) + 1;
+						}
+						notf.text(count);
+						
 						Page.open('EditBook', true, { bid: bid, title: title, desc: desc });						
 					});
 				};
@@ -40,8 +52,6 @@ Page.CreateBook = {
 				else {
 					Service.Book.CreateBook(inputTitle.val(), inputDesc.val(), Account.userId, pub, fn);					
 				}
-				
-				Page.Profile.load(Account.userId, false, $(page_Profile));
 			}
 		});
 		var btnCheck = container.find('[data-id=btn_c]'); 
