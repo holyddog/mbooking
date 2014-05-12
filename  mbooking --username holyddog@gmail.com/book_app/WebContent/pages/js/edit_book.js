@@ -21,7 +21,8 @@ Page.EditBook = {
 				Page.Profile.updateCover();
 			}
 		};
-		var book=null;
+		
+//		var book = null;
 		var btnPub = container.find('[data-id=btn_pub]');
 		btnPub.tap(function() {
 			if (!btnPub.hasClass('used')) {
@@ -29,29 +30,35 @@ Page.EditBook = {
 				
 				var img = container.find('.book_size').css('background-image');
 				img = img.replace('url(' + Config.FILE_URL, '').replace(')', '').replace('_s', '');
-				Service.Book.PublishBook(bid, Account.userId, img, function(data) {
-				      
-		              if(container.find('[data-id=btn_c]').hasClass('check')&&Device.isMobile()){
-		            	  var publish_fn = function(success){
-		            		  if(success){
-								  alert('success');
-		            		  }else{
-		            			  alert('fail');
-		            		  }
-		            		  Page.hideLoading();
-							  updateAccount(data.user);
-							  Page.back();
-		            	  };
-						
-						  if(book!=null)
-						  Device.PhoneGap.postBookToFacebook(book.title,"The Story Application",book.desc,book.pic,(WEB_BOOK_URL+"?bid="+book.id),container.find('.share_cap').val(),publish_fn);
-						
-		               }
-		              else{
-		            	Page.hideLoading();
-		            	updateAccount(data.user);
-		            	Page.back();
-					}
+				Service.Book.PublishBook(bid, Account.userId, img, function(data) {	      
+//					if (container.find('[data-id=btn_c]').hasClass('check') && Device.isMobile()) {
+//						var publish_fn = function(success) {
+//							if (success) {
+//								alert('success');
+//							} else {
+//								alert('fail');
+//							}
+//							Page.hideLoading();
+//							updateAccount(data.user);
+//							Page.back();
+//						};
+//
+//						if (book != null)
+//							Device.PhoneGap.postBookToFacebook(book.title, "The Story Application", book.desc, book.pic, (WEB_BOOK_URL + "?bid=" + book.id), container.find('.share_cap').val(), publish_fn);
+//
+//					} else {
+//						Page.hideLoading();
+//						updateAccount(data.user);
+//						Page.back();
+//					}
+					
+					Page.hideLoading();
+					updateAccount(data.user);
+					Page.back(function(c, page) {
+						if (page.loadProfile) {
+							page.loadProfile(Account.userId, false, c);
+						}
+					});
 				});
 			}
 			else {
@@ -59,10 +66,12 @@ Page.EditBook = {
 				
 				Service.Book.UnpublishBook(bid, Account.userId, function(data) {
 					Page.hideLoading();
-
-					updateAccount(data.user);
-					
-					Page.back();
+					updateAccount(data.user);					
+					Page.back(function(c, page) {
+						if (page.loadProfile) {
+							page.loadProfile(Account.userId, false, c);
+						}
+					});
 				});				
 			}
 		});

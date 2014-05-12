@@ -341,7 +341,11 @@ textarea {
 	background-color: #ccc;
 	color: #333;
 }
-.btn_text.gray.follow {
+.btn_text.blue {
+	background-color: #6DCAEC;
+	color: #fff;
+}
+.btn_text.blue.follow {
 	background-color: #99CC00;
 	color: #fff;
 }

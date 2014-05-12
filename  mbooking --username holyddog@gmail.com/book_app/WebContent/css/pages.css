@@ -239,14 +239,13 @@
 #page_Profile .link_add {
 	float: left;
 	margin: 5px;
-	background-color: #e2e2e2;
 }
 
 #page_Profile .link_add .icon {
 	margin: 0 auto;
 	width: 40px;
 	height: 40px;
-	background-color: #777;
+	background-color: #fff;
 	-webkit-mask-size: 20px;
 	-webkit-mask-position: center center;
 	-webkit-mask-repeat: no-repeat;
@@ -255,7 +254,7 @@
 
 #page_Profile .link_add .label {
 	font-size: 75%;
-	color: #777;
+	color: #fff;
 }
 #page_Profile .header_overlay {
 	background-color: #000; 
@@ -320,8 +319,10 @@
 #page_Profile #xbar {
 	background-color: #fff;
 	height: 50px;
-	margin-top: 2px;
 	-webkit-box-shadow: 0px 1px 0px 0px rgba(50, 50, 50, 0.25);
+}
+#page_Profile #xbar .text {
+	line-height: 50px; padding: 0 10px; font-size: 80%; color: #555; text-align: center;
 }
 #page_Profile .ptab a {
 	display: block;
@@ -566,8 +567,6 @@
 }
 
 #page_EditBook .cmd_panel {
-	-webkit-box-shadow: 0px 1px 0px 0px rgba(50, 50, 50, 0.25);
-	padding-bottom: 10px;
 }
 #page_EditBook .cmd_panel .box {
 	height: 50px;

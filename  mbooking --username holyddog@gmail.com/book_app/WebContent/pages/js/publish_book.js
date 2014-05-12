@@ -22,11 +22,17 @@ Page.PublishBook = {
 				Page.loadMenu();
 				localStorage.setItem('u', JSON.stringify(Account));
 				
-				Page.back(function() {
-					Page.back(function(c) {
-						Page.Profile.invoke(Account.userId, c);			
-					});
-				});
+				if ($('#page_Profile').length > 0) {
+					Page.back(function() {
+						Page.back(function(c) {
+							alert(c);
+//							Page.Profile.invoke(Account.userId, c);			
+						});
+					});			
+				}
+				else {
+					Page.back();
+				}
 			});
 		});
 		container.find('[data-id=btn_e]').tap(function() {
