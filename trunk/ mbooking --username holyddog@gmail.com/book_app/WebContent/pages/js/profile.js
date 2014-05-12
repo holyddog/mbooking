@@ -69,6 +69,23 @@ Page.Profile = {
 		});
 		
 		self.loadProfile(uid, isGuest, container);
+		
+		var content = container.find('.content');
+		var tab1 = container.find('#ptab1');
+		var loading = false;
+		setInterval(function() {
+			container.find('.tbar .title').text(content[0].scrollTop + ', ' + content[0].offsetHeight);
+			if (!loading && content[0].scrollHeight - content[0].scrollTop <= content[0].offsetHeight) {
+				console.log('Load: ' + new Date().getTime());
+				loading = true;
+				
+				setTimeout(function() {
+					var b = parseInt(tab1.css('padding-bottom').replace('px', ''));
+					tab1.css('padding-bottom', (b + 100) + 'px');
+					loading = false;
+				}, 1000);
+			}
+		}, 1);
 	},
 	
 	openBook: function(b, uid) {
@@ -138,6 +155,8 @@ Page.Profile = {
 	
 	loadProfile: function(uid, isGuest, container) {
 		var self = this;
+		var profile_view = container.find('#profile_view')[0];
+		var profile_header = container.find('#profile_header')[0];
 		
 		var content = container.find('.content');
 		Page.bodyShowLoading(content);
@@ -216,7 +235,12 @@ Page.Profile = {
 	},
 	
 	resizeBook: function(container) {		
-		var w = (profile_header.offsetWidth / 2) - 15;
+		var ratio = 2;
+		if (profile_header.offsetWidth >= 600) {
+			ratio = 3;
+		}
+		
+		var w = (profile_header.offsetWidth / ratio) - 15;
 		var h = (w * 4) / 3;
 		container.find('.book_size').css({
 			width: w + 'px',

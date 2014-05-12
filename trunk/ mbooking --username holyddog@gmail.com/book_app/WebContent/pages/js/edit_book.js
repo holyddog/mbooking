@@ -76,7 +76,10 @@ Page.EditBook = {
 			}
 		});
 		
-		var w = Math.floor((book_header.offsetWidth / 2) - 15);
+		if (book_header.offsetWidth >= 600) {
+			self.ratio = 3;
+		}
+		var w = Math.floor((book_header.offsetWidth / self.ratio) - 15);
 		var h = Math.floor((w * 4) / 3);
 		container.find('.book_size').css({
 			width: w + 'px',
@@ -152,6 +155,7 @@ Page.EditBook = {
 	},
 	
 	bookPages: [],
+	ratio: 2,
 	
 	updateBook: function(container, title, desc) {
 		container.find('.book_title').text(title);
@@ -159,7 +163,8 @@ Page.EditBook = {
 	},
 	
 	reScale: function(container) {
-		var w = Math.floor((book_header.offsetWidth / 2) - 15);
+		var self = this;
+		var w = Math.floor((book_header.offsetWidth / self.ratio) - 15);
 		container.find('.page_size').css({
 			width: w + 'px',
 			height: w + 'px'			
@@ -167,7 +172,8 @@ Page.EditBook = {
 	},
 	
 	addPage: function(container, data) {
-		var w = Math.floor((book_header.offsetWidth / 2) - 15);
+		var self = this;
+		var w = Math.floor((book_header.offsetWidth / self.ratio) - 15);
 		
 		var div = document.createElement('div');
 		div.className = 'pp page_size';
