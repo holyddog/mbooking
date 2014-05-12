@@ -351,7 +351,6 @@
 	overflow: hidden; 
 	padding: 5px;
 	position: relative;
-	padding-bottom: 75px;
 }
 #page_Profile .tpage .btn_more {
 	position: absolute;
@@ -360,6 +359,9 @@
 	bottom: 0;
 	line-height: 70px;
 	text-align: center;
+}
+#page_Profile .tpage.loading .btn_more {
+	display: block;
 }
 
 #page_Book .btitle {
