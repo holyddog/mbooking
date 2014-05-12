@@ -113,12 +113,12 @@ Service.User = {
 		
 		Web.get(url, params, callback);
 	},
-	ReadedNotification: function(ntid, callback) {
-		var url = Service.url + '/readedNotification.json';
+	CountNotifications: function(uid, callback) {
+		var url = Service.url + '/countNotifications.json';
 		var params = {
-			ntid: ntid
+			uid: uid
 		};
-		Web.post(url, params, callback);
+		Web.get(url, params, callback);
 	}
 
 };

@@ -4,8 +4,8 @@ Page.Notifications = {
 		var self = this;
 		
 		// set toolbar buttons
-		container.find('[data-id=btn_m]').tap(function() {
-			Page.slideMenu();
+		container.find('[data-id=btn_b]').tap(function() {
+			Page.back();
 		});	
 		container.find('[data-id=btn_r]').tap(function() {
 			self.load(container);

@@ -1,6 +1,6 @@
 Page.Explore = {
 	url: 'pages/html/explore.html',
-	init: function(params, container) {
+	init: function(params, container) {		
 		var self = this;
 		
 		// set toolbar buttons
@@ -14,6 +14,11 @@ Page.Explore = {
 		btnAdd.tap(function() {
 			Page.open('AddPage', true, { total: Account.bookCount });
 		});
+		var btnNotf = container.find('[data-id=btn_n]');
+		btnNotf.tap(function() {
+			btnNotf.find('.notf_count').removeClass('show');
+			Page.open('Notifications', true);
+		});	
 		
 		self.load(container);
 	},
