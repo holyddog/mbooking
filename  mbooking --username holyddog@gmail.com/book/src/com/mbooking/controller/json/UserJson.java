@@ -35,6 +35,22 @@ public class UserJson {
 		return userRepo.getUserProfile(uid, guestId);
 	}
 	
+	@RequestMapping(method = RequestMethod.GET, value = "/getPublicBooks.json")
+	public @ResponseBody Object getPublicBooks(
+			@RequestParam(value = "uid") Long uid,
+			@RequestParam(value = "start") Integer start,
+			@RequestParam(value = "limit") Integer limit) {
+		return userRepo.findPublicBooks(uid, start, limit);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/getPrivateBooks.json")
+	public @ResponseBody Object getPrivateBooks(
+			@RequestParam(value = "uid") Long uid,
+			@RequestParam(value = "start") Integer start,
+			@RequestParam(value = "limit") Integer limit) {
+		return userRepo.findPrivateBooks(uid, start, limit);
+	}
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/getMyLastBooks.json")
 	public @ResponseBody Object getMyLastBooks(
 			@RequestParam(value = "uid") Long uid
