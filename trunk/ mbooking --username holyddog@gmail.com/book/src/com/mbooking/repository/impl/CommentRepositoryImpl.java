@@ -52,6 +52,7 @@ public class CommentRepositoryImpl implements CommentRepostitoryCustom {
 
 				Notification notf = new Notification();
 				notf.setUid(book.getUid()); // set notify to book author
+				notf.setUnread(true);
 				
 				Book b = new Book();
 				b.setBid(book.getBid());

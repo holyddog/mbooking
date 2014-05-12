@@ -176,6 +176,12 @@ public class UserJson {
 		}
 
 		return ErrorResponse.getError("Unsuccess to find notication by uid: " + uid);
-
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/countNotifications.json")
+	public @ResponseBody
+	Object countNotifications(
+			@RequestParam(value = "uid") Long uid) {
+		return ResultResponse.getResult("result", userRepo.notfCount(uid));
 	}
 }
