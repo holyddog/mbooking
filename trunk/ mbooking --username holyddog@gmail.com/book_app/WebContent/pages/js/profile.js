@@ -66,26 +66,34 @@ Page.Profile = {
 			
 			container.find('.tpage').hide();
 			container.find('.tpage').eq($(this).index() - 1).show();
+			
+			if (ptab.index() == 2) {
+				var content = container.find('.content');
+				var ptab2 = container.find('#ptab2').css('padding-bottom', '75px');
+				var start2 = ptab2.find('.b').length;
+				var more2 = ptab2.find('.btn_more');
+				Page.inv2 = setInterval(function() {
+					if (!ptab2.hasClass('loading') && content[0].scrollHeight - content[0].scrollTop <= content[0].offsetHeight) {
+						ptab2.addClass('loading');
+						Page.bodyShowLoading(more2);
+						
+						Service.User.GetPrivateBooks(uid, start2, Config.LIMIT_ITEM, function(data) { 
+							self.loadPrivateBooks(data, uid, container, true);
+							start2 += data.length;
+							ptab2.removeClass('loading');
+							Page.bodyHideLoading(more2);
+							
+							if (data.length < Config.LIMIT_ITEM) {
+								clearInterval(Page.inv2);
+								ptab2.css('padding-bottom', '5px');
+							}
+						});
+					}
+				}, 1);
+			}
 		});
 		
 		self.loadProfile(uid, isGuest, container);
-		
-		var content = container.find('.content');
-		var tab1 = container.find('#ptab1');
-		var loading = false;
-		setInterval(function() {
-			container.find('.tbar .title').text(content[0].scrollTop + ', ' + content[0].offsetHeight);
-			if (!loading && content[0].scrollHeight - content[0].scrollTop <= content[0].offsetHeight) {
-				console.log('Load: ' + new Date().getTime());
-				loading = true;
-				
-				setTimeout(function() {
-					var b = parseInt(tab1.css('padding-bottom').replace('px', ''));
-					tab1.css('padding-bottom', (b + 100) + 'px');
-					loading = false;
-				}, 1000);
-			}
-		}, 1);
 	},
 	
 	openBook: function(b, uid) {
@@ -187,6 +195,30 @@ Page.Profile = {
 			}
 								
 			self.loadPublicBooks(data.pubBooks, uid, container);
+			
+			if (data.pubBooks.length + 1 == Config.LIMIT_ITEM) {
+				var ptab1 = container.find('#ptab1').css('padding-bottom', '75px');
+				var start1 = ptab1.find('.b').length;
+				var more1 = ptab1.find('.btn_more');
+				Page.inv1 = setInterval(function() {
+					if (!ptab1.hasClass('loading') && content[0].scrollHeight - content[0].scrollTop <= content[0].offsetHeight) {
+						ptab1.addClass('loading');
+						Page.bodyShowLoading(more1);
+						
+						Service.User.GetPublicBooks(uid, start1, Config.LIMIT_ITEM, function(data) { 
+							self.loadPublicBooks(data, uid, container, true);
+							start1 += data.length;
+							ptab1.removeClass('loading');
+							Page.bodyHideLoading(more1);
+							
+							if (data.length < Config.LIMIT_ITEM) {
+								clearInterval(Page.inv1);
+								ptab1.css('padding-bottom', '5px');
+							}
+						});
+					}
+				}, 1);
+			}
 
 			container.find('#xbar .flex1').hide();
 			var textBar = container.find('#xbar .text');
@@ -198,6 +230,7 @@ Page.Profile = {
 				textBar.hide();
 				
 				self.loadPrivateBooks(data.priBooks, uid, container);
+				
 				self.loadDraftBooks(data.drBooks, uid, container);
 			}
 			else {

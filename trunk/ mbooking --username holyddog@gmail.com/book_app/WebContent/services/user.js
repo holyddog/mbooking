@@ -74,6 +74,24 @@ Service.User = {
 		};
 		Web.get(url, params, callback);
 	},
+	GetPublicBooks : function(userId, start, limit, callback) {
+		var url = Service.url + '/getPublicBooks.json';
+		var params = {
+			uid : userId,
+			start : start,
+			limit: limit
+		};
+		Web.get(url, params, callback);
+	},
+	GetPrivateBooks : function(userId, start, limit, callback) {
+		var url = Service.url + '/getPrivateBooks.json';
+		var params = {
+			uid : userId,
+			start : start,
+			limit: limit
+		};
+		Web.get(url, params, callback);
+	},
 	ChangePassword : function(uid, oldpassword, newpassword, callback) {
 		var url = Service.url + '/changePassword.json';
 		var params = {

@@ -1,7 +1,7 @@
 Config = {
 	DEBUG_MODE: true,
 	DEFAULT_PAGE: 'Home',
-	LIMIT_ITEM: 20,
+	LIMIT_ITEM: 2,
 	
 	SLIDE_DELAY: 250,
 	FADE_DELAY: 250,
@@ -742,6 +742,13 @@ Web = {
 var pageLoad = function() {
 	Page.hideLoading();
 	Page.bodyHideLoading();
+	
+	if (Page.inv1) {
+		clearInterval(Page.inv1);
+	}
+	if (Page.inv2) {
+		clearInterval(Page.inv2);		
+	}
 	
 	var hash = location.hash;	
 	var arr = hash.split('?');
