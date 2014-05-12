@@ -226,7 +226,7 @@
 }
 
 #page_Profile #profile_header {
-	max-height: 480px;
+	max-height: 400px;
 	background-color: #aaa;
 	position: relative;
 	background-size: 100%;
@@ -246,14 +246,15 @@
 	width: 40px;
 	height: 40px;
 	background-color: #fff;
-	-webkit-mask-size: 20px;
+	-webkit-mask-size: 25px;
 	-webkit-mask-position: center center;
 	-webkit-mask-repeat: no-repeat;
 	-webkit-mask-image: url(../icons/add.png);
+	margin-bottom: 5px;
 }
 
 #page_Profile .link_add .label {
-	font-size: 75%;
+	font-size: 85%;
 	color: #fff;
 }
 #page_Profile .header_overlay {
@@ -349,6 +350,16 @@
 #page_Profile .tpage {
 	overflow: hidden; 
 	padding: 5px;
+	position: relative;
+	padding-bottom: 75px;
+}
+#page_Profile .tpage .btn_more {
+	position: absolute;
+	width: 100%;
+	height: 70px;
+	bottom: 0;
+	line-height: 70px;
+	text-align: center;
 }
 
 #page_Book .btitle {
@@ -694,14 +705,14 @@
 #page_EditBook .link_add {
 	float: left;
 	margin: 5px;
-	background-color: #e2e2e2;
+	background-color: #e788d8;
 }
 
 #page_EditBook .link_add .icon {
 	margin: 0 auto;
 	width: 40px;
 	height: 40px;
-	background-color: #777;
+	background-color: #fff;
 	-webkit-mask-size: 20px;
 	-webkit-mask-position: center center;
 	-webkit-mask-repeat: no-repeat;
@@ -710,7 +721,7 @@
 
 #page_EditBook .link_add .label {
 	font-size: 75%;
-	color: #777;
+	color: #fff;
 }
 
 #page_ChangeCover .book_panel {

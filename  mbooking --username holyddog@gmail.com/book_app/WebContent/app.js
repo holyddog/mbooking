@@ -826,7 +826,7 @@ var pageLoad = function() {
 			var p = Page._stackPages.pop().split('?')[0];
 			var activeContainer = $('[data-page=' + Page._stackPages[Page._stackPages.length - 1].split('?')[0] + ']');
 			activeContainer.addClass('active');
-			$('[data-page=' + p + ']').remove();	
+			$('[data-page=' + p + ']:last-child').remove();	
 			
 //			if (typeof Page._tempBack == 'function') {
 //				Page._tempBack(activeContainer);

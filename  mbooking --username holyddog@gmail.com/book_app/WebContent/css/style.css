@@ -454,6 +454,7 @@ textarea {
 	height: 0px;
 	font-size: 100%;
 	line-height: 20px;
+	z-index: 10;
 	
 	overflow-y: scroll; 
 	-webkit-overflow-scrolling: touch; 
@@ -539,14 +540,14 @@ textarea {
 	opacity: .3;
 }
 .profile_item .info:after {
-	/*content: " ";
+	content: " ";
 	position: absolute;
 	width: 100%;
 	height: 80px;
 	background-color: #000;
 	top: 0;
 	left: 0;
-	opacity: .3;*/
+	opacity: .3;
 }
 
 .profile_item {
@@ -555,10 +556,13 @@ textarea {
 	padding: 15px;
 	background-size: 100% auto;
 	background-position: center center;
+	height: 50px;
 }
 .profile_item .pimage {
 	background-color: #ddd;
 	border-radius: 25px;
+	position: absolute;
+	z-index: 1;
 }
 .profile_item .pimage img {
 	width: 50px;
@@ -571,10 +575,17 @@ textarea {
 .profile_item .info h1 {
 	 line-height: 30px;	 
 	 font-weight: bold;
+	position: absolute;
+	z-index: 1;
+	left: 80px;
 }
 .profile_item .info .stat {
 	line-height: 20px;
 	font-size: 80%;
+	position: absolute;
+	z-index: 1;
+	left: 80px;
+	top: 45px;
 }*/
 
 #app_logo {
