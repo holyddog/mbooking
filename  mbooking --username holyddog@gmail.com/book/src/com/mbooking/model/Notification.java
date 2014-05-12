@@ -17,6 +17,7 @@ public class Notification {
 	
 	Book book; // book reference
 	User who; // user reference (who notified)
+	Boolean unread;
 
 	// pretty time
 	String time;
@@ -83,5 +84,13 @@ public class Notification {
 
 	public void setTime(String time) {
 		this.time = time;
+	}
+
+	public Boolean getUnread() {
+		return unread;
+	}
+
+	public void setUnread(Boolean unread) {
+		this.unread = unread;
 	}
 }

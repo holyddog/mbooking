@@ -258,6 +258,11 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		return map;
 	}
 	
+	@Override 
+	public Integer notfCount(Long uid) {
+		return (int) db.count(new Query(Criteria.where("uid").is(uid).and("unread").is(true)), Notification.class);
+	}
+	
 	@Override
 	public List<Notification> notifications(Long uid,Integer skip, Integer limit) {
 		Query query = new Query(Criteria.where("uid").is(uid));
@@ -276,6 +281,7 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 				n.setTime(TimeUtils.timefromNow(n.getAdate(), now));				
 			}
 		}
+		db.updateMulti(query, new Update().unset("unread"), Notification.class);
 		return list;		
 	}
 }

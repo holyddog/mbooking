@@ -18,6 +18,7 @@ public interface UserRepostitoryCustom {
 	Boolean changeDisplayName(Long uid, String displayName);
 	String changePic(Long uid, String pic);
 	List<Notification> notifications(Long uid, Integer skip, Integer limit);
+	Integer notfCount(Long uid);
 
 	Boolean unlinkFB(Long uid);
 	Boolean linkFB(Long uid,Long fbid,String fbpic,String fbname,String fbemail);

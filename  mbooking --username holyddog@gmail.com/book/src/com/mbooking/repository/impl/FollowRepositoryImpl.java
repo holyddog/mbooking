@@ -83,6 +83,7 @@ public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 				Notification notf = new Notification();
 				notf.setUid(auid);
 				notf.setAdate(System.currentTimeMillis());
+				notf.setUnread(true);
 				
 				User who = new User();
 				who.setUid(foll.getUid());
