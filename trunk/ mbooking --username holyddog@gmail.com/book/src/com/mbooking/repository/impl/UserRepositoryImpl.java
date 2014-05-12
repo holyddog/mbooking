@@ -201,6 +201,11 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 			guestId = uid;
 		}
 		
+		int limit = 2;
+		if (uid.equals(guestId)) {
+			limit = 1;
+		}
+		
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		
 		// get user info
@@ -223,6 +228,7 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		// find public book
 		query = new Query(Criteria.where("uid").is(uid).and("pub").is(true).and("pbdate").exists(true));
 		query.sort().on("pbdate", Order.DESCENDING);
+		query.skip(0).limit(limit);
 		
 		query.fields().include("title");
 		query.fields().include("pic");
@@ -235,6 +241,7 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		if (uid.equals(guestId)) {
 			query = new Query(Criteria.where("uid").is(uid).and("pub").is(false).and("pbdate").exists(true));
 			query.sort().on("pbdate", Order.DESCENDING);
+			query.skip(0).limit(limit);
 			
 			query.fields().include("title");
 			query.fields().include("pic");
@@ -285,5 +292,31 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		}
 		db.updateMulti(query, new Update().unset("unread"), Notification.class);
 		return list;		
+	}
+
+	@Override
+	public List<Book> findPublicBooks(Long uid, Integer start, Integer limit) {
+		Query query = new Query(Criteria.where("uid").is(uid).and("pub").is(true).and("pbdate").exists(true));
+		query.sort().on("pbdate", Order.DESCENDING);
+		query.skip(start).limit(limit);
+		
+		query.fields().include("title");
+		query.fields().include("pic");
+		query.fields().include("pcount");
+		
+		return db.find(query, Book.class);
+	}
+
+	@Override
+	public List<Book> findPrivateBooks(Long uid, Integer start, Integer limit) {
+		Query query = new Query(Criteria.where("uid").is(uid).and("pub").is(false).and("pbdate").exists(true));
+		query.sort().on("pbdate", Order.DESCENDING);
+		query.skip(start).limit(limit);
+		
+		query.fields().include("title");
+		query.fields().include("pic");
+		query.fields().include("pcount");
+		
+		return db.find(query, Book.class);
 	}
 }
