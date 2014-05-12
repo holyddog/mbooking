@@ -222,6 +222,7 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		
 		// find public book
 		query = new Query(Criteria.where("uid").is(uid).and("pub").is(true).and("pbdate").exists(true));
+		query.sort().on("pbdate", Order.DESCENDING);
 		
 		query.fields().include("title");
 		query.fields().include("pic");
@@ -233,6 +234,7 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		// find private/draft book for author
 		if (uid.equals(guestId)) {
 			query = new Query(Criteria.where("uid").is(uid).and("pub").is(false).and("pbdate").exists(true));
+			query.sort().on("pbdate", Order.DESCENDING);
 			
 			query.fields().include("title");
 			query.fields().include("pic");
