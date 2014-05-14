@@ -57,7 +57,7 @@ Page.EditBook = {
 					Page.back(function(c, page) {
 						var profile = $('#page_Profile');
 						if (profile.length > 0) {
-							Page.Profile.loadProfile(Account.userId, false, c);
+							Page.Profile.loadProfile(Account.userId, false, profile);
 						}
 					});
 				});
@@ -71,7 +71,7 @@ Page.EditBook = {
 					Page.back(function(c, page) {
 						var profile = $('#page_Profile');
 						if (profile.length > 0) {
-							Page.Profile.loadProfile(Account.userId, false, c);
+							Page.Profile.loadProfile(Account.userId, false, profile);
 						}
 					});
 				});				
