@@ -223,7 +223,12 @@ Page.Profile = {
 			container.find('#xbar .flex1').hide();
 			var textBar = container.find('#xbar .text');
 			if (!isGuest) {
-				container.find('#xbar .notf').show().text((user.drcount)? user.drcount: '0');
+				if (user.drcount) {
+					container.find('#xbar .notf').show().text(user.drcount);
+				}
+				else {
+					container.find('#xbar .notf').hide();
+				}
 				container.find('#xbar .flex1').show();
 				textBar.hide();
 				
