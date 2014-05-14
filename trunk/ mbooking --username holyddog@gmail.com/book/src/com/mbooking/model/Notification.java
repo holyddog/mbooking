@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Notification {
 
 	@Id
-	ObjectId _id;
+	ObjectId nid;
 	
 	Long uid;	
 	Integer ntype;	// 1 = new follower, 2 = new comment on my book	
@@ -21,13 +21,13 @@ public class Notification {
 
 	// pretty time
 	String time;
-	
-	public ObjectId get_id() {
-		return _id;
+
+	public ObjectId getNid() {
+		return nid;
 	}
 
-	public void set_id(ObjectId _id) {
-		this._id = _id;
+	public void setNid(ObjectId nid) {
+		this.nid = nid;
 	}
 
 	public Long getUid() {

@@ -1,13 +1,11 @@
 package com.mbooking.repository.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
@@ -18,7 +16,6 @@ import com.mbooking.model.User;
 import com.mbooking.repository.PageRepostitoryCustom;
 import com.mbooking.util.ImageUtils;
 import com.mbooking.util.MongoCustom;
-import com.mbooking.util.TimeUtils;
 
 public class PageRepositoryImpl implements PageRepostitoryCustom {
 
@@ -285,84 +282,85 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 	}
 	
 	public List<Page> findFollowingPages(Long uid,Integer skip,Integer limit) {
-		try{	
-			
-			Criteria criteria = Criteria.where("uid").is(uid);
-			Query query = new Query(criteria);
-			User user = db.findOne(query,User.class);
-			Long[] followings  = user.getFollowing();
-			ArrayList<Long> arr = new ArrayList<Long>();
-			for(Long f : followings){
-				arr.add(f);
-			}
-			Criteria pcriteria = Criteria.where("uid").in(arr).and("pbdate").exists(true);;
-			Query pquery = new Query(pcriteria);
-			pquery.sort().on("cdate", Order.DESCENDING);
-			
-			if(skip!=null&&limit!=null&&limit!=0)
-			pquery.skip(skip).limit(limit);
-			
-			List<Page> pages = db.find(pquery, Page.class);
-			
-			for(Page page : pages){
-				Long cdate = page.getCdate();
-				page.setStrtime(TimeUtils.timefromNow(cdate,System.currentTimeMillis()));
-			}
-			
-			return pages;
-			
-//				ArrayList<Page> fpages = new ArrayList<>();
-//				
-//				Criteria criteria = Criteria.where("uid").is(uid);
-//				Query query = new Query(criteria);
-//				query.fields().include("auid");
-//				query.fields().include("auth");
-//				List<Follow> follows = db.find(query, Follow.class);
-//				
-//				for(int i = 0;i<follows.size();i++){
-//					
-//					Follow follow = follows.get(i);
-//					Long auid = follow.getAuid();
-//					User author = follow.getAuth();
-//					author.setUid(auid);
-//					
-//					Criteria pcriteria = Criteria.where("uid").is(auid).and("pbdate").exists(true);
-//					Query pquery = new Query(pcriteria);
-//
-//					List<Page> pages = db.find(pquery, Page.class);
-//					for(int j=0;j<pages.size();j++){
-//						Page page = pages.get(j);
-//						Long bid = page.getBid();
-//						Book book = db.findOne(new Query(Criteria.where("bid").is(bid)), Book.class);
-//						pages.get(j).setBook(book);
-//						pages.get(j).setAuthor(author);
-//						pages.get(j).setStrtime(TimeUtils.timefromNow(page.getCdate(),System.currentTimeMillis()));
-//					}
-//					fpages.addAll(pages);
-//				}
-//				
-//				Collections.sort(fpages, new Comparator<Page>() {
-//					@Override
-//					public int compare(Page page1, Page page2) {
-//						if(page1.getCdate()>page2.getCdate()){
-//							return -1;
-//						}
-//						else if(page1.getCdate()<page2.getCdate()){
-//							return 1;
-//						}
-//						else{
-//							return 0;
-//						}
-//					}
-//			    });
-//				
-//				
-//				return fpages;
-			}
-		catch(Exception e){
-			System.out.println(e);
-			return null;
-		}
+		return null;
+//		try{	
+//			
+//			Criteria criteria = Criteria.where("uid").is(uid);
+//			Query query = new Query(criteria);
+//			User user = db.findOne(query,User.class);
+//			Long[] followings  = user.getFollowing();
+//			ArrayList<Long> arr = new ArrayList<Long>();
+//			for(Long f : followings){
+//				arr.add(f);
+//			}
+//			Criteria pcriteria = Criteria.where("uid").in(arr).and("pbdate").exists(true);;
+//			Query pquery = new Query(pcriteria);
+//			pquery.sort().on("cdate", Order.DESCENDING);
+//			
+//			if(skip!=null&&limit!=null&&limit!=0)
+//			pquery.skip(skip).limit(limit);
+//			
+//			List<Page> pages = db.find(pquery, Page.class);
+//			
+//			for(Page page : pages){
+//				Long cdate = page.getCdate();
+//				page.setStrtime(TimeUtils.timefromNow(cdate,System.currentTimeMillis()));
+//			}
+//			
+//			return pages;
+//			
+////				ArrayList<Page> fpages = new ArrayList<>();
+////				
+////				Criteria criteria = Criteria.where("uid").is(uid);
+////				Query query = new Query(criteria);
+////				query.fields().include("auid");
+////				query.fields().include("auth");
+////				List<Follow> follows = db.find(query, Follow.class);
+////				
+////				for(int i = 0;i<follows.size();i++){
+////					
+////					Follow follow = follows.get(i);
+////					Long auid = follow.getAuid();
+////					User author = follow.getAuth();
+////					author.setUid(auid);
+////					
+////					Criteria pcriteria = Criteria.where("uid").is(auid).and("pbdate").exists(true);
+////					Query pquery = new Query(pcriteria);
+////
+////					List<Page> pages = db.find(pquery, Page.class);
+////					for(int j=0;j<pages.size();j++){
+////						Page page = pages.get(j);
+////						Long bid = page.getBid();
+////						Book book = db.findOne(new Query(Criteria.where("bid").is(bid)), Book.class);
+////						pages.get(j).setBook(book);
+////						pages.get(j).setAuthor(author);
+////						pages.get(j).setStrtime(TimeUtils.timefromNow(page.getCdate(),System.currentTimeMillis()));
+////					}
+////					fpages.addAll(pages);
+////				}
+////				
+////				Collections.sort(fpages, new Comparator<Page>() {
+////					@Override
+////					public int compare(Page page1, Page page2) {
+////						if(page1.getCdate()>page2.getCdate()){
+////							return -1;
+////						}
+////						else if(page1.getCdate()<page2.getCdate()){
+////							return 1;
+////						}
+////						else{
+////							return 0;
+////						}
+////					}
+////			    });
+////				
+////				
+////				return fpages;
+//			}
+//		catch(Exception e){
+//			System.out.println(e);
+//			return null;
+//		}
 	}
 
 }

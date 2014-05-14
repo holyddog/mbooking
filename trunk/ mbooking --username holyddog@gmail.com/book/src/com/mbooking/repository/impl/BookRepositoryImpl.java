@@ -1,7 +1,5 @@
 package com.mbooking.repository.impl;
 
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +17,6 @@ import com.mbooking.model.User;
 import com.mbooking.repository.BookRepostitoryCustom;
 import com.mbooking.util.ImageUtils;
 import com.mbooking.util.MongoCustom;
-import com.mbooking.util.TimeUtils;
 
 public class BookRepositoryImpl implements BookRepostitoryCustom {
 
@@ -447,101 +444,64 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 	}
 	
 	
-	public List<Book> findFollowingBooks(Long uid,Integer skip,Integer limit) {
-		
-		try{	
-
-				Criteria criteria = Criteria.where("uid").is(uid);
-				Query query = new Query(criteria);
-				User user = db.findOne(query,User.class);
-				Long[] followings  = user.getFollowing();
-//				ArrayList<Long> arr = new ArrayList<Long>();
-//				for(Long f : followings){
-//					arr.add(f);
-//				}
+	public List<Book> findFollowingBooks(Long uid, Integer start, Integer limit) {
+		try {
+			Query query = new Query(Criteria.where("uid").is(uid));
+			query.fields().include("following");
+			User user = db.findOne(query, User.class);
+			if (user.getFollowing() != null && user.getFollowing().length > 0) {			
+				query = new Query(Criteria.where("uid").in(user.getFollowing()).and("pub").is(true).and("pbdate").exists(true));
+				query.sort().on("pbdate", Order.DESCENDING);
+				query.fields().include("title").include("pic").include("uid").include("pcount").include("author");
+				query.skip(start).limit(limit);
 				
-				
-				List<Long> auids = Arrays.asList(followings);
-				Query auquery = new Query(Criteria.where("uid").in(auids));
-				auquery.sort().on("uid",  Order.ASCENDING);
-				auquery.fields().include("uid");
-				auquery.fields().include("dname");
-				auquery.fields().include("pic");
-				
-				List<User> authors = db.find(auquery, User.class);
-				HashMap<Long,User> users_map = new HashMap<Long, User>();
-				
-				for(int i=0;i<authors.size();i++){
-					Long userid = authors.get(i).getUid();
-					users_map.put(userid, authors.get(i));
-				}
-				
-				Criteria bcriteria = Criteria.where("uid").in(auids).and("pbdate").exists(true);
-				Query bquery = new Query(bcriteria);
-				bquery.sort().on("pbdate", Order.DESCENDING);
-				
-				if(skip!=null&&limit!=null&&limit!=0)
-				bquery.skip(skip).limit(limit);
-				
-				List<Book> books = db.find(bquery, Book.class);
-				
-				for(Book book : books){
-					Long pbdate = book.getPbdate();
-					book.setStrtime(TimeUtils.timefromNow(pbdate,System.currentTimeMillis()));
-					Long userid = book.getUid();
-					if(users_map.containsKey(userid)){
-						book.setAuthor(users_map.get(userid));
-					}
-				
-				}
-				
-				return books;
-				
-//				Criteria criteria = Criteria.where("uid").is(uid);
-//				Query query = new Query(criteria);
-//				query.fields().include("auid");
-//				query.fields().include("auth");
-//				List<Follow> follows = db.find(query, Follow.class);
-				
-//				for(int i = 0;i<follows.size();i++){
-//					
-//					Follow follow = follows.get(i);
-//					Long auid = follow.getAuid();
-//					User author = follow.getAuth();
-//					author.setUid(auid);
-//					
-//					Criteria bcriteria = Criteria.where("uid").is(auid).and("pbdate").exists(true);
-//					Query bquery = new Query(bcriteria);
-//
-//					
-//					List<Book> books = db.find(bquery, Book.class);
-//					for(int j=0;j<books.size();j++){
-//						Book book = books.get(j);
-//						Long pbdate = book.getPbdate();
-//						books.get(j).setAuthor(author);
-//						books.get(j).setStrtime(TimeUtils.timefromNow(pbdate,System.currentTimeMillis()));
-//					}
-//					fbooks.addAll(books);
-//				}
-				
-//				Collections.sort(fbooks, new Comparator<Book>() {
-//					@Override
-//					public int compare(Book book1, Book book2) {
-//						if(book1.getPbdate()>book2.getPbdate()){
-//							return -1;
-//						}
-//						else if(book1.getPbdate()<book2.getPbdate()){
-//							return 1;
-//						}
-//						else{
-//							return 0;
-//						}
-//					}
-//			    });
-//				return fbooks;
+				return db.find(query, Book.class);
 			}
-		catch(Exception e){
-			System.out.println(e);
+			
+			return null;
+			
+//			Criteria criteria = Criteria.where("uid").is(uid);
+//			Query query = new Query(criteria);
+//			User user = db.findOne(query, User.class);
+//			Long[] followings = user.getFollowing();
+//
+//			List<Long> auids = Arrays.asList(followings);
+//			Query auquery = new Query(Criteria.where("uid").in(auids));
+//			auquery.sort().on("uid", Order.ASCENDING);
+//			auquery.fields().include("uid");
+//			auquery.fields().include("dname");
+//			auquery.fields().include("pic");
+
+//			List<User> authors = db.find(auquery, User.class);
+//			HashMap<Long, User> users_map = new HashMap<Long, User>();
+//
+//			for (int i = 0; i < authors.size(); i++) {
+//				Long userid = authors.get(i).getUid();
+//				users_map.put(userid, authors.get(i));
+//			}
+
+//			Criteria bcriteria = Criteria.where("uid").in(auids).and("pub").is(true).and("pbdate").exists(true);
+//			Query bquery = new Query(bcriteria);
+//			bquery.sort().on("pbdate", Order.DESCENDING);
+//
+//			if (skip != null && limit != null) {
+//				bquery.skip(skip).limit(limit);
+//			}
+//
+//			List<Book> books = db.find(bquery, Book.class);
+
+//			for (Book book : books) {
+//				Long pbdate = book.getPbdate();
+//				book.setStrtime(TimeUtils.timefromNow(pbdate, System.currentTimeMillis()));
+//				Long userid = book.getUid();
+//				
+//				if (users_map.containsKey(userid)) {
+//					book.setAuthor(users_map.get(userid));
+//				}
+//
+//			}
+		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 	}
