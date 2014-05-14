@@ -7,7 +7,7 @@ Config = {
 	FADE_DELAY: 250,
 	INTERVAL_DELAY: 1000, //60000, // 1 minute
 	
-	WEB_BOOK_URL:'http://localhost:8080/book',
+	WEB_BOOK_URL: 'http://localhost:8080/book',
 	FILE_URL: 'http://' + window.location.hostname + '/res/book',
 	FB_APP_ID: '370184839777084',
 	
