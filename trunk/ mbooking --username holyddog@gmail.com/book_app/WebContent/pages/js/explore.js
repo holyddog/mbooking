@@ -30,14 +30,14 @@ Page.Explore = {
 		var panel = container.find('.book_con');
 		panel.empty();
 		
-		Service.Book.GetPublishBooks(0, Config.LIMIT_ITEM, function(data) {
+		Service.Book.GetPublishBooks(0, 100, function(data) {
 			Page.bodyHideLoading(content);
 			
 			for (var i = 0; i < data.length; i++) {
 				var b = data[i];
 				
 				var div = document.createElement('div');
-				div.className = 'b';
+				div.className = 'book';
 				
 				div.appendChild(Page.Profile.getBook(b.bid, b.title, b.pic, b.pcount, b.author));
 				div.appendChild(Page.Following.getAuthor(b.author.uid, b.author.dname, b.author.pic));
@@ -45,7 +45,12 @@ Page.Explore = {
 				panel.append(div);
 			}
 			
-			var w = (panel.width() / 2) - 15;
+			var ratio = 2;
+			if (panel[0].offsetWidth >= 600) {
+				ratio = 3;
+			}
+			
+			var w = (panel[0].offsetWidth / ratio) - 15;
 			var h = (w * 4) / 3;
 			container.find('.book_size').css({
 				width: w + 'px',
