@@ -26,8 +26,8 @@ Page.CreateBook = {
 					Page.btnHideLoading(btnAccept[0]);
 					Page.back(function(c, page) {
 						var b = [{
-							bid: 9,
-							title: "Proin praesent"
+							bid: bid,
+							title: title
 						}];
 						page.loadDraftBooks(b, Account.userId, c, true);
 						var notf = c.find('#xbar .notf').show();
