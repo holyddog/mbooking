@@ -69,8 +69,9 @@ Page.EditBook = {
 					Page.hideLoading();
 					updateAccount(data.user);					
 					Page.back(function(c, page) {
-						if (page.loadProfile) {
-							page.loadProfile(Account.userId, false, c);
+						var profile = $('#page_Profile');
+						if (profile.length > 0) {
+							Page.Profile.loadProfile(Account.userId, false, c);
 						}
 					});
 				});				
