@@ -761,29 +761,35 @@ textarea {
 	opacity: .4;
 }
 
+.load_more {
+	height: 70px;
+	line-height: 70px;
+	text-align: center;
+	display: none;
+}
 .book_con {
 	overflow: hidden; 
 	padding: 5px;
 }
-.book_con .b {	
+.book_con .book {	
 	margin: 5px;
 	background-color: #fff;
 	position: relative;
 	float: left;
 }
-.book_con .b .panel img {
+.book_con .book .panel img {
 	width: 24px;
 	height: 24px;
 	display: block;
 	margin: 5px;
 }
-.book_con .b .panel .author {
+.book_con .book .panel .author {
 	font-size: 70%;
 	display: flex;
 	line-height: 34px;
 	font-weight: bold;
 }
-.book_con .b .panel .author .text {
+.book_con .book .panel .author .text {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
