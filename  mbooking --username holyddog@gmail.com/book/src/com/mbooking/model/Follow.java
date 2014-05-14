@@ -1,47 +1,48 @@
 package com.mbooking.model;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "follows")
 public class Follow {
 	@Id
-	Long fid;
-	Long auid;	//Author ID
-	Long uid;	//Follower ID
-	User auth ;//Author
-	User foll;//Follower
-	
-	public Long getFid() {
+	ObjectId fid;
+	Long auid; // Author ID
+	Long uid;  // Follower ID
+//	User auth; // Author
+//	User foll; // Follower
+	Long fdate;
+
+	public ObjectId getFid() {
 		return fid;
 	}
-	public void setFid(Long fid) {
+
+	public void setFid(ObjectId fid) {
 		this.fid = fid;
 	}
+
 	public Long getAuid() {
 		return auid;
 	}
+
 	public void setAuid(Long auid) {
 		this.auid = auid;
 	}
+
 	public Long getUid() {
 		return uid;
 	}
+
 	public void setUid(Long uid) {
 		this.uid = uid;
 	}
-	public User getAuth() {
-		return auth;
-	}
-	public void setAuth(User auth) {
-		this.auth = auth;
-	}
-	public User getFoll() {
-		return foll;
-	}
-	public void setFoll(User foll) {
-		this.foll = foll;
+
+	public Long getFdate() {
+		return fdate;
 	}
 
-	
+	public void setFdate(Long fdate) {
+		this.fdate = fdate;
+	}	
 }

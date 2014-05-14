@@ -29,7 +29,7 @@ public class User {
 	
 	Integer tcount; // Total book count
 
-	Long[] following;
+	Object[] following;
 
 	Long lstin;		//last login
 	FBobj fbobj;
@@ -155,11 +155,11 @@ public class User {
 		this.drcount = drcount;
 	}
 
-	public Long[] getFollowing() {
+	public Object[] getFollowing() {
 		return following;
 	}
 
-	public void setFollows(Long[] following) {
+	public void setFollowing(Object[] following) {
 		this.following = following;
 	}
 
