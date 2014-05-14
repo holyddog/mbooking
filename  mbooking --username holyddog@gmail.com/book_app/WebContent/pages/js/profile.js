@@ -223,9 +223,7 @@ Page.Profile = {
 			container.find('#xbar .flex1').hide();
 			var textBar = container.find('#xbar .text');
 			if (!isGuest) {
-				if (user.drcount) {
-					container.find('#xbar .notf').show().text(user.drcount);
-				}
+				container.find('#xbar .notf').show().text((user.drcount)? user.drcount: '0');
 				container.find('#xbar .flex1').show();
 				textBar.hide();
 				
