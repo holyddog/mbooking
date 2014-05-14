@@ -18,84 +18,66 @@ Page.Settings = {
 		container.find('[data-id=disp_name]').tap(function() {
 			Page.open('ChangeName', true);
 		});
-		container.find('[data-id=sign_out]').tap(function() {
-			
+		container.find('[data-id=sign_out]').tap(function() {			
             localStorage.removeItem('u');
 			Account = {};
 			Page.open('Home');
                       
             Device.PhoneGap.logoutFacebook(function(){});
 		});
-
+		self.setImage(container);
 
 		if (Account.fbObject && Account.fbObject.fbname) {
-			document.getElementById("fblogin_check").className = "ch_logfb checked";
-			document.getElementById("fblogin_check").style.background = "green";
+			fblogin_check.className = "ch_logfb checked";
+			fblogin_check.style.background = "green";
 		}
         
-		var checkbox = $('#fblogin_check');
-        checkbox.tap(function() {
-                     
-            if($(this).hasClass('checked')){
-              //Un-link
-                     
-               var onConfirm = function(button){
-                  
-                if(button==2){
-                  Device.PhoneGap.logoutFacebook(
-                    function(){
-                       document.getElementById("fblogin_check").className = "ch_logfb";
-                       document.getElementById("fblogin_check").style.background="";
-                  
-                       Service.User.unLinkFB(Account.userId, function(data) {
-                                  
-                                     var fbobj = {};
-                                     Account.fbObject = fbobj;
-                                     localStorage.setItem('u', JSON.stringify(Account));
-                                     
-                                    });
-                    }
-                   );
-                }
-                     
-                     
-              };
-                     
-               navigator.notification.confirm(
-                                                    'By disconnect, you will not be able to log in to The Story via Facebook',
-                                                    onConfirm,
-                                                    'Disconnect Facebook',
-                                                    'Cancel,Disconnect'
-                                                    );
-                     
-            }else{
-              //Link
-                     
-                document.getElementById("fblogin_check").className = "ch_logfb checked";
-                document.getElementById("fblogin_check").style.background="green";
-                     
-                Device.PhoneGap.loginFacebook(
-                    function(user){
-                            Service.User.linkFB(Account.userId,user.fbid,user.fbpic,user.fbname,user.fbemail,function(data) {
-                                                
-                                                var fbobj = {fbpic:user.fbpic,fbname:user.fbname};
-                                                
-                                                if(user.fbemail!=undefined){
-                                                    fbobj.fbemail = user.fbemail;
-                                                }
-                                                
-                                                Account.fbObject = fbobj;
-                                                localStorage.setItem('u', JSON.stringify(Account));
-                                                
-                            });
+		var checkbox = container.find('#fblogin_check');
+        checkbox.click(function() {                     
+        	if ($(this).hasClass('checked')) {
+        		MessageBox.confirm({
+        			message: 'By disconnect, you will not be able to log in to The Story via Facebook',
+					callback: function(button) {
+	        			if (button == 2) {
+	        				Device.PhoneGap.logoutFacebook(function() {
+	        					fblogin_check.className = "ch_logfb";
+	        					fblogin_check.style.background = "";
 
-                       }
-                    );
-            }
+	        					Service.User.unLinkFB(Account.userId, function(data) {
+	        						var fbobj = {};
+	        						Account.fbObject = fbobj;
+	        						localStorage.setItem('u', JSON.stringify(Account));
+	        					});
+	        				});
+	        			}
+	        		}
+        		});
+//              navigator.notification.confirm(msg, onConfirm, 'Disconnect Facebook', 'Cancel,Disconnect');
+    		} else {
+    			fblogin_check.className = "ch_logfb checked";
+    			fblogin_check.style.background = "green";
+
+    			Device.PhoneGap.loginFacebook(function(user) {
+    				var fn = function(data) {
+						var fbobj = {
+							fbpic: user.fbpic,
+							fbname: user.fbname
+						};
+
+						if (!user.fbemail) {
+							fbobj.fbemail = user.fbemail;
+						}
+
+						Account.fbObject = fbobj;
+						localStorage.setItem('u', JSON.stringify(Account));
+
+					};
+    				Service.User.linkFB(Account.userId, user.fbid, user.fbpic, user.fbname, user.fbemail, fn);
+    			});
+    		}
         
-        },false);
+        });
 
-		self.setImage(container);
 	},
 	
 	setImage: function(container) {		

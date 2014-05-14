@@ -67,124 +67,81 @@ Page.Following = {
 	
 	load: function(container) {		
 		var self = this;
-		
+		clearInterval(Page.inv1);
+
 		var content = container.find('.content');
-		Page.bodyShowLoading(content);
-		
-//		var list = container.find('.book_list');
-//		list.empty();
-//		
-//		Service.Book.GetFollowBooksByUID(Account.userId, 0, Config.LIMIT_ITEM, function(data) {
-//			Page.bodyHideLoading(content);
-//			
-//			var bcWidth = list.width();
-//			var bw = bcWidth / 2;
-//			var bh = (bw * 4) / 3;
-//			for (var i = 0; i < data.length; i++) {
-//				var b = data[i];
-//				var pic = Config.FILE_URL + Util.getImage(b.pic, Config.FILE_SIZE.COVER);
-//				
-//				var li = document.createElement('li');
-//				li.className = 'book_con';
-//				
-//				var divB = document.createElement('div');
-//				divB.className = 'b shadow_border';
-//				
-//				var divCover = document.createElement('div');
-//				divCover.dataset.bid = b.bid;
-//				divCover.dataset.uid = b.author.uid;
-//				divCover.className = 'cover';
-//				divCover.style.backgroundImage = 'url(' + pic + ')';
-//				
-//				var h3 = document.createElement('h3');
-//				h3.className = 'title';
-//				h3.innerText = b.title;
-//				
-//				var divPanel = document.createElement('div');
-//				divPanel.className = 'panel flow_hidden';
-//				divPanel.dataset.uid = b.author.uid;
-//				
-//				var divLeft = document.createElement('div');
-//				divLeft.className = 'fleft';
-//				
-//				var img = document.createElement('img');
-//				img.className = 'image';
-//				img.className = 'image';
-//				if (b.author.pic) {
-//					img.src = Config.FILE_URL + Util.getImage(b.author.pic, Config.FILE_SIZE.SQUARE);
-//				}
-//				else {
-//					img.src = 'images/user.jpg';					
-//				}
-//				
-//				var divAuthor = document.createElement('div');
-//				divAuthor.className = 'author';
-//				
-//				var divText = document.createElement('div');
-//				divText.className = 'text';
-//				divText.innerText = b.author.dname;
-//				
-//				divAuthor.appendChild(divText);
-//				divLeft.appendChild(img);
-//				
-//				divPanel.appendChild(divLeft);
-//				divPanel.appendChild(divAuthor);				
-//				divCover.appendChild(h3);
-//				
-//				divB.appendChild(divCover);
-//				divB.appendChild(divPanel);
-//				
-//				li.appendChild(divB);
-//				
-//				list.append(li);
-//			}
-//			
-//			container.find('.book_con').width(bw);
-//			container.find('.book_con .cover').height(bh);
-//			container.find('li .cover').tap(function() {
-//				var obj = $(this);
-//				Page.open('Book', true, { bid: obj.data('bid'), uid: obj.data('uid') });
-//			}, true);
-//			container.find('li .panel').tap(function() {
-//				var obj = $(this);
-//				Page.open('Profile', true, { uid: obj.data('uid') });
-//			}, true);
-//		});
-		
 		var panel = container.find('.book_con');
 		panel.empty();
-		
+		Page.bodyShowLoading(content);
 		Service.Book.GetFollowBooksByUID(Account.userId, 0, Config.LIMIT_ITEM, function(data) {
 			Page.bodyHideLoading(content);
+			self.loadItems(data, container, panel);
 			
-			for (var i = 0; i < data.length; i++) {
-				var b = data[i];
-				
-				var div = document.createElement('div');
-				div.className = 'b';
-				
-				div.appendChild(Page.Profile.getBook(b.bid, b.title, b.pic, b.pcount, b.author));
-				div.appendChild(self.getAuthor(b.author.uid, b.author.dname, b.author.pic));
-				
-				panel.append(div);
+			if (data.length >= Config.LIMIT_ITEM) {
+				self.runInterval(container, panel);
 			}
+		});
+	},
+	
+	runInterval: function(container, panel) {		
+		var self = this;
+		var content = container.find('.content');
+		var start = container.find('.book_size').length;
+		var more = container.find('.load_more');
+		Page.inv1 = setInterval(function() {
+			if (!more.is(':visible') && content[0].scrollHeight - content[0].scrollTop <= content[0].offsetHeight) {
+				more.show();
+				Page.bodyShowLoading(more);
+				
+				Service.Book.GetFollowBooksByUID(Account.userId, start, Config.LIMIT_ITEM, function(data) {
+					self.loadItems(data, container, panel);
+					start += data.length;
+					more.hide();
+					Page.bodyHideLoading(more);
+					
+					if (data.length < Config.LIMIT_ITEM) {
+						clearInterval(Page.inv1);
+					}
+				});
+			}
+		}, 1);
+	},
+	
+	loadItems: function(data, container, panel) {
+		var self = this;
+		
+		for (var i = 0; i < data.length; i++) {
+			var b = data[i];
 			
-			var w = (panel.width() / 2) - 15;
-			var h = (w * 4) / 3;
-			container.find('.book_size').css({
-				width: w + 'px',
-				height: h + 'px',
-				margin: 0,
-				float: 'none'
-			}).click(function() {
-				var bid = $(this).data('bid');
-				var uid = $(this).data('uid');
-				Page.open('Book', true, { bid: bid, uid: uid });
-			});
-			panel.find('.panel').click(function() {
-				var uid = $(this).data('uid');
-				Page.open('Profile', true, { uid: uid, back: true });
-			});
+			var div = document.createElement('div');
+			div.className = 'book';
+			
+			div.appendChild(Page.Profile.getBook(b.bid, b.title, b.pic, b.pcount, b.author));
+			div.appendChild(self.getAuthor(b.author.uid, b.author.dname, b.author.pic));
+			
+			panel.append(div);
+		}
+		
+		var ratio = 2;
+		if (panel[0].offsetWidth >= 600) {
+			ratio = 3;
+		}
+		
+		var w = (panel[0].offsetWidth / ratio) - 15;
+		var h = (w * 4) / 3;
+		container.find('.book_size').css({
+			width: w + 'px',
+			height: h + 'px',
+			margin: 0,
+			float: 'none'
+		}).click(function() {
+			var bid = $(this).data('bid');
+			var uid = $(this).data('uid');
+			Page.open('Book', true, { bid: bid, uid: uid });
+		});
+		panel.find('.panel').click(function() {
+			var uid = $(this).data('uid');
+			Page.open('Profile', true, { uid: uid, back: true });
 		});
 	}
 };
