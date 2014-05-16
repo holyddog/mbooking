@@ -688,7 +688,6 @@ textarea {
 #dd_message {
 	position: fixed;
 	z-index: -1;
-	visibility: hidden;
 	top: 60px;
 	height: 50px;
 	overflow: hidden;
