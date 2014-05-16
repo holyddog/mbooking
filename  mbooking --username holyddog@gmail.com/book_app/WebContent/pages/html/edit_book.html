@@ -1,10 +1,10 @@
-<div class="tbar_bg gray"></div>
-<div class="tbar">	
+<div class="tbar_bg gray"style="z-index:1000; pointer-events:all;"></div>
+<div class="tbar"style="z-index:1000; pointer-events:all;">	
 	<a data-id="btn_b" class="btn" style="left: 0;"><span class="cancel"></span></a>
 	<a data-id="btn_pub" class="btn_text" style="float: right; display: none;">PUBLISH</a>
 	<!-- <a data-id="btn_pr" class="btn" style="position: relative; float: right;"><span class="preview"></span></a>  -->
 </div>
-<div class="content flex1 box vertical"style="z-index:1000;">
+<div class="content flex1 box vertical"style="z-index:1000;pointer-events:all;">
 	<div id="book_header" class="box horizontal">
 		<div class="book_size">
 			<h2 class="book_title"></h2>
@@ -15,7 +15,7 @@
 			<div class="pcount"><span>0</span> Pages</div>
 		</div>
 	</div>
-	<div class="cmd_panel">
+	<div class="cmd_panel"style="z-index:1000;pointer-events:all;">
 		<div class="box horizontal">
 			<div data-link="edit_book" class="flex1 flex_lock">Edit Book</div>
 			<div class="sep"></div>
@@ -24,7 +24,7 @@
 			<div data-link="preview" class="flex1 flex_lock">Preview</div>
 		</div>
 	</div>
-	<div class="tab_page box horizontal" style="display: none;">
+	<div class="tab_page box horizontal" style="display: none;z-index:1000;pointer-events:all;">
 		<div class="flex1 flex_lock">
 			<a class="active" data-ref="book_panel">PAGES</a>
 		</div>
@@ -39,8 +39,8 @@
 			<a data-ref="share_panel">SHARE</a>
 		</div>	
 	</div>
-	<div id="book_panel" class="page_ref">
-		<div data-id="link_a" class="link_add page_size box center_middle">
+	<div id="book_panel" class="page_ref"style="z-index:1000;pointer-events:all;">
+		<div data-id="link_a" class="link_add page_size box center_middle"style="z-index:1000;pointer-events:all;">
 			<div>
 				<div class="icon"></div>
 				<div class="label">Add Page</div>
@@ -56,13 +56,13 @@
 		</div>
 		 -->
 	</div>
-	<div id="share_panel" class="page_ref" style="display: none;">
+	<div id="share_panel" class="page_ref" style="display: none;pointer-events:all;">
 		<textarea class="share_cap" rows="3" placeholder="Add Description"></textarea>
 		
-		<div class="input_layout">
-			<div class="box horizontal">
-				<div class="flex1 box check_label">Post to my Facebook wall</div>
-				<a data-id="btn_c" class="btn_check check"> 
+		<div class="input_layout"style="z-index:1000;pointer-events:all;">
+			<div class="box horizontal"style="z-index:1000;pointer-events:all;">
+				<div class="flex1 box check_label"style="z-index:1000;pointer-events:all;">Post to my Facebook wall</div>
+				<a data-id="btn_c" class="btn_check check"style="z-index:1000;pointer-events:all;"> 
 					<span class="check_icon"></span>
 				</a>
 			</div>

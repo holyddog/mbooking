@@ -3,11 +3,15 @@ Page.EditBook = {
 	init: function(params, container, append) {	
 		var self = this;
 		var bid = (params)? params.bid: undefined;
-		
+		container.css('z-index','1001');
 		// set toolbar buttons
 		var btnBack = container.find('[data-id=btn_b]');
 		btnBack.tap(function() {
-			history.back();
+			Page.back(function(c, page) {
+				if(page.reverseIndex){
+					page.reverseIndex(c);
+				}
+			});
 		});
 		
 		var updateAccount = function(u) {
@@ -55,10 +59,15 @@ Page.EditBook = {
 					Page.hideLoading();
 					updateAccount(data.user);
 					Page.back(function(c, page) {
+						
+						if(page.reverseIndex){
+							page.reverseIndex(c);
+						}
 						var profile = $('#page_Profile');
 						if (profile.length > 0) {
 							Page.Profile.loadProfile(Account.userId, false, profile);
 						}
+						
 					});
 				});
 			}
@@ -69,10 +78,15 @@ Page.EditBook = {
 					Page.hideLoading();
 					updateAccount(data.user);					
 					Page.back(function(c, page) {
+						if(page.reverseIndex){
+							page.reverseIndex(c);
+						}
+						
 						var profile = $('#page_Profile');
 						if (profile.length > 0) {
 							Page.Profile.loadProfile(Account.userId, false, profile);
 						}
+						
 					});
 				});				
 			}
