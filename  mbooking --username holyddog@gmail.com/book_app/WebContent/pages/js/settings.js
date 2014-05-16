@@ -61,7 +61,8 @@ Page.Settings = {
     				var fn = function(data) {
 						var fbobj = {
 							fbpic: user.fbpic,
-							fbname: user.fbname
+							fbname: user.fbname,
+							token: user.access_token
 						};
 
 						if (!user.fbemail) {
@@ -72,7 +73,7 @@ Page.Settings = {
 						localStorage.setItem('u', JSON.stringify(Account));
 
 					};
-    				Service.User.linkFB(Account.userId, user.fbid, user.fbpic, user.fbname, user.fbemail, fn);
+    				Service.User.linkFB(Account.userId, user.fbid, user.fbpic, user.fbname, user.fbemail, user.access_token, fn);
     			});
     		}
         

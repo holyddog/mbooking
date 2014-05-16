@@ -30,44 +30,39 @@ Page.SignUp = {
 			var uname = container.find('input[name=uname]').val();
 			var pwd = container.find('input[name=pwd]').val();
 			
-            
-                      
-            function afterSignup(data){
-                      Page.btnHideLoading(btnAccept[0]);
-                      
-                      Account = {
-                            userId: data.uid,
-                            email: data.email,
-                            displayName: data.dname,
-                            userName: data.uname
-                      };
-                      
-                      if(data.fbobj){
-      
-                        Account.fbObject={fbpic:data.fbobj.pic,fbname:data.fbobj.dname};
-                        if(data.fbobj.email&&data.fbobj.email!=undefined&&data.fbobj.email!=null&&data.fbobj.email!=""){
-                            Account.fbObject.fbemail = data.fbobj.email;
-                        }
-                      
-                      }
-                      
-                      localStorage.setItem("u", JSON.stringify(Account));
-                      
-                      Page.open('Profile');
-            }
-            
-            if(!fbid){
-                      Service.User.SignUp(dname, email, uname, pwd, function(data) {
-                        afterSignup(data);
-                      });
-            }
-            else{
-                      Service.User.SignUpFB(email,dname, uname, pwd,fbid,fbpic,fbname,fbemail, function(data) {
-                        afterSignup(data);
-                      });
-            }
-                      
-           
+			function afterSignup(data) {
+				Page.btnHideLoading(btnAccept[0]);
+
+				Account = {
+					userId : data.uid,
+					email : data.email,
+					displayName : data.dname,
+					userName : data.uname
+				};
+
+				if (data.fbobj) {
+					Account.fbObject = {
+						fbpic : data.fbobj.pic,
+						fbname : data.fbobj.dname
+					};
+					if (data.fbobj.email) {
+						Account.fbObject.fbemail = data.fbobj.email;
+					}
+				}
+
+				localStorage.setItem("u", JSON.stringify(Account));
+				Page.open('Profile');
+			}
+
+			if (!fbid) {
+				Service.User.SignUp(dname, email, uname, pwd, function(data) {
+					afterSignup(data);
+				});
+			} else {
+				Service.User.SignUpFB(email, dname, uname, pwd, fbid, fbpic, fbname, fbemail, function(data) {
+					afterSignup(data);
+				});
+			}
         });
 		
 		// set content binding
