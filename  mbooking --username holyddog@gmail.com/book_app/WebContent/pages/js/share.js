@@ -11,14 +11,17 @@ Page.Share = {
 		var btnCheck = container.find('[data-id=btn_c]'); 
 		btnCheck.tap(function() {
 			if (!btnCheck.hasClass('check')) {
-				Page.showLoading('Connecting...');
-				self.fbConnect(function() {
-					Page.hideLoading();
-					btnCheck.addClass('check');
-					btnAccept.removeClass('disabled');
-					
-					alert('success');
-				});
+				if (Account.fbObject && Account.fbObject.token) {
+					Account.fbObject.off = false;
+				}
+				else {
+					Page.showLoading('Connecting...');
+					self.fbConnect(function() {
+						Page.hideLoading();
+						btnCheck.addClass('check');
+						btnAccept.removeClass('disabled');
+					});					
+				}
 			}		
 			else {
 				Account.fbObject.off = true;
@@ -88,8 +91,6 @@ Page.Share = {
 	fbPost: function(bid, title, desc, pic, message, callback) {
 		var post = function() {
 			var link = Config.WEB_BOOK_URL + '?bid=' + bid;
-			
-			alert(Account.fbObject.token);
 			
 			var privacy = {
 				"value" : "EVERYONE"
