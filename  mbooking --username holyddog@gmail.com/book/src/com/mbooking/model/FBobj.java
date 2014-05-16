@@ -8,7 +8,7 @@ public class FBobj {
 	String pic;
 	String dname;
 	String email;
-	
+	String token;
 	
 	public Long getFbid() {
 		return fbid;
@@ -33,5 +33,11 @@ public class FBobj {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
 	}
 }

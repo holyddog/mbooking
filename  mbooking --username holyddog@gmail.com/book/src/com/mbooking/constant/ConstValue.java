@@ -9,7 +9,8 @@ public interface ConstValue {
 	public static final String[] MONTH_EN_SNAMES = {
 		"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 	};
-
+	
+	public static final int LIMIT_ITEM = 20;
 	public static final int PROFILE_SIZE = 125;
 	
 	public static final int SMALL_SIZE = 270;

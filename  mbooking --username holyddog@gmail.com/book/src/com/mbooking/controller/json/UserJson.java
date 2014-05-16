@@ -144,15 +144,14 @@ public class UserJson {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/linkFB.json")
-	public @ResponseBody Object linkFB(
-			@RequestParam(value = "uid") Long uid,
+	public @ResponseBody
+	Object linkFB(@RequestParam(value = "uid") Long uid,
 			@RequestParam(value = "fbid") Long fbid,
 			@RequestParam(value = "fbpic") String fbpic,
 			@RequestParam(value = "fbname") String fbname,
-			@RequestParam(value = "fbemail",required = false) String fbemail
-			)
-	{
-		return ResultResponse.getResult("result", userRepo.linkFB(uid,fbid,fbpic,fbname,fbemail)!= false);
+			@RequestParam(value = "fbemail", required = false) String fbemail,
+			@RequestParam(value = "token") String token) {
+		return ResultResponse.getResult("result", userRepo.linkFB(uid, fbid, fbpic, fbname, fbemail, token) != false);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/changePassword.json")
