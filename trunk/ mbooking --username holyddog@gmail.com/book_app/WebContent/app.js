@@ -1,13 +1,13 @@
 Config = {
 	DEBUG_MODE: true,
 	DEFAULT_PAGE: 'Home',
-	LIMIT_ITEM: 2,
+	LIMIT_ITEM: 20,
 	
 	SLIDE_DELAY: 250,
 	FADE_DELAY: 250,
 	INTERVAL_DELAY: 1000, //60000, // 1 minute
 	
-	WEB_BOOK_URL: 'http://localhost:8080/book',
+	WEB_BOOK_URL: 'http://' + window.location.hostname + ':8080/book',
 	FILE_URL: 'http://' + window.location.hostname + '/res/book',
 	FB_APP_ID: '370184839777084',
 	
@@ -267,7 +267,7 @@ Device = {
 								callback({
 									fbid : user.id,
 									fbpic : user.picture.data.url,
-									token : access_token,
+									access_token : access_token,
 									fbname : user.name,
 									fbemail : user.email
 								});
@@ -277,7 +277,7 @@ Device = {
 					console.log('login response:' + response.error);
 				}
 	        },
-	        { scope: "email" }
+	        { scope: "email,publish_actions" }
 	        );
 	    
 	    },
@@ -329,7 +329,8 @@ Device = {
 						var linkToFb = function(data) {
 							var fbobj = {
 								fbpic : user.fbpic,
-								fbname : user.fbname
+								fbname : user.fbname,
+								token: user.access_token
 							};
 
 							if (user.fbemail != undefined) {
@@ -341,7 +342,7 @@ Device = {
 									.stringify(Account));
 							postfb();
 						};
-						Service.User.linkFB(Account.userId, user.fbid, user.fbpic, user.fbname, user.fbemail, linkToFb);
+						Service.User.linkFB(Account.userId, user.fbid, user.fbpic, user.fbname, user.fbemail, user.access_token, linkToFb);
 					});
 				}
 			}); 
@@ -371,10 +372,11 @@ Device = {
 			} else {
 				Device.PhoneGap.loginFacebook(function(user) {
 					Service.User.linkFB(Account.userId, user.fbid, user.fbpic,
-					user.fbname, user.fbemail, function(data) {
+					user.fbname, user.fbemail, user.access_token, function(data) {
 						var fbobj = {
 							fbpic : user.fbpic,
-							fbname : user.fbname
+							fbname : user.fbname,
+							token: user.access_token
 						};
 
 						if (user.fbemail != undefined) {

@@ -24,13 +24,14 @@ Service.User = {
 		};
 		Web.post(url, params, callback);
 	},
-	linkFB : function(uid,fbid,fbpic,fbname,fbemail, callback) {
+	linkFB : function(uid,fbid,fbpic,fbname,fbemail, access_token,callback) {
 		var url = Service.url + '/linkFB.json';
 		var params = {
 			uid : uid,
 	        fbid : fbid,
 	        fbpic : fbpic,
-	        fbname : fbname
+	        fbname : fbname,
+	        token: access_token
 		};
 	        
         if(fbemail!=null&&fbemail&&fbemail!=undefined)
@@ -47,23 +48,22 @@ Service.User = {
 		};
 		Web.post(url, params, callback);
 	},
-	SignUpFB : function(email,fullName,userName, password,fbid,fbpic,fbname,fbemail, callback) {
+	SignUpFB : function(email, fullName, userName, password, fbid, fbpic, fbname, fbemail, callback) {
 		var url = Service.url + '/signUpFB.json';
 		var params = {
 			email : email,
 			dname : fullName,
-	        uname : userName,
+			uname : userName,
 			pwd : password,
-	        fbid : fbid,
-	        fbpic : fbpic,
-	        fbname : fbname
+			fbid : fbid,
+			fbpic : fbpic,
+			fbname : fbname
 		};
-	        
-	    if(fbemail!=null&&fbemail&&fbemail!=undefined)
-	    {
-	    	params.fbemail  = fbemail;
-	    }
-	        
+
+		if (fbemail != null && fbemail && fbemail != undefined) {
+			params.fbemail = fbemail;
+		}
+
 		Web.post(url, params, callback);
 	},
 	GetProfile : function(userId, guestId, callback) {

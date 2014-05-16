@@ -20,7 +20,7 @@ Page.Book = {
 		});
 		var btnShare = container.find('[data-id=btn_s]');
 		btnShare.tap(function() {
-			alert('share');
+			Page.open('Share', true, { bid: params.bid });
 		});	
 		var btnSetting = container.find('[data-id=btn_e]');
 		btnSetting.tap(function() {
