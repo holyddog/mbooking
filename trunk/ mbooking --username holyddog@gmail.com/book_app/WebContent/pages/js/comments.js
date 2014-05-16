@@ -7,7 +7,11 @@ Page.Comments = {
 		
 		// set toolbar buttons
 		container.find('[data-id=btn_b]').tap(function() {
-			Page.back();
+			Page.back(function(c, page) {
+			    if(page.reverseIndex){
+					page.reverseIndex(c);
+				}
+			});
 		});	
 		container.find('[data-id=btn_r]').tap(function() {
 			self.load(params.bid, list, container);

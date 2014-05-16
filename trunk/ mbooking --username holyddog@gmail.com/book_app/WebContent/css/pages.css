@@ -567,10 +567,11 @@
 	background-color: #ddd;
 	border-radius: 60px;
 	margin: 0 auto;
+	overflow:hidden;
 }
 #page_ChangePic .bg_pic img {
 	width: 120px;
-	height: 120px;
+	height: auto;
 	border-radius: 60px;
 }
 
