@@ -25,5 +25,5 @@ public interface UserRepostitoryCustom {
 	List<Book> findPrivateBooks(Long uid, Integer start, Integer limit);
 
 	Boolean unlinkFB(Long uid);
-	Boolean linkFB(Long uid,Long fbid,String fbpic,String fbname,String fbemail);
+	Boolean linkFB(Long uid, Long fbid, String fbpic, String fbname, String fbemail, String token);
 }

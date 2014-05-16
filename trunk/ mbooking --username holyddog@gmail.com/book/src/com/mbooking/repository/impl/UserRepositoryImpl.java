@@ -170,28 +170,28 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 	}
 
 	@Override
-	public Boolean linkFB(Long uid,Long fbid,String fbpic,String fbname,String fbemail) {
-		try{
+	public Boolean linkFB(Long uid, Long fbid, String fbpic, String fbname, String fbemail, String token) {
+		try {
 			Update update = new Update();
 			update.unset("unlinkfb");
-			
-			if(fbid!=null){
+
+			if (fbid != null) {
 				FBobj fbobj = new FBobj();
 				fbobj.setFbid(fbid);
 				fbobj.setPic(fbpic);
 				fbobj.setDname(fbname);
-				if(fbemail!=null)
-				fbobj.setEmail(fbemail);
-				update.set("fbobj",fbobj);
+				fbobj.setToken(token);
+				if (fbemail != null) {
+					fbobj.setEmail(fbemail);
+				}
+				update.set("fbobj", fbobj);
 			}
-			
-			
+
 			db.updateFirst(new Query(Criteria.where("uid").is(uid)), update, User.class);
 			return true;
-		}catch(Exception e){
-			System.out.println("Unsuccess unlink fb, User Service error: " + e);
+		} catch (Exception e) {
 			return false;
-		
+
 		}
 	}
 
@@ -201,9 +201,9 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 			guestId = uid;
 		}
 		
-		int limit = 2;
+		int limit = ConstValue.LIMIT_ITEM;
 		if (uid.equals(guestId)) {
-			limit = 1;
+			limit = ConstValue.LIMIT_ITEM - 1;
 		}
 		
 		HashMap<String, Object> map = new HashMap<String, Object>();
