@@ -113,7 +113,7 @@ MessageBox = {
 			setTimeout(function() {
 				dd.style.zIndex = -1;
 			}, 300);
-		}, 3000);
+		}, 5000);
 	}
 };
 
