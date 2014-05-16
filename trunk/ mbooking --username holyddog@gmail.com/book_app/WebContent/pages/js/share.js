@@ -11,15 +11,23 @@ Page.Share = {
 		var btnCheck = container.find('[data-id=btn_c]'); 
 		btnCheck.tap(function() {
 			if (!btnCheck.hasClass('check')) {
-				if (Account.fbObject && Account.fbObject.token) {
+				var allow = function() {
+					btnCheck.addClass('check');
+					btnAccept.removeClass('disabled');
+					
 					Account.fbObject.off = false;
+					localStorage.setItem('u', JSON.stringify(Account));
+				};
+				
+				if (Account.fbObject && Account.fbObject.token) {
+					allow();
 				}
 				else {
 					Page.showLoading('Connecting...');
 					self.fbConnect(function() {
 						Page.hideLoading();
-						btnCheck.addClass('check');
-						btnAccept.removeClass('disabled');
+						
+						allow();
 					});					
 				}
 			}		
@@ -58,6 +66,8 @@ Page.Share = {
 				Service.Book.GetBookByBid(params.bid, function(data) {					
 					self.fbPost(data.bid, data.title, data.desc, Util.getImage(data.pic, 2), inputText.val(), function() {
 						Page.btnHideLoading(btnAccept[0]);
+						
+						MessageBox.drop('Your book has been shared to facebook');
 						
 						Page.back();
 					});
