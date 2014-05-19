@@ -8,28 +8,26 @@ Page.EditCaption = {
 		var warnning = 20;
 		var ex_warnning = 10;
 		function updateRemainLetter(count){
-			var remain = limit_txt-(count);
-			if(remain<limit_txt){
-				if(remain<ex_warnning)
-				{
-					remain_lb.css("color",'#DF0101');
-				}else if(remain<warnning){
-					remain_lb.css("color",'#B40404');
+			var remain = limit_txt - (count);
+			if (remain < limit_txt) {
+				if (remain < ex_warnning) {
+					remain_lb.css("color", '#DF0101');
+				} else if (remain < warnning) {
+					remain_lb.css("color", '#B40404');
+				} else {
+					remain_lb.css("color", 'darkgray');
 				}
-				else{
-					remain_lb.css("color",'darkgray');
-				}
-				
-				if(remain<0){
-					btnAdd.css("pointer-events", 'none');	
-					btnAdd.css("opacity", 0.6);	
-				}else{
-					btnAdd.css("pointer-events", '');	
+
+				if (remain < 0) {
+					btnAdd.css("pointer-events", 'none');
+					btnAdd.css("opacity", 0.6);
+				} else {
+					btnAdd.css("pointer-events", '');
 					btnAdd.css("opacity", '');
 				}
-				
+
 				remain_lb.html(remain);
-			}else{
+			} else {
 				remain_lb.html('');
 			}
 		}
@@ -49,8 +47,7 @@ Page.EditCaption = {
 		  el.focus();
 		  el.setSelectionRange && el.setSelectionRange(0, 0);
 		};
-		focus(inputText[0]);
-		
+		focus(inputText[0]);		
 		
 		btnAdd.click(function() {
 			var val = inputText.val();

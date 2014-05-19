@@ -49,7 +49,7 @@ Page.Book = {
 		});
 	},
 	
-	load: function(container, bookData) {		
+	load: function(container, bookData) {
 		var content = container.find('.content');
 		content.find('.btitle').text(bookData.title);
 		content.find('.bdesc').text(bookData.desc);

@@ -3,25 +3,24 @@ Page.AddPage = {
 	init: function(params, container) {
 		var self = this;
 		var bid = (params)? params.bid: undefined;
+		var pid = (params)? params.pid: undefined;
+		
+		var boxPhoto = container.find('#box_photo')[0];
+		if (pid) {
+			self.loadPage(container, pid);
+		}
+		else {
+			boxPhoto.style.height = boxPhoto.offsetWidth + 'px';
+		}
 		
 		var adjPhoto = container.find('#adj_photo');
 		var btnAddPhoto = container.find('#add_photo');
 		btnAddPhoto.tap(function() {
 			Page.popDialog(function(img) {
-				btnAddPhoto.hide();
-				adjPhoto.show();
-				
-				img = 'data:image/jpg;base64,' + img;
-				
-				var imgObj = document.createElement('img');
-				imgObj.setAttribute('id', 'drag_img');
-				imgObj.src = img;
-				
-				adjPhoto.append(imgObj);
-				self.editPhoto(container);					
-				self.checkAccept(container);
+				self.addPhoto(container, img);
 			});
-		});				
+		});		
+		
 		var descText = container.find('#desc_text');
 		container.find('#box_desc').tap(function() {
 			Page.open('EditCaption', true, { text: descText.text() });
@@ -35,30 +34,38 @@ Page.AddPage = {
 			if (!btnAccept.hasClass('disabled')) {
 				Page.btnShowLoading(btnAccept[0]);
 				
-				var pos = 0;
-				var dir = $(drag_img).data('dir');
-				if (dir == 0) {
-					pos = -1 * parseInt(drag_img.style.webkitTransform.split('(')[1].split('px, ')[0]);
-				}
-				else if (dir == 1) {
-					pos = -1 * parseInt(drag_img.style.webkitTransform.split('(')[1].split('px, ')[1]);
-				}
-				
-				Service.Page.AddPage(drag_img.src, drag_img.parentNode.offsetWidth, pos, desc_text.innerText, bid, Account.userId, function(data) {
-					Page.btnHideLoading(btnAccept[0]);
-					
-					Page.back(function(c, page) {
-						page.addPage(c, data);
-						
-						// set cover
-						if (data.seq == 1) {
-							c.find('.book_size').css('background-image', 'url(' + Util.getImage(data.pic, 2) + ')');
-						}
-						
-						var counter = c.find('.pcount span');
-						counter.text(parseInt(counter.text()) + 1);
+				if (drag_img.className == 'noedit') {
+					Service.Page.EditCaption(pid, desc_text.innerText, function() {
+						Page.btnHideLoading(btnAccept[0]);
+						Page.back();
 					});
-				});
+				}
+				else {
+					var pos = 0;
+					var dir = $(drag_img).data('dir');
+					if (dir == 0) {
+						pos = -1 * parseInt(drag_img.style.webkitTransform.split('(')[1].split('px, ')[0]);
+					}
+					else if (dir == 1) {
+						pos = -1 * parseInt(drag_img.style.webkitTransform.split('(')[1].split('px, ')[1]);
+					}
+					
+					Service.Page.AddPage(drag_img.src, drag_img.parentNode.offsetWidth, pos, desc_text.innerText, bid, Account.userId, function(data) {
+						Page.btnHideLoading(btnAccept[0]);
+						
+						Page.back(function(c, page) {
+							page.addPage(c, data);
+							
+							// set cover
+							if (data.seq == 1) {
+								c.find('.book_size').css('background-image', 'url(' + Util.getImage(data.pic, 2) + ')');
+							}
+							
+							var counter = c.find('.pcount span');
+							counter.text(parseInt(counter.text()) + 1);
+						});
+					});					
+				}				
 			}
 		});
 		
@@ -69,9 +76,6 @@ Page.AddPage = {
 			
 			self.checkAccept(container);
 		});
-		
-		box_photo.style.height = box_photo.offsetWidth + 'px';
-		self.editPhoto(container);
 	},
 	
 	checkAccept: function(container) {
@@ -85,13 +89,64 @@ Page.AddPage = {
 		}
 	},
 	
+	addPhoto: function(container, imgData, loaded) {
+		var self = this;
+		var adjPhoto = container.find('#adj_photo');
+		var btnAddPhoto = container.find('#add_photo');
+		
+		btnAddPhoto.hide();
+		adjPhoto.show();
+		
+		if (typeof imgData == 'string') {
+			var img = 'data:image/jpg;base64,' + imgData;
+			var imgObj = document.createElement('img');
+			imgObj.setAttribute('id', 'drag_img');
+			imgObj.src = img;
+			adjPhoto.append(imgObj);
+		}
+		else {
+			adjPhoto.append(imgData);
+		}		
+		
+		if (!loaded) {
+			self.editPhoto(container, loaded);
+		}
+		self.checkAccept(container);
+	},
+	
+	loadPage: function(container, pid) {
+		var self = this;
+		var content = container.find('.content');
+		var boxPhoto = container.find('#box_photo')[0];
+		var boxDesc = container.find('#box_desc')[0];
+				
+		boxPhoto.style.display = 'none';
+		boxDesc.style.display = 'none';
+		Page.bodyShowLoading(content);
+		
+		Service.Page.GetPage(pid, function(data) {
+			
+			var img = $('<img id="drag_img" class="noedit" style="width: 100%; height: 100%;" src="' + Util.getImage(data.pic, 1) + '">');
+			img.load(function() {
+				Page.bodyHideLoading(content);
+				boxPhoto.style.display = 'block';
+				boxPhoto.style.height = boxPhoto.offsetWidth + 'px';
+				boxDesc.style.display = '-webkit-box';
+				
+				self.updateDesc(container, data.caption);
+				self.addPhoto(container, img, true);	
+				container.find('[data-id=btn_rem]').hide();		
+			});
+		});
+	},
+	
 	updateDesc: function(container, text) {
 		container.find('#desc_text').show().text(text);
 		container.find('#desc_label').hide();
 		this.checkAccept(container);
 	},
 	
-	editPhoto: function(container) {
+	editPhoto: function(container, loaded) {
 		var drag = container.find('#drag_img');
 		
 		var target = undefined;
@@ -120,7 +175,8 @@ Page.AddPage = {
 		var start = false;
 		var pos = { x: 0, y: 0, sx: 0, sy: 0 };
 		var max = 0;
-		drag.load(function() {			
+		
+		var afterLoad = function() {
 			var iw = drag.width();
 			var ih = drag.height();
 			var pw = drag.parent().width();
@@ -150,7 +206,16 @@ Page.AddPage = {
 					break;
 				}
 			}
-		});
+		};
+		
+		if (!loaded) {
+			drag.load(function() {
+				afterLoad();
+			});
+		}
+		else {
+			afterLoad();
+		}
 		
 		drag.bind('mousedown touchstart', function(e) {
 			e.preventDefault();
