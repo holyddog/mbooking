@@ -156,42 +156,7 @@ $(document).ready(function() {
 	dialog.bind('touchmove', function(e) {
 		e.preventDefault();
 	});
-	
-	var dIndex = 1;
-	dialog.find('[data-link=camera]').tap(function() {		
-		if (Page._callbackDialog) {
-			if (Device.PhoneGap.isReady) {
-				Device.PhoneGap.takePhoto({
-					success: function(imageData) {
-						history.back();
-						Page._callbackDialog(imageData);
-					}
-				});
-			}
-			else {
-				history.back();
-				Page._callbackDialog(Data['Image' + dIndex]);
-				dIndex = (dIndex % 4) + 1;
-			}
-		}
-	});
-	dialog.find('[data-link=gallery]').tap(function() {
-        if (Page._callbackDialog) {
-        	if (Device.PhoneGap.isReady) {
-	        	Device.PhoneGap.choosePhoto({
-					success: function(imageData) {
-						history.back();
-						Page._callbackDialog(imageData);
-					}
-				});
-        	}
-        	else {
-				history.back();
-				Page._callbackDialog(Data['Image' + dIndex]);
-				dIndex = (dIndex % 4) + 1;
-        	}
-		}
-	});
+	dialog.find('.d_panel').empty();
 });
 
 Container = {	
@@ -397,6 +362,7 @@ Device = {
 	screenHeight: $(window).innerHeight()
 };
 
+var dIndex = 1;
 Page = {	
 	_stackPages: new Array(),
 	_slideMenu: false,
@@ -492,11 +458,111 @@ Page = {
 			history.back();
 		}
 	},
-	popDialog: function(fn) {		
+	popDialog: function(fn, type) {		
 		if (!Page._showDialog) {
 			if (typeof fn == 'function') {
 				Page._callbackDialog = fn; 
 			}
+			
+			if (!type) {
+				type = 1;
+			}
+
+			var dialog = $('#dialog');
+			var ul = document.createElement('ul');
+			ul.className = 'list_item';
+			
+			var getItem = function(name, label) {
+				var li = document.createElement('li');
+				li.dataset.link = name;
+				li.innerText = label;
+				return li;
+			};
+			
+			switch (type) {
+				// select photo
+				case 1: { 
+					var items = [{
+						name: 'camera',
+						label: 'Take a Photo'
+					}, {
+						name: 'gallery',
+						label: 'Choose from Gallery'
+					}];
+					
+					for (var i = 0; i < items.length; i++) {
+						var it = items[i];
+						ul.appendChild(getItem(it.name, it.label));
+					}
+					dialog.find('.d_panel').append(ul);
+					
+					dialog.find('[data-link=camera]').tap(function() {	
+						if (Page._callbackDialog) {
+							if (Device.PhoneGap.isReady) {
+								Device.PhoneGap.takePhoto({
+									success: function(imageData) {
+										history.back();
+										Page._callbackDialog(imageData);
+									}
+								});
+							}
+							else {
+								history.back();
+								Page._callbackDialog(Data['Image' + dIndex]);
+								dIndex = (dIndex % 4) + 1;
+							}
+						}
+					});
+					dialog.find('[data-link=gallery]').tap(function() {
+				        if (Page._callbackDialog) {
+				        	if (Device.PhoneGap.isReady) {
+					        	Device.PhoneGap.choosePhoto({
+									success: function(imageData) {
+										history.back();
+										Page._callbackDialog(imageData);
+									}
+								});
+				        	}
+				        	else {
+								history.back();
+								Page._callbackDialog(Data['Image' + dIndex]);
+								dIndex = (dIndex % 4) + 1;
+				        	}
+						}
+					});
+					break;
+				}
+				case 2: {
+					var items = [{
+						name: 'edit',
+						label: 'Edit'
+					}, {
+						name: 'move',
+						label: 'Move'
+					}, {
+						name: 'delete',
+						label: 'Delete'
+					}];
+					
+					for (var i = 0; i < items.length; i++) {
+						var it = items[i];
+						ul.appendChild(getItem(it.name, it.label));
+					}
+					dialog.find('.d_panel').append(ul);
+					
+					dialog.find('[data-link=edit]').tap(function() {	
+						Page._callbackDialog('edit');
+					});
+					dialog.find('[data-link=move]').tap(function() {	
+						Page._callbackDialog('move');
+					});
+					dialog.find('[data-link=delete]').tap(function() {	
+						Page._callbackDialog('delete');
+					});
+					break;
+				}
+			}
+			
 			window.location = '#dialog';
 		}
 		else {
@@ -505,6 +571,7 @@ Page = {
 	},
 	hideDialog: function() {
 		var dialog = document.getElementById('dialog');
+		$(dialog).find('.d_panel').empty();
 		dialog.className = dialog.className.replace(' show', '');
 	},
 	showLoading: function(text) {
@@ -785,6 +852,7 @@ var pageLoad = function() {
 	if (Page._showDialog) {
 		var dd = document.getElementById('dialog');
 		dd.className = dd.className.replace(' show', '');
+		$(dd).find('.d_panel').empty();
 		
 		Page._showDialog = false;
 		Page._callbackDialog = undefined;

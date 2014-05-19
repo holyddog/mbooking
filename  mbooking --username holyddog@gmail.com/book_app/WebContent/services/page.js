@@ -12,6 +12,12 @@ Service.Page = {
 		Web.post(url, params, callback);
 	},
 	
+	GetPage: function(pageId, callback) {
+		var url = Service.url + '/getPage.json';
+		var params = { pid: pageId };
+		Web.get(url, params, callback);
+	},
+	
 	AddPage: function(picture, imageSize, cropPos, caption, bookId, addBy, callback) {
 		var url = Service.url + '/addPage.json';
 		var params = {
@@ -21,6 +27,15 @@ Service.Page = {
 			caption : caption,
 			bid : bookId, 
 			uid : addBy
+		};
+		Web.post(url, params, callback);
+	},
+	
+	EditCaption: function(pageId, caption, callback) {
+		var url = Service.url + '/editCaption.json';
+		var params = {
+			pid: pageId,
+			caption: caption
 		};
 		Web.post(url, params, callback);
 	},
