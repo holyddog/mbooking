@@ -1,9 +1,12 @@
 Page.EditBook = {	
 	url: 'pages/html/edit_book.html',
+	bid: null,
 	init: function(params, container, append) {	
 		var self = this;
 		var bid = (params)? params.bid: undefined;
+		this.bid = bid;		
 		container.css('z-index','1001');
+		
 		// set toolbar buttons
 		var btnBack = container.find('[data-id=btn_b]');
 		btnBack.tap(function() {
@@ -34,28 +37,7 @@ Page.EditBook = {
 				
 				var img = container.find('.book_size').css('background-image');
 				img = img.replace('url(' + Config.FILE_URL, '').replace(')', '').replace('_s', '');
-				Service.Book.PublishBook(bid, Account.userId, img, function(data) {	      
-//					if (container.find('[data-id=btn_c]').hasClass('check') && Device.isMobile()) {
-//						var publish_fn = function(success) {
-//							if (success) {
-//								alert('success');
-//							} else {
-//								alert('fail');
-//							}
-//							Page.hideLoading();
-//							updateAccount(data.user);
-//							Page.back();
-//						};
-//
-//						if (book != null)
-//							Device.PhoneGap.postBookToFacebook(book.title, "The Story Application", book.desc, book.pic, (WEB_BOOK_URL + "?bid=" + book.id), container.find('.share_cap').val(), publish_fn);
-//
-//					} else {
-//						Page.hideLoading();
-//						updateAccount(data.user);
-//						Page.back();
-//					}
-					
+				Service.Book.PublishBook(bid, Account.userId, img, function(data) {	   					
 					Page.hideLoading();
 					updateAccount(data.user);
 					Page.back(function(c, page) {
@@ -163,11 +145,6 @@ Page.EditBook = {
                      
 			});
 		}
-		
-//		if (params.bg && params.title) {
-//			container.find('.book_size').css('background-image', params.bg);
-//			container.find('.book_size h2').text(params.title);
-//		}
 	},
 	
 	bookPages: [],
@@ -199,6 +176,29 @@ Page.EditBook = {
 		div.style.backgroundImage = 'url(' + Util.getImage(data.pic, 2) + ')';
 		div.style.width = w + 'px';
 		div.style.height = w + 'px';
+		
+		div.addEventListener('click', function() {
+			var item = this;
+			Page.popDialog(function(text) { 
+				if (text == 'edit') {
+					history.back();
+					
+					setTimeout(function() {
+						Page.open('AddPage', true, { bid: self.bid, pid: item.dataset.pid });						
+					}, 100);
+				}
+				else {
+					alert(text);
+				}
+			}, 2);
+		}, false);
+		
+		var num = document.createElement('div');
+		num.className = 'page_num';
+		num.innerText = data.seq;
+		
+		div.appendChild(num);
+		
 		container.find('#book_panel').append(div);
 	}
 };
