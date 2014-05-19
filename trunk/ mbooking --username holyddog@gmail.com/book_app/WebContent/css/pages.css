@@ -672,6 +672,28 @@
 	float: left;
 	margin: 5px;
 	background-size: 100%;
+	position: relative;
+}
+#page_EditBook .pp:after {
+	content: " ";
+	display: block;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	height: 25%;
+	background-image: -webkit-linear-gradient(bottom, rgba(0,0,0,0.6), rgba(0,0,0,0) 100%);
+}
+#page_EditBook .page_num {
+	position: absolute;
+	bottom: 0;
+	right: 10px;
+	font-size: 80%;
+	height: 30px;
+	line-height: 30px;
+	text-align: right;
+	color: #fff;
+	z-index: 1;
 }
 
 #page_EditBook #book_panel {
