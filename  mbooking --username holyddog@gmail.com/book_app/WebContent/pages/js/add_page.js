@@ -7,6 +7,7 @@ Page.AddPage = {
 		
 		var boxPhoto = container.find('#box_photo')[0];
 		if (pid) {
+			container.find('.tbar .title').text('Edit Page');
 			self.loadPage(container, pid);
 		}
 		else {
@@ -133,7 +134,9 @@ Page.AddPage = {
 				boxPhoto.style.height = boxPhoto.offsetWidth + 'px';
 				boxDesc.style.display = '-webkit-box';
 				
-				self.updateDesc(container, data.caption);
+				if (data.caption) {
+					self.updateDesc(container, data.caption);
+				}
 				self.addPhoto(container, img, true);	
 				container.find('[data-id=btn_rem]').hide();		
 			});

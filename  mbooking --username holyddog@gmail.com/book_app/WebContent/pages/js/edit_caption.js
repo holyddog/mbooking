@@ -39,6 +39,8 @@ Page.EditCaption = {
 		
 		var inputText = container.find('[name=text]');
 		if (params && params.text) {
+			container.find('.tbar .title').text('Edit Description');
+			btnAdd.find('.label').text('Update');
 			inputText.val(params.text);
 			updateRemainLetter((params.text).length);
 		}
