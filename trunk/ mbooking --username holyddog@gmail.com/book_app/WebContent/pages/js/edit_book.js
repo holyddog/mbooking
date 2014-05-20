@@ -187,6 +187,31 @@ Page.EditBook = {
 						Page.open('AddPage', true, { bid: self.bid, pid: item.dataset.pid });						
 					}, 100);
 				}
+				else if (text == 'delete') {
+					history.back();
+					
+					setTimeout(function() {
+						MessageBox.confirm({ 
+							title: 'Confirm', 
+							message: 'Are you sure you want to delete this page?', 
+							callback: function() {										
+								Page.showLoading('Deleting...');
+								Service.Page.DeletePage(item.dataset.pid, self.bid, function() {
+									Page.hideLoading();
+									
+									container.find('[data-pid=' + item.dataset.pid + ']').remove();
+									var counter = container.find('.pcount span');
+									counter.text(parseInt(counter.text()) - 1);
+									
+									var pages = container.find('.pp');
+									for (var i = 0; i < pages.length; i++) {
+										pages.eq(i).find('.page_num').text(i + 1);
+									}
+								});								
+							} 
+						});
+					}, 100);					
+				}
 				else {
 					alert(text);
 				}
