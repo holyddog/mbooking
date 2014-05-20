@@ -38,6 +38,16 @@ public class PageJson {
 		}
 		return ErrorResponse.getError("This page cannot be saved");
 	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/editCaption.json")
+	public @ResponseBody
+	Object editCaption(
+			@RequestParam(value = "pid") Long pid,
+			@RequestParam(value = "caption") String caption
+
+	) {
+		return ResultResponse.getResult("success", pageRepo.editCaption(pid, caption));
+	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/createPage.json")
 	public @ResponseBody
@@ -82,10 +92,9 @@ public class PageJson {
 	public @ResponseBody
 	Object deletePage(
 			@RequestParam(value = "pid") Long pid,
-			@RequestParam(value = "bid") Long bid,
-			@RequestParam(value = "uid") Long uid) 
+			@RequestParam(value = "bid") Long bid) 
 	{
-		return ResultResponse.getResult("success", pageRepo.delete(pid, bid, uid));
+		return ResultResponse.getResult("success", pageRepo.delete(pid, bid));
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/getBookPages.json")
@@ -99,5 +108,15 @@ public class PageJson {
 		}
 
 		return ErrorResponse.getError("Book page not found");
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/getPage.json")
+	public @ResponseBody
+	Object getPage(@RequestParam(value = "pid") Long pid) {
+		Page page = pageRepo.findByPid(pid);
+		if (page != null) {
+			return page;
+		}
+		return ErrorResponse.getError("Page not found");
 	}
 }

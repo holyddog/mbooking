@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
@@ -195,6 +196,13 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 		retPage.setPic(pic);
 		return retPage;
 	}
+	
+	@Override
+	public Boolean editCaption(Long pid, String caption) {
+		Query query = new Query(Criteria.where("pid").is(pid));
+		db.updateFirst(query, new Update().set("caption", caption), Page.class);
+		return true;
+	}
 
 	@Override
 	public Page edit(Long pid, Long uid, Long bid, Long date, String pic,
@@ -218,40 +226,32 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 	}
 
 	@Override
-	public Boolean delete(Long pid, Long bid, Long uid) {
-		Criteria criteria = Criteria.where("pid").is(pid).and("bid").is(bid)
-				.and("uid").is(uid);
-		Query query = new Query(criteria);
+	public Boolean delete(Long pid, Long bid) {
+		Query query = new Query(Criteria.where("pid").is(pid));
+		query.fields().include("pic");
+		query.fields().include("seq");		
+		Page page = db.findOne(query, Page.class);
+		
+		// Remove Page
+		db.remove(query, Page.class);
 
-		try {
-			
-			query.fields().include("pic");
-			query.fields().include("seq");
-			
-			Page page = db.findOne(query, Page.class);
-			
-			
-			
-			// Remove Page
-			db.remove(query, Page.class);
+		// Remove Image Files
+		String filename = page.getPic();
+		if (filename != null && filename != "")
+			ImageUtils.deleteImageFile(filename, ConstValue.PAGE_IMG_TYPE);
 
-			// Remove Image Files
-			String filename = page.getPic();
-			if (filename != null && filename != "")
-				ImageUtils.deleteImageFile(filename, ConstValue.PAGE_IMG_TYPE);
-
-			// Update pcount
-			criteria = Criteria.where("bid").is(bid).and("uid").is(uid);
-			query = new Query(criteria);
-			Integer pcount = (int) db.count(query, Page.class);
-			Update update = new Update();
-			update.set("pcount", pcount);
-			db.updateFirst(query, update, Book.class);
-			
-		} catch (Exception e) {
-
-			System.out.println("Delete page err :" + e);
-			return false;
+		// Update page count
+		query = new Query(Criteria.where("bid").is(bid));
+		db.updateFirst(query, new Update().inc("pcount", -1), Book.class);
+		
+		// Re-sequence
+		query = new Query(Criteria.where("bid").is(bid));
+		query.fields().include("seq");
+		query.sort().on("seq", Order.ASCENDING);
+		List<Page> list = db.find(query, Page.class);
+		for (int i = 0; i < list.size(); i++) {
+			Page p = list.get(i);
+			db.updateFirst(new Query(Criteria.where("pid").is(p.getPid())), new Update().set("seq", i + 1), Page.class);
 		}
 
 		return true;
