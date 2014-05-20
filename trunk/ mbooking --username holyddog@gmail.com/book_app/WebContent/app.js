@@ -84,8 +84,8 @@ MessageBox = {
 			}, config.title);
 		}
 		else {
-			confirm(config.message);
-			if (typeof config.callback == 'function') {
+			var res = confirm(config.message);
+			if (res && typeof config.callback == 'function') {
 				config.callback();
 			}
 		}
