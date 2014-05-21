@@ -1,6 +1,6 @@
 Page.Profile = {	
 	url: 'pages/html/profile.html',
-	init: function(params, container, append) {		
+	init: function(params, container, append) {
 		var self = this;
 		
 		var isGuest = false;
@@ -11,6 +11,7 @@ Page.Profile = {
 		else {
 			uid = Account.userId;
 		}
+		container.find('[data-id=btn_f]').hide();
 		
 		// set toolbar buttons
 		var btnMenu = container.find('[data-id=btn_m]');
@@ -68,7 +69,7 @@ Page.Profile = {
 			btnNotf.hide();
 			scBar.hide();
 			profileView.css('padding-bottom', '0px');
-		}
+		}	
 		
 		container.find('.ptab').click(function() {
 			var ptab = $(this);
