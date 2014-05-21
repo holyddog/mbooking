@@ -25,17 +25,39 @@ Page.CreateBook = {
 					
 					Page.btnHideLoading(btnAccept[0]);
 					Page.back(function(c, page) {
-						var b = [{
+//						var b = [{
+//							bid: bid,
+//							title: title
+//						}];
+//						page.loadDraftBooks(b, Account.userId, c, true);
+//						var notf = c.find('#xbar .notf').show();
+//						var count = 1;
+//						if (notf.text().length) {
+//							count = parseInt(notf.text()) + 1;
+//						}
+//						notf.text(count);
+
+						var lb = c.find('.sc_bar [data-link=edit] .label');
+						if (Account.draftCount) {
+							Account.draftCount = parseInt(Account.draftCount) + 1;
+							lb.text(lb.text().replace(/\d/i, Account.draftCount));							
+						}
+						else {
+							lb.text(lb.text().replace(/\d/i, 1));
+							c.find('.sc_bar .sep').show();
+							c.find('.sc_bar [data-link=edit]').show();
+							Account.draftCount = 1;
+						}			
+						
+						if (!Account.draftBooks) {
+							Account.draftBooks = [];
+						}
+						Account.draftBooks.push({
 							bid: bid,
 							title: title
-						}];
-						page.loadDraftBooks(b, Account.userId, c, true);
-						var notf = c.find('#xbar .notf').show();
-						var count = 1;
-						if (notf.text().length) {
-							count = parseInt(notf.text()) + 1;
-						}
-						notf.text(count);
+						});
+						
+						localStorage.setItem('u', JSON.stringify(Account));
 						
 						Page.open('EditBook', true, { bid: bid, title: title, desc: desc });						
 					});
@@ -46,6 +68,17 @@ Page.CreateBook = {
 					Service.Book.EditBook(params.bid, title, desc, pub, function() {
 						Page.back(function(c, page) {
 							page.updateBook(c, title, desc);
+							
+							if (Account.draftBooks) {
+								var books = Account.draftBooks;
+								for (var i = 0; i < books.length; i++) {
+									if (params.bid == books[i].bid) {
+										Account.draftBooks[i].title = title;
+										break;
+									}
+								}
+								localStorage.setItem('u', JSON.stringify(Account));
+							}
 						});
 					});					
 				}

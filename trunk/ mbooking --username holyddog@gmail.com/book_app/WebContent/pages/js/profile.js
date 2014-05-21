@@ -45,18 +45,29 @@ Page.Profile = {
 				});					
 			}
 		});
+
+		var profileView = container.find('#profile_view');
+		var scBar = container.find('.sc_bar');
+		var btnAdd = scBar.find('[data-link=new]');
+		var btnEdit = scBar.find('[data-link=edit]');
 		
-		var linkAdd = container.find('[data-id=link_a]');
+		btnAdd.tap(function() {
+			Page.open('CreateBook', true, { pub: true });
+		});
+		btnEdit.tap(function() {
+			
+		});
 		
 		if (!isGuest) {
 			btnFollow.hide();
 			btnNotf.show();
-			linkAdd.show();
+			scBar.show();
 		}
 		else {
 			btnFollow.show();
 			btnNotf.hide();
-			linkAdd.hide();
+			scBar.hide();
+			profileView.css('padding-bottom', '0px');
 		}
 		
 		container.find('.ptab').click(function() {
@@ -234,7 +245,7 @@ Page.Profile = {
 				
 				self.loadPrivateBooks(data.priBooks, uid, container);
 				
-				self.loadDraftBooks(data.drBooks, uid, container);
+//				self.loadDraftBooks(data.drBooks, uid, container);
 			}
 			else {
 				if (data.isFollow) {

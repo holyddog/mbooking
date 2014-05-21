@@ -5,7 +5,7 @@ Page.SignIn = {
 		// check authen
 		if (localStorage.getItem('u')) {
 			Account = JSON.parse(localStorage.getItem('u'));
-			Page.open('Profile');
+			Page.open('Following');
 			
 			return;
 		}
@@ -47,6 +47,8 @@ Page.SignIn = {
 							bookCount: data.pbcount,
 							draftCount: data.drcount,
 							
+							draftBooks: data.books,
+							
 //							followerCount: data.fcount,
 //							bookCount: data.pbcount
 							
@@ -59,7 +61,7 @@ Page.SignIn = {
 						localStorage.setItem("u", JSON.stringify(Account));						
 
 						Page.loadMenu();						
-						Page.open('Profile');
+						Page.open('Following');
 					}
 				});
 			}

@@ -60,6 +60,17 @@ Page.AddPage = {
 							// set cover
 							if (data.seq == 1) {
 								c.find('.book_size').css('background-image', 'url(' + Util.getImage(data.pic, 2) + ')');
+								
+								if (Account.draftBooks) {
+									var books = Account.draftBooks;
+									for (var i = 0; i < books.length; i++) {
+										if (bid == books[i].bid) {
+											Account.draftBooks[i].pic = data.pic;
+											break;
+										}
+									}
+									localStorage.setItem('u', JSON.stringify(Account));
+								}
 							}
 							
 							var counter = c.find('.pcount span');
