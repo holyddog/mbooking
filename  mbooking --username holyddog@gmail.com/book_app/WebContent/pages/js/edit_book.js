@@ -5,7 +5,7 @@ Page.EditBook = {
 		var self = this;
 		var bid = (params)? params.bid: undefined;
 		this.bid = bid;		
-		container.css('z-index','1001');
+//		container.css('z-index','1001');
 		
 		// set toolbar buttons
 		var btnBack = container.find('[data-id=btn_b]');
@@ -17,15 +17,28 @@ Page.EditBook = {
 			});
 		});
 		
-		var updateAccount = function(u) {
+		var updateAccount = function(u, bid) {
 			if (u) {
 				Account.cover = u.cover;
 				Account.bookCount = u.pbcount;
 				Account.draftCount = u.drcount;
 				
+				if (bid) {
+					var books = Account.draftBooks;
+					for (var i = 0; i < books.length; i++) {
+						if (books[i].bid == bid) {
+							Account.draftBooks.splice(i, 1);
+							break;
+						}
+					}
+					Page.updateShortcutBar();
+				}
+				
 				localStorage.setItem('u', JSON.stringify(Account));
 				
-				Page.Profile.updateCover();
+				if ($('#page_Profile').length) {
+					Page.Profile.updateCover();					
+				}
 			}
 		};
 		
@@ -39,17 +52,16 @@ Page.EditBook = {
 				img = img.replace('url(' + Config.FILE_URL, '').replace(')', '').replace('_s', '');
 				Service.Book.PublishBook(bid, Account.userId, img, function(data) {	   					
 					Page.hideLoading();
-					updateAccount(data.user);
+					updateAccount(data.user, bid);
+					
 					Page.back(function(c, page) {
-						
-						if(page.reverseIndex){
-							page.reverseIndex(c);
-						}
-						var profile = $('#page_Profile');
-						if (profile.length > 0) {
-							Page.Profile.loadProfile(Account.userId, false, profile);
-						}
-						
+//						if (page.reverseIndex) {
+//							page.reverseIndex(c);
+//						}
+//						var profile = $('#page_Profile');
+//						if (profile.length > 0) {
+//							Page.Profile.loadProfile(Account.userId, false, profile);
+//						}						
 					});
 				});
 			}
@@ -134,6 +146,7 @@ Page.EditBook = {
 				book = data;
 				btnPub.show();
 				if (data.pbdate) {
+					btnPub.hide();
 					btnPub.addClass('used');
 					btnPub.text('UNPUBLISH');
 				}
