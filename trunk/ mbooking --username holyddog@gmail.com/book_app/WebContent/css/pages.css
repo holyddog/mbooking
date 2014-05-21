@@ -370,6 +370,15 @@
 	color: #fff;
 	line-height: 35px;
 }
+#page_Book .edit_book {
+	margin-top: 10px;
+	margin-right: 10px;
+	width: 30px;
+	height: 30px;
+	background-color: #fff;
+	-webkit-mask-size: 16px;
+	-webkit-mask-image: url(../icons/pencil.png);
+}
 #page_Book .grad_overlay {
 	z-index: -2;
 	background-color: #000;
@@ -458,6 +467,7 @@
 }
 #page_Comments #input_comment {
 	background-color: #fff;
+	border-top: solid 1px #33B5E5;
 }
 #page_Comments #input_comment .flex1 {	
 	padding: 5px 0;
