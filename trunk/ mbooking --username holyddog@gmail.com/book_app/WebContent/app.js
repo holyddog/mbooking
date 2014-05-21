@@ -154,7 +154,9 @@ $(document).ready(function() {
 		history.back();
 	});
 	dialog.bind('touchmove', function(e) {
-		e.preventDefault();
+		if ($(e.target).closest('.d_panel').length == 0) {
+			e.preventDefault();
+		}
 	});
 	dialog.find('.d_panel').empty();
 });
@@ -370,6 +372,104 @@ Page = {
 	
 	_tempBack: [],
 	
+	createShortcutBar: function(target) {
+//		<div class="sc_bar box horiztonal">
+//			<div data-link="new" class="flex1 flex_lock box center_middle">
+//				<div class="btn_link">
+//					<div class="icon mask_icon" style="-webkit-mask-image: url(icons/add.png);"></div>
+//					<div class="label">Create</div>
+//				</div>
+//			</div>
+//			<div class="sep"></div>
+//			<div data-link="edit" class="flex1 flex_lock box center_middle">
+//				<div class="btn_link">
+//					<div class="icon mask_icon" style="-webkit-mask-image: url(icons/pencil.png);"></div>
+//					<div class="label">Edit</div>
+//				</div>
+//			</div>
+//		</div>
+		var bar = document.createElement('div');
+		bar.className = 'sc_bar box horiztonal';
+		
+		var getSep = function() {
+			var sep = document.createElement('div');
+			sep.className = 'sep';
+			return sep;
+		};
+		var getLink = function(name, text, iconPath) {
+			var link = document.createElement('div');
+			link.dataset.link = name;
+			link.className = 'flex1 flex_lock box center_middle';
+			
+			var btn = document.createElement('div');
+			btn.className = 'btn_link';
+			
+			var icon = document.createElement('div');
+			icon.className = 'icon mask_icon';
+			icon.style.webkitMaskImage = 'url(' + iconPath + ')';
+			
+			var label = document.createElement('div');
+			label.className = 'label';
+			label.innerText = text;
+			
+			btn.appendChild(icon);
+			btn.appendChild(label);
+			
+			link.appendChild(btn);
+			
+			return link;
+		};
+		
+		bar.appendChild(getLink('new', 'Create', 'icons/add.png'));
+		bar.appendChild(getSep());
+		bar.appendChild(getLink('edit', 'Edit (0)', 'icons/pencil.png'));
+		
+		target.append(bar);
+		
+		var scBar = $(bar);
+		var btnAdd = scBar.find('[data-link=new]');
+		var btnEdit = scBar.find('[data-link=edit]');
+		if (Account.draftCount) {
+			var lb = btnEdit.find('.label');
+			lb.text(lb.text().replace(/\d/i, Account.draftCount));
+		}
+		else {
+			scBar.find('.sep').hide();
+			btnEdit.hide();
+		}
+		
+		btnAdd.tap(function() {
+			Page.open('CreateBook', true, { pub: true });
+		});
+		btnEdit.tap(function() {
+			if (Account.draftBooks && Account.draftBooks.length == 1) {
+				Page.open('EditBook', true, { bid: Account.draftBooks[0].bid });
+			}
+			else {
+				Page.popDialog(function(bid) { 
+					history.back();
+					
+					setTimeout(function() {
+						Page.open('EditBook', true, { bid: bid });					
+					}, 100);
+				}, 3);				
+			}
+		});
+	},
+	
+	updateShortcutBar: function() {
+		var scBar = $('.sc_bar');
+		var btnEdit = scBar.find('[data-link=edit]');
+		if (Account.draftCount > 0) {
+			var lb = btnEdit.find('.label');
+			lb.text(lb.text().replace(/\d/i, Account.draftCount));
+		}
+		else {
+			scBar.find('.sep').hide();
+			btnEdit.hide();
+		}
+	},
+	
 	getNotifications: function(page) {
 		if (Page.bgService) {
 			Service.User.CountNotifications(Account.userId, function(data) {
@@ -469,6 +569,8 @@ Page = {
 			}
 
 			var dialog = $('#dialog');
+			dialog.find('.d_panel').css('width', 'auto');
+			
 			var ul = document.createElement('ul');
 			ul.className = 'list_item';
 			
@@ -550,14 +652,54 @@ Page = {
 					}
 					dialog.find('.d_panel').append(ul);
 					
-					dialog.find('[data-link=edit]').tap(function() {	
+					dialog.find('[data-link=edit]').click(function() {	
 						Page._callbackDialog('edit');
 					});
-					dialog.find('[data-link=move]').tap(function() {	
+					dialog.find('[data-link=move]').click(function() {	
 						Page._callbackDialog('move');
 					});
-					dialog.find('[data-link=delete]').tap(function() {	
+					dialog.find('[data-link=delete]').click(function() {	
 						Page._callbackDialog('delete');
+					});
+					break;
+				}
+				case 3: {
+					var dPanel = dialog.find('.d_panel');
+					dPanel.width(window.innerWidth - 30);
+					dPanel.css('max-height', window.innerHeight - 30);
+					
+					ul.className = 'list_book';
+					
+					var items = Account.draftBooks;
+					for (var i = 0; i < items.length; i++) {
+						var it = items[i];
+												
+						var dimage = document.createElement('div');
+						dimage.className = 'pic';
+
+						if (it.pic) {
+							var img = document.createElement('img');
+							img.src = Util.getImage(it.pic, 2);
+							dimage.appendChild(img);
+						}
+						
+						var label = document.createElement('div');
+						label.className = 'label flex1';
+						label.innerText = it.title;
+						
+						var li = document.createElement('li');
+						li.className = 'box horizontal';
+						li.dataset.bid = it.bid;
+						
+						li.appendChild(dimage);
+						li.appendChild(label);
+						
+						ul.appendChild(li);
+					}
+					dPanel.append(ul);
+					
+					dialog.find('li').click(function() {	
+						Page._callbackDialog($(this).data('bid'));
 					});
 					break;
 				}
