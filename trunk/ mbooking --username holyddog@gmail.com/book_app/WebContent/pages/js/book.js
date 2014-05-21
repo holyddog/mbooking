@@ -22,21 +22,24 @@ Page.Book = {
 		btnShare.tap(function() {
 			Page.open('Share', true, { bid: params.bid });
 		});	
-		var btnSetting = container.find('[data-id=btn_e]');
-		btnSetting.tap(function() {
-			Page.open('EditBook', true, { bid: params.bid });
+		var btnLike = container.find('[data-id=btn_l]');
+		btnLike.tap(function() {
+			alert('Like');
 		});
+		
+		if (isGuest) {
+			container.find('.edit_book').css('visibility', 'hidden');
+		}
+		
+//		var btnSetting = container.find('[data-id=btn_e]');
+//		btnSetting.tap(function() {
+//			Page.open('EditBook', true, { bid: params.bid });
+//		});
 		
 		if (params.preview) {
 			btnComment.hide();
-			btnSetting.hide();
 			btnShare.hide();
 			btnBack.find('span')[0].className = 'back';
-		}
-		
-		if (isGuest) {
-			btnSetting.hide();
-			btnComment.css('right', '0px');
 		}
 		
 		var content = container.find('.content');
@@ -84,9 +87,14 @@ Page.Book = {
 			};
 			
 			content.css('display', 'none');
-			content.tap(function() {
-				container.find('.page_nav').eq(index).css('display', '-webkit-box');
-				container.find('#tap_nav').css('display', '-webkit-box');
+			content.click(function(e) {
+				if ($(e.target).hasClass('edit_book')) {
+					Page.open('EditBook', true, { bid: bookData.bid });
+				}
+				else {
+					container.find('.page_nav').eq(index).css('display', '-webkit-box');
+					container.find('#tap_nav').css('display', '-webkit-box');					
+				}
 			});
 			
 			container.append('<div id="tap_nav" class="fill_dock box horizontal" style="top: 0; z-index: 1000; display: none;"><div class="flex1" style="width: 50%;"></div><div class="flex1" style="width: 50%;"></div></div>');			
