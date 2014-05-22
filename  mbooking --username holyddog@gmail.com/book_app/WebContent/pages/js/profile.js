@@ -104,7 +104,8 @@ Page.Profile = {
 				}, 1);
 			}
 		});
-		
+
+		Page.createShortcutBar(container.find('.content'));
 		self.loadProfile(uid, isGuest, container);
 	},
 	
