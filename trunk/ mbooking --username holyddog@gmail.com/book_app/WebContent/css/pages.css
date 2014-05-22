@@ -371,7 +371,7 @@
 	padding: 10px;
 	font-size: 180%;
 	color: #fff;
-	line-height: 35px;
+	line-height: 40px;
 }
 #page_Book .edit_book {
 	margin-top: 10px;
@@ -391,19 +391,20 @@
 	font-size: 80%;
 	color: #eee;
 	padding: 0 10px;
+	margin-bottom: 10px;
 }
 #page_Book .book_bg {
 	z-index: -3;
 }
 #page_Book .bline {
 	height: 1px;
-	margin: 10px;
+	margin: 0 10px 10px;
 	width: 70%;
 	background-color: #fff;
 }
 #page_Book .author_info {
 	float: left;
-	padding: 0 10px;
+	padding: 10px;
 }
 #page_Book .author_info .pimage {
 	width: 50px;
