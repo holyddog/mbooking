@@ -11,6 +11,25 @@ body {
 	src: url(HNC.ttf) format("truetype")
 }
 
+@font-face {
+	font-family: 'Roboto';
+	font-style: normal;
+	font-weight: 300;
+	src: url(Roboto-Thin.ttf);
+}
+@font-face {
+	font-family: 'Roboto';
+	font-style: normal;
+	font-weight: 400;
+	src: url(Roboto-Light.ttf);
+}
+@font-face {
+	font-family: 'Roboto';
+	font-style: normal;
+	font-weight: 700;
+	src: url(Roboto-Bold.ttf);
+}
+
 .aleft { left: 0; }
 .aright { right: 0; }
 .no_display { display: none !important;}
