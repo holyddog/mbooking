@@ -282,13 +282,15 @@ Page.Profile = {
 		return div;
 	},
 	
-	resizeBook: function(container) {		
+	resizeBook: function(container) {	
+		var header = $('.page:last-child #profile_header')[0];
+		
 		var ratio = 2;
-		if (profile_header.offsetWidth >= 600) {
+		if (header.offsetWidth >= 600) {
 			ratio = 3;
 		}
 		
-		var w = (profile_header.offsetWidth / ratio) - 15;
+		var w = (header.offsetWidth / ratio) - 15;
 		var h = (w * 4) / 3;
 		container.find('.book_size').css({
 			width: w + 'px',

@@ -88,8 +88,12 @@ Page.Book = {
 			
 			content.css('display', 'none');
 			content.click(function(e) {
-				if ($(e.target).hasClass('edit_book')) {
+				var target = $(e.target);
+				if (target.hasClass('edit_book')) {
 					Page.open('EditBook', true, { bid: bookData.bid });
+				}
+				else if (target.closest('.author_info').length) {
+					Page.open('Profile', true, { uid: bookData.uid, back: true });
 				}
 				else {
 					container.find('.page_nav').eq(index).css('display', '-webkit-box');
