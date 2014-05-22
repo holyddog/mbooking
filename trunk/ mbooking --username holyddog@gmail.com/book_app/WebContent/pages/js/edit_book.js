@@ -117,7 +117,7 @@ Page.EditBook = {
 		});
 		
 		container.find('[data-link=edit_book]').click(function() {
-			Page.open('CreateBook', true, { bid: bid });
+			Page.open('CreateBook', true, { bid: bid, uid: Account.userId });
 		});
 		container.find('[data-link=preview]').click(function() {
 			Page.open('Book', true, { bid: bid, uid: Account.userId, preview: true });

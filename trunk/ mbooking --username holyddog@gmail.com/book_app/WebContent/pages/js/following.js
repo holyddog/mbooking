@@ -20,7 +20,7 @@ Page.Following = {
 			Page.open('Notifications', true);
 		});	
 		
-		Page.createShortcutBar(container.find('.content'));
+		Page.createShortcutBar(container);
 		self.load(container);		
 	},
 	
