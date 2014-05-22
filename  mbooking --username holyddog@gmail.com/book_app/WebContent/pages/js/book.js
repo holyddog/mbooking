@@ -71,7 +71,8 @@ Page.Book = {
 			for (var i = data.length - 1; i > -1; i--) {
 				var page = $('<div class="page_nav fill_dock box vertical" style="background-color: white; visibility: hidden;"></div>');
 				var pic = $('<div class="pic_box relative" style="background-color: #ccc; overflow: hidden;"><img style="position: absolute; width: 100%; height: 100%;" src="' + Util.getImage(data[i].pic, 1) + '"></div>');
-				content.append(page.append(pic).append('<div class="flex1 box" style="padding: 10px; -webkit-box-align: center;">' + data[i].caption + '</div><div style="line-height: 15px; padding: 0 10px 10px; font-size: 80%; text-align: right;">' + (i + 1) + ' of ' + data.length + '</div>'));
+				// -webkit-box-align: center;
+				content.append(page.append(pic).append('<div class="flex1 box center_middle" style="padding: 15px;">' + data[i].caption + '</div><div style="line-height: 15px; padding: 0 10px 10px; font-size: 80%; text-align: right;">' + (i + 1) + ' of ' + data.length + '</div>'));
 				pic.css('height', pic.width());
 			}		
 			
@@ -95,9 +96,10 @@ Page.Book = {
 				else if (target.closest('.author_info').length) {
 					Page.open('Profile', true, { uid: bookData.uid, back: true });
 				}
-				else {
+				else {		
+					container.find('.first_cover').hide();
 					container.find('.page_nav').eq(index).css('display', '-webkit-box');
-					container.find('#tap_nav').css('display', '-webkit-box');					
+					container.find('#tap_nav').css('display', '-webkit-box');			
 				}
 			});
 			
@@ -110,9 +112,16 @@ Page.Book = {
 						index--;
 						container.find('.page_nav').eq(index).css('display', '-webkit-box');
 					}
+					else if (index == 0) {
+						container.find('.page_nav').eq(index).css('display', 'none');	
+						container.find('.last_cover').css('display', '-webkit-box');
+						index--;
+					}
 				}
 				else {	
 					if (index == size) {
+						container.find('.first_cover').show();	
+						container.find('.last_cover').hide();
 						container.find('.page_nav').eq(index).css('display', 'none');	
 						index = data.length - 1;
 						container.find('#tap_nav').css('display', 'none');
