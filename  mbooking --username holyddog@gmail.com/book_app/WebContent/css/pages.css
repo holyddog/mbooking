@@ -365,6 +365,9 @@
 }
 
 #page_Book .btitle {
+	font-family: 'Roboto';
+	font-weight: 400;
+	
 	padding: 10px;
 	font-size: 180%;
 	color: #fff;
@@ -432,6 +435,48 @@
 }
 #page_Book #tap_nav .flex1.highlight {
 }
+#page_Book .first_cover {
+	
+}
+#page_Book .last_cover {
+	display: none;
+}
+#page_Book .last_cover .end_box {
+	width: 70px;
+	height: 70px;
+	display: block;
+	line-height: 70px;
+	color: #fff;
+	font-size: 180%;
+	text-align: center;
+	font-family: 'Roboto';
+	font-weight: 400;
+}
+/*#page_Book .last_cover .end_box {
+	width: 70px;
+	height: 70px;
+	background: rgba(0,0,0,0.6);
+	display: block;
+	line-height: 70px;
+	border-radius: 35px;
+	border: solid 2px #e5e5e5;
+	color: #fff;
+	font-size: 80%;
+	text-align: center;
+	
+	margin-left: -37px;
+	bottom: 30%;
+	left: 50%;
+}
+#page_Book .last_cover .sep_line {
+	position: absolute;
+	width: 2px;
+	height: 30%;
+	bottom: 0;
+	left: 50%;
+	margin-left: -1px;
+	background-color: #e5e5e5;
+}*/
 
 #page_Comments .comment_list .image {
 	width: 50px;
