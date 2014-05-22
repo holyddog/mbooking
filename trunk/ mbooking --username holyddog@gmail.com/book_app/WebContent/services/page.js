@@ -55,12 +55,11 @@ Service.Page = {
 		Web.post(url, params, callback);
 	},
 
-	DeletePage : function(pageID, bookID, userID, callback) {
+	DeletePage : function(pageId, bookId, callback) {
 		var url = Service.url + '/deletePage.json';
 		var params = {
-			pid : pidID,
-			bid : bookID,
-			uid : userID
+			pid : pageId,
+			bid : bookId
 		};
 		Web.post(url, params, callback);
 	}
