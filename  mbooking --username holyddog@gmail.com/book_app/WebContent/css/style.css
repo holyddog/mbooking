@@ -856,10 +856,12 @@ textarea {
 	background-position: center center;
 }
 .book_size h2 {
+	font-family: 'Roboto';
 	color: #fff;
 	position: relative;
 	z-index: 1;
 	padding: 10px;
+	line-height: 24px;
 }
 .book_size .pcount {
 	position: absolute;

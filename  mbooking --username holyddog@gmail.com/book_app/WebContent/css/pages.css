@@ -267,6 +267,7 @@
 	overflow: hidden;
 }
 #page_Profile .header_title span {
+	font-family: 'Roboto';
 	font-size: 180%;
 	color: #fff;
 	overflow: hidden;
