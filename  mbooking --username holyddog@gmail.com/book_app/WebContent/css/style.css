@@ -30,6 +30,11 @@ body {
 	src: url(Roboto-Bold.ttf);
 }
 
+/*@font-face {
+	font-family: 'Bangna';
+	src: url(WDB_Bangna.ttf);
+}*/
+
 .aleft { left: 0; }
 .aright { right: 0; }
 .no_display { display: none !important;}
@@ -940,8 +945,6 @@ textarea {
 .sc_bar {
 	height: 50px;
 	width: 100%;
-	position: fixed;
-	bottom: 0;
 	background-color: #33B5E5;
 	z-index: 2;
 }
