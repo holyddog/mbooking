@@ -36,12 +36,18 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		password = Convert.toMD5Password(password);
 		Criteria criteria = Criteria.where("inactive").ne(true).andOperator(loginCriteria).and("pwd").is(password);
 			
-			
 		Query query = new Query(criteria);
 		query.fields().exclude("pwd");
 		query.fields().exclude("fb.fbid");
 		
-		return db.findOne(query, User.class);
+		User user = db.findOne(query, User.class);
+		if (user != null) {
+			query = new Query(Criteria.where("uid").is(user.getUid()).and("pbdate").exists(false));
+			query.fields().include("pic").include("title").include("pcount");
+			List<Book> books = db.find(query, Book.class);
+			user.setBooks(books);
+		}
+		return user;
 	}
 
 	@Override
@@ -202,9 +208,6 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		}
 		
 		int limit = ConstValue.LIMIT_ITEM;
-		if (uid.equals(guestId)) {
-			limit = ConstValue.LIMIT_ITEM - 1;
-		}
 		
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		
@@ -250,14 +253,14 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 			List<Book> priBooks = db.find(query, Book.class);
 			map.put("priBooks", priBooks);
 			
-			query = new Query(Criteria.where("uid").is(uid).and("pbdate").exists(false));
-			
-			query.fields().include("title");
-			query.fields().include("pic");
-			query.fields().include("pcount");
-			
-			List<Book> drBooks = db.find(query, Book.class);
-			map.put("drBooks", drBooks);
+//			query = new Query(Criteria.where("uid").is(uid).and("pbdate").exists(false));
+//			
+//			query.fields().include("title");
+//			query.fields().include("pic");
+//			query.fields().include("pcount");
+//			
+//			List<Book> drBooks = db.find(query, Book.class);
+//			map.put("drBooks", drBooks);
 		}
 		else {			
 			boolean isFollow = db.count(new Query(Criteria.where("auid").is(uid).and("uid").is(guestId)), Follow.class) > 0;
