@@ -30,10 +30,16 @@ body {
 	src: url(Roboto-Bold.ttf);
 }
 
-/*@font-face {
-	font-family: 'Bangna';
-	src: url(WDB_Bangna.ttf);
-}*/
+@font-face {
+    font-family: 'Bangna';
+    src: url('../fonts/wdb_bangna-webfont.eot');
+    src: url('../fonts/wdb_bangna-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/wdb_bangna-webfont.woff') format('woff'),
+         url('../fonts/wdb_bangna-webfont.ttf') format('truetype'),
+         url('../fonts/wdb_bangna-webfont.svg#wdb_bangnaregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
 
 .aleft { left: 0; }
 .aright { right: 0; }
@@ -719,6 +725,7 @@ textarea {
 	height: 50px;
 	overflow: hidden;
 	width: 100%;
+	visibility: hidden;
 }
 #dd_message .msg {
 	padding: 10px;

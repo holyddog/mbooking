@@ -366,13 +366,14 @@
 }
 
 #page_Book .btitle {
-	font-family: 'Roboto';
+	font-family: 'Roboto', 'Bangna';
 	font-weight: 400;
 	
 	padding: 10px;
 	font-size: 180%;
 	color: #fff;
 	line-height: 40px;
+	margin-top: 10px;
 }
 #page_Book .edit_book {
 	margin-top: 10px;
@@ -424,6 +425,7 @@
 	color: #fff;
 }
 #page_Book .text_bar {
+	font-family: 'Roboto';
 	padding: 10px;
 }
 #page_Book .bottom_info {
