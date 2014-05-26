@@ -101,7 +101,7 @@ Page.AddPage = {
 		}
 	},
 	
-	addPhoto: function(container, imgData, loaded) {
+	addPhoto: function(container, imgData, loaded, pos) {
 		var self = this;
 		var adjPhoto = container.find('#adj_photo');
 		var btnAddPhoto = container.find('#add_photo');
@@ -120,9 +120,7 @@ Page.AddPage = {
 			adjPhoto.append(imgData);
 		}		
 		
-		if (!loaded) {
-			self.editPhoto(container, loaded);
-		}
+		self.editPhoto(container, loaded, pos);
 		self.checkAccept(container);
 	},
 	
@@ -138,18 +136,30 @@ Page.AddPage = {
 		
 		Service.Page.GetPage(pid, function(data) {
 			
-			var img = $('<img id="drag_img" class="noedit" style="width: 100%; height: 100%;" src="' + Util.getImage(data.pic, 1) + '">');
+			var img = $('<img id="drag_img" src="' + Util.getImage(data.pic) + '">');
 			img.load(function() {
 				Page.bodyHideLoading(content);
 				boxPhoto.style.display = 'block';
 				boxPhoto.style.height = boxPhoto.offsetWidth + 'px';
 				boxDesc.style.display = '-webkit-box';
 				
+//				img.css({
+//					'-webkit-transform': 'translate3d(0px, 0px, 0px)'
+//				});
+				
 				if (data.caption) {
 					self.updateDesc(container, data.caption);
 				}
-				self.addPhoto(container, img, true);	
-				container.find('[data-id=btn_rem]').hide();		
+				
+				var pos = undefined;
+				if (data.pos && data.pos.length == 2) {
+					var x = Math.round((data.pos[0] * 303) / 640);
+					var y = Math.round((data.pos[1] * 303) / 640);
+					pos = [x, y];
+				}
+				
+				self.addPhoto(container, img, true, pos);	
+//				container.find('[data-id=btn_rem]').hide();		
 			});
 		});
 	},
@@ -160,7 +170,7 @@ Page.AddPage = {
 		this.checkAccept(container);
 	},
 	
-	editPhoto: function(container, loaded) {
+	editPhoto: function(container, loaded, crop) {
 		var drag = container.find('#drag_img');
 		
 		var target = undefined;
@@ -218,6 +228,14 @@ Page.AddPage = {
 					drag_img.style.webkitTransform = 'translate3d(0px, -' + ((ih / 2) - (ph / 2)) + 'px, 0px)';
 					max = -1 * (ph - ih / 2);
 					break;
+				}
+			}
+			if (crop && crop.length == 2) {
+				if (crop[0]) {
+					drag_img.style.webkitTransform = 'translate3d(-' + crop[0] + 'px, 0px, 0px)';				
+				}
+				else if (crop[1]) {
+					drag_img.style.webkitTransform = 'translate3d(0px, -' + crop[1] + 'px, 0px)';					
 				}
 			}
 		};
