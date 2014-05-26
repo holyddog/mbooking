@@ -39,6 +39,18 @@ public class PageJson {
 		return ErrorResponse.getError("This page cannot be saved");
 	}
 	
+	@RequestMapping(method = RequestMethod.POST, value = "/changeSeq.json")
+	public @ResponseBody
+	Object changeSeq(
+			@RequestParam(value = "bid") Long bid,
+			@RequestParam(value = "fseq") Integer fseq,
+			@RequestParam(value = "tseq") Integer tseq
+
+	) {
+		pageRepo.changeSeq(bid, fseq, tseq);
+		return ResultResponse.getResult("success", true);
+	}
+	
 	@RequestMapping(method = RequestMethod.POST, value = "/editCaption.json")
 	public @ResponseBody
 	Object editCaption(
