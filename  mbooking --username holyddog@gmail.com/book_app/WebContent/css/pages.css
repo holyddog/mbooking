@@ -267,7 +267,7 @@
 	overflow: hidden;
 }
 #page_Profile .header_title span {
-	font-family: 'Roboto';
+	font-family: 'Roboto', 'Bangna';
 	font-size: 180%;
 	color: #fff;
 	overflow: hidden;
@@ -425,7 +425,7 @@
 	color: #fff;
 }
 #page_Book .text_bar {
-	font-family: 'Roboto';
+	font-family: 'Roboto', 'Bangna';
 	padding: 10px;
 }
 #page_Book .bottom_info {
@@ -453,7 +453,7 @@
 	color: #fff;
 	font-size: 180%;
 	text-align: center;
-	font-family: 'Roboto';
+	font-family: 'Roboto', 'Bangna';
 	font-weight: 400;
 }
 /*#page_Book .last_cover .end_box {
@@ -735,6 +735,14 @@
 	background-size: 100%;
 	position: relative;
 }
+#page_EditBook .page_size.selected {
+	box-sizing: border-box;
+	border: solid 5px #33B5E5 !important; 
+}
+#page_EditBook .page_size.active {
+	box-sizing: border-box;
+	border: solid 5px #ccc;
+}
 #page_EditBook .pp:after {
 	content: " ";
 	display: block;
@@ -742,7 +750,7 @@
 	left: 0;
 	bottom: 0;
 	width: 100%;
-	height: 25%;
+	height: 55%;
 	background-image: -webkit-linear-gradient(bottom, rgba(0,0,0,0.6), rgba(0,0,0,0) 100%);
 }
 #page_EditBook .page_num {
@@ -755,6 +763,18 @@
 	text-align: right;
 	color: #fff;
 	z-index: 1;
+}
+#page_EditBook .cover {
+	position: absolute;
+	bottom: 0;
+	left: 5px;
+	font-size: 80%;
+	z-index: 1;
+		
+	width: 30px;
+	height: 30px;
+	background-color: #fff;
+	-webkit-mask-image: url(../icons/accept.png);
 }
 
 #page_EditBook #book_panel {
