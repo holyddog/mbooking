@@ -62,5 +62,15 @@ Service.Page = {
 			bid : bookId
 		};
 		Web.post(url, params, callback);
+	},
+
+	ChangeSeq : function(bookId, fromSeq, toSeq, callback) {
+		var url = Service.url + '/changeSeq.json';
+		var params = {
+			bid : bookId,
+			fseq : fromSeq,
+			tseq : toSeq
+		};
+		Web.post(url, params, callback);
 	}
 };
