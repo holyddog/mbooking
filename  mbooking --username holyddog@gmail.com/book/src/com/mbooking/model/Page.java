@@ -16,6 +16,7 @@ public class Page {
 	
 	String pic;
 	String caption;
+	Integer[] pos;
 	
 	// Return from Service Only , Not in db
 	User author;
@@ -72,6 +73,12 @@ public class Page {
 	}
 	public void setCaption(String caption) {
 		this.caption = caption;
+	}	
+	public Integer[] getPos() {
+		return pos;
+	}
+	public void setPos(Integer[] pos) {
+		this.pos = pos;
 	}
 	
 	// Return from Service Only , Not in db

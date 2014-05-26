@@ -109,8 +109,10 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 		page.setCdate(System.currentTimeMillis());
 		
 		// generate picture to directory
-		String pic = ImageUtils.generatePicture(picture, imgSize, cropPos, "u" + addBy + "/b" + bookId);
+		Integer[] pos = new Integer[2];
+		String pic = ImageUtils.generatePicture(picture, imgSize, cropPos, "u" + addBy + "/b" + bookId, pos);
 		page.setPic(pic);
+		page.setPos(pos);
 		
 		db.insert(page);		
 		
