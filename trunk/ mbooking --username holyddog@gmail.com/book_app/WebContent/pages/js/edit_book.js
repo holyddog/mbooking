@@ -98,6 +98,9 @@ Page.EditBook = {
 		self.reScale(container);
         
 		container.find('[data-id=link_a]').click(function() {
+			if (self.move) {
+				return;
+			}
 			Page.open('AddPage', true, { bid: bid });
 		});
 		
@@ -152,7 +155,7 @@ Page.EditBook = {
 				}
 				
 				for (var i = 0; i < data.pages.length; i++) {
-					self.addPage(container, data.pages[i]);
+					self.addPage(container, data.pages[i], data.pic == data.pages[i].pic);
 				}
 				self.reScale(container);
                      
@@ -162,6 +165,7 @@ Page.EditBook = {
 	
 	bookPages: [],
 	ratio: 2,
+	move: false,
 	
 	updateBook: function(container, title, desc) {
 		container.find('.book_title').text(title);
@@ -177,7 +181,7 @@ Page.EditBook = {
 		});
 	},
 	
-	addPage: function(container, data) {
+	addPage: function(container, data, isCover) {
 		var self = this;
 		var w = Math.floor((book_header.offsetWidth / self.ratio) - 15);
 		
@@ -191,6 +195,10 @@ Page.EditBook = {
 		div.style.height = w + 'px';
 		
 		div.addEventListener('click', function() {
+			if (self.move) {
+				return;
+			}
+			
 			var item = this;
 			Page.popDialog(function(text) { 
 				if (text == 'edit') {
@@ -225,8 +233,64 @@ Page.EditBook = {
 						});
 					}, 100);					
 				}
-				else {
-					alert(text);
+				else if (text == 'cover') {
+					var it = $(item);
+					var pic = it.data('pic');
+					container.find('.pp .cover').remove();
+					
+					var cover = document.createElement('div');
+					cover.className = 'cover mask_icon';					
+					it.append(cover);
+					
+					container.find('.book_size').css('background-image', 'url(' + Util.getImage(pic, 2) + ')');
+					
+					Service.Book.ChangeCover(self.bid, pic, function(data) {
+//						container.find('.book_size').css('background-image', 'url(' + Util.getImage(newCover, 2) + ')');
+						
+//						Page.btnHideLoading(btnAccept[0]);
+						
+//						Page.back(function(c) {
+//							c.find('.book_size').css('background-image', 'url(' + Util.getImage(newCover, 2) + ')');
+//						});
+					});
+				}
+				else if (text == 'move') {
+					var all = container.find('.pp').addClass('active');
+					var it = $(item).addClass('selected');
+					self.move = true;
+					
+					setTimeout(function() {
+						$(document).one('click', function(e) {
+							it.removeClass('selected');
+							all.removeClass('active');
+							
+							self.move = false;
+							
+							var reload = function(fseq, tseq) {
+								var pages = container.find('.pp');
+								for (var i = 0; i < pages.length; i++) {
+									pages.eq(i).data('seq', i + 1).find('.page_num').text(i + 1);
+								}
+								Service.Page.ChangeSeq(self.bid, fseq, tseq , function(data) {});
+							};
+							var target = $(e.target).closest('.pp');
+							if (target.length > 0) {
+								e.preventDefault();
+								
+								var fseq = parseInt(it.data('seq'));
+								var tseq = parseInt(target.data('seq'));
+								if (fseq > tseq) {	
+									it.insertBefore(target);
+									reload(fseq, tseq);								
+								}
+								else if (fseq < tseq) {
+									it.insertAfter(target);
+									reload(fseq, tseq);									
+								}
+								
+							}
+						});						
+					}, 100);
 				}
 			}, 2);
 		}, false);
@@ -234,6 +298,12 @@ Page.EditBook = {
 		var num = document.createElement('div');
 		num.className = 'page_num';
 		num.innerText = data.seq;
+		
+		if (isCover) {
+			var cover = document.createElement('div');
+			cover.className = 'cover mask_icon';
+			div.appendChild(cover);
+		}
 		
 		div.appendChild(num);
 		

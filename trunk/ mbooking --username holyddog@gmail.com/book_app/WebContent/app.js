@@ -642,6 +642,9 @@ Page = {
 						name: 'move',
 						label: 'Move'
 					}, {
+						name: 'cover',
+						label: 'Set as Cover'
+					}, {
 						name: 'delete',
 						label: 'Delete'
 					}];
@@ -654,6 +657,9 @@ Page = {
 					
 					dialog.find('[data-link=edit]').click(function() {	
 						Page._callbackDialog('edit');
+					});
+					dialog.find('[data-link=cover]').click(function() {	
+						Page._callbackDialog('cover');
 					});
 					dialog.find('[data-link=move]').click(function() {	
 						Page._callbackDialog('move');

@@ -104,7 +104,7 @@ Page.Book = {
 			});
 			
 			container.append('<div id="tap_nav" class="fill_dock box horizontal" style="top: 0; z-index: 1000; display: none;"><div class="flex1" style="width: 50%;"></div><div class="flex1" style="width: 50%;"></div></div>');			
-			container.find('#tap_nav .flex1').tap(function() {
+			container.find('#tap_nav .flex1').click(function() {
 				var pos = $(this).index();
 				if (pos == 1) {		
 					if (index > 0) {
