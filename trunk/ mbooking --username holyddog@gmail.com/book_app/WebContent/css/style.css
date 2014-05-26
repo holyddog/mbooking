@@ -32,11 +32,10 @@ body {
 
 @font-face {
     font-family: 'Bangna';
-    src: url('../fonts/wdb_bangna-webfont.eot');
-    src: url('../fonts/wdb_bangna-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/wdb_bangna-webfont.woff') format('woff'),
-         url('../fonts/wdb_bangna-webfont.ttf') format('truetype'),
-         url('../fonts/wdb_bangna-webfont.svg#wdb_bangnaregular') format('svg');
+    src: url('wdb_bangna-webfont.eot');
+    src: url('wdb_bangna-webfont.eot?#iefix') format('embedded-opentype'),
+         url('wdb_bangna-webfont.ttf') format('truetype'),
+         url('wdb_bangna-webfont.svg#wdb_bangnaregular') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -606,8 +605,8 @@ textarea {
 	padding-left: 10px;
 }
 .profile_item .info h1 {
-	 line-height: 30px;	 
-	 font-weight: bold;
+	font-family: 'Roboto', 'Bangna';
+	line-height: 30px;	 
 	position: absolute;
 	z-index: 1;
 	left: 80px;
@@ -863,7 +862,7 @@ textarea {
 	background-position: center center;
 }
 .book_size h2 {
-	font-family: 'Roboto';
+	font-family: 'Roboto', 'Bangna';
 	color: #fff;
 	position: relative;
 	z-index: 1;
