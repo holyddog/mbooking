@@ -15,6 +15,7 @@ public interface PageRepostitoryCustom {
 	public Page edit(Long pid, Long uid, Long bid, Long date, String pic, String caption);
 
 	public Boolean delete(Long pid, Long bid);
+	public void changeSeq(Long bid, Integer fromSeq, Integer toSeq);
 
 	public List<Page> edit_seq(Long bid, Long uid, Long[] pid, Integer[] seq);
 

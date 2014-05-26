@@ -124,72 +124,6 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 		}
 		db.updateFirst(query, update, Book.class);
 		
-//		Page page = new Page();
-//		Book book = null;
-//		try {
-//
-//			page.setBid(bid);
-//
-//			if (caption != null)
-//				page.setCaption(caption);
-//
-//			if (date != null)
-//				page.setDate(date);
-//
-//			Long create_date = System.currentTimeMillis();
-//
-//			page.setCdate(create_date);
-//			page.setUid(uid);
-//
-//			if (pic != null && !pic.equals("") && !pic.equals("undefined")) {
-//				String img_path = ImageUtils.toImageFile(ConstValue.USER_FOLDER
-//						+ uid + "/" + ConstValue.BOOK_FOLDER + bid, pic, ConstValue.PAGE_IMG_TYPE);
-//				pic = img_path;
-//				page.setPic(pic);
-//			}
-//
-//			Criteria criteria = Criteria.where("bid").is(bid).and("uid")
-//					.is(uid);
-//			Query query = new Query(criteria);
-//			Integer seq = (int) db.count(query, Page.class) + 1;
-//
-//			page.setSeq(seq);
-//			
-//
-//			Long pid = MongoCustom.generateMaxSeq(Page.class, db);
-//			page.setPid(pid);
-//			db.insert(page);
-//
-//			if (seq == 1 && pic != null && !pic.equals("")
-//					&& !pic.equals("undefined")) {
-//				Update update = new Update();
-//				update.set("pic", pic);
-//				db.updateFirst(query, update, Book.class);
-//			}
-//
-//			Update update = new Update();
-//			int pcount = (int) db.count(
-//					new Query(Criteria.where("bid").is(bid)), Page.class);
-//			update.set("pcount", pcount);
-//			update.set("ledate", create_date);
-//
-//			db.updateFirst(query, update, Book.class);
-//
-//			Update user_update = new Update();
-//			Query q = new Query(Criteria.where("bid").is(bid));
-//			q.fields().include("title").include("pic").include("pcount");
-//			book = db.findOne(q, Book.class);
-//			user_update.set("leb", book);
-//
-//			db.updateFirst(new Query(Criteria.where("uid").is(uid)),
-//					user_update, User.class);
-//
-//		} catch (Exception e) {
-//			System.out.println("Create page arr: " + e);
-//			return null;
-//		}
-//		return book;
-		
 		Page retPage = new Page();
 		retPage.setPid(pid);
 		retPage.setSeq(seq);
@@ -223,6 +157,52 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 
 		return db.findAndModify(query, update,
 				new FindAndModifyOptions().returnNew(true), Page.class);
+	}
+	
+	@Override
+	public void changeSeq(Long bid, Integer fromSeq, Integer toSeq) {
+		int from = fromSeq.intValue();
+		int to = toSeq.intValue();
+		
+		Criteria c = Criteria.where("bid").is(bid);
+		boolean rev = false;
+		if (fromSeq < toSeq) {
+			c.andOperator(Criteria.where("seq").lte(toSeq), Criteria.where("seq").gte(fromSeq));			
+		}
+		else {
+			c.andOperator(Criteria.where("seq").lte(fromSeq), Criteria.where("seq").gte(toSeq));
+			rev = true;
+		}
+		
+		Query query = new Query(c);
+		
+		query.fields().include("seq");
+		query.sort().on("seq", Order.ASCENDING);
+		List<Page> pages = db.find(query, Page.class);
+		for (int i = 0; i < pages.size(); i++) {
+			Page p = pages.get(i);
+			int seq = p.getSeq().intValue();
+			long pageId = p.getPid().longValue();
+			Update update = new Update();
+			
+			if (!rev) {
+				if (seq == from) { // change to new seq
+					update.set("seq", to);
+				}
+				else {
+					update.inc("seq", -1);
+				}			
+			}
+			else {
+				if (seq == from) { // change to new seq
+					update.set("seq", to);
+				}
+				else {
+					update.inc("seq", 1);
+				}					
+			}
+			db.updateFirst(new Query(Criteria.where("pid").is(pageId)), update, Page.class);	
+		}
 	}
 
 	@Override
