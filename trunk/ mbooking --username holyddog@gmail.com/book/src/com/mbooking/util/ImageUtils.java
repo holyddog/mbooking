@@ -326,8 +326,9 @@ public class ImageUtils {
 		return fileName.substring(fileName.lastIndexOf('.') + 1, fileName.length());
 	}
 	
-	public static int cropAndResize(File input, File outputDir, double imgSize, double cropPos) {
-		int count = 0;
+	public static int[] cropAndResize(File input, File outputDir, double imgSize, double cropPos) {
+		int x = 0;
+		int y = 0;
 		try {
 			BufferedImage src = ImageIO.read(input);
 			int imageWidth = ((Image)src).getWidth(null);
@@ -361,13 +362,11 @@ public class ImageUtils {
 			
 		    String cImg = outputDir.getAbsolutePath() + "\\" + fileName + "_" + "c." + fileExt;
 		    if (ImageIO.write(newBuff, getExt(input.getName()), new File(cImg))) {
-		    	count++;
+//		    	count++;
 		    }
 			
 			// crop to square 640x640
 			int size = 640;
-			int x = 0;
-			int y = 0;
 			
 			if (imageDir == 0) {
 				x = (int) ((cropPos * size) / imgSize);
@@ -382,7 +381,7 @@ public class ImageUtils {
 			g.dispose();
 		    
 		    if (ImageIO.write(dest, getExt(input.getName()), new File(cImg))) {
-		    	count++;
+//		    	count++;
 		    }
 			
 			// resize to 320x320
@@ -395,17 +394,17 @@ public class ImageUtils {
 
 		    String sImg = outputDir.getAbsolutePath() + "\\" + fileName + "_" + "s." + fileExt;
 		    if (ImageIO.write(sBuff, getExt(input.getName()), new File(sImg))) {
-		    	count++;
+//		    	count++;
 		    }
 		}
 		catch (IOException e) {
 			e.printStackTrace();
-			return -1;
+			return null;
 		}
-		return count;
+		return new int[]{ x, y };
 	}
 	
-	public static String generatePicture(String base64, Integer imageSize, Integer cropPos, String imgPath) {
+	public static String generatePicture(String base64, Integer imageSize, Integer cropPos, String imgPath, Integer[] pos) {
 		if (isEmpty(base64)) {
 			return null;
 		}
@@ -430,7 +429,9 @@ public class ImageUtils {
 			out.flush();  
 			out.close();
 			
-			cropAndResize(file, output, imageSize, cropPos);
+			int[] res = cropAndResize(file, output, imageSize, cropPos);
+			pos[0] = res[0];
+			pos[1] = res[1];
 			
 			return "/" + imgPath + "/" + image;
 			
