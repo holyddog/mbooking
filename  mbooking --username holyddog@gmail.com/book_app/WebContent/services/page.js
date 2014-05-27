@@ -18,9 +18,10 @@ Service.Page = {
 		Web.get(url, params, callback);
 	},
 	
-	AddPage: function(picture, imageSize, cropPos, caption, bookId, addBy, callback) {
+	AddPage: function(pid, picture, imageSize, cropPos, caption, bookId, addBy, callback) {
 		var url = Service.url + '/addPage.json';
 		var params = {
+			pid: pid,
 			pic : picture,
 			size: imageSize,
 			crop: cropPos,

@@ -299,6 +299,16 @@ Service.Book = {
 				comment :comment
 		};
 		Web.post(url, params, callback);
+	},	
+
+	UpdateTag : function(bid, tag, isNew, callback) {
+		var url = Service.url + '/updateTag.json';
+		var params = {
+			bid : bid,
+			tag : tag,
+			isNew : isNew
+		};
+		Web.post(url, params, callback);
 	},
 	
 	GetComments: function(bid,skip,limit,callback){

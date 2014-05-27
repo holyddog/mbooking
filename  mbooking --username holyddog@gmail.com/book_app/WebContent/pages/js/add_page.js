@@ -35,28 +35,28 @@ Page.AddPage = {
 			if (!btnAccept.hasClass('disabled')) {
 				Page.btnShowLoading(btnAccept[0]);
 				
-				if (drag_img.className == 'noedit') {
-					Service.Page.EditCaption(pid, desc_text.innerText, function() {
-						Page.btnHideLoading(btnAccept[0]);
-						Page.back();
-					});
+				var pos = 0;
+				var dir = $(drag_img).data('dir');
+				if (dir == 0) {
+					pos = -1 * parseInt(drag_img.style.webkitTransform.split('(')[1].split('px, ')[0]);
 				}
-				else {
-					var pos = 0;
-					var dir = $(drag_img).data('dir');
-					if (dir == 0) {
-						pos = -1 * parseInt(drag_img.style.webkitTransform.split('(')[1].split('px, ')[0]);
-					}
-					else if (dir == 1) {
-						pos = -1 * parseInt(drag_img.style.webkitTransform.split('(')[1].split('px, ')[1]);
-					}
+				else if (dir == 1) {
+					pos = -1 * parseInt(drag_img.style.webkitTransform.split('(')[1].split('px, ')[1]);
+				}
+				
+				var edit = false;
+				var pic = drag_img.src;
+				if (pid) {
+					edit = true;
+					pic = pic.substring(pic.lastIndexOf('/') + 1, pic.length);
+				}
+				
+				Service.Page.AddPage(pid, pic, drag_img.parentNode.offsetWidth, pos, desc_text.innerText, bid, Account.userId, function(data) {
+					Page.btnHideLoading(btnAccept[0]);
 					
-					Service.Page.AddPage(drag_img.src, drag_img.parentNode.offsetWidth, pos, desc_text.innerText, bid, Account.userId, function(data) {
-						Page.btnHideLoading(btnAccept[0]);
-						
-						Page.back(function(c, page) {
-							page.addPage(c, data);
-							
+					Page.back(function(c, page) {						
+						if (!edit) {	
+							page.addPage(c, data);					
 							// set cover
 							if (data.seq == 1) {
 								c.find('.book_size').css('background-image', 'url(' + Util.getImage(data.pic, 2) + ')');
@@ -75,9 +75,24 @@ Page.AddPage = {
 							
 							var counter = c.find('.pcount span');
 							counter.text(parseInt(counter.text()) + 1);
-						});
-					});					
-				}				
+						}
+						else {
+							c.find('[data-pid=' + pid + ']').css({
+								'background-image': 'url(' + Util.getImage(data.pic, 2) + '?' + new Date().getTime() + ')'
+							});
+						}
+					});
+				});		
+				
+//				if (drag_img.className == 'noedit') {
+//					Service.Page.EditCaption(pid, desc_text.innerText, function() {
+//						Page.btnHideLoading(btnAccept[0]);
+//						Page.back();
+//					});
+//				}
+//				else {
+//								
+//				}				
 			}
 		});
 		
@@ -153,8 +168,8 @@ Page.AddPage = {
 				
 				var pos = undefined;
 				if (data.pos && data.pos.length == 2) {
-					var x = Math.round((data.pos[0] * 303) / 640);
-					var y = Math.round((data.pos[1] * 303) / 640);
+					var x = Math.round((data.pos[0] * boxPhoto.offsetWidth) / 640);
+					var y = Math.round((data.pos[1] * boxPhoto.offsetWidth) / 640);
 					pos = [x, y];
 				}
 				

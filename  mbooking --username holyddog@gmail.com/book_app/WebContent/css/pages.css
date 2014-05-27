@@ -638,6 +638,20 @@
 
 #page_EditBook .cmd_panel {
 }
+#page_EditBook .tags {
+	margin: 0 10px 0 10px;
+	overflow: hidden;
+}
+#page_EditBook .tags .name {
+	display: block;
+	float: left;
+	color: #fff;
+	background-color: #FFBB33;
+	margin-right: 10px;
+	margin-bottom: 10px;
+	padding: 10px;
+	font-size: 80%;
+}
 #page_EditBook .cmd_panel .box {
 	height: 50px;
 	line-height: 50px;

@@ -273,6 +273,31 @@ Page.Profile = {
 		h2.innerText = title;
 		div.appendChild(h2);
 		
+		var social = document.createElement('div');
+		social.className = 'social flow_hidden';
+		
+		var getLabel = function(icon, c) {
+			var item = document.createElement('div');
+			item.className = 'clabel';
+			
+			var ic = document.createElement('div');
+			ic.className = 'icon mask_icon';
+			ic.style.webkitMaskImage = 'url(icons/' + icon + '.png)';
+			
+			var txt = document.createElement('div');
+			txt.className = 'text';
+			txt.innerText = c;
+			
+			item.appendChild(ic);
+			item.appendChild(txt);
+			
+			return item;
+		};
+		social.appendChild(getLabel('like', '23'));
+		social.appendChild(getLabel('comment', '12'));
+		
+		div.appendChild(social);
+		
 		if (count) {
 			var countDiv = document.createElement('div');
 			countDiv.className = 'pcount';
