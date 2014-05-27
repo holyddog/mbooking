@@ -122,6 +122,9 @@ Page.EditBook = {
 		container.find('[data-link=edit_book]').click(function() {
 			Page.open('CreateBook', true, { bid: bid, uid: Account.userId });
 		});
+		container.find('[data-link=add_tag]').click(function() {
+			Page.open('AddTag', true, { bid: bid });
+		});
 		container.find('[data-link=preview]').click(function() {
 			Page.open('Book', true, { bid: bid, uid: Account.userId, preview: true });
 		});
@@ -158,7 +161,14 @@ Page.EditBook = {
 					self.addPage(container, data.pages[i], data.pic == data.pages[i].pic);
 				}
 				self.reScale(container);
-                     
+				
+				var tags = data.tags;
+				if (tags && tags.length > 0) {
+					var tagPanel = container.find('.tags');
+					for (var i = 0; i < tags.length; i++) {
+						self.addTag(tagPanel, tags[i]);
+					}				
+				}
 			});
 		}
 	},
@@ -166,6 +176,32 @@ Page.EditBook = {
 	bookPages: [],
 	ratio: 2,
 	move: false,
+	
+	addTag: function(tagPanel, tagName) {
+		var self = this;
+		
+		var link = document.createElement('a');
+		link.className = 'name';
+		link.innerText = tagName;
+		
+		$(link).click(function() {
+			var item = $(this);
+			MessageBox.confirm({ 
+				title: 'Confirm', 
+				message: 'Are you sure you want to delete this tag?', 
+				callback: function() {	
+					var tagName = item.text();
+					item.remove();
+					
+					Service.Book.UpdateTag(self.bid, tagName, false, function() {
+						
+					});								
+				} 
+			});
+		});
+		
+		tagPanel.append(link);
+	},
 	
 	updateBook: function(container, title, desc) {
 		container.find('.book_title').text(title);

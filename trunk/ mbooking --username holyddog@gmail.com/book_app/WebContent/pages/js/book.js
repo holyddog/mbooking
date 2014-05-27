@@ -39,7 +39,8 @@ Page.Book = {
 		if (params.preview) {
 			btnComment.hide();
 			btnShare.hide();
-			btnBack.find('span')[0].className = 'back';
+			btnLike.hide();
+//			btnBack.find('span')[0].className = 'back';
 		}
 		
 		var content = container.find('.content');
