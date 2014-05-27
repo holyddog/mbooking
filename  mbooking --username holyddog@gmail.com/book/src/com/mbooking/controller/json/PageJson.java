@@ -23,6 +23,7 @@ public class PageJson {
 	@RequestMapping(method = RequestMethod.POST, value = "/addPage.json")
 	public @ResponseBody
 	Object addPage(
+			@RequestParam(value = "pid", required = false) Long pageId,
 			@RequestParam(value = "pic") String picture,
 			@RequestParam(value = "size") Integer imageSize,
 			@RequestParam(value = "crop") Integer cropPos,
@@ -32,7 +33,7 @@ public class PageJson {
 
 	) 
 	{
-		Page page = pageRepo.add(picture, imageSize, cropPos, caption, bookId, addBy);
+		Page page = pageRepo.add(pageId, picture, imageSize, cropPos, caption, bookId, addBy);
 		if (page != null) {
 			return page;
 		}

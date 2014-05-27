@@ -163,4 +163,21 @@ public class BookJson {
 
 		return ResultResponse.getResult("success", bookRepo.changeCover(bid, newCover));
 	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/updateTag.json")
+	public @ResponseBody
+	Object updateTag(
+			@RequestParam(value = "bid") Long bid,
+			@RequestParam(value = "tag") String tag,
+			@RequestParam(value = "isNew") Boolean isNew) {
+		
+		Boolean res = false;
+		if (isNew) {
+			res = bookRepo.addTag(bid, tag);
+		}
+		else {
+			res = bookRepo.removeTag(bid, tag);
+		}
+		return ResultResponse.getResult("success", res);
+	}
 }

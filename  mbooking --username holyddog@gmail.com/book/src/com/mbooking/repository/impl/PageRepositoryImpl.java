@@ -1,5 +1,6 @@
 package com.mbooking.repository.impl;
 
+import java.io.File;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import com.mbooking.model.Book;
 import com.mbooking.model.Page;
 import com.mbooking.model.User;
 import com.mbooking.repository.PageRepostitoryCustom;
+import com.mbooking.util.ConfigReader;
 import com.mbooking.util.ImageUtils;
 import com.mbooking.util.MongoCustom;
 
@@ -93,44 +95,60 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 	}
 	
 	@Override
-	public Page add(String picture, Integer imgSize, Integer cropPos, String caption, Long bookId, Long addBy) {
-		Query query = new Query(Criteria.where("bid").is(bookId));
-		
-		// insert new page data
-		Page page = new Page();
-		Long pid = MongoCustom.generateMaxSeq(Page.class, db);
-		Integer seq = (int) db.count(query, Page.class) + 1;
-		
-		page.setPid(pid);
-		page.setSeq(seq);
-		page.setCaption(caption);
-		page.setBid(bookId);
-		page.setUid(addBy);
-		page.setCdate(System.currentTimeMillis());
-		
-		// generate picture to directory
-		Integer[] pos = new Integer[2];
-		String pic = ImageUtils.generatePicture(picture, imgSize, cropPos, "u" + addBy + "/b" + bookId, pos);
-		page.setPic(pic);
-		page.setPos(pos);
-		
-		db.insert(page);		
-		
-		// update book (page count, 
-		Update update = new Update();
-		update.inc("pcount", 1);
-		
-		// set picture to cover image for seq = 1
-		if (seq.intValue() == 1) {
-			update.set("pic", pic);
+	public Page add(Long pid, String picture, Integer imgSize, Integer cropPos, String caption, Long bookId, Long addBy) {	
+		if (pid == null) {	
+			// insert new page data
+			Page page = new Page();
+			Page retPage = new Page();
+			
+			Query query = new Query(Criteria.where("bid").is(bookId));
+			pid = MongoCustom.generateMaxSeq(Page.class, db);
+			Integer seq = (int) db.count(query, Page.class) + 1;
+			
+			page.setPid(pid);
+			page.setSeq(seq);
+			page.setCaption(caption);
+			page.setBid(bookId);
+			page.setUid(addBy);
+			page.setCdate(System.currentTimeMillis());
+			
+			// generate picture to directory
+			Integer[] pos = new Integer[2];
+			String pic = ImageUtils.generatePicture(null, picture, imgSize, cropPos, "u" + addBy + "/b" + bookId, pos);
+			page.setPic(pic);
+			page.setPos(pos);
+			
+			db.insert(page);		
+			
+			// update book (page count, 
+			Update update = new Update();
+			update.inc("pcount", 1);
+			
+			// set picture to cover image for seq = 1
+			if (seq.intValue() == 1) {
+				update.set("pic", pic);
+			}
+			db.updateFirst(query, update, Book.class);
+			
+			retPage.setSeq(seq);
+			retPage.setPic(pic);			
+			retPage.setPid(pid);
+			return retPage;
 		}
-		db.updateFirst(query, update, Book.class);
-		
-		Page retPage = new Page();
-		retPage.setPid(pid);
-		retPage.setSeq(seq);
-		retPage.setPic(pic);
-		return retPage;
+		else {
+			Query query = new Query(Criteria.where("pid").is(pid));
+			query.fields().include("seq").include("pic").include("pid");
+			
+			String imgPath = "u" + addBy + "/b" + bookId;
+			String uploadPath = ConfigReader.getProp("upload_path") + "/" + imgPath;
+			File file = new File(uploadPath + "/" + picture);
+			Integer[] pos = new Integer[2];
+			ImageUtils.generatePicture(file, picture, imgSize, cropPos, imgPath, pos);
+			
+			Update update = new Update().set("pos", pos);
+			Page retPage = db.findAndModify(query, update, new FindAndModifyOptions().returnNew(true), Page.class);
+			return retPage;
+		}
 	}
 	
 	@Override
