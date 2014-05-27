@@ -404,7 +404,7 @@ public class ImageUtils {
 		return new int[]{ x, y };
 	}
 	
-	public static String generatePicture(String base64, Integer imageSize, Integer cropPos, String imgPath, Integer[] pos) {
+	public static String generatePicture(File file, String base64, Integer imageSize, Integer cropPos, String imgPath, Integer[] pos) {
 		if (isEmpty(base64)) {
 			return null;
 		}
@@ -413,27 +413,29 @@ public class ImageUtils {
 			base64 = base64.split(",")[1];
 		}
 
-		try {			
+		try {					
 			String uploadPath = ConfigReader.getProp("upload_path") + "/" + imgPath;
 			File output = new File(uploadPath);
 			if (!output.exists()) {
 				output.mkdirs();
 			}
-
-			String key = uniqueString(8);
-			String image = key + ".jpg";
-			byte[] b = new Base64().decode(base64.getBytes());
-			File file = new File(uploadPath + "/" + image);
-			FileOutputStream out = new FileOutputStream(file);  
-			out.write(b);  
-			out.flush();  
-			out.close();
+			
+			if (file == null) {					
+				String key = uniqueString(8);
+				String image = key + ".jpg";
+				byte[] b = new Base64().decode(base64.getBytes());
+				file = new File(uploadPath + "/" + image);
+				FileOutputStream out = new FileOutputStream(file);  
+				out.write(b);  
+				out.flush();  
+				out.close();
+			}
 			
 			int[] res = cropAndResize(file, output, imageSize, cropPos);
 			pos[0] = res[0];
 			pos[1] = res[1];
 			
-			return "/" + imgPath + "/" + image;
+			return "/" + imgPath + "/" + file.getName();
 			
 		} catch (IOException ex) {
 			ex.printStackTrace();

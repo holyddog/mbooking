@@ -9,7 +9,7 @@ public interface PageRepostitoryCustom {
 
 	public Book create(Long bid, Long uid, Long date, String pic, String caption);
 
-	public Page add(String picture, Integer imageSize, Integer cropPos, String caption, Long bookId, Long addBy);
+	public Page add(Long pid, String picture, Integer imageSize, Integer cropPos, String caption, Long bookId, Long addBy);
 	public Boolean editCaption(Long pid, String caption);
 
 	public Page edit(Long pid, Long uid, Long bid, Long date, String pic, String caption);

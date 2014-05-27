@@ -20,6 +20,8 @@ public interface BookRepostitoryCustom {
 	public Boolean changeCover(Long bid, String newCover);
 
 	public Book findBookWithPages(Long bid, Long uid);
+	public Boolean addTag(Long bid, String tag);
+	public Boolean removeTag(Long bid, String tag);
 	
 	public List<Book> findLastBookByUid(Long uid);
 	public String findLastCover(Long uid);

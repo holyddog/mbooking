@@ -268,6 +268,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			query.fields().include("pic");
 			query.fields().include("pcount");
 			query.fields().include("pbdate");
+			query.fields().include("tags");
 
 			Book book = db.findOne(query, Book.class);
 
@@ -549,5 +550,31 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 		update.set("pic", newCover);
 		db.updateFirst(query , update, Book.class);
 		return true;
+	}
+
+	@Override
+	public Boolean addTag(Long bid, String tag) {
+		try {
+			long count = db.count(new Query(Criteria.where("bid").is(bid).and("tags").is(tag)), Book.class);
+			if (count > 0) {
+				return false;
+			}
+			db.updateFirst(new Query(Criteria.where("bid").is(bid)), new Update().push("tags", tag), Book.class);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public Boolean removeTag(Long bid, String tag) {
+		try {
+			db.updateFirst(new Query(Criteria.where("bid").is(bid)), new Update().pull("tags", tag), Book.class);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 	}	
 }
