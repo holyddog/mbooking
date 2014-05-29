@@ -1,4 +1,5 @@
 package com.mbooking.util;
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -8,6 +9,18 @@ public class Convert {
 			return "";
 		}
 		return fileName.substring(fileName.lastIndexOf('.') + 1, fileName.length());
+	}
+	
+	public static String toString(Object obj) {
+		if (obj != null) {
+			try {
+				return new String(String.valueOf(obj).getBytes("ISO-8859-1"), "UTF-8");
+			} 
+			catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
 	
 	public static String toMD5Password(String inputPwd) {

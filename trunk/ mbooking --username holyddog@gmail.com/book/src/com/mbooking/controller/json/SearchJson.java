@@ -15,6 +15,7 @@ import com.mbooking.model.Tag;
 import com.mbooking.model.User;
 import com.mbooking.repository.BookRepository;
 import com.mbooking.repository.UserRepository;
+import com.mbooking.util.Convert;
 
 @Controller
 public class SearchJson {
@@ -28,7 +29,7 @@ public class SearchJson {
 	Object findUsers(
 			@RequestParam(value = "keyword") String keyword
 			) {
-		List<User> users = userRepo.findUsersByName(keyword);
+		List<User> users = userRepo.findUsersByName(Convert.toString(keyword));
 		if (users != null) {
 			return users;
 		}
@@ -40,7 +41,7 @@ public class SearchJson {
 	Object findBooksByTitle(
 			@RequestParam(value = "keyword") String keyword
 			) {
-		List<Book> books = bookRepo.findBooksByTitle(keyword);
+		List<Book> books = bookRepo.findBooksByTitle(Convert.toString(keyword));
 		if (books != null) {
 			return books;
 		}
@@ -52,9 +53,21 @@ public class SearchJson {
 	Object findTags(
 			@RequestParam(value = "keyword") String keyword
 			) {
-		List<Tag> tags = bookRepo.findTags(keyword);
+		List<Tag> tags = bookRepo.findTags(Convert.toString(keyword));
 		if (tags != null) {
 			return tags;
+		}
+		return ErrorResponse.getError("An internal error");
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/findBooksByTag.json")
+	public @ResponseBody
+	Object findBooksByTag(
+			@RequestParam(value = "tag") String tag
+			) {
+		List<Book> books = bookRepo.findBooksByTag(tag);
+		if (books != null) {
+			return books;
 		}
 		return ErrorResponse.getError("An internal error");
 	}

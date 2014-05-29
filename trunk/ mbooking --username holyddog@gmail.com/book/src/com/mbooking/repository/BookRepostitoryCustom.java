@@ -20,14 +20,16 @@ public interface BookRepostitoryCustom {
 	public User unpublishBook(Long bid, Long uid);
 	public Boolean changeCover(Long bid, String newCover);
 
-	public Book findBookWithPages(Long bid, Long uid);
+	public Book findBookWithPages(Long bid, Long uid, Long gid);
 	public Boolean addTag(Long bid, String tag);
 	public Boolean removeTag(Long bid, String tag);
 	
 	public List<Book> findLastBookByUid(Long uid);
 	public List<Book> findBooksByTitle(String keyword);
+	public List<Book> findBooksByTag(String tag);
 	public List<Tag> findTags(String keyword);
 	public String findLastCover(Long uid);
+	public Boolean likeBook(Long bid, Long who, boolean like);
 	
 	public List<Book> findByPbdateExists(boolean exists,Integer skip,Integer limit);
 	
