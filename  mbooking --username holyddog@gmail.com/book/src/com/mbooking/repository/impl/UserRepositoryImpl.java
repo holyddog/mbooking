@@ -65,6 +65,15 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		user.setPwd(null); // remove password before return data
 		return user;
 	}
+	
+	@Override
+	public List<User> findUsersByName(String keyword) {
+		Criteria searchCriteria = new Criteria().orOperator(
+				Criteria.where("dname").regex("^(?i)" + keyword + "(?i)"), Criteria.where("uname").regex("^(?i)" + keyword + "(?i)"));
+		Query query  = new Query(searchCriteria);
+		query.fields().include("dname").include("uname").include("pic").include("pbcount");
+		return db.find(query, User.class);
+	}
 
 	@Override
 	public User signInFB(Long fbid) {

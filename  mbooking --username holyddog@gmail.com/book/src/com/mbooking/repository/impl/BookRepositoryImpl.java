@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import com.mbooking.constant.ConstValue;
 import com.mbooking.model.Book;
 import com.mbooking.model.Page;
+import com.mbooking.model.Tag;
 import com.mbooking.model.User;
 import com.mbooking.repository.BookRepostitoryCustom;
 import com.mbooking.util.ImageUtils;
@@ -560,6 +561,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 				return false;
 			}
 			db.updateFirst(new Query(Criteria.where("bid").is(bid)), new Update().push("tags", tag), Book.class);
+			db.upsert(new Query(Criteria.where("tag").is(tag)), new Update().set("tag", tag).inc("count", 1), Tag.class);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -571,10 +573,25 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 	public Boolean removeTag(Long bid, String tag) {
 		try {
 			db.updateFirst(new Query(Criteria.where("bid").is(bid)), new Update().pull("tags", tag), Book.class);
+			db.updateFirst(new Query(Criteria.where("tag").is(tag)), new Update().set("tag", tag).inc("count", -1), Tag.class);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	@Override
+	public List<Book> findBooksByTitle(String keyword) {
+//		title, pic, lcount, ccount, pcount, author
+		Query query  = new Query(Criteria.where("title").regex("^(?i)" + keyword + "(?i)"));
+		query.fields().include("title").include("pic").include("lcount").include("ccount").include("pcount").include("author");
+		return db.find(query, Book.class);
+	}	
+
+	@Override
+	public List<Tag> findTags(String keyword) {
+		Query query  = new Query(Criteria.where("tag").regex("^(?i)" + keyword + "(?i)"));
+		return db.find(query, Tag.class);
 	}	
 }

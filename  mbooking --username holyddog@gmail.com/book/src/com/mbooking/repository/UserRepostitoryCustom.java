@@ -10,6 +10,7 @@ import com.mbooking.model.User;
 public interface UserRepostitoryCustom {
 	User signIn(String email, String password);
 	User signUp(String email, String password, String displayName, String userName);
+	List<User> findUsersByName(String keyword);
 	
 	User signInFB(Long fbid);
 	User signUpFB(String email, String displayName, String userName,String password,Long fbid,String fbpic,String fbname,String fbemail);	
