@@ -19,15 +19,18 @@ Page.Explore = {
 			btnNotf.find('.notf_count').removeClass('show');
 			Page.open('Notifications', true);
 		});	
+		var btnSearch = container.find('[data-id=btn_s]');
+		btnSearch.tap(function() {
+			Page.open('Search', true);
+		});	
 		
-		self.load(container);
+		self.load(container.find('.content'));
 	},
 	
-	load: function(container) {		
-		var content = container.find('.content');
+	load: function(content, pwidth) {
 		Page.bodyShowLoading(content);
 
-		var panel = container.find('.book_con');
+		var panel = content.find('.book_con');
 		panel.empty();
 		
 		Service.Book.GetPublishBooks(0, 100, function(data) {
@@ -45,14 +48,19 @@ Page.Explore = {
 				panel.append(div);
 			}
 			
+			var panelWidth = panel[0].offsetWidth;
+			if (!panelWidth && pwidth) {
+				panelWidth = pwidth;
+			}
+			
 			var ratio = 2;
-			if (panel[0].offsetWidth >= 600) {
+			if (panelWidth >= 600) {
 				ratio = 3;
 			}
 			
-			var w = (panel[0].offsetWidth / ratio) - 15;
+			var w = (panelWidth / ratio) - 15;
 			var h = (w * 4) / 3;
-			container.find('.book_size').css({
+			content.find('.book_size').css({
 				width: w + 'px',
 				height: h + 'px',
 				margin: 0,

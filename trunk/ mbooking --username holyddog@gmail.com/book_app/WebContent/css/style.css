@@ -294,6 +294,12 @@ textarea {
 .btn_box.disabled span {
 	opacity: .5;
 }
+.btn.liked {
+	background-color: #33B5E5;
+}
+.btn.liked span {
+	background-color: #fff;	
+}
 
 .btn font {
 	font-size: 90%;
@@ -575,16 +581,24 @@ textarea {
 	opacity: .3;
 }
 .profile_item .info:after {
-	content: " ";
+	/*content: " ";
 	position: absolute;
 	width: 100%;
 	height: 80px;
 	background-color: #000;
 	top: 0;
 	left: 0;
-	opacity: .3;
+	opacity: .3;*/
 }
 
+#profile_cover {
+	padding: 0px !important;
+	height: auto !important;
+}
+#profile_cover .box {
+	padding: 15px;
+	background-color: rgba(0, 0, 0, .3);
+}
 .profile_item {
 	line-height: 0;
 	color: #fff;
@@ -596,8 +610,6 @@ textarea {
 .profile_item .pimage {
 	background-color: #ddd;
 	border-radius: 25px;
-	position: absolute;
-	z-index: 1;
 }
 .profile_item .pimage img {
 	width: 50px;
@@ -609,19 +621,12 @@ textarea {
 }
 .profile_item .info h1 {
 	font-family: 'Roboto', 'Bangna';
-	line-height: 30px;	 
-	position: absolute;
-	z-index: 1;
-	left: 80px;
+	line-height: 30px;
 }
 .profile_item .info .stat {
 	line-height: 20px;
 	font-size: 80%;
-	position: absolute;
-	z-index: 1;
-	left: 80px;
-	top: 45px;
-}*/
+}
 
 #app_logo {
 	width: 50px;

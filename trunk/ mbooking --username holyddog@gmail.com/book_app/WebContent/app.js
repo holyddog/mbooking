@@ -501,7 +501,7 @@ Page = {
 			profileCover.find('.pimage img').attr('src', Util.getImage(Account.picture, 3));
 		}
 		var bookCount = (Account.bookCount)? Account.bookCount: 0;
-		profileCover.find('.stat').text(bookCount + ' Books');
+		profileCover.find('.stat').html('@holydog &#183; ' + bookCount + ' Books</span>');
 	},
 	open: function(page, append, params) {
 		var fn = function() {

@@ -24,7 +24,14 @@ Page.Book = {
 		});	
 		var btnLike = container.find('[data-id=btn_l]');
 		btnLike.tap(function() {
-			alert('Like');
+			if (!btnLike.hasClass('liked')) {
+				btnLike.addClass('liked');			
+				Service.Book.LikeBook(params.bid, Account.userId, true, function(data) {});				
+			}
+			else {
+				btnLike.removeClass('liked');			
+				Service.Book.LikeBook(params.bid, Account.userId, false, function(data) {});				
+			}
 		});
 		
 		if (isGuest) {
@@ -47,8 +54,13 @@ Page.Book = {
 		Page.bodyShowLoading(content);
 		
 		// set content data		
-		Service.Book.GetBook(params.bid, params.uid, function(data) {
+		Service.Book.GetBookData(params.bid, params.uid, Account.userId, function(data) {
 			Page.bodyHideLoading(content);
+			
+			if (data.liked) {
+				btnLike.addClass('liked');				
+			}
+			
 			self.load(container, data);
 		});
 	},

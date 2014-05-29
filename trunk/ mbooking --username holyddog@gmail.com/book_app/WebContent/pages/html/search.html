@@ -1,7 +1,102 @@
 <div class="tbar_bg gray"></div>
 <div class="tbar">		
 	<a data-id="btn_b" class="btn" style="left: 0;"><span class="back"></span></a>
-	<div class="title">Search</div>
+	<div class="search_box box horizontal">
+		<div style="width: 50px;"></div>
+		<div class="relative flex1">
+			<span class="glass mask_icon"></span>
+			<span data-id="clr" class="clr mask_icon"></span>
+			<input class="input_search" type="search" />
+		</div>
+	</div>
 </div>
-<div class="content gray flex1 box vertical">
+<div class="content flex1 box vertical no_scroll">
+	<div class="tab_cat box horizontal">
+		<div class="tab flex1 flex_lock active" data-link="user_tab">USERS</div>
+		<div class="sep"></div>
+		<div class="tab flex1 flex_lock" data-link="book_tab">BOOKS</div>
+		<div class="sep"></div>
+		<div class="tab flex1 flex_lock" data-link="tag_tab">TAGS</div>
+	</div>
+	<div id="search_res" class="flex1 overflow_scroll">
+		<div id="user_tab" data-type="user" class="res_panel active">
+			<!-- <div class="search_for">Search for "u"<span></span></div>  -->
+			<!-- 
+			<div class="user_item box horizontal">
+				<div class="pimage">
+					<img src="temp/u1.jpg">
+				</div>
+				<div class="info flex1">
+					<h1>Chanon Trising</h1>
+					<div class="stat">@holydog<span>78 Books</span></div>
+				</div>
+			</div>
+			<div class="user_item box horizontal">
+				<div class="pimage">
+					<img src="images/user.jpg">
+				</div>
+				<div class="info flex1">
+					<h1>Chanon Trising</h1>
+					<div class="stat">@chanon<span>31 Books</span></div>
+				</div>
+			</div>
+			<div class="user_item box horizontal">
+				<div class="pimage">
+					<img src="temp/u2.jpg">
+				</div>
+				<div class="info flex1">
+					<h1>Chanon Trising</h1>
+					<div class="stat">@chopper<span>28 Books</span></div>
+				</div>
+			</div>
+			<div class="user_item box horizontal">
+				<div class="pimage">
+					<img src="temp/u3.jpg">
+				</div>
+				<div class="info flex1">
+					<h1>Chanon Trising</h1>
+					<div class="stat">@zoro<span>30 Books</span></div>
+				</div>
+			</div>
+			 -->
+		</div>
+		<div id="book_tab" data-type="book" class="res_panel">		
+		</div>
+		<div id="tag_tab" data-type="tag" class="res_panel">
+			<!-- 
+			<div class="tag_item">
+				<div class="label">#HongKong</div>
+				<div class="count">20 Books</div>
+			</div>
+			<div class="tag_item">
+				<div class="label">#DisneyLand</div>
+				<div class="count">56 Books</div>
+			</div>
+			<div class="tag_item">
+				<div class="label">#Travel</div>
+				<div class="count">5 Books</div>
+			</div>
+			<div class="tag_item">
+				<div class="label">#Thailand</div>
+				<div class="count">10 Books</div>
+			</div>
+			<div class="tag_item">
+				<div class="label">#Resort</div>
+				<div class="count">32 Books</div>
+			</div>
+			<div class="tag_item">
+				<div class="label">#Japan</div>
+				<div class="count">14 Books</div>
+			</div>
+			<div class="tag_item">
+				<div class="label">#OnePiece</div>
+				<div class="count">43 Books</div>
+			</div>
+			<div class="tag_item">
+				<div class="label">#Family</div>
+				<div class="count">13 Books</div>
+			</div>
+			 -->
+		</div>
+	</div>
 </div>		
