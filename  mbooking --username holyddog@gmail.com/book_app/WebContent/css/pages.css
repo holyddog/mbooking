@@ -518,7 +518,7 @@
 }
 #page_Comments #input_comment {
 	background-color: #fff;
-	border-top: solid 1px #33B5E5;
+	border-top: solid 2px #33B5E5;
 }
 #page_Comments #input_comment .flex1 {	
 	padding: 5px 0;
@@ -871,4 +871,121 @@
 	font-size: 70%;
 	color: #777;
 	margin-top: 5px;
+}
+
+#page_Search .tab_cat {
+	border-bottom: solid 1px #ddd;
+}
+#page_Search .tab_cat .sep {
+	width: 1px;
+	height: 30px;
+	margin-top: 10px;
+	background-color: #ddd;
+}
+#page_Search .tab_cat .tab {
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+	font-size: 80%;	
+}
+#page_Search .tab_cat .tab.active {
+	color: #33B5E5;
+}
+#page_Search .res_panel {
+	display: none;
+}
+#page_Search .res_panel.active {
+	display: block;
+}
+#page_Search .input_search {
+	background-color: transparent;
+	border-bottom: solid 2px #33B5E5;
+	padding-left: 40px;
+	padding-right: 40px;
+}
+#page_Search .search_box {
+	padding-right: 10px; 
+	padding-top: 5px;
+}
+#page_Search .search_box .mask_icon {
+	width: 40px;
+	height: 40px;
+	background-color: #aaa;
+	display: block;
+	position: absolute;
+}
+#page_Search .search_box .mask_icon.glass {
+	left: 0;
+	top: 0;
+	-webkit-mask-image: url(../icons/glass.png);
+}
+#page_Search .search_box .mask_icon.clr {
+	display: none;
+	right: 0;
+	top: 0;
+	-webkit-mask-size: 16px;
+	-webkit-mask-image: url(../icons/cancel.png);
+}
+#page_Search .user_item {
+	line-height: 0;
+	padding: 10px;
+	background-size: 100% auto;
+	background-position: center center;
+	height: 50px;
+	-webkit-box-shadow: 0px 0px 2px #aaa;
+	background-color: #fff;
+}
+#page_Search .user_item .pimage {
+	background-color: #ddd;
+	border-radius: 25px;
+}
+#page_Search .user_item .pimage img {
+	width: 50px;
+	height: 50px;
+	border-radius: 25px;
+}
+#page_Search .user_item .info {
+	padding-left: 10px;
+}
+#page_Search .user_item .info h1 {
+	line-height: 30px;
+	font-size: 90%;
+}
+#page_Search .user_item .info .stat span {
+	float: right;
+}
+#page_Search .user_item .info .stat {
+	line-height: 20px;
+	font-size: 70%;
+	color: #999;
+}
+#page_Search .tag_item {
+	line-height: 0;
+	padding: 10px 15px;
+	-webkit-box-shadow: 0px 0px 2px #aaa;
+	background-color: #fff;
+}
+#page_Search .tag_item .label {
+	font-size: 90%;
+	line-height: 30px;
+}
+#page_Search .tag_item .count {
+	font-size:70%;
+	line-height: 20px;
+	color: #999;
+}
+#page_Search .search_for {
+	font-size:80%;
+	line-height: 60px;
+	padding: 0 15px;
+	overflow: hidden;
+	color: #669900;
+}
+#page_Search .search_for span {
+	width: 30px;
+	height: 30px;
+	display: block;
+	background-color: red;
+	float: right;
+	margin-top: 15px; 
 }

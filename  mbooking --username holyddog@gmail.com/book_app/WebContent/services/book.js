@@ -42,6 +42,16 @@ Service.Book = {
 				callback);
 	},
 
+	LikeBook: function(bid, uid, like, callback) {
+		var url = Service.url + '/likeBook.json';
+		var params = {
+			bid : bid,
+			uid : uid,
+			like : like
+		};
+		Web.post(url, params, callback);
+	},
+
 //	EditBook : function(bookID, bookName, desc, userID, picName, startDate,
 //			endDate, tags, callback) {
 //		var url = Service.url + '/editBook.json';
@@ -84,6 +94,17 @@ Service.Book = {
 		var params = {
 			bid : bookID,
 			uid : userID,
+			
+		};
+		Web.get(url, params, callback);
+	},
+
+	GetBookData : function(bookId, userId, guestId, callback) {
+		var url = Service.url + '/getBook.json';
+		var params = {
+			bid : bookId,
+			uid : userId,
+			gid : guestId
 			
 		};
 		Web.get(url, params, callback);

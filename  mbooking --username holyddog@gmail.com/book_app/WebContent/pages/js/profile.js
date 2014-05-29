@@ -22,6 +22,10 @@ Page.Profile = {
 		btnBack.tap(function() {
 			Page.back();
 		});	
+		var btnSearch = container.find('[data-id=btn_s]');
+		btnSearch.tap(function() {
+			Page.open('Search', true);
+		});	
 		var btnNotf = container.find('[data-id=btn_n]');
 		btnNotf.tap(function() {
 			btnNotf.find('.notf_count').removeClass('show');
@@ -47,27 +51,16 @@ Page.Profile = {
 			}
 		});
 
-		var profileView = container.find('#profile_view');
-		var scBar = container.find('.sc_bar');
-		var btnAdd = scBar.find('[data-link=new]');
-		var btnEdit = scBar.find('[data-link=edit]');
-		
-		btnAdd.tap(function() {
-			Page.open('CreateBook', true, { pub: true });
-		});
-		btnEdit.tap(function() {
-			
-		});
+		var profileView = container.find('#profile_view');	
 		
 		if (!isGuest) {
 			btnFollow.hide();
 			btnNotf.show();
-			scBar.show();
 		}
 		else {
 			btnFollow.show();
 			btnNotf.hide();
-			scBar.hide();
+			btnSearch.hide();
 			profileView.css('padding-bottom', '0px');
 		}	
 		
@@ -106,6 +99,12 @@ Page.Profile = {
 		});
 
 		Page.createShortcutBar(container);
+		
+		var scBar = container.find('.sc_bar');
+		if (isGuest) {
+			scBar.hide();
+		}
+		
 		self.loadProfile(uid, isGuest, container);
 	},
 	
