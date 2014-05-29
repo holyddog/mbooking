@@ -824,7 +824,7 @@ textarea {
 	-webkit-transition: .15s opacity ease-in-out;
 }
 #dialog.show:before {
-	opacity: .4;
+	opacity: .6;
 }
 
 .load_more {
@@ -876,6 +876,7 @@ textarea {
 	z-index: 1;
 	padding: 10px;
 	line-height: 24px;
+	text-align: left;
 }
 .book_size .pcount {
 	position: absolute;
@@ -1052,4 +1053,38 @@ textarea {
 .sc_bar .sep {
 	width: 1px; height: 30px; background-color: #fff;
 	margin-top: 10px;
+}
+
+.d_panel .body {
+	background-color: #eee;
+}
+.d_panel .input_layout {
+	padding: 10px !important;
+	background-color: #fff;
+}
+.d_panel .book_size h2 {
+	font-size: 90% !important;
+}
+.d_panel .book_size {
+	margin: 10px;
+}
+.d_panel .header {
+	text-align: left;
+	background-color: #fff;
+	height: 50px;
+	padding: 0 10px;
+	line-height: 50px;
+}
+.d_panel .bbar {
+	border-top: solid 2px #33B5E5;
+	background-color: #fff;
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+}
+.d_panel .bbar .sep {
+	width: 1px;
+	height: 30px;
+	margin-top: 10px;
+	background-color: #ccc;
 }

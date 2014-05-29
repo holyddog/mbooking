@@ -45,45 +45,58 @@ Page.EditBook = {
 //		var book = null;
 		var btnPub = container.find('[data-id=btn_pub]');
 		btnPub.tap(function() {
-			if (!btnPub.hasClass('used')) {
-				Page.showLoading('Publishing...');
+			Page.popDialog(function(text, data) { 
+				history.back();
 				
-				var img = container.find('.book_size').css('background-image');
-				img = img.replace('url(' + Config.FILE_URL, '').replace(')', '').replace('_s', '');
-				Service.Book.PublishBook(bid, Account.userId, img, function(data) {	   					
-					Page.hideLoading();
-					updateAccount(data.user, bid);
-					
-					Page.back(function(c, page) {
-//						if (page.reverseIndex) {
+				if (text == 'ok') {
+					if (Device.PhoneGap.isReady) {
+//						TODO: post to facebook
+//						self.fbPost(bid, title, desc, pic, '', function() {
+//							
+//						});
+					}
+				}
+			}, 4);
+			
+//			if (!btnPub.hasClass('used')) {
+//				Page.showLoading('Publishing...');
+//				
+//				var img = container.find('.book_size').css('background-image');
+//				img = img.replace('url(' + Config.FILE_URL, '').replace(')', '').replace('_s', '');
+//				Service.Book.PublishBook(bid, Account.userId, img, function(data) {	   					
+//					Page.hideLoading();
+//					updateAccount(data.user, bid);
+//					
+//					Page.back(function(c, page) {
+////						if (page.reverseIndex) {
+////							page.reverseIndex(c);
+////						}
+////						var profile = $('#page_Profile');
+////						if (profile.length > 0) {
+////							Page.Profile.loadProfile(Account.userId, false, profile);
+////						}						
+//					});
+//				});
+//			}
+//			else {
+//				Page.showLoading('Updating...');
+//				
+//				Service.Book.UnpublishBook(bid, Account.userId, function(data) {
+//					Page.hideLoading();
+//					updateAccount(data.user);					
+//					Page.back(function(c, page) {
+//						if(page.reverseIndex){
 //							page.reverseIndex(c);
 //						}
+//						
 //						var profile = $('#page_Profile');
 //						if (profile.length > 0) {
 //							Page.Profile.loadProfile(Account.userId, false, profile);
-//						}						
-					});
-				});
-			}
-			else {
-				Page.showLoading('Updating...');
-				
-				Service.Book.UnpublishBook(bid, Account.userId, function(data) {
-					Page.hideLoading();
-					updateAccount(data.user);					
-					Page.back(function(c, page) {
-						if(page.reverseIndex){
-							page.reverseIndex(c);
-						}
-						
-						var profile = $('#page_Profile');
-						if (profile.length > 0) {
-							Page.Profile.loadProfile(Account.userId, false, profile);
-						}
-						
-					});
-				});				
-			}
+//						}
+//						
+//					});
+//				});				
+//			}
 		});
 		
 		if (book_header.offsetWidth >= 600) {
@@ -176,6 +189,38 @@ Page.EditBook = {
 	bookPages: [],
 	ratio: 2,
 	move: false,
+	
+	fbPost: function(bid, title, desc, pic, message, callback) {
+		var post = function() {
+			var link = Config.WEB_BOOK_URL + '?bid=' + bid;
+			
+			var privacy = {
+				"value" : "EVERYONE"
+			};
+			var opt = {
+				access_token: Account.fbObject.token,
+				message : message,
+				
+				link : link,
+				name : title,
+				description : desc,
+				picture : pic,
+
+				caption : "The Story Application",
+				privacy: privacy
+	        };
+	    	var cb = function(response) {	    		
+	            if (!response || response.error) { 
+	            	console.error(JSON.stringify(response.error));
+					callback(false);
+	            } else {
+	            	callback(true);
+	            }
+	        };
+	    	FB.api("/me/feed", 'post', opt, cb); 
+		};
+		post();
+	},
 	
 	addTag: function(tagPanel, tagName) {
 		var self = this;
