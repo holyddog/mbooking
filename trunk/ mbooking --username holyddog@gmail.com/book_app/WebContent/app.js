@@ -150,8 +150,12 @@ $(document).ready(function() {
 	});
 	
 	var dialog = $('#dialog');
-	dialog.bind('click', function() {
-		history.back();
+	dialog.bind('click', function(e) {
+		if ($(e.target).closest('.d_panel').length > 0) {
+		}
+		else {
+			history.back();			
+		}
 	});
 	dialog.bind('touchmove', function(e) {
 		if ($(e.target).closest('.d_panel').length == 0) {
@@ -707,6 +711,137 @@ Page = {
 					dialog.find('li').click(function() {	
 						Page._callbackDialog($(this).data('bid'));
 					});
+					break;
+				}
+				case 4: {					
+					var dPanel = dialog.find('.d_panel');
+					dPanel.width(window.innerWidth - 30);
+					dPanel.css('max-height', window.innerHeight - 30);
+					
+					var dwidth = (dPanel.width() * 4) / 5;
+					var ratio = 2;
+					if (dwidth >= 600) {
+						ratio = 3;
+					}
+					var w = Math.floor((dwidth / ratio) - 15);
+					var h = Math.floor((w * 4) / 3);
+					
+					var html = 
+						'<div class="body box horizontal">' +
+						'	<div class="book_size" style="width: ' + w + 'px; height: ' + h + 'px; background-image: url(http://192.168.0.118/res/book/u9/b37/b3877w43_s.jpg);">' +
+						'		<h2 class="book_title">yuoik</h2>' +
+						'	</div>' +
+						'	<div class="book_det flex1 box vertical">' +
+						'		<div class="flex1 desc">Placeat malesuada euismod eligendi tempora taciti posuere suspendisse molestie sit</div>' +
+						'		<div class="pcount"><span>1</span> PAGES</div>' +
+						'	</div>' +
+						'</div>';
+					
+						html +=
+						'<div class="input_layout">' +
+						'	<div class="box horizontal">' +
+						'		<div class="flex1 box check_label">Share with Facebook</div>' +
+						'		<a data-id="btn_c" class="btn_check">' +
+						'			<span class="check_icon"></span>' +
+						'		</a>' +
+						'	</div>' +
+						'</div>';
+					
+					var header = document.createElement('div');
+					header.className = 'header';
+					header.innerText = 'Confirm';
+					
+					var getButton = function(text) {
+						var div = document.createElement('div');
+						div.className = 'flex1 flex_lock';
+						div.innerText = text;
+						return div;
+					};
+					var bbar = document.createElement('div');
+					bbar.className = 'bbar box horizontal';
+					var sep = document.createElement('div');
+					sep.className = 'sep';
+					var btnOk = getButton('OK');
+					var btnCancel = getButton('Cancel');
+					bbar.appendChild(btnOk);
+					bbar.appendChild(sep);
+					bbar.appendChild(btnCancel);
+					
+					dPanel.append(header);
+					dPanel.append(html);
+					dPanel.append(bbar);
+					
+					$(btnOk).click(function() {
+						Page._callbackDialog('ok');
+					});
+					$(btnCancel).click(function() {
+						Page._callbackDialog('cancel');
+					});
+					
+					var btnCheck = dPanel.find('[data-id=btn_c]'); 
+					btnCheck.tap(function() {
+						if (!btnCheck.hasClass('check')) {
+							var fbConnect = function(callback) {
+								if (!Device.PhoneGap.isReady) {
+									callback();
+									return;
+								}
+								
+								Device.PhoneGap.loginFacebook(function(user) {
+									var fn = function(data) {
+										var fbobj = {
+											fbpic: user.fbpic,
+											fbname: user.fbname,
+											token: user.access_token
+										};
+
+										if (!user.fbemail) {
+											fbobj.fbemail = user.fbemail;
+										}
+
+										Account.fbObject = fbobj;
+										localStorage.setItem('u', JSON.stringify(Account));
+										
+										callback();
+									};
+									Service.User.linkFB(Account.userId, user.fbid, user.fbpic, user.fbname, user.fbemail, user.access_token, fn);
+								});
+							};
+							
+							var allow = function() {
+								btnCheck.addClass('check');
+								
+								Account.fbObject.off = false;
+								localStorage.setItem('u', JSON.stringify(Account));
+							};
+							
+							if (Account.fbObject && Account.fbObject.token) {
+								allow();
+							}
+							else {
+								if (Device.PhoneGap.isReady) {
+									Page.showLoading('Connecting...');
+									fbConnect(function() {
+										Page.hideLoading();
+										
+										allow();
+									});											
+								}		
+								else {
+									allow();
+								}
+							}
+						}		
+						else {
+							Account.fbObject.off = true;
+							localStorage.setItem('u', JSON.stringify(Account));
+							btnCheck.removeClass('check');
+						}
+					});
+					
+//					dialog.find('li').click(function() {	
+//						Page._callbackDialog($(this).data('bid'));
+//					});
 					break;
 				}
 			}
