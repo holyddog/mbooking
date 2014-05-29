@@ -22,6 +22,7 @@ public class Book {
 	Long tdate;
 	@Indexed
 	String[] tags;
+	Long[] likes;
 	
 	Integer lcount; // likes count
 	Integer ccount; // comments count
@@ -35,6 +36,7 @@ public class Book {
 
 	// Return from Service Only , Not in db
 	User author;
+	Boolean liked;
 	List<Page> pages;
 	String strtime;
 
@@ -72,6 +74,22 @@ public class Book {
 
 	public void setUid(Long uid) {
 		this.uid = uid;
+	}
+
+	public Long[] getLikes() {
+		return likes;
+	}
+
+	public void setLikes(Long[] likes) {
+		this.likes = likes;
+	}
+
+	public Boolean getLiked() {
+		return liked;
+	}
+
+	public void setLiked(Boolean liked) {
+		this.liked = liked;
 	}
 
 	public String[] getTags() {

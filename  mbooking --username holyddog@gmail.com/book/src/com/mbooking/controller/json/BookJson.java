@@ -73,11 +73,12 @@ public class BookJson {
 	public @ResponseBody
 	Object getBook(
 			@RequestParam(value = "bid") Long bid,
-			@RequestParam(value = "uid", required = false) Long uid) {
+			@RequestParam(value = "uid", required = false) Long uid,
+			@RequestParam(value = "gid", required = false) Long guestId) {
 
 		Book book = null;
 		if (uid != null && uid > 0) {
-			book = bookRepo.findBookWithPages(bid, uid);	
+			book = bookRepo.findBookWithPages(bid, uid, guestId);	
 		}
 		else {
 			book = bookRepo.findByBid(bid);	
@@ -179,5 +180,15 @@ public class BookJson {
 			res = bookRepo.removeTag(bid, tag);
 		}
 		return ResultResponse.getResult("success", res);
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/likeBook.json")
+	public @ResponseBody
+	Object likeBook(
+			@RequestParam(value = "bid") Long bid,
+			@RequestParam(value = "uid") Long uid,
+			@RequestParam(value = "like") Boolean like
+			) {
+		return ResultResponse.getResult("success", bookRepo.likeBook(bid, uid, like));
 	}
 }

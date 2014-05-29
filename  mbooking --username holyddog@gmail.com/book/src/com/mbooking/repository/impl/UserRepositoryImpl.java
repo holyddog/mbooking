@@ -71,6 +71,7 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		Criteria searchCriteria = new Criteria().orOperator(
 				Criteria.where("dname").regex("^(?i)" + keyword + "(?i)"), Criteria.where("uname").regex("^(?i)" + keyword + "(?i)"));
 		Query query  = new Query(searchCriteria);
+		query.limit(50);
 		query.fields().include("dname").include("uname").include("pic").include("pbcount");
 		return db.find(query, User.class);
 	}

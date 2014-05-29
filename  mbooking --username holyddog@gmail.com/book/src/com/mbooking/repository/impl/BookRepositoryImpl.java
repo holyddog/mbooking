@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.query.Update;
 
 import com.mbooking.constant.ConstValue;
 import com.mbooking.model.Book;
+import com.mbooking.model.Like;
 import com.mbooking.model.Page;
 import com.mbooking.model.Tag;
 import com.mbooking.model.User;
@@ -253,7 +254,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 	}
 
 	@Override
-	public Book findBookWithPages(Long bid, Long uid) {
+	public Book findBookWithPages(Long bid, Long uid, Long gid) {
 		try {
 			Criteria criteria = Criteria.where("uid").is(uid);
 			Query query = new Query(criteria);
@@ -282,6 +283,13 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 
 			book.setAuthor(user);
 			book.setPages(pages);
+			
+			if (gid != null) {
+				long count = db.count(new Query(Criteria.where("bid").is(bid).and("likes").is(gid)), Book.class);
+				if (count > 0) {
+					book.setLiked(true);
+				}
+			}
 
 			return book;
 		} catch (Exception e) {
@@ -583,8 +591,9 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 
 	@Override
 	public List<Book> findBooksByTitle(String keyword) {
-//		title, pic, lcount, ccount, pcount, author
-		Query query  = new Query(Criteria.where("title").regex("^(?i)" + keyword + "(?i)"));
+		Criteria criteria = Criteria.where("title").regex("^(?i)" + keyword + "(?i)").and("pbdate").exists(true).and("pub").is(true);
+		Query query  = new Query(criteria);
+		query.limit(50);
 		query.fields().include("title").include("pic").include("lcount").include("ccount").include("pcount").include("author");
 		return db.find(query, Book.class);
 	}	
@@ -592,6 +601,39 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 	@Override
 	public List<Tag> findTags(String keyword) {
 		Query query  = new Query(Criteria.where("tag").regex("^(?i)" + keyword + "(?i)"));
+		query.limit(50);
 		return db.find(query, Tag.class);
+	}
+
+	@Override
+	public List<Book> findBooksByTag(String tag) {
+		Query query  = new Query(Criteria.where("tags").is(tag).and("pbdate").exists(true).and("pub").is(true));
+		query.fields().include("title").include("pic").include("lcount").include("ccount").include("pcount").include("author");
+		return db.find(query, Book.class);		
+	}
+
+	@Override
+	public Boolean likeBook(Long bid, Long who, boolean isLike) {
+		try {
+			if (isLike) {
+				db.updateFirst(new Query(Criteria.where("bid").is(bid)), new Update().push("likes", who).inc("lcount", 1), Book.class);
+				
+				Like like = new Like();
+				like.setBid(bid);
+				like.setUid(who);
+				like.setLdate(System.currentTimeMillis());
+				
+				db.insert(like);
+			}
+			else {
+				db.updateFirst(new Query(Criteria.where("bid").is(bid)), new Update().pull("likes", who).inc("lcount", -1), Book.class);
+				db.remove(new Query(Criteria.where("bid").is(bid).and("uid").is(who)), Like.class);
+			}
+			
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 	}	
 }
