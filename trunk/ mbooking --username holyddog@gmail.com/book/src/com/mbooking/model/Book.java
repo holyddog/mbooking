@@ -3,12 +3,14 @@ package com.mbooking.model;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "books")
 public class Book {
 	@Id
 	Long bid;
+	@Indexed
 	String title;
 	String desc;
 	String period;
@@ -18,7 +20,11 @@ public class Book {
 	Integer fcount;
 	Long fdate;
 	Long tdate;
+	@Indexed
 	String[] tags;
+	
+	Integer lcount; // likes count
+	Integer ccount; // comments count
 	
 	Long pbdate; // publish date
 	
@@ -143,6 +149,22 @@ public class Book {
 
 	public void setAuthor(User author) {
 		this.author = author;
+	}
+
+	public Integer getLcount() {
+		return lcount;
+	}
+
+	public void setLcount(Integer lcount) {
+		this.lcount = lcount;
+	}
+
+	public Integer getCcount() {
+		return ccount;
+	}
+
+	public void setCcount(Integer ccount) {
+		this.ccount = ccount;
 	}
 
 	public List<Page> getPages() {

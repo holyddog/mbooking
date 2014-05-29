@@ -3,6 +3,7 @@ package com.mbooking.repository;
 import java.util.List;
 
 import com.mbooking.model.Book;
+import com.mbooking.model.Tag;
 import com.mbooking.model.User;
 
 public interface BookRepostitoryCustom {
@@ -24,6 +25,8 @@ public interface BookRepostitoryCustom {
 	public Boolean removeTag(Long bid, String tag);
 	
 	public List<Book> findLastBookByUid(Long uid);
+	public List<Book> findBooksByTitle(String keyword);
+	public List<Tag> findTags(String keyword);
 	public String findLastCover(Long uid);
 	
 	public List<Book> findByPbdateExists(boolean exists,Integer skip,Integer limit);

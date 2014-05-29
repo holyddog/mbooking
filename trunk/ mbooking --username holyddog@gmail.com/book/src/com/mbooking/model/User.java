@@ -12,6 +12,7 @@ public class User {
 	Long uid;
 	@Indexed(unique = true)
 	String email;
+	@Indexed
 	String dname; // display name
 	@Indexed(unique = true)
 	String uname; // username
