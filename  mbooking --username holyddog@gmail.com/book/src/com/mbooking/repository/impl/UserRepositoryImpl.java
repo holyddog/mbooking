@@ -82,7 +82,16 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 			Query query = new Query(criteria);
 			query.fields().exclude("pwd");
 			query.fields().exclude("fbobj.fbid");
-			return db.findOne(query, User.class);
+			
+			User user = db.findOne(query, User.class);
+			if (user != null) {
+				query = new Query(Criteria.where("uid").is(user.getUid()).and("pbdate").exists(false));
+				query.fields().include("pic").include("title").include("pcount");
+				List<Book> books = db.find(query, Book.class);
+				user.setBooks(books);
+			}
+			
+			return user;
 	}
 
 	@Override
@@ -246,6 +255,8 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		query.fields().include("title");
 		query.fields().include("pic");
 		query.fields().include("pcount");
+		query.fields().include("lcount");
+		query.fields().include("ccount");
 		
 		List<Book> pubBooks = db.find(query, Book.class);
 		map.put("pubBooks", pubBooks);
@@ -259,6 +270,8 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 			query.fields().include("title");
 			query.fields().include("pic");
 			query.fields().include("pcount");
+			query.fields().include("lcount");
+			query.fields().include("ccount");
 			
 			List<Book> priBooks = db.find(query, Book.class);
 			map.put("priBooks", priBooks);
