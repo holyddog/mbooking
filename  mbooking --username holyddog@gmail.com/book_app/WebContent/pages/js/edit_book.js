@@ -42,41 +42,57 @@ Page.EditBook = {
 			}
 		};
 		
+		var publishBook = function(showLoad) {
+			if (showLoad) {
+				Page.showLoading('Publishing...');
+			}			
+			
+			var img = container.find('.book_size').css('background-image');
+			img = img.replace('url(' + Config.FILE_URL, '').replace(')', '').replace('_s', '');
+			Service.Book.PublishBook(bid, Account.userId, img, function(data) {	   					
+				Page.hideLoading();
+				updateAccount(data.user, bid);
+				
+				Page.back(function(c, page) {
+//					if (page.reverseIndex) {
+//						page.reverseIndex(c);
+//					}
+//					var profile = $('#page_Profile');
+//					if (profile.length > 0) {
+//						Page.Profile.loadProfile(Account.userId, false, profile);
+//					}						
+				});
+			});
+		};
+		
 //		var book = null;
 		var btnPub = container.find('[data-id=btn_pub]');
 		btnPub.tap(function() {
-			Page.popDialog(function(text, data) { 
+			Page.popDialog(function(text, share) { 
 				history.back();
 				
 				if (text == 'ok') {
-					if (Device.PhoneGap.isReady) {
-//						TODO: post to facebook
-//						self.fbPost(bid, title, desc, pic, '', function() {
-//							
-//						});
+					if (share && Device.PhoneGap.isReady) {						
+						var title = container.find('.book_title').text();
+						var desc = container.find('.book_det .desc').text();
+						var pic = container.find('.book_size').css('background-image');
+						pic = pic.substring(pic.indexOf('(') + 1, pic.length - 1);
+						
+						setTimeout(function() {
+							Page.showLoading('Publishing...');							
+							self.fbPost(bid, title, desc, pic, function() {
+								publishBook();
+							});
+						}, 100);
+					}
+					else {
+						publishBook(true);
 					}
 				}
 			}, 4);
 			
 //			if (!btnPub.hasClass('used')) {
-//				Page.showLoading('Publishing...');
-//				
-//				var img = container.find('.book_size').css('background-image');
-//				img = img.replace('url(' + Config.FILE_URL, '').replace(')', '').replace('_s', '');
-//				Service.Book.PublishBook(bid, Account.userId, img, function(data) {	   					
-//					Page.hideLoading();
-//					updateAccount(data.user, bid);
-//					
-//					Page.back(function(c, page) {
-////						if (page.reverseIndex) {
-////							page.reverseIndex(c);
-////						}
-////						var profile = $('#page_Profile');
-////						if (profile.length > 0) {
-////							Page.Profile.loadProfile(Account.userId, false, profile);
-////						}						
-//					});
-//				});
+
 //			}
 //			else {
 //				Page.showLoading('Updating...');
@@ -125,11 +141,6 @@ Page.EditBook = {
 			
 			container.find('.page_ref').hide();
 			container.find('#' + link.data('ref')).show();
-		});
-		
-		var btnCheck = container.find('[data-id=btn_c]'); 
-		btnCheck.tap(function() {
-			btnCheck.toggleClass('check');
 		});
 		
 		container.find('[data-link=edit_book]').click(function() {
@@ -190,7 +201,7 @@ Page.EditBook = {
 	ratio: 2,
 	move: false,
 	
-	fbPost: function(bid, title, desc, pic, message, callback) {
+	fbPost: function(bid, title, desc, pic, callback) {
 		var post = function() {
 			var link = Config.WEB_BOOK_URL + '?bid=' + bid;
 			
@@ -199,7 +210,6 @@ Page.EditBook = {
 			};
 			var opt = {
 				access_token: Account.fbObject.token,
-				message : message,
 				
 				link : link,
 				name : title,

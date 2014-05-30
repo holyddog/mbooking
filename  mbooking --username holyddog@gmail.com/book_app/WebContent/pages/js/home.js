@@ -25,26 +25,27 @@ Page.Home = {
 			
 					} else {			
 						Account = {
-							userId : data.uid,
-							email : data.email,
-							displayName : data.dname,
-							userName : data.uname,
-							lastEditBook : data.leb,
-							cover : data.cover,
-							picture : data.pic,
-							followerCount : data.fcount,
-							bookCount : data.pbcount,
-							fbObject : {
-								fbpic : data.fbobj.pic,
-								fbname : data.fbobj.dname,
-								token: data.fbobj.token
+								userId: data.uid,
+								email: data.email,
+								displayName: data.dname,
+								userName: data.uname,
+								picture: data.pic,							
+								cover: data.cover,
+								bookCount: data.pbcount,
+								draftCount: data.drcount,
+								
+								draftBooks: data.books,
+								
+//								followerCount: data.fcount,
+//								bookCount: data.pbcount
+								
+	                            fbObject: data.fbobj
+							};                                    
+
+							if (data.fbobj && data.fbobj.email) {
+								Account.fbObject.fbemail = data.fbobj.email;
 							}
-						};
-			
-						if (data.fbobj.email) {
-							Account.fbObject.fbemail = data.fbobj.email;
-						}			
-						localStorage.setItem("u", JSON.stringify(Account));
+							localStorage.setItem("u", JSON.stringify(Account));	
 						
 						Page.loadMenu();
 						Page.open('Profile');

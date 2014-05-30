@@ -504,8 +504,8 @@ Page = {
 		if (Account.picture) {
 			profileCover.find('.pimage img').attr('src', Util.getImage(Account.picture, 3));
 		}
-		var bookCount = (Account.bookCount)? Account.bookCount: 0;
-		profileCover.find('.stat').html('@holydog &#183; ' + bookCount + ' Books</span>');
+//		var bookCount = (Account.bookCount)? Account.bookCount: 0;
+		profileCover.find('.stat').html('@' + Account.userName);// + ' &#183; ' + bookCount + ' Books</span>');
 	},
 	open: function(page, append, params) {
 		var fn = function() {
@@ -726,14 +726,20 @@ Page = {
 					var w = Math.floor((dwidth / ratio) - 15);
 					var h = Math.floor((w * 4) / 3);
 					
+					var container = $('.page:last-child');
+					var bg = container.find('.book_size').css('background-image');
+					var title = container.find('.book_title').text();
+					var desc = container.find('.book_det .desc').text();
+					var count = container.find('.pcount').html();
+					
 					var html = 
 						'<div class="body box horizontal">' +
-						'	<div class="book_size" style="width: ' + w + 'px; height: ' + h + 'px; background-image: url(http://192.168.0.118/res/book/u9/b37/b3877w43_s.jpg);">' +
-						'		<h2 class="book_title">yuoik</h2>' +
+						'	<div class="book_size" style="width: ' + w + 'px; height: ' + h + 'px; background-image: ' + bg + ';">' +
+						'		<h2 class="book_title">' + title + '</h2>' +
 						'	</div>' +
 						'	<div class="book_det flex1 box vertical">' +
-						'		<div class="flex1 desc">Placeat malesuada euismod eligendi tempora taciti posuere suspendisse molestie sit</div>' +
-						'		<div class="pcount"><span>1</span> PAGES</div>' +
+						'		<div class="flex1 desc">' + desc + '</div>' +
+						'		<div class="pcount">' + count + '</div>' +
 						'	</div>' +
 						'</div>';
 					
@@ -770,15 +776,25 @@ Page = {
 					dPanel.append(header);
 					dPanel.append(html);
 					dPanel.append(bbar);
-					
+
+					var btnCheck = dPanel.find('[data-id=btn_c]'); 
 					$(btnOk).click(function() {
-						Page._callbackDialog('ok');
+						Page._callbackDialog('ok', btnCheck.hasClass('check'));
 					});
 					$(btnCancel).click(function() {
 						Page._callbackDialog('cancel');
 					});
 					
-					var btnCheck = dPanel.find('[data-id=btn_c]'); 
+					if (Account.fbObject && Account.fbObject.fbname) {
+						var fb = Account.fbObject;
+						if (fb.off) {
+							btnCheck.removeClass('check');
+						}
+						else {
+							btnCheck.addClass('check');
+						}
+					}
+					
 					btnCheck.tap(function() {
 						if (!btnCheck.hasClass('check')) {
 							var fbConnect = function(callback) {
