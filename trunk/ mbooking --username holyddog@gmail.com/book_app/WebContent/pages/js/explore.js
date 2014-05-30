@@ -42,7 +42,7 @@ Page.Explore = {
 				var div = document.createElement('div');
 				div.className = 'book';
 				
-				div.appendChild(Page.Profile.getBook(b.bid, b.title, b.pic, b.pcount, b.author));
+				div.appendChild(Page.Profile.getBook(b.bid, b.title, b.pic, b.pcount, b.author, b.lcount, b.ccount));
 				div.appendChild(Page.Following.getAuthor(b.author.uid, b.author.dname, b.author.pic));
 				
 				panel.append(div);

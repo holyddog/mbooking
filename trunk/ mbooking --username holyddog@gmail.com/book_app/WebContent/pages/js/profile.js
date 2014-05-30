@@ -128,7 +128,7 @@ Page.Profile = {
 		
 		for (var i = 0; i < pubBooks.length; i++) {
 			var b = pubBooks[i];
-			ptab1.append(self.getBook(b.bid, b.title, b.pic, b.pcount));
+			ptab1.append(self.getBook(b.bid, b.title, b.pic, b.pcount, b.lcount, b.ccount));
 		}
 		ptab1.find('.book_size').click(function() {
 			self.openBook($(this), uid);
@@ -146,7 +146,7 @@ Page.Profile = {
 		
 		for (var i = 0; i < priBooks.length; i++) {
 			var b = priBooks[i];
-			ptab2.append(self.getBook(b.bid, b.title, b.pic, b.pcount));
+			ptab2.append(self.getBook(b.bid, b.title, b.pic, b.pcount, b.lcount, b.ccount));
 		}
 		ptab2.find('.book_size').click(function() {
 			self.openBook($(this), uid);
@@ -164,7 +164,7 @@ Page.Profile = {
 		
 		for (var i = 0; i < drBooks.length; i++) {
 			var b = drBooks[i];
-			ptab3.append(self.getBook(b.bid, b.title, b.pic, b.pcount));
+			ptab3.append(self.getBook(b.bid, b.title, b.pic, b.pcount, b.lcount, b.ccount));
 		}
 		ptab3.find('.book_size').click(function() {
 			var b = $(this);
@@ -187,7 +187,8 @@ Page.Profile = {
 			
 			var user = data.user;
 			
-			content.find('.header_title span').text(user.dname);
+			content.find('.header_title span.dname').text(user.dname);
+			content.find('.header_title span.uname').text('@' + user.uname);
 			if (user.pic) {
 				content.find('.pimage img').attr('src', Util.getImage(user.pic, 3));
 			}
@@ -259,7 +260,7 @@ Page.Profile = {
 		});
 	},
 	
-	getBook: function(bid, title, cover, count, author) {
+	getBook: function(bid, title, cover, count, author, lcount, ccount) {
 		var div = document.createElement('div');
 		div.className = 'b book_size';
 		div.dataset.bid = bid;
@@ -292,8 +293,8 @@ Page.Profile = {
 			
 			return item;
 		};
-		social.appendChild(getLabel('like', '23'));
-		social.appendChild(getLabel('comment', '12'));
+		social.appendChild(getLabel('like', (lcount)? lcount: '0'));
+		social.appendChild(getLabel('comment', (ccount)? ccount: '0'));
 		
 		div.appendChild(social);
 		
