@@ -266,7 +266,7 @@
 	padding: 15px 10px; 
 	overflow: hidden;
 }
-#page_Profile .header_title span {
+#page_Profile .header_title span.dname {
 	font-family: 'Roboto', 'Bangna';
 	font-size: 180%;
 	color: #fff;
@@ -275,6 +275,10 @@
 	display: block;
 	text-overflow: ellipsis;
 	line-height: 40px;
+}
+#page_Profile .header_title span.uname {
+	font-size: 80%;
+	color: #eee;
 }
 #page_Profile .header_title a {
 	float: right;

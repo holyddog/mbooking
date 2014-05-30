@@ -626,6 +626,8 @@ textarea {
 .profile_item .info .stat {
 	line-height: 20px;
 	font-size: 80%;
+	color: #eee;
+	opacity: .8;
 }
 
 #app_logo {
