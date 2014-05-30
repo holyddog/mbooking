@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 
 import com.mbooking.constant.ConstValue;
 import com.mbooking.model.Book;
@@ -49,6 +50,8 @@ public class CommentRepositoryImpl implements CommentRepostitoryCustom {
 					comment.setPic(user.getPic());
 				}
 				db.insert(comment);
+				
+				db.updateFirst(new Query(Criteria.where("bid").is(bid)), new Update().inc("ccount", 1), Book.class);
 
 				Notification notf = new Notification();
 				notf.setUid(book.getUid()); // set notify to book author
