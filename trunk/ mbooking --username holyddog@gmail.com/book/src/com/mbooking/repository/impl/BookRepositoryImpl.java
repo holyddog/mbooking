@@ -1,7 +1,9 @@
 package com.mbooking.repository.impl;
 
+import java.io.File;
 import java.util.List;
 
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -10,14 +12,13 @@ import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
-import com.mbooking.constant.ConstValue;
 import com.mbooking.model.Book;
 import com.mbooking.model.Like;
 import com.mbooking.model.Page;
 import com.mbooking.model.Tag;
 import com.mbooking.model.User;
 import com.mbooking.repository.BookRepostitoryCustom;
-import com.mbooking.util.ImageUtils;
+import com.mbooking.util.ConfigReader;
 import com.mbooking.util.MongoCustom;
 
 public class BookRepositoryImpl implements BookRepostitoryCustom {
@@ -150,79 +151,36 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 
 	@Override
 	public Boolean delete(Long bid, Long uid) {
-
-		Criteria criteria = Criteria.where("bid").is(bid).and("uid").is(uid);
-		Query query = new Query(criteria);
-		query.fields().include("pic");
-
-		List<Page> pages = db.find(query, Page.class);
-
 		try {
-			// Remove Pages
-			db.remove(query, Page.class);
-
-			// Remove Book
+			Query query = new Query(Criteria.where("bid").is(bid));
+			query.fields().include("pbdate").include("pub");
+			Book book = db.findOne(query, Book.class);
+			
+			query = new Query(Criteria.where("bid").is(bid).and("uid").is(uid));
+			// Remove book
 			db.remove(query, Book.class);
-
-			// Remove Image Files
-			for (int i = 0; i < pages.size(); i++) {
-
-				String filename = pages.get(i).getPic();
-				if (filename != null && filename != "") {
-					ImageUtils.deleteImageFile(filename, ConstValue.PAGE_IMG_TYPE);
+			
+			// Remove pages
+			db.remove(query, Page.class);
+			
+			// Update book count from author
+			if (book.getPbdate() != null) {
+				if (book.getPub() != null && book.getPub()) {
+					db.updateFirst(new Query(Criteria.where("uid").is(uid)), new Update().inc("pbcount", -1), User.class);					
+				}				
+				else {
+					db.updateFirst(new Query(Criteria.where("uid").is(uid)), new Update().inc("prcount", -1), User.class);						
 				}
 			}
-			
-			Query user_query = new Query(Criteria.where("uid").is(uid));
-			
-			User user = db.findOne(user_query,User.class);
-			
-			if (user != null) {
-				int tcount = (int) db.count(user_query, Book.class);
-
-				Update user_update = new Update();
-
-				user_update.set("tcount", tcount);
-
-				if (user.getLeb() != null && user.getLeb().getBid().longValue() == bid.longValue()) {
-					Query book_query = new Query(Criteria.where("uid").is(uid));
-					book_query.fields().include("ledate");
-					book_query.fields().include("bid");
-					book_query.fields().include("title");
-					book_query.fields().include("pic");
-					book_query.sort().on("ledate", Order.DESCENDING);
-					Book book = db.findOne(book_query, Book.class);
-
-					if (book != null) {
-						Book b = new Book();
-						b.setBid(bid);
-						b.setTitle(book.getTitle());
-						b.setPic(book.getPic());
-						user_update.set("leb", b);
-						
-//						user_update.set("leb", book.getBid());
-//
-//						String btitle = book.getTitle();
-//						String bpic = book.getPic();
-//
-//						if (btitle != null && !btitle.isEmpty()
-//								&& !btitle.equals("")
-//								&& !btitle.equals("undefined")) {
-//							user_update.set("lebt", btitle);
-//						}
-//						if (bpic != null && !bpic.isEmpty() && !bpic.equals("")
-//								&& !bpic.equals("undefined")) {
-//							user_update.set("lebp", bpic);
-//						}
-
-					}
-				}
-
-				db.updateFirst(user_query, user_update, User.class);
+			else {
+				db.updateFirst(new Query(Criteria.where("uid").is(uid)), new Update().inc("drcount", -1), User.class);				
 			}
+			
+			// Remove book image files directory
+			String dir = ConfigReader.getProp("upload_path") + "/u" + uid + "/b" + bid;
+			FileUtils.deleteDirectory(new File(dir));
 		} catch (Exception e) {
-
-			System.out.println("Delete book err :" + e);
+			e.printStackTrace();
 			return false;
 		}
 
@@ -271,6 +229,8 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			query.fields().include("pcount");
 			query.fields().include("pbdate");
 			query.fields().include("tags");
+			query.fields().include("lcount");
+			query.fields().include("ccount");
 
 			Book book = db.findOne(query, Book.class);
 
@@ -309,6 +269,8 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			query.fields().include("pcount");
 			query.fields().include("pbdate");
 			query.fields().include("uid");
+			query.fields().include("lcount");
+			query.fields().include("ccount");
 
 			Book book = db.findOne(query, Book.class);
 
@@ -348,7 +310,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 
 			db.updateFirst(query, update, Book.class);			
 			
-			int bookCount = (int) db.count(new Query(Criteria.where("uid").is(uid).and("pbdate").exists(true)), Book.class);
+			int bookCount = (int) db.count(new Query(Criteria.where("uid").is(uid).and("pbdate").exists(true).and("pub").is(true)), Book.class);
 			int draftCount = (int) db.count(new Query(Criteria.where("uid").is(uid).and("pbdate").exists(false)), Book.class);
 			
 			update = new Update();

@@ -20,7 +20,6 @@ public class User {
 	String pwd;
 	Boolean inactive;
 
-	Book leb; // last edit book
 	Integer fcount; // Follower book count
 	Integer fgcount; // Following book count
 	
@@ -98,14 +97,6 @@ public class User {
 
 	public void setPic(String pic) {
 		this.pic = pic;
-	}
-
-	public Book getLeb() {
-		return leb;
-	}
-
-	public void setLeb(Book leb) {
-		this.leb = leb;
 	}
 
 	public Integer getFcount() {

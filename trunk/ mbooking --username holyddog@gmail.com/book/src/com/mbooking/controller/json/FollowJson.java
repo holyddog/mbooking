@@ -14,6 +14,7 @@ import com.mbooking.common.ResultResponse;
 import com.mbooking.model.Book;
 import com.mbooking.model.Follow;
 import com.mbooking.model.Page;
+import com.mbooking.model.User;
 import com.mbooking.repository.BookRepository;
 import com.mbooking.repository.FollowRepository;
 import com.mbooking.repository.PageRepository;
@@ -46,20 +47,6 @@ public class FollowJson {
 		) {
 		
 		return ResultResponse.getResult("success",  followRepo.unfollowAuthor(uid, auid));
-	}
-	
-	@RequestMapping(method = RequestMethod.GET, value = "/getFollowAuthors.json")
-	public @ResponseBody
-	Object getAuthors(
-			@RequestParam(value = "uid") Long uid
-		) {
-		
-		List<Follow> authors = followRepo.findByUid(uid);
-		if (authors != null) {
-			return authors;
-		}
-
-		return ErrorResponse.getError("Unsuccess to load authors that uid: "+uid+" following");
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/getFollowBooksByUID.json")
@@ -98,16 +85,26 @@ public class FollowJson {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/getFollowers.json")
 	public @ResponseBody
-	Object getFollowers(
-			@RequestParam(value = "auid") Long auid
-		) {
-		
-		List<Follow> followers = followRepo.findByAuid(auid);
-		if (followers != null) {
-			return followers;
+	Object getFollowers(@RequestParam(value = "uid") Long uid) {
+
+		List<User> users = followRepo.getFollowers(uid);
+		if (users != null) {
+			return users;
 		}
 
-		return ErrorResponse.getError("Unsuccess to load followers of author : "+auid);
+		return ErrorResponse.getError("Internal Error");
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/getFollowing.json")
+	public @ResponseBody
+	Object getFollowing(@RequestParam(value = "uid") Long uid) {
+
+		List<User> users = followRepo.getFollowing(uid);
+		if (users != null) {
+			return users;
+		}
+
+		return ErrorResponse.getError("Internal Error");
 	}	
 	
 }
