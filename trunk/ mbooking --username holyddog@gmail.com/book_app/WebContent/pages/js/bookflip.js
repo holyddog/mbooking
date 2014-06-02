@@ -1,5 +1,5 @@
 Page.Book = {
-url: 'pages/html/book.html',
+url: 'pages/html/blank.html',
 init: function(params, container) {
     var self = this;
 //    var content = container.find('.content');
@@ -14,7 +14,11 @@ reverseIndex:function(container){
 	container.css('display','');
 },
 load: function(container, bookData,params) {
-
+	var uid = (params && params.uid)? params.uid: Account.userId;
+	var isGuest = false;
+	if (uid != Account.userId) {
+		isGuest = true;
+	}
 	container.css('-webkit-transition','background-color 500ms linear');	
 	container.css('transition','background-color 500ms linear');	
 
@@ -23,6 +27,7 @@ load: function(container, bookData,params) {
 	var index = 0;
     // generate book pages
     var data = bookData.pages;
+    data.push({});
     if (data.length) {
         for (var i = data.length - 1; i > -3; i--) {
             var f_ev_str = 'f_ev';
@@ -47,50 +52,75 @@ load: function(container, bookData,params) {
             
             var tbar_btn = '';
             
+            var tbar_btn_back = '';
+            
             if(!params.preview){
-                tbar_btn =   '<a data-id="btn_e" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="edit"></span></a>	'
-                            +'<a data-id="btn_s" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="share"></span></a>	'
-                            +'<a data-id="btn_c" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="comment"></span></a> ';
+                tbar_btn =  '<a data-id="btn_l" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="like"></span></a>'
+                    +'<a data-id="btn_c" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="comment"></span></a>'
+                    +'<a data-id="btn_s" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="share"></span></a> ';
+                
+                tbar_btn_bp =  '<a data-id="btn_l" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="like"style="background-color:#FBFBFB;"></span></a>'
+                    +'<a data-id="btn_c" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="comment"style="background-color:#FBFBFB;"></span></a>'
+                    +'<a data-id="btn_s" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="share"style="background-color:#FBFBFB;"></span></a> ';
             }
             
             var cover_page = '<div class="tbar_bg trans cover_book"></div>'
-            +'<div class="grad_overlay fill_dock hid_loading"></div>'
-            +'<div class="tbar" style="pointer-events:none;">	'
-            +'<a data-id="btn_b" class="btn" style="left: 0; pointer-events:all;"><span class="'+((params.preview)?"back":"cancel")+'"></span></a>'
-            +'<div class="title"></div>'
-            +tbar_btn
-            +'</div>'
-            +'<div class="content gray flex1 box vertical '+f_ev_str+'" style="pointer-events:all;">'
-            +'	<div class="hid_loading">'
-            +'		<h1 class="btitle"></h1>'
-            +'		<div class="bdesc"></div>'
-            +'		<div class="bline"></div>'
-            +'		<div class="author_info box horizontal">'
-            +'			<div class="pimage">'
-            +'				<img src="images/user.jpg" />'
-            +'			</div>'
-            +'			<div class="box flex1" style="-webkit-box-align: center;">'
-            +'					<h1 class="name"></h1>'
-            +'			</div>'
-            +'		</div>'
-            +'		<div class="bottom_info">'
-            +'			<div class="text_bar flow_hidden">'
-            +'				<span class="fright">42 Pages</span>'
-            +'			</div>'
-            +'		</div>'
-            +'	</div>'
-            +'</div>	';
+                +'<div class="grad_overlay fill_dock hid_loading"></div>'
+                +'<div class="tbar" style="pointer-events:none;">	'
+                +'<a data-id="btn_b" class="btn" style="left: 0; pointer-events:all;"><span class="'+((params.preview)?"back":"cancel")+'"></span></a>'
+                +'<div class="title"></div>'
+                +tbar_btn
+                +'</div>'
+                +'<div class="content gray flex1 box vertical '+f_ev_str+'" style="pointer-events:all;">'
+                +'	<div class="first_cover hid_loading">'
+                +'      <div class="box horizontal">'
+    			+'          <h1 class="btitle flex1"></h1>'
+    			+       (!isGuest?'<div class="edit_book mask_icon" style="pointer-events:all;"></div>':'')
+                +'      </div>'
+                +'		<div class="bdesc"></div>'
+                +'		<div class="bline"></div>'
+                +'		<div class="author_info box horizontal">'
+                +'			<div class="pimage">'
+                +'				<img src="images/user.jpg" />'
+                +'			</div>'
+                +'			<div class="box flex1" style="-webkit-box-align: center;">'
+                +'					<h1 class="name"></h1>'
+                +'			</div>'
+                +'		</div>'
+                +'		<div class="bottom_info">'
+                +'			<div class="text_bar flow_hidden">'
+                +'				<span class="fright">42 Pages</span>'
+                +'			</div>'
+                +'		</div>'
+                +'	</div>'
+                +'</div>	';
+            
+            var back_page =
+                '<div class="tbar" style="background: #131313;pointer-events:none;">	'
+                +'<a data-id="btn_b" class="btn" style="left: 0; pointer-events:all;"><span class="'+((params.preview)?"back":"cancel")+'"style="background-color:#FBFBFB;"></span></a>'
+                +'<div class="title"></div>'
+                +tbar_btn_bp
+                +'</div>'
+                +'<div class="content flex1 box vertical '+f_ev_str+'" style="background:#131313; pointer-events:all;">'
+                +'	<div class="flex1" style=" background: url('+"'images/thank1.jpg'"+'); background-position: center; background-size: 100% auto; background-repeat: no-repeat;"></div>'
+                +'		<div class="bottom_info">'
+                +'			<div class="text_bar flow_hidden" style="text-align: center;padding: 30px;">'
+                +'				<span style="font-family:'+"'Roboto'"+ ';">Credit by : '+bookData.author.dname+'</span>'
+                +'			</div>'
+                +'		</div>'
+                +'</div>	';
+            
           
             
             var title_bar_left =$('<div class="tbar" style="pointer-events:none;"><div class="title"></div>'
-                                  +'<a data-id="btn_b" class="btn" style="left: 0; pointer-events:all;"><span class="'+((params.preview)?"back":"cancel")+'"></span></a>'
-                                  +'</div>');
+                    +'<a data-id="btn_b" class="btn" style="left: 0; pointer-events:all;"><span class="'+((params.preview)?"back":"cancel")+'"></span></a>'
+                    +'</div>');
             
             var title_bar_right =$('<div class="tbar" style="pointer-events:none;"><div class="title"></div>'
-                                   +'<a data-id="btn_e" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="edit"></span></a>	'
-                                   +'<a data-id="btn_s" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="share"></span></a>	'
-                                   +'<a data-id="btn_c" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="comment"></span></a> '
-                                   +'</div>');
+                    +'<a data-id="btn_l" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="like"></span></a>'
+                    +'<a data-id="btn_c" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="comment"></span></a>'
+                    +'<a data-id="btn_s" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="share"></span></a> '
+                    +'</div>');
          
             var shadowf =  $('<div class="fill_dock" data-id="page_shadow" style="opacity:0; background:black; z-index:1"></div>');
             var shadowb =  $('<div class="fill_dock" data-id="page_shadow" style="opacity:0; background:black; z-index:1"></div>');
@@ -106,42 +136,49 @@ load: function(container, bookData,params) {
                 frontpage = $('<div class="frontside fill_dock box vertical" style="background-color: white; overflow: hidden; width:50%; position:absolute; -webkit-backface-visibility:hidden;-webkit-transform-style: preserve-3d;"></div>');
                 var foutframe = $('<div class="fill_dock box vertical" style="width:200%; position:absolute;"></div>');
                 var finframe = $('<div class="fill_dock box vertical" style="position:absolute; left:-100%;"></div>');
-                if( i > - 1){
+                if( i > - 1&&i<data.length-1){
                	fpic = $('<div class="pic_box relative f_ev" data-id="pic_box'+(i)+'"  style="background-color: #EEEEEE; overflow: hidden;width: '+window_width+'px; height: '+window_width+'px;"><img  data-id="'+i+'" style="visibility:hidden;opacity:0;transition:opacity 0.25s linear; position: absolute; width: 100%; height: 100%;"></div>');
-                    var fcaption = $('<div class="flex1 box f_ev"  data-id="txt'+(i)+'"  style="visibility:hidden;opacity:0;transition:opacity 0.25s linear; padding: 10px; -webkit-box-align: center;">' + data[i].caption + '</div><div style="line-height: 15px; padding: 0 10px 10px; font-size: 80%; text-align: right;">' + (i+1) + ' of ' + data.length + '</div>');
+                    var fcaption = $('<div class="flex1 box f_ev"  data-id="txt'+(i)+'"  style="visibility:hidden;opacity:0;transition:opacity 0.25s linear; padding: 10px; -webkit-box-align: center;">' + data[i].caption + '</div><div style="line-height: 15px; padding: 0 10px 10px; font-size: 80%; text-align: right;">' + (i+1) + ' of ' + (data.length-1) + '</div>');
                     foutframe.append(shadowf).append(title_bar_right).append(fpic).append(fcaption);
                 }
                 else if(i==-1){
                     
                     foutframe.append(shadowf).append($(cover_page));
                     
+                }         
+                else if(i==data.length-1){
+                	 foutframe.append(shadowf).append($(back_page));
                 }
+            
                 finframe.append(foutframe);
                 frontpage.append(finframe);
                 
-            }else{
-                frontpage = $('<div class="frontside fill_dock box vertical" style="background-color: white; overflow: hidden; width:50%;height:100%; position:absolute; -webkit-backface-visibility:hidden;-webkit-transform-style: preserve-3d;"></div>');
             }
             
             
-            if(i!=data.length - 1){
+            
+
+            
+         
                 //back 2 pages
                 backpage = $('<div class="backside fill_dock box vertical" style="background-color: white; overflow: hidden; width:50%; position:absolute; -webkit-transform:  rotate3d(0, 1, 0, 180deg); -webkit-backface-visibility:hidden;-webkit-transform-style: preserve-3d;"></div>');
                 var outframe = $('<div class="fill_dock box vertical" style="width:200%; position:absolute;"></div>');
                 
-                if( i !=-2){
+                if( i !=-2&&i<data.length-2){
                 	pic = $('<div class="pic_box relative bk_ev"  data-id="pic_box'+(i+1)+'" style=" background-color: #EEEEEE; overflow: hidden; width: '+window_width+'px; height: '+window_width+'px;"><img  data-id="'+(i+1)+'" style="visibility:hidden;opacity:0;transition:opacity 0.25s linear; position: absolute; width: 100%; height: 100%;"></div>');
-                    var caption = $('<div class ="flex1 box bk_ev" data-id="txt'+(i+1)+'" style="visibility:hidden;opacity:0;transition:opacity 0.25s linear; padding: 10px; -webkit-box-align: center;">' + data[i+1].caption + '</div><div style="line-height: 15px; padding: 0 10px 10px; font-size: 80%; text-align: right;">' + (i + 2) + ' of ' + data.length + '</div>');
+                    var caption = $('<div class ="flex1 box bk_ev" data-id="txt'+(i+1)+'" style="visibility:hidden;opacity:0;transition:opacity 0.25s linear; padding: 10px; -webkit-box-align: center;">' + data[i+1].caption + '</div><div style="line-height: 15px; padding: 0 10px 10px; font-size: 80%; text-align: right;">' + (i + 2) + ' of ' + (data.length-1) + '</div>');
                     outframe.append(shadowb).append(title_bar_left).append(pic).append(caption);//.append($(btn_b_str));
-                }else{
+                }
+                else if(i==data.length-2){
+                	outframe.append(shadowb).append($(back_page));
+                }
+                else if( i ==-2){
                     outframe.append(shadowb).append($(cover_page));
                 }
-                
                 backpage.append(outframe);
-            }else{
-                backpage = $('<div class="backside fill_dock box vertical" style="background-color: white; overflow: hidden; width:50%; position:absolute; -webkit-transform: rotate3d(0, 1, 0, 180deg); -webkit-backface-visibility:hidden;-webkit-transform-style: preserve-3d;"></div>');
-            }
-           
+            
+            
+            
             
             if(backpage!='')
                 page.append(backpage);
@@ -174,19 +211,29 @@ load: function(container, bookData,params) {
             btnShare.tap(function(success) {
                          
             	Page.open('Share', true, { bid: params.bid });
+                container.css('display','none');
                          
-                         
-            });
-            var btnSetting = $('[data-id=btn_e]');
-            btnSetting.tap(function() {
-                           Page.open('EditBook', true, { bid: params.bid,frombookpage:true });
-                           container.css('display','none');
             });
         
+        	var btnLike = $('[data-id=btn_l]');
+    		btnLike.tap(function() {
+    			if (!btnLike.hasClass('liked')) {
+    				btnLike.addClass('liked');			
+    				Service.Book.LikeBook(params.bid, Account.userId, true, function(data) {});				
+    			}
+    			else {
+    				btnLike.removeClass('liked');			
+    				Service.Book.LikeBook(params.bid, Account.userId, false, function(data) {});				
+    			}
+    		});
+            
+        
+        var btnSetting = container.find('.edit_book');
+        btnSetting.tap(function() {
+                       Page.open('EditBook', true, { bid: params.bid,frombookpage:true });
+                       container.css('display','none');
+                       });
 
-      
-        
-        
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////     
         var os=Config.OS;
 		
@@ -200,22 +247,22 @@ load: function(container, bookData,params) {
         var state=0;//1:next, -1:back
         var zcount=0;
         var lockpage=false;
-        var duration=400;//ms
-        if(os=='Android')
-        	duration= 400;
-        var locktimer = null;
-        
-        var maxdis		= 20;
-        var maxdis_time = 20;
-        
-        var prev_nav = container.find('.page_nav');
-        
-        prev_nav.unbind('transitionend webkitTransitionEnd');
-        prev_nav.bind('transitionend webkitTransitionEnd', function(){
-                                         clearTimeout(locktimer);
-                                         lockpage=false;
-                                         $('[data-id=page_shadow]').css('-webkit-transition' ,'opacity 0ms ease-in-out');                
-        });
+        var duration=250;//ms
+
+      var maxdis		= 20;
+      var maxdis_time = 10;
+                var locktimer = null;
+//        if(os=='Android')
+//        	duration= 400;
+//        
+//        var prev_nav = container.find('.page_nav');
+//        
+//        prev_nav.unbind('transitionend webkitTransitionEnd');
+//        prev_nav.bind('transitionend webkitTransitionEnd', function(){
+//                                         clearTimeout(locktimer);
+//                                         lockpage=false;
+//                                         $('[data-id=page_shadow]').css('-webkit-transition' ,'opacity 0ms ease-in-out');                
+//        });
         
         //
         var sndpage = false;
@@ -306,27 +353,27 @@ load: function(container, bookData,params) {
                 index--;
             }
         }
-        if(os!='Android'){
-        function shadowchange(angle,front_right_elm,back_left_elm,back_right_elm,front_left_elm){
-			if(angle>=-90&&angle<0){
-				front_right_elm.style.opacity=  (-angle/1000);	
-    			back_left_elm.style.opacity=  '0';	
-    			back_right_elm.style.opacity=  '0';	
-    			front_left_elm.style.opacity= (((90+angle)*5)/1000);		
-        		
-			}else if(angle>-180&&angle<=-90){
-				front_right_elm.style.opacity=  '0';	
-    			back_left_elm.style.opacity=  (((-angle-90)*5)/1000);	
-    			back_right_elm.style.opacity=  ((180+angle)/1000);
-    			front_left_elm.style.opacity=  '0';		            		
-			}else{
-				front_right_elm.style.opacity=  '0';	
-    			back_left_elm.style.opacity=  '0';	
-    			back_right_elm.style.opacity=  '0';
-    			front_left_elm.style.opacity=  '0';		
-			}
-        }
-        }
+//        if(os!='Android'){
+//        function shadowchange(angle,front_right_elm,back_left_elm,back_right_elm,front_left_elm){
+//			if(angle>=-90&&angle<0){
+//				front_right_elm.style.opacity=  (-angle/1000);	
+//    			back_left_elm.style.opacity=  '0';	
+//    			back_right_elm.style.opacity=  '0';	
+//    			front_left_elm.style.opacity= (((90+angle)*5)/1000);		
+//        		
+//			}else if(angle>-180&&angle<=-90){
+//				front_right_elm.style.opacity=  '0';	
+//    			back_left_elm.style.opacity=  (((-angle-90)*5)/1000);	
+//    			back_right_elm.style.opacity=  ((180+angle)/1000);
+//    			front_left_elm.style.opacity=  '0';		            		
+//			}else{
+//				front_right_elm.style.opacity=  '0';	
+//    			back_left_elm.style.opacity=  '0';	
+//    			back_right_elm.style.opacity=  '0';
+//    			front_left_elm.style.opacity=  '0';		
+//			}
+//        }
+//        }
         function dodrag(x){
         	var angle=null;
 //        	page_shadow
@@ -341,23 +388,23 @@ load: function(container, bookData,params) {
 	            
 	            	
 	            if(angle !=ang_tmp){
-	            	if(os!='Android'){
-		            	var prev_nav = null;
-		            			if(index>=0)
-		            			prev_nav = container.find('.page_nav').eq(index+1);
-		                
-		                var next_nav = null;
-		            			if(index<=data.length){
-		            			next_nav = container.find('.page_nav').eq(index-1);
-		            			}
-		            			
-		            	var back_left_elm = prev_nav.find('.backside').find('[data-id=page_shadow]')[0];
-		            	var front_right_elm = page_nav.find('.frontside').find('[data-id=page_shadow]')[0];
-		            	var back_right_elm = page_nav.find('.backside').find('[data-id=page_shadow]')[0];
-		            	var front_left_elm = next_nav.find('.frontside').find('[data-id=page_shadow]')[0];
-		            	
-		            	shadowchange(angle,front_right_elm,back_left_elm,back_right_elm,front_left_elm);
-	                }          	
+//	            	if(os!='Android'){
+//		            	var prev_nav = null;
+//		            			if(index>=0)
+//		            			prev_nav = container.find('.page_nav').eq(index+1);
+//		                
+//		                var next_nav = null;
+//		            			if(index<=data.length){
+//		            			next_nav = container.find('.page_nav').eq(index-1);
+//		            			}
+//		            			
+//		            	var back_left_elm = prev_nav.find('.backside').find('[data-id=page_shadow]')[0];
+//		            	var front_right_elm = page_nav.find('.frontside').find('[data-id=page_shadow]')[0];
+//		            	var back_right_elm = page_nav.find('.backside').find('[data-id=page_shadow]')[0];
+//		            	var front_left_elm = next_nav.find('.frontside').find('[data-id=page_shadow]')[0];
+//		            	
+//		            	shadowchange(angle,front_right_elm,back_left_elm,back_right_elm,front_left_elm);
+//	                }          	
 	            	ang_tmp = angle;
 	            	page_nav[0].style.webkitTransition=  '';
 	                
@@ -412,53 +459,53 @@ load: function(container, bookData,params) {
                                    }, duration+25);
             
         	var page_nav = container.find('.page_nav').eq(index);
-	        if(os!='Android'){
-	        	function shadowchangeflip(){
-	                var timeCounter = 0;
-	                var ang_tmp = 0;
-	                var angle = 0;
-	            	
-	                var prev_nav = null;
-	    			if(index>=0)
-	    				prev_nav = container.find('.page_nav').eq(index+1);
-	        
-	    			var next_nav = null;
-	    			if(index<=data.length){
-	    				next_nav = container.find('.page_nav').eq(index-1);
-	    			}
-	    			
-	                (function updateShadow() {
-	                  setTimeout(function() {
-	                    if (timeCounter++ < duration) {
-	                    	var el = page_nav[0];
-	                    	var st = window.getComputedStyle(el, null);
-	                    	var tr = st.getPropertyValue("-webkit-transform");
-	                    	var matrix = new WebKitCSSMatrix(tr);
-	                    	angle = Math.round(( Math.acos(matrix.a) * (180/Math.PI)))*-1;
-	                    	if(angle !=ang_tmp){
-	                    		ang_tmp = angle;
-	                        			
-	                        	var back_left_elm = prev_nav.find('.backside').find('[data-id=page_shadow]')[0];
-	                        	var front_right_elm = page_nav.find('.frontside').find('[data-id=page_shadow]')[0];
-	                        	var back_right_elm = page_nav.find('.backside').find('[data-id=page_shadow]')[0];
-	                        	var front_left_elm = next_nav.find('.frontside').find('[data-id=page_shadow]')[0];                     	
-	                        	shadowchange(angle,front_right_elm,back_left_elm,back_right_elm,front_left_elm);                    	
-	                        }
-	                    	
-	                    	updateShadow();
-	                    }
-	                  }, 1);
-	                })();
-	        		
-	        	}
-	        }
+//	        if(os!='Android'){
+//	        	function shadowchangeflip(){
+//	                var timeCounter = 0;
+//	                var ang_tmp = 0;
+//	                var angle = 0;
+//	            	
+//	                var prev_nav = null;
+//	    			if(index>=0)
+//	    				prev_nav = container.find('.page_nav').eq(index+1);
+//	        
+//	    			var next_nav = null;
+//	    			if(index<=data.length){
+//	    				next_nav = container.find('.page_nav').eq(index-1);
+//	    			}
+//	    			
+//	                (function updateShadow() {
+//	                  setTimeout(function() {
+//	                    if (timeCounter++ < duration) {
+//	                    	var el = page_nav[0];
+//	                    	var st = window.getComputedStyle(el, null);
+//	                    	var tr = st.getPropertyValue("-webkit-transform");
+//	                    	var matrix = new WebKitCSSMatrix(tr);
+//	                    	angle = Math.round(( Math.acos(matrix.a) * (180/Math.PI)))*-1;
+//	                    	if(angle !=ang_tmp){
+//	                    		ang_tmp = angle;
+//	                        			
+//	                        	var back_left_elm = prev_nav.find('.backside').find('[data-id=page_shadow]')[0];
+//	                        	var front_right_elm = page_nav.find('.frontside').find('[data-id=page_shadow]')[0];
+//	                        	var back_right_elm = page_nav.find('.backside').find('[data-id=page_shadow]')[0];
+//	                        	var front_left_elm = next_nav.find('.frontside').find('[data-id=page_shadow]')[0];                     	
+//	                        	shadowchange(angle,front_right_elm,back_left_elm,back_right_elm,front_left_elm);                    	
+//	                        }
+//	                    	
+//	                    	updateShadow();
+//	                    }
+//	                  }, 1);
+//	                })();
+//	        		
+//	        	}
+//	        }
         	
             function flipnext(){
                 lockpage=true;
                 page_nav[0].style.webkitTransition=  duration+'ms ease-in-out';
                 page_nav[0].style.webkitTransform = "perspective(100em) rotate3d(0, 1, 0, -180deg)";    
-    	        if(os!='Android')
-                shadowchangeflip();
+//    	        if(os!='Android')
+//                shadowchangeflip();
             }
             
             function flipback(){
@@ -466,8 +513,8 @@ load: function(container, bookData,params) {
                 page_nav[0].style.webkitTransition=  duration+'ms ease-in-out';
                 page_nav[0].style.webkitTransform = "perspective(100em) rotate3d(0, 1, 0, -1deg)";
     	       
-                if(os!='Android')
-                shadowchangeflip();
+//                if(os!='Android')
+//                shadowchangeflip();
             }
             
             if(isdrag){
@@ -752,10 +799,10 @@ load: function(container, bookData,params) {
 				 if (count < data.length-1) {	
 					count++;
 						
-					setTimeout(function(){
+//					setTimeout(function(){
 //					if (count != 2)
 						loadpagepic();	
-					},1000);
+//					},1000);
 					
 					if (count == 1) {
 						firstLoad();

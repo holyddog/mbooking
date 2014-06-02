@@ -22,23 +22,24 @@ Page.Settings = {
             localStorage.removeItem('u');
 			Account = {};
 			Page.open('Home');
-                      
+//          Device.PhoneGap.disablePush();
+            Device.PhoneGap.setAliasPushnotification("");
             Device.PhoneGap.logoutFacebook(function(){});
 		});
 		self.setImage(container);
-
-		if (Account.fbObject && Account.fbObject.fbname) {
+        console.log(Account.fbObject);
+        console.log("-------------------------------------------!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		if (Account.fbObject && Account.fbObject.dname) {
 			fblogin_check.className = "ch_logfb checked";
 			fblogin_check.style.background = "green";
 		}
-        
 		var checkbox = container.find('#fblogin_check');
         checkbox.click(function() {                     
         	if ($(this).hasClass('checked')) {
         		MessageBox.confirm({
         			message: 'By disconnect, you will not be able to log in to The Story via Facebook',
 					callback: function(button) {
-	        			if (button == 2) {
+	        		
 	        				Device.PhoneGap.logoutFacebook(function() {
 	        					fblogin_check.className = "ch_logfb";
 	        					fblogin_check.style.background = "";
@@ -49,7 +50,7 @@ Page.Settings = {
 	        						localStorage.setItem('u', JSON.stringify(Account));
 	        					});
 	        				});
-	        			}
+	        		
 	        		}
         		});
 //              navigator.notification.confirm(msg, onConfirm, 'Disconnect Facebook', 'Cancel,Disconnect');

@@ -1,21 +1,25 @@
 Service.User = {
-	SignIn : function(loginName, password, callback) {
-		var url = Service.url + '/signIn.json';
-		var params = {
-			login : loginName,
-			pwd : password
-		};
-		Web.post(url, params, callback);
-	},
-	SignUp : function(fullName, email, userName, password, callback) {
-		var url = Service.url + '/signUp.json';
-		var params = {
-			dname : fullName,
-			email : email,
-			uname : userName,
-			pwd : password
-		};
-		Web.post(url, params, callback);
+	SignIn : function(loginName, password,os,dvtoken, callback) {
+			var url = Service.url + '/signIn.json';
+			var params = {
+				login : loginName,
+				pwd : password,
+	            os : os,
+	            dvtoken : dvtoken
+			};
+			Web.post(url, params, callback);
+		},
+	SignUp : function(fullName, email, userName, password,os,dvtoken, callback) {
+			var url = Service.url + '/signUp.json';
+			var params = {
+				dname : fullName,
+				email : email,
+				uname : userName,
+				pwd : password,
+	            os : os,
+	            dvtoken : dvtoken
+			};
+			Web.post(url, params, callback);
 	},
 	unLinkFB : function(uid, callback) {
 		var url = Service.url + '/unlinkFB.json';
@@ -41,14 +45,16 @@ Service.User = {
 	            
 		Web.post(url, params, callback);
 	},
-	SignInFB : function(fbid, callback) {
+	SignInFB : function(fbid,os,dvtoken, callback) {
 		var url = Service.url + '/signInFB.json';
 		var params = {
-			fbid : fbid
+			fbid : fbid,
+            os : os,
+            dvtoken : dvtoken
 		};
 		Web.post(url, params, callback);
 	},
-	SignUpFB : function(email, fullName, userName, password, fbid, fbpic, fbname, fbemail, callback) {
+	SignUpFB : function(email, fullName, userName, password, fbid, fbpic, fbname, fbemail,os,dvtoken, callback) {
 		var url = Service.url + '/signUpFB.json';
 		var params = {
 			email : email,
@@ -57,7 +63,9 @@ Service.User = {
 			pwd : password,
 			fbid : fbid,
 			fbpic : fbpic,
-			fbname : fbname
+			fbname : fbname,
+            os : os,
+            dvtoken : dvtoken
 		};
 
 		if (fbemail != null && fbemail && fbemail != undefined) {
