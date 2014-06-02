@@ -2,18 +2,15 @@ Config = {
 	DEBUG_MODE: true,
 	DEFAULT_PAGE: 'Home',
 	LIMIT_ITEM: 20,
-	
 	SLIDE_DELAY: 250,
 	FADE_DELAY: 250,
 	INTERVAL_DELAY: 1000, //60000, // 1 minute
-	
-	WEB_BOOK_URL: 'http://' + window.location.hostname + ':8080/book',
-	FILE_URL: 'http://' + window.location.hostname + '/res/book',
+//	FILE_URL: 'http://' + window.location.hostname + '/res/book',
 	FB_APP_ID: '370184839777084',
-	
-//	FILE_URL: 'http://119.59.122.38/book_dev_files',
-
-	
+	WEB_BOOK_URL:'http://119.59.122.38:8080/book',
+	FILE_URL: 'http://119.59.122.38/book_dev_files',
+	OS:'iOS',
+    OS_Int:1, //iOS :1, Android :2
 	FILE_SIZE: {
 		COVER: 1,
 		SMALL: 2,
@@ -22,8 +19,11 @@ Config = {
 };
 
 Service = {
-	url: 'http://' + window.location.hostname + ':8080/book/data'		
-};
+
+	url: 'http://' + '119.59.122.38' + '/book/data'		
+//	url: 'http://localhost:8080/book/data'		
+
+};	
 
 Account = {};
 
@@ -191,7 +191,28 @@ Device = {
 	},
 	PhoneGap: {
 		isReady : false,
-	    
+        isResume : false,
+        isOnScreen : false,
+        onNotification : false,
+        setAliasPushnotification : function(email){
+            PushNotification.setAlias(email, function() {
+                console.log("Set Alias Success: " + email);
+            });
+        },
+        disablePush:function(){
+            PushNotification.disablePush(function() {
+                console.log("disablePush");
+            });
+        }
+        ,
+    enablePush:function(){
+//        alert();
+        console.log(PushNotification);
+        PushNotification.enablePush(function() {
+                console.log("enablePush");
+        });
+    }
+	,
 		_getPhoto : function(opts) { 
 			var options = {
 //				quality : 75,
@@ -504,8 +525,8 @@ Page = {
 		if (Account.picture) {
 			profileCover.find('.pimage img').attr('src', Util.getImage(Account.picture, 3));
 		}
-//		var bookCount = (Account.bookCount)? Account.bookCount: 0;
-		profileCover.find('.stat').html('@' + Account.userName);// + ' &#183; ' + bookCount + ' Books</span>');
+		var bookCount = (Account.bookCount)? Account.bookCount: 0;
+		profileCover.find('.stat').html('@holydog &#183; ' + bookCount + ' Books</span>');
 	},
 	open: function(page, append, params) {
 		var fn = function() {
@@ -726,20 +747,14 @@ Page = {
 					var w = Math.floor((dwidth / ratio) - 15);
 					var h = Math.floor((w * 4) / 3);
 					
-					var container = $('.page:last-child');
-					var bg = container.find('.book_size').css('background-image');
-					var title = container.find('.book_title').text();
-					var desc = container.find('.book_det .desc').text();
-					var count = container.find('.pcount').html();
-					
 					var html = 
 						'<div class="body box horizontal">' +
-						'	<div class="book_size" style="width: ' + w + 'px; height: ' + h + 'px; background-image: ' + bg + ';">' +
-						'		<h2 class="book_title">' + title + '</h2>' +
+						'	<div class="book_size" style="width: ' + w + 'px; height: ' + h + 'px; background-image: url(http://192.168.0.118/res/book/u9/b37/b3877w43_s.jpg);">' +
+						'		<h2 class="book_title">yuoik</h2>' +
 						'	</div>' +
 						'	<div class="book_det flex1 box vertical">' +
-						'		<div class="flex1 desc">' + desc + '</div>' +
-						'		<div class="pcount">' + count + '</div>' +
+						'		<div class="flex1 desc">Placeat malesuada euismod eligendi tempora taciti posuere suspendisse molestie sit</div>' +
+						'		<div class="pcount"><span>1</span> PAGES</div>' +
 						'	</div>' +
 						'</div>';
 					
@@ -776,25 +791,15 @@ Page = {
 					dPanel.append(header);
 					dPanel.append(html);
 					dPanel.append(bbar);
-
-					var btnCheck = dPanel.find('[data-id=btn_c]'); 
+					
 					$(btnOk).click(function() {
-						Page._callbackDialog('ok', btnCheck.hasClass('check'));
+						Page._callbackDialog('ok');
 					});
 					$(btnCancel).click(function() {
 						Page._callbackDialog('cancel');
 					});
 					
-					if (Account.fbObject && Account.fbObject.fbname) {
-						var fb = Account.fbObject;
-						if (fb.off) {
-							btnCheck.removeClass('check');
-						}
-						else {
-							btnCheck.addClass('check');
-						}
-					}
-					
+					var btnCheck = dPanel.find('[data-id=btn_c]'); 
 					btnCheck.tap(function() {
 						if (!btnCheck.hasClass('check')) {
 							var fbConnect = function(callback) {
@@ -945,7 +950,7 @@ Page = {
 			Page.bodyInterval = undefined;
 		}
 		if (content) {
-			content.find('canvas').remove();
+			content.children('canvas').remove();
 		}
 	},
 	
@@ -1260,4 +1265,136 @@ document.addEventListener("deviceready", function() {
          nativeInterface: CDV.FB,
          useCachedDialogs: false
      });
+	 
+	 
+//   PushNotification = cordova.require('PushNotification.js');
+     var onRegistration = function(event)  {
+        if (!event.error) {
+                          console.log("Reg Success: " + event.pushID);
+                          localStorage.setItem("dvk", event.pushID);
+                          return event.pushID;
+                          }
+        else {
+                          console.log(event.error);
+                          return null;
+        }
+    };                         
+   // Incoming message callback
+   var handleIncomingPush = function(event) {
+                        alert();
+                          
+     if(event.message) {
+        Device.PhoneGap.onNotification = true;
+        var page = (document.URL).split('#')[1];
+              // กรณี topage==page แก้ case by case ติดไว้ก่อน
+        var topage = null;
+        if(event.extras){
+           if(event.extras.page)
+            topage = event.extras.page;
+        }
+                          
+       if(page!='Home'&&page!='SignIn'&&page!='SignUp'&&(topage)){
+          function changePage(){
+              var params = {};
+              if(topage=="Notifications"){
+                 $('.notf_count').removeClass('show');
+              }
+              else if(topage=="Book"){
+                if(event.extras.bid){
+                    params = { bid: event.extras.bid, uid: Account.userId };
+                }
+                else{
+                    return;
+                }
+              }
+              else if(topage=="Profile"){
+                    if(event.extras.followid){
+                          params = { uid:event.extras.followid,back: true };
+                    }
+                    else{
+                          return;
+                    }
+              }
+              Page.open(topage, true,params);
+          }
+                        
+         
+                    
+          if(Device.PhoneGap.isOnScreen)
+          {
+                          MessageBox.confirm({
+                                message: 'Do you want to read new message',
+                                callback: function(button) {
+                                    
+                                changePage();
+                                            
+                                },
+                                title:'New Message',
+                                confirm_lb:'View'
+                          });
+          }
+          else {
+                          alert(Device.PhoneGap.isResume);
+              if(Device.PhoneGap.isResume){
+                
+                  changePage();
+                          
+              }else{
+                          Page.Profile.callPushNote =changePage;
+                          
+              }
+                          
+          }
+       }
+       Device.PhoneGap.onNotification = false;
+     }
+     else {
+        console.log("No incoming message");
+     }
+   };
+    
+   setTimeout(function() {
+        Device.PhoneGap.isOnScreen = true;
+   },800);
+                          
+   document.addEventListener("urbanairship.registration", onRegistration, false);
+   document.addEventListener("urbanairship.push", handleIncomingPush, false);
+
+   
+   document.addEventListener("resume", function() {
+                  
+        document.addEventListener("urbanairship.registration", onRegistration, false);
+        document.addEventListener("urbanairship.push", handleIncomingPush, false);
+      
+        setTimeout(function() {
+        Device.PhoneGap.isOnScreen = true;
+        },500);
+                             
+        Device.PhoneGap.isResume = true;
+        
+ 
+                             
+        Device.PhoneGap.isReady = true;
+        PushNotification.getIncoming(handleIncomingPush);
+        PushNotification.resetBadge();
+        
+        
+   }, false);
+
+   document.addEventListener("pause", function() {
+        Device.PhoneGap.isOnScreen = false;
+        document.removeEventListener("urbanairship.registration",onRegistration, false);
+        document.removeEventListener("urbanairship.push", handleIncomingPush, false);
+         PushNotification.getIncoming(handleIncomingPush);
+   }, false);
+   
+   PushNotification.registerForNotificationTypes(PushNotification.notificationType.badge |
+                                                 PushNotification.notificationType.sound |
+                                                 PushNotification.notificationType.alert);
+   
+   PushNotification.getIncoming(handleIncomingPush);
+
+	 
+	 
+	 
 }, false);

@@ -32,8 +32,11 @@ Page.SignUp = {
 			
 			function afterSignup(data) {
 				Page.btnHideLoading(btnAccept[0]);
-
-				Account = {
+				
+				if(Device.PhoneGap.isReady)
+                Device.PhoneGap.setAliasPushnotification(data.email);
+				
+                Account = {
 					userId : data.uid,
 					email : data.email,
 					displayName : data.dname,
@@ -52,14 +55,18 @@ Page.SignUp = {
 
 				localStorage.setItem("u", JSON.stringify(Account));
 				Page.open('Profile');
-			}
+			}    
+			
+			var dvtoken = '';
+                if(localStorage.getItem("dvk"))
+                dvtoken = localStorage.getItem("dvk");
 
 			if (!fbid) {
-				Service.User.SignUp(dname, email, uname, pwd, function(data) {
+				Service.User.SignUp(dname, email, uname, pwd,Config.OS_Int,dvtoken, function(data) {
 					afterSignup(data);
 				});
 			} else {
-				Service.User.SignUpFB(email, dname, uname, pwd, fbid, fbpic, fbname, fbemail, function(data) {
+				Service.User.SignUpFB(email, dname, uname, pwd, fbid, fbpic, fbname, fbemail,Config.OS_Int,dvtoken, function(data) {
 					afterSignup(data);
 				});
 			}

@@ -5,7 +5,11 @@ Page.Share = {
 		
 		// set toolbar buttons
 		container.find('[data-id=btn_b]').tap(function() {
-			Page.back();
+			Page.back(function(c, page) {
+			    if(page.reverseIndex){
+					page.reverseIndex(c);
+				}
+			});
 		});
 		
 		var btnCheck = container.find('[data-id=btn_c]'); 

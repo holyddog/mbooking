@@ -1,5 +1,6 @@
 Page.Profile = {	
 	url: 'pages/html/profile.html',
+    callPushNote:{},
 	init: function(params, container, append) {
 		var self = this;
 		
@@ -44,10 +45,14 @@ Page.Profile = {
 					btnFollow.html('+ FOLLOW').removeClass('follow');
 				});					
 			}
-			else {
+			else {btnFollow.html('');
+//                Page.bodyShowLoading(btnFollow);
+                      btnFollow.css('pointer-events','none');
 				Service.Book.FollowAuthor(uid, Account.userId, function() {
 					btnFollow.html('FOLLOWING').addClass('follow');
-				});					
+                                          btnFollow.css('pointer-events','');
+//                    Page.bodyHideLoading(btnFollow);
+				});
 			}
 		});
 
@@ -257,6 +262,11 @@ Page.Profile = {
 			}
 
 			profile_header.style.height = profile_header.offsetWidth + 'px';
+//                                alert(JSON.stringify(Device.PhoneGap.changePage));
+//                                if(Device.PhoneGap.changePage){
+//                                Device.PhoneGap.changePage();
+//                                Device.PhoneGap.changePage={};
+//                                }
 		});
 	},
 	

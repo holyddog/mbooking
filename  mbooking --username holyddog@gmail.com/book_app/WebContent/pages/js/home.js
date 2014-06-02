@@ -13,7 +13,13 @@ Page.Home = {
 		// set content links
 		container.find('[data-id=link_f]').tap(function() {
 			var fn = function(user) {
-				Service.User.SignInFB(user.fbid, function(data) {	
+				
+
+                var dvtoken = '';
+                if(localStorage.getItem("dvk"))
+                dvtoken = localStorage.getItem("dvk");
+
+				Service.User.SignInFB(user.fbid,Config.OS_Int,dvtoken, function(data) {	
 					if (data.error) {
 						var params = {
 							fbid : user.fbid,
@@ -23,7 +29,11 @@ Page.Home = {
 						};	
 						Page.open('SignUp', true, params);
 			
-					} else {			
+					} else {		
+						
+						if(Device.PhoneGap.isReady)
+							Device.PhoneGap.setAliasPushnotification(data.email);
+						
 						Account = {
 								userId: data.uid,
 								email: data.email,
@@ -40,8 +50,8 @@ Page.Home = {
 //								bookCount: data.pbcount
 								
 	                            fbObject: data.fbobj
-							};                                    
-
+							};
+                                      
 							if (data.fbobj && data.fbobj.email) {
 								Account.fbObject.fbemail = data.fbobj.email;
 							}
