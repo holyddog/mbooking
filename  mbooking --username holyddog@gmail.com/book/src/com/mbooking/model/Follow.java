@@ -13,6 +13,8 @@ public class Follow {
 //	User auth; // Author
 //	User foll; // Follower
 	Long fdate;
+	
+	User user;
 
 	public ObjectId getFid() {
 		return fid;
@@ -44,5 +46,13 @@ public class Follow {
 
 	public void setFdate(Long fdate) {
 		this.fdate = fdate;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}	
 }
