@@ -1,11 +1,14 @@
 Page.Home = {
 	url: 'pages/html/home.html',
-	
-	init: function(params, container) {		
+	init: function(params, container) {
+        
 		// check authen
 		if (localStorage.getItem('u')) {
 			Account = JSON.parse(localStorage.getItem('u'));
 			Page.open('Profile');
+                       
+			if(Device.PhoneGap.isReady)
+                    	Device.PhoneGap.setAliasPushnotification(Account.email);
 			
 			return;
 		}
@@ -13,13 +16,7 @@ Page.Home = {
 		// set content links
 		container.find('[data-id=link_f]').tap(function() {
 			var fn = function(user) {
-				
-
-                var dvtoken = '';
-                if(localStorage.getItem("dvk"))
-                dvtoken = localStorage.getItem("dvk");
-
-				Service.User.SignInFB(user.fbid,Config.OS_Int,dvtoken, function(data) {	
+				Service.User.SignInFB(user.fbid, function(data) {	
 					if (data.error) {
 						var params = {
 							fbid : user.fbid,
@@ -29,33 +26,30 @@ Page.Home = {
 						};	
 						Page.open('SignUp', true, params);
 			
-					} else {		
-						
-						if(Device.PhoneGap.isReady)
-							Device.PhoneGap.setAliasPushnotification(data.email);
-						
+					} else {
+		 			     if(Device.PhoneGap.isReady)
+                    				Device.PhoneGap.setAliasPushnotification(data.email);
 						Account = {
-								userId: data.uid,
-								email: data.email,
-								displayName: data.dname,
-								userName: data.uname,
-								picture: data.pic,							
-								cover: data.cover,
-								bookCount: data.pbcount,
-								draftCount: data.drcount,
-								
-								draftBooks: data.books,
-								
-//								followerCount: data.fcount,
-//								bookCount: data.pbcount
-								
-	                            fbObject: data.fbobj
-							};
-                                      
-							if (data.fbobj && data.fbobj.email) {
-								Account.fbObject.fbemail = data.fbobj.email;
+							userId : data.uid,
+							email : data.email,
+							displayName : data.dname,
+							userName : data.uname,
+							lastEditBook : data.leb,
+							cover : data.cover,
+							picture : data.pic,
+							followerCount : data.fcount,
+							bookCount : data.pbcount,
+							fbObject : {
+								fbpic : data.fbobj.pic,
+								fbname : data.fbobj.dname,
+								token: data.fbobj.token
 							}
-							localStorage.setItem("u", JSON.stringify(Account));	
+						};
+			
+						if (data.fbobj.email) {
+							Account.fbObject.fbemail = data.fbobj.email;
+						}			
+						localStorage.setItem("u", JSON.stringify(Account));
 						
 						Page.loadMenu();
 						Page.open('Profile');

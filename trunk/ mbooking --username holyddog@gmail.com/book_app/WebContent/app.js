@@ -1,3 +1,4 @@
+PushNotification={};
 Config = {
 	DEBUG_MODE: true,
 	DEFAULT_PAGE: 'Home',
@@ -7,7 +8,7 @@ Config = {
 	INTERVAL_DELAY: 1000, //60000, // 1 minute
 //	FILE_URL: 'http://' + window.location.hostname + '/res/book',
 	FB_APP_ID: '370184839777084',
-	WEB_BOOK_URL:'http://119.59.122.38:8080/book',
+	WEB_BOOK_URL:'http://119.59.122.38/book/index.html',
 	FILE_URL: 'http://119.59.122.38/book_dev_files',
 	OS:'iOS',
     OS_Int:1, //iOS :1, Android :2
@@ -19,13 +20,15 @@ Config = {
 };
 
 Service = {
-
-	url: 'http://' + '119.59.122.38' + '/book/data'		
-//	url: 'http://localhost:8080/book/data'		
+	url: 'http://' + '192.168.0.201:8080' + '/book/data'		
+//	url: 'http://' + '119.59.122.38' + '/book/data'		
+//	url: 'http://localhost:8080/book/data'
 
 };	
 
 Account = {};
+
+income_push = false;
 
 Util = {
 	getRandomInt: function(min, max) {
@@ -77,11 +80,24 @@ Util = {
 MessageBox = {
 	confirm: function(config) {
 		if (Device.PhoneGap.isReady) {
-			navigator.notification.confirm(config.message, function(index) {
-				if (index == 1 && typeof config.callback == 'function') {
-					config.callback();
-				}
-			}, config.title);
+            
+            if(config.confirm_lb){
+                navigator.notification.confirm(config.message,
+                                               function(index) {
+                                                if (index == 2 && typeof config.callback == 'function') {
+                                                config.callback();
+                                                }
+                                               },
+                                               config.title,
+                                               'Cancel,'+config.confirm_lb);
+            }
+			else{
+                navigator.notification.confirm(config.message, function(index) {
+                                               if (index == 1 && typeof config.callback == 'function') {
+                                               config.callback();
+                                               }
+                                               }, config.title);
+            }
 		}
 		else {
 			var res = confirm(config.message);
@@ -150,12 +166,8 @@ $(document).ready(function() {
 	});
 	
 	var dialog = $('#dialog');
-	dialog.bind('click', function(e) {
-		if ($(e.target).closest('.d_panel').length > 0) {
-		}
-		else {
-			history.back();			
-		}
+	dialog.bind('click', function() {
+		history.back();
 	});
 	dialog.bind('touchmove', function(e) {
 		if ($(e.target).closest('.d_panel').length == 0) {
@@ -165,7 +177,7 @@ $(document).ready(function() {
 	dialog.find('.d_panel').empty();
 });
 
-Container = {	
+Container = {
 	getBody: function() {
 		return $('#wrapper');
 	},
@@ -212,8 +224,8 @@ Device = {
                 console.log("enablePush");
         });
     }
-	,
-		_getPhoto : function(opts) { 
+        ,
+		_getPhoto : function(opts) {
 			var options = {
 //				quality : 75,
 //				targetWidth : 100,
@@ -247,9 +259,9 @@ Device = {
 	        
 			this._getPhoto(opts);
 		},
-	    loginFacebook: function(callback){
+    loginFacebook: function(callback){
 	    	if (!Device.PhoneGap.isReady) return;
-
+            
 	    	FB.login(function(response) {
 				if (response.authResponse) {
 					var access_token = FB.getAuthResponse()['accessToken'];
@@ -269,7 +281,9 @@ Device = {
 					console.log('login response:' + response.error);
 				}
 	        },
-	        { scope: "email,publish_actions" }
+	        { scope: "email,publish_actions"
+                     
+            }
 	        );
 	    
 	    },
@@ -526,7 +540,7 @@ Page = {
 			profileCover.find('.pimage img').attr('src', Util.getImage(Account.picture, 3));
 		}
 		var bookCount = (Account.bookCount)? Account.bookCount: 0;
-		profileCover.find('.stat').html('@holydog &#183; ' + bookCount + ' Books</span>');
+		profileCover.find('.stat').text(bookCount + ' Books');
 	},
 	open: function(page, append, params) {
 		var fn = function() {
@@ -546,6 +560,7 @@ Page = {
 		else {
 			fn();
 		}
+        
 	},
 	load: function(page, params) {
 		var currentPage = Page[page];
@@ -558,7 +573,7 @@ Page = {
 
 			Container.changePage(container);			
 			currentPage.init(params, container);
-			
+                 
 //			var p = Page._stackPages.pop();
 //			
 //			var pageUrl = page;
@@ -734,135 +749,44 @@ Page = {
 					});
 					break;
 				}
-				case 4: {					
+				case 4: {
 					var dPanel = dialog.find('.d_panel');
 					dPanel.width(window.innerWidth - 30);
 					dPanel.css('max-height', window.innerHeight - 30);
 					
-					var dwidth = (dPanel.width() * 4) / 5;
-					var ratio = 2;
-					if (dwidth >= 600) {
-						ratio = 3;
-					}
-					var w = Math.floor((dwidth / ratio) - 15);
-					var h = Math.floor((w * 4) / 3);
+					ul.className = 'list_book';
 					
-					var html = 
-						'<div class="body box horizontal">' +
-						'	<div class="book_size" style="width: ' + w + 'px; height: ' + h + 'px; background-image: url(http://192.168.0.118/res/book/u9/b37/b3877w43_s.jpg);">' +
-						'		<h2 class="book_title">yuoik</h2>' +
-						'	</div>' +
-						'	<div class="book_det flex1 box vertical">' +
-						'		<div class="flex1 desc">Placeat malesuada euismod eligendi tempora taciti posuere suspendisse molestie sit</div>' +
-						'		<div class="pcount"><span>1</span> PAGES</div>' +
-						'	</div>' +
-						'</div>';
-					
-						html +=
-						'<div class="input_layout">' +
-						'	<div class="box horizontal">' +
-						'		<div class="flex1 box check_label">Share with Facebook</div>' +
-						'		<a data-id="btn_c" class="btn_check">' +
-						'			<span class="check_icon"></span>' +
-						'		</a>' +
-						'	</div>' +
-						'</div>';
-					
-					var header = document.createElement('div');
-					header.className = 'header';
-					header.innerText = 'Confirm';
-					
-					var getButton = function(text) {
-						var div = document.createElement('div');
-						div.className = 'flex1 flex_lock';
-						div.innerText = text;
-						return div;
-					};
-					var bbar = document.createElement('div');
-					bbar.className = 'bbar box horizontal';
-					var sep = document.createElement('div');
-					sep.className = 'sep';
-					var btnOk = getButton('OK');
-					var btnCancel = getButton('Cancel');
-					bbar.appendChild(btnOk);
-					bbar.appendChild(sep);
-					bbar.appendChild(btnCancel);
-					
-					dPanel.append(header);
-					dPanel.append(html);
-					dPanel.append(bbar);
-					
-					$(btnOk).click(function() {
-						Page._callbackDialog('ok');
-					});
-					$(btnCancel).click(function() {
-						Page._callbackDialog('cancel');
-					});
-					
-					var btnCheck = dPanel.find('[data-id=btn_c]'); 
-					btnCheck.tap(function() {
-						if (!btnCheck.hasClass('check')) {
-							var fbConnect = function(callback) {
-								if (!Device.PhoneGap.isReady) {
-									callback();
-									return;
-								}
-								
-								Device.PhoneGap.loginFacebook(function(user) {
-									var fn = function(data) {
-										var fbobj = {
-											fbpic: user.fbpic,
-											fbname: user.fbname,
-											token: user.access_token
-										};
+					var items = Account.draftBooks;
+					for (var i = 0; i < items.length; i++) {
+						var it = items[i];
+												
+						var dimage = document.createElement('div');
+						dimage.className = 'pic';
 
-										if (!user.fbemail) {
-											fbobj.fbemail = user.fbemail;
-										}
-
-										Account.fbObject = fbobj;
-										localStorage.setItem('u', JSON.stringify(Account));
-										
-										callback();
-									};
-									Service.User.linkFB(Account.userId, user.fbid, user.fbpic, user.fbname, user.fbemail, user.access_token, fn);
-								});
-							};
-							
-							var allow = function() {
-								btnCheck.addClass('check');
-								
-								Account.fbObject.off = false;
-								localStorage.setItem('u', JSON.stringify(Account));
-							};
-							
-							if (Account.fbObject && Account.fbObject.token) {
-								allow();
-							}
-							else {
-								if (Device.PhoneGap.isReady) {
-									Page.showLoading('Connecting...');
-									fbConnect(function() {
-										Page.hideLoading();
-										
-										allow();
-									});											
-								}		
-								else {
-									allow();
-								}
-							}
-						}		
-						else {
-							Account.fbObject.off = true;
-							localStorage.setItem('u', JSON.stringify(Account));
-							btnCheck.removeClass('check');
+						if (it.pic) {
+							var img = document.createElement('img');
+							img.src = Util.getImage(it.pic, 2);
+							dimage.appendChild(img);
 						}
-					});
+						
+						var label = document.createElement('div');
+						label.className = 'label flex1';
+						label.innerText = it.title;
+						
+						var li = document.createElement('li');
+						li.className = 'box horizontal';
+						li.dataset.bid = it.bid;
+						
+						li.appendChild(dimage);
+						li.appendChild(label);
+						
+						ul.appendChild(li);
+					}
+					dPanel.append(ul);
 					
-//					dialog.find('li').click(function() {	
-//						Page._callbackDialog($(this).data('bid'));
-//					});
+					dialog.find('li').click(function() {	
+						Page._callbackDialog($(this).data('bid'));
+					});
 					break;
 				}
 			}
@@ -1252,25 +1176,26 @@ $(function(){
 	$(window).hashchange(function() {
 		pageLoad();
 	});
-	$(window).hashchange();  
+    $(window).hashchange();
 });
 
 document.addEventListener("deviceready", function() {
+                          FB.init({
+                                  appId: Config.FB_APP_ID,
+                                  nativeInterface: CDV.FB,
+                                  useCachedDialogs: false
+                                  });
+    
 	Device.PhoneGap.isReady = true;
 	Device.PhoneGap.PictureSourceType = navigator.camera.PictureSourceType;
 	Device.PhoneGap.DestinationType = navigator.camera.DestinationType;
-	
-	 FB.init({
-         appId: Config.FB_APP_ID,
-         nativeInterface: CDV.FB,
-         useCachedDialogs: false
-     });
-	 
-	 
-//   PushNotification = cordova.require('PushNotification.js');
+//    PushNotification= cordova.require('cordova/PushNotification');
+            
+//                          alert();
      var onRegistration = function(event)  {
         if (!event.error) {
                           console.log("Reg Success: " + event.pushID);
+                          if(event.pushID&&event.pushID!='')
                           localStorage.setItem("dvk", event.pushID);
                           return event.pushID;
                           }
@@ -1281,7 +1206,6 @@ document.addEventListener("deviceready", function() {
     };                         
    // Incoming message callback
    var handleIncomingPush = function(event) {
-                        alert();
                           
      if(event.message) {
         Device.PhoneGap.onNotification = true;
@@ -1334,7 +1258,7 @@ document.addEventListener("deviceready", function() {
                           });
           }
           else {
-                          alert(Device.PhoneGap.isResume);
+                       
               if(Device.PhoneGap.isResume){
                 
                   changePage();
@@ -1394,7 +1318,10 @@ document.addEventListener("deviceready", function() {
    
    PushNotification.getIncoming(handleIncomingPush);
 
-	 
-	 
-	 
+
+                          
+                          
+                          
 }, false);
+
+
