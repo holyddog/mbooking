@@ -23,17 +23,17 @@ Page.SignIn = {
 		btnAccept.tap(function() {
 			if (!btnAccept.hasClass('disabled')) {
 				Page.btnShowLoading(btnAccept[0]);
-				
+                      
                 var dvtoken = '';
+                
                 if(localStorage.getItem("dvk"))
-                dvtoken = localStorage.getItem("dvk");
-				
-				Service.User.SignIn(inputText.val(), inputPwd.val(),Config.OS_Int,dvtoken, function(data) {
-					
-					if(Device.PhoneGap.isReady)
-					Device.PhoneGap.setAliasPushnotification(data.email);
-					
-					Page.btnHideLoading(btnAccept[0]);
+                localStorage.getItem("dvk");
+                
+                Service.User.SignIn(inputText.val(), inputPwd.val(),Config.OS_Int,dvtoken, function(data) {
+                    
+                    Device.PhoneGap.setAliasPushnotification(data.email);
+//                                    Device.PhoneGap.enablePush();
+                    Page.btnHideLoading(btnAccept[0]);
 					
                                     
 					if (data.error) {
