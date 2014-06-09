@@ -4,12 +4,24 @@
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:t="http://myfaces.apache.org/tomahawk"
-    xmlns:f="http://java.sun.com/jsf/core">     
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:fb="http://ogp.me/ns/fb#">     
 <head>
-	<title>#{initParam['appName']}</title>
+	<title>#{bookView.book.title} - #{initParam['appName']}</title>
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	
+	<meta name="description" content="#{bookView.book.desc}" />
+    <meta name="author" content="InStory" />
+    
+    <!-- opengraph -->
+    <meta property="og:site_name" content="InStory" />
+    <meta property="og:url" content="#{initParam['root']}/?bid=#{bookView.book.bid}" />
+    <meta property="og:title" content="#{bookView.book.title}" />
+    <meta property="fb:app_id" content="370184839777084" />
+    <meta property="og:image" content="#{initParam['file']}#{bookView.coverPic}" />
+    <meta property="og:description" content="created using InStory app | Download for Free!" />
 	
 	<script type="text/javascript">
 		var Context = {
