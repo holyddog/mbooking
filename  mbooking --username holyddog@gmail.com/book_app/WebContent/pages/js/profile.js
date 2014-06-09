@@ -14,6 +14,13 @@ Page.Profile = {
 		}
 		container.find('[data-id=btn_f]').hide();
 		
+		container.find('[data-link=followers]').click(function() {
+			Page.open('Follows', true, { uid: uid, follower: true });
+		});
+		container.find('[data-link=following]').click(function() {
+			Page.open('Follows', true, { uid: uid, follower: false });			
+		});
+		
 		// set toolbar buttons
 		var btnMenu = container.find('[data-id=btn_m]');
 		btnMenu.tap(function() {
@@ -130,7 +137,7 @@ Page.Profile = {
 		
 		for (var i = 0; i < pubBooks.length; i++) {
 			var b = pubBooks[i];
-			ptab1.append(self.getBook(b.bid, b.title, b.pic, b.pcount));
+			ptab1.append(self.getBook(b.bid, b.title, b.pic, b.pcount, undefined, b.lcount, b.ccount));
 		}
 		ptab1.find('.book_size').click(function() {
 			self.openBook($(this), uid);

@@ -80,11 +80,11 @@ Service.Book = {
 				null, null, callback);
 	},
 
-	DeleteBook : function(bookID, userID, callback) {
+	DeleteBook : function(bookId, userId, callback) {
 		var url = Service.url + '/deleteBook.json';
 		var params = {
-			bid : bookID,
-			uid : userID
+			bid : bookId,
+			uid : userId
 		};
 		Web.post(url, params, callback);
 	},

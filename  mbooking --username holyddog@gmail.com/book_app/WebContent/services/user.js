@@ -145,6 +145,21 @@ Service.User = {
 			uid: uid
 		};
 		Web.get(url, params, callback);
+	},
+	
+	FindFollowing: function(uid, callback) {
+		var url = Service.url + '/getFollowing.json';
+		var params = {
+			uid: uid
+		};
+		Web.get(url, params, callback);
+	},
+	
+	FindFollowers: function(uid, callback) {
+		var url = Service.url + '/getFollowers.json';
+		var params = {
+			uid: uid
+		};
+		Web.get(url, params, callback);
 	}
-
 };

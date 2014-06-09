@@ -388,6 +388,40 @@
 	-webkit-mask-size: 16px;
 	-webkit-mask-image: url(../icons/pencil.png);
 }
+#page_Book .bottom_info .pcount {
+	color: #fff;
+	font-size: 100%;
+	text-align: center;
+	z-index: 1;
+	width: 50px;
+	height: 50px;
+	background-color: rgba(0, 0, 0, .3);
+	line-height: 50px;
+	border-radius: 25px;
+	font-family: 'Roboto';
+}
+#page_Book .clabel {
+}
+#page_Book .clabel .icon {
+	width: 40px;
+	height: 50px;
+	background-color: #fff;
+	float: left;
+	-webkit-mask-size: 16px;
+}
+#page_Book .clabel .icon.like {	
+	-webkit-mask-image: url(../icons/like.png);
+}
+#page_Book .clabel .icon.comment {	
+	-webkit-mask-image: url(../icons/comment.png);
+}
+#page_Book .clabel .text {
+	width: 20px;
+	height: 50px;
+	line-height: 50px;
+	color: #fff;
+	float: left;
+}
 #page_Book .grad_overlay {
 	z-index: -2;
 	background-color: #000;
@@ -893,39 +927,6 @@
 	top: 0;
 	-webkit-mask-size: 16px;
 	-webkit-mask-image: url(../icons/cancel.png);
-}
-#page_Search .user_item {
-	line-height: 0;
-	padding: 10px;
-	background-size: 100% auto;
-	background-position: center center;
-	height: 50px;
-	-webkit-box-shadow: 0px 0px 2px #aaa;
-	background-color: #fff;
-}
-#page_Search .user_item .pimage {
-	background-color: #ddd;
-	border-radius: 25px;
-}
-#page_Search .user_item .pimage img {
-	width: 50px;
-	height: 50px;
-	border-radius: 25px;
-}
-#page_Search .user_item .info {
-	padding-left: 10px;
-}
-#page_Search .user_item .info h1 {
-	line-height: 30px;
-	font-size: 90%;
-}
-#page_Search .user_item .info .stat span {
-	float: right;
-}
-#page_Search .user_item .info .stat {
-	line-height: 20px;
-	font-size: 70%;
-	color: #999;
 }
 #page_Search .tag_item {
 	line-height: 0;

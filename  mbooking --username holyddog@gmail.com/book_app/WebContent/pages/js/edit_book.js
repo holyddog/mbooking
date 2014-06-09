@@ -42,6 +42,34 @@ Page.EditBook = {
 			}
 		};
 		
+		var btnDel = container.find('[data-id=btn_d]');
+		btnDel.tap(function() {
+			MessageBox.confirm({ 
+				title: 'Confirm', 
+				message: 'Are you sure you want to delete this book?', 
+				callback: function() {
+					Service.Book.DeleteBook(self.bid, Account.userId, function() {
+						var books = Account.draftBooks;
+						for (var i = 0; i < books.length; i++) {
+							if (books[i].bid == bid) {
+								Account.draftBooks.splice(i, 1);
+								Account.draftCount = Account.draftBooks.length; 
+								localStorage.setItem('u', JSON.stringify(Account));
+								break;
+							}
+						}
+						Page.updateShortcutBar();
+						
+						Page.back(function(c) {
+							if (c.data('page') == 'Book') {
+								Page.back();
+							}
+						});
+					});								
+				} 
+			});
+		});
+		
 		var publishBook = function(showLoad) {
 			if (showLoad) {
 				Page.showLoading('Publishing...');
@@ -325,6 +353,8 @@ Page.EditBook = {
 					}, 100);					
 				}
 				else if (text == 'cover') {
+					history.back();
+					
 					var it = $(item);
 					var pic = it.data('pic');
 					container.find('.pp .cover').remove();
@@ -346,6 +376,8 @@ Page.EditBook = {
 					});
 				}
 				else if (text == 'move') {
+					history.back();
+					
 					var all = container.find('.pp').addClass('active');
 					var it = $(item).addClass('selected');
 					self.move = true;

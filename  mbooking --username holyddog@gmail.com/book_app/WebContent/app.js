@@ -6,12 +6,15 @@ Config = {
 	SLIDE_DELAY: 250,
 	FADE_DELAY: 250,
 	INTERVAL_DELAY: 1000, //60000, // 1 minute
-//	FILE_URL: 'http://' + window.location.hostname + '/res/book',
+
 	FB_APP_ID: '370184839777084',
+	
 	WEB_BOOK_URL:'http://119.59.122.38/book/index.html',
-	FILE_URL: 'http://119.59.122.38/book_dev_files',
-	OS:'iOS',
-    OS_Int:1, //iOS :1, Android :2
+	FILE_URL: 'http://' + window.location.hostname + '/res/book',
+	
+	OS: 'iOS',
+    OS_Int: 1, //iOS :1, Android :2
+    
 	FILE_SIZE: {
 		COVER: 1,
 		SMALL: 2,
@@ -19,11 +22,8 @@ Config = {
 	}
 };
 
-Service = {
-	url: 'http://' + '192.168.0.201:8080' + '/book/data'		
-//	url: 'http://' + '119.59.122.38' + '/book/data'		
-//	url: 'http://localhost:8080/book/data'
-
+Service = {		
+	url: 'http://localhost:8080/book/data'
 };	
 
 Account = {};
@@ -754,39 +754,146 @@ Page = {
 					dPanel.width(window.innerWidth - 30);
 					dPanel.css('max-height', window.innerHeight - 30);
 					
-					ul.className = 'list_book';
-					
-					var items = Account.draftBooks;
-					for (var i = 0; i < items.length; i++) {
-						var it = items[i];
-												
-						var dimage = document.createElement('div');
-						dimage.className = 'pic';
-
-						if (it.pic) {
-							var img = document.createElement('img');
-							img.src = Util.getImage(it.pic, 2);
-							dimage.appendChild(img);
-						}
-						
-						var label = document.createElement('div');
-						label.className = 'label flex1';
-						label.innerText = it.title;
-						
-						var li = document.createElement('li');
-						li.className = 'box horizontal';
-						li.dataset.bid = it.bid;
-						
-						li.appendChild(dimage);
-						li.appendChild(label);
-						
-						ul.appendChild(li);
+					var dwidth = (dPanel.width() * 4) / 5;
+					var ratio = 2;
+					if (dwidth >= 600) {
+						ratio = 3;
 					}
-					dPanel.append(ul);
+					var w = Math.floor((dwidth / ratio) - 15);
+					var h = Math.floor((w * 4) / 3);
 					
-					dialog.find('li').click(function() {	
-						Page._callbackDialog($(this).data('bid'));
+					var container = $('.page:last-child');
+					var bg = container.find('.book_size').css('background-image');
+					var title = container.find('.book_title').text();
+					var desc = container.find('.book_det .desc').text();
+					var count = container.find('.pcount').html();
+					
+					var html = 
+						'<div class="body box horizontal">' +
+						'	<div class="book_size" style="width: ' + w + 'px; height: ' + h + 'px; background-image: ' + bg + ';">' +
+						'		<h2 class="book_title">' + title + '</h2>' +
+						'	</div>' +
+						'	<div class="book_det flex1 box vertical">' +
+						'		<div class="flex1 desc">' + desc + '</div>' +
+						'		<div class="pcount">' + count + '</div>' +
+						'	</div>' +
+						'</div>';
+					
+						html +=
+						'<div class="input_layout">' +
+						'	<div class="box horizontal">' +
+						'		<div class="flex1 box check_label">Share with Facebook</div>' +
+						'		<a data-id="btn_c" class="btn_check">' +
+						'			<span class="check_icon"></span>' +
+						'		</a>' +
+						'	</div>' +
+						'</div>';
+					
+					var header = document.createElement('div');
+					header.className = 'header';
+					header.innerText = 'Confirm';
+					
+					var getButton = function(text) {
+						var div = document.createElement('div');
+						div.className = 'flex1 flex_lock';
+						div.innerText = text;
+						return div;
+					};
+					var bbar = document.createElement('div');
+					bbar.className = 'bbar box horizontal';
+					var sep = document.createElement('div');
+					sep.className = 'sep';
+					var btnOk = getButton('OK');
+					var btnCancel = getButton('Cancel');
+					bbar.appendChild(btnOk);
+					bbar.appendChild(sep);
+					bbar.appendChild(btnCancel);
+					
+					dPanel.append(header);
+					dPanel.append(html);
+					dPanel.append(bbar);
+
+					var btnCheck = dPanel.find('[data-id=btn_c]'); 
+					$(btnOk).click(function() {
+						Page._callbackDialog('ok', btnCheck.hasClass('check'));
 					});
+					$(btnCancel).click(function() {
+						Page._callbackDialog('cancel');
+					});
+					
+					if (Account.fbObject && Account.fbObject.email) {
+						var fb = Account.fbObject;
+						if (fb.off) {
+							btnCheck.removeClass('check');
+						}
+						else {
+							btnCheck.addClass('check');
+						}
+					}
+					
+					btnCheck.tap(function() {
+						if (!btnCheck.hasClass('check')) {
+							var fbConnect = function(callback) {
+								if (!Device.PhoneGap.isReady) {
+									callback();
+									return;
+								}
+								
+								Device.PhoneGap.loginFacebook(function(user) {
+									var fn = function(data) {
+										var fbobj = {
+											fbpic: user.fbpic,
+											fbname: user.fbname,
+											token: user.access_token
+										};
+
+										if (!user.fbemail) {
+											fbobj.fbemail = user.fbemail;
+										}
+
+										Account.fbObject = fbobj;
+										localStorage.setItem('u', JSON.stringify(Account));
+										
+										callback();
+									};
+									Service.User.linkFB(Account.userId, user.fbid, user.fbpic, user.fbname, user.fbemail, user.access_token, fn);
+								});
+							};
+							
+							var allow = function() {
+								btnCheck.addClass('check');
+								
+								Account.fbObject.off = false;
+								localStorage.setItem('u', JSON.stringify(Account));
+							};
+							
+							if (Account.fbObject && Account.fbObject.token) {
+								allow();
+							}
+							else {
+								if (Device.PhoneGap.isReady) {
+									Page.showLoading('Connecting...');
+									fbConnect(function() {
+										Page.hideLoading();
+										
+										allow();
+									});											
+								}		
+								else {
+									allow();
+								}
+							}
+						}		
+						else {
+							Account.fbObject.off = true;
+							localStorage.setItem('u', JSON.stringify(Account));
+							btnCheck.removeClass('check');
+						}
+					});
+					
+//					dialog.find('li').click(function() {	
+//						Page._callbackDialog($(this).data('bid'));
+//					});
 					break;
 				}
 			}
@@ -1210,7 +1317,7 @@ document.addEventListener("deviceready", function() {
      if(event.message) {
         Device.PhoneGap.onNotification = true;
         var page = (document.URL).split('#')[1];
-              // ¡Ã³Õ topage==page á¡é case by case µÔ´äÇé¡èÍ¹
+              // ï¿½Ã³ï¿½ topage==page ï¿½ï¿½ case by case ï¿½Ô´ï¿½ï¿½ï¿½ï¿½Í¹
         var topage = null;
         if(event.extras){
            if(event.extras.page)
