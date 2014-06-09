@@ -20,7 +20,26 @@ Page.Book = {
 		});
 		var btnShare = container.find('[data-id=btn_s]');
 		btnShare.tap(function() {
-			Page.open('Share', true, { bid: params.bid });
+//			Page.open('Share', true, { bid: params.bid });
+			
+			alert('share');
+			try {
+				FB.ui({
+					method : 'share',
+					href : 'https://developers.facebook.com/docs/',
+				}, function(response) {
+					alert(JSON.stringify(response));
+					
+					if (response && !response.error_code) {
+						alert('Posting completed.');
+					} else {
+						alert('Error while posting.');
+					}
+				});
+			}
+			catch (e) {
+				alert('error: ' + e.message);
+			}
 		});	
 		var btnLike = container.find('[data-id=btn_l]');
 		btnLike.tap(function() {
@@ -73,7 +92,10 @@ Page.Book = {
 		if (bookData.author.pic) {
 			content.find('.author_info img').attr('src', Util.getImage(bookData.author.pic, 3));
 		}
-		content.find('.text_bar .fright').text(bookData.pcount + ' Page' + ((bookData.pcount > 1)? 's': ''));
+//		content.find('.text_bar .fright').text(bookData.pcount + ' Page' + ((bookData.pcount > 1)? 's': ''));
+		content.find('.text_bar .fright').text(bookData.pcount);
+		if (bookData.lcount) content.find('.text_bar .lcount').text(bookData.lcount);
+		if (bookData.ccount) content.find('.text_bar .ccount').text(bookData.ccount);
 		
 		var index = 0;
 		var size = 0;
