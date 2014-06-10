@@ -1,6 +1,5 @@
 Page.Profile = {	
 	url: 'pages/html/profile.html',
-    callPushNote:{},
 	init: function(params, container, append) {
 		var self = this;
 		
@@ -14,13 +13,6 @@ Page.Profile = {
 		}
 		container.find('[data-id=btn_f]').hide();
 		
-		container.find('[data-link=followers]').click(function() {
-			Page.open('Follows', true, { uid: uid, follower: true });
-		});
-		container.find('[data-link=following]').click(function() {
-			Page.open('Follows', true, { uid: uid, follower: false });			
-		});
-		
 		// set toolbar buttons
 		var btnMenu = container.find('[data-id=btn_m]');
 		btnMenu.tap(function() {
@@ -29,6 +21,10 @@ Page.Profile = {
 		var btnBack = container.find('[data-id=btn_b]');
 		btnBack.tap(function() {
 			Page.back();
+		});	
+		var btnSearch = container.find('[data-id=btn_s]');
+		btnSearch.tap(function() {
+			Page.open('Search', true);
 		});	
 		var btnNotf = container.find('[data-id=btn_n]');
 		btnNotf.tap(function() {
@@ -55,27 +51,16 @@ Page.Profile = {
 			}
 		});
 
-		var profileView = container.find('#profile_view');
-		var scBar = container.find('.sc_bar');
-		var btnAdd = scBar.find('[data-link=new]');
-		var btnEdit = scBar.find('[data-link=edit]');
-		
-		btnAdd.tap(function() {
-			Page.open('CreateBook', true, { pub: true });
-		});
-		btnEdit.tap(function() {
-			
-		});
+		var profileView = container.find('#profile_view');	
 		
 		if (!isGuest) {
 			btnFollow.hide();
 			btnNotf.show();
-			scBar.show();
 		}
 		else {
 			btnFollow.show();
 			btnNotf.hide();
-			scBar.hide();
+			btnSearch.hide();
 			profileView.css('padding-bottom', '0px');
 		}	
 		
@@ -114,6 +99,12 @@ Page.Profile = {
 		});
 
 		Page.createShortcutBar(container);
+		
+		var scBar = container.find('.sc_bar');
+		if (isGuest) {
+			scBar.hide();
+		}
+		
 		self.loadProfile(uid, isGuest, container);
 	},
 	
@@ -137,7 +128,7 @@ Page.Profile = {
 		
 		for (var i = 0; i < pubBooks.length; i++) {
 			var b = pubBooks[i];
-			ptab1.append(self.getBook(b.bid, b.title, b.pic, b.pcount, undefined, b.lcount, b.ccount));
+			ptab1.append(self.getBook(b.bid, b.title, b.pic, b.pcount, b.lcount, b.ccount));
 		}
 		ptab1.find('.book_size').click(function() {
 			self.openBook($(this), uid);
@@ -155,7 +146,7 @@ Page.Profile = {
 		
 		for (var i = 0; i < priBooks.length; i++) {
 			var b = priBooks[i];
-			ptab2.append(self.getBook(b.bid, b.title, b.pic, b.pcount));
+			ptab2.append(self.getBook(b.bid, b.title, b.pic, b.pcount, b.lcount, b.ccount));
 		}
 		ptab2.find('.book_size').click(function() {
 			self.openBook($(this), uid);
@@ -173,7 +164,7 @@ Page.Profile = {
 		
 		for (var i = 0; i < drBooks.length; i++) {
 			var b = drBooks[i];
-			ptab3.append(self.getBook(b.bid, b.title, b.pic, b.pcount));
+			ptab3.append(self.getBook(b.bid, b.title, b.pic, b.pcount, b.lcount, b.ccount));
 		}
 		ptab3.find('.book_size').click(function() {
 			var b = $(this);
@@ -196,7 +187,8 @@ Page.Profile = {
 			
 			var user = data.user;
 			
-			content.find('.header_title span').text(user.dname);
+			content.find('.header_title span.dname').text(user.dname);
+			content.find('.header_title span.uname').text('@' + user.uname);
 			if (user.pic) {
 				content.find('.pimage img').attr('src', Util.getImage(user.pic, 3));
 			}
@@ -265,15 +257,15 @@ Page.Profile = {
 			}
 
 			profile_header.style.height = profile_header.offsetWidth + 'px';
-		
-            if(Page.Profile.callPushNote){
-               Page.Profile.callPushNote();
-               Page.Profile.callPushNote={};
+			
+			if (Device.PhoneGap.isReady && Page.Profile.callPushNote) {
+            	Page.Profile.callPushNote();
+            	Page.Profile.callPushNote = {};
             }
-       });
+		});
 	},
 	
-	getBook: function(bid, title, cover, count, author) {
+	getBook: function(bid, title, cover, count, author, lcount, ccount) {
 		var div = document.createElement('div');
 		div.className = 'b book_size';
 		div.dataset.bid = bid;
@@ -285,6 +277,31 @@ Page.Profile = {
 		var h2 = document.createElement('h2');
 		h2.innerText = title;
 		div.appendChild(h2);
+		
+		var social = document.createElement('div');
+		social.className = 'social flow_hidden';
+		
+		var getLabel = function(icon, c) {
+			var item = document.createElement('div');
+			item.className = 'clabel';
+			
+			var ic = document.createElement('div');
+			ic.className = 'icon mask_icon';
+			ic.style.webkitMaskImage = 'url(icons/' + icon + '.png)';
+			
+			var txt = document.createElement('div');
+			txt.className = 'text';
+			txt.innerText = c;
+			
+			item.appendChild(ic);
+			item.appendChild(txt);
+			
+			return item;
+		};
+		social.appendChild(getLabel('like', (lcount)? lcount: '0'));
+		social.appendChild(getLabel('comment', (ccount)? ccount: '0'));
+		
+		div.appendChild(social);
 		
 		if (count) {
 			var countDiv = document.createElement('div');

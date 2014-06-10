@@ -498,14 +498,16 @@ Page = {
 	
 	updateShortcutBar: function() {
 		var scBar = $('.sc_bar');
-		var btnEdit = scBar.find('[data-link=edit]');
-		if (Account.draftCount > 0) {
-			var lb = btnEdit.find('.label');
-			lb.text(lb.text().replace(/\d/i, Account.draftCount));
-		}
-		else {
-			scBar.find('.sep').hide();
-			btnEdit.hide();
+		if (scBar.length > 0) {
+			var btnEdit = scBar.find('[data-link=edit]');
+			if (Account.draftCount > 0) {
+				var lb = btnEdit.find('.label');
+				lb.text(lb.text().replace(/\d/i, Account.draftCount));
+			}
+			else {
+				scBar.find('.sep').hide();
+				btnEdit.hide();
+			}			
 		}
 	},
 	
@@ -539,8 +541,8 @@ Page = {
 		if (Account.picture) {
 			profileCover.find('.pimage img').attr('src', Util.getImage(Account.picture, 3));
 		}
-		var bookCount = (Account.bookCount)? Account.bookCount: 0;
-		profileCover.find('.stat').text(bookCount + ' Books');
+//		var bookCount = (Account.bookCount)? Account.bookCount: 0;
+		profileCover.find('.stat').html('@' + Account.userName);// + ' &#183; ' + bookCount + ' Books</span>');
 	},
 	open: function(page, append, params) {
 		var fn = function() {
@@ -1040,31 +1042,39 @@ Web = {
 			url: url,
 			success: success,
 			error: function(xhr) {
-				console.error('Internal Error: ' + xhr.responseText);
+				console.warn('Internal Error on "GET HTML": ' + xhr.responseText);
 			},
 			cache: !Config.DEBUG_MODE,
 			dataType: 'html'
 		});
 	},
-	get: function(url, params, success) {
+	get: function(url, params, success, error) {
 		$.ajax({
 			url: url,
 			success: success,
 			error: function(xhr) {
-				console.error('Internal Error: ' + xhr.responseText);
+				console.warn('Internal Error on "GET": ' + xhr.responseText);
+				
+				if (typeof error == 'function') {
+					error(xhr);
+				}
 			},
 			data: params,
 			cache: !Config.DEBUG_MODE,
 			dataType: 'json'
 		});
 	},
-	post: function(url, params, success) {
+	post: function(url, params, success, error) {
 		$.ajax({
 			type: 'POST',
 			url: url,
 			success: success,
 			error: function(xhr) {
-				console.error('Internal Error: ' + xhr.responseText);
+				console.warn('Internal Error on "GET": ' + xhr.responseText);
+				
+				if (typeof error == 'function') {
+					error(xhr);
+				}
 			},
 			data: params,
 			cache: !Config.DEBUG_MODE,

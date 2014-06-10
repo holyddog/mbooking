@@ -26,13 +26,13 @@ Page.SignIn = {
                       
                 var dvtoken = '';
                 
-                if(localStorage.getItem("dvk"))
-                localStorage.getItem("dvk");
+                if (localStorage.getItem("dvk"))
+                	localStorage.getItem("dvk");
                 
-                Service.User.SignIn(inputText.val(), inputPwd.val(),Config.OS_Int,dvtoken, function(data) {
-                    
-                    Device.PhoneGap.setAliasPushnotification(data.email);
-//                                    Device.PhoneGap.enablePush();
+                Service.User.SignIn(inputText.val(), inputPwd.val(), Config.OS_Int, dvtoken, function(data) {
+                    if (Device.PhoneGap.isReady) {
+                    	Device.PhoneGap.setAliasPushnotification(data.email);
+                    }
                     Page.btnHideLoading(btnAccept[0]);
 					
                                     
@@ -70,8 +70,16 @@ Page.SignIn = {
 						localStorage.setItem("u", JSON.stringify(Account));						
 
 						Page.loadMenu();						
-						Page.open('Following');
+						Page.open('Explore');
 					}
+				}, function() {					
+					MessageBox.alert({
+						message: 'An internal error occurred',
+						title: 'Error',
+						callback: function() {
+							Page.btnHideLoading(btnAccept[0]);							
+						}
+					});
 				});
 			}
 		}, true);

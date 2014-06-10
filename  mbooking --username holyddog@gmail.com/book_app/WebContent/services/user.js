@@ -1,5 +1,5 @@
 Service.User = {
-	SignIn : function(loginName, password,os,dvtoken, callback) {
+	SignIn : function(loginName, password,os,dvtoken, callback, error) {
 			var url = Service.url + '/signIn.json';
 			var params = {
 				login : loginName,
@@ -7,9 +7,9 @@ Service.User = {
 	            os : os,
 	            dvtoken : dvtoken
 			};
-			Web.post(url, params, callback);
+			Web.post(url, params, callback, error);
 		},
-	SignUp : function(fullName, email, userName, password,os,dvtoken, callback) {
+	SignUp : function(fullName, email, userName, password,os,dvtoken, callback, error) {
 			var url = Service.url + '/signUp.json';
 			var params = {
 				dname : fullName,
@@ -19,7 +19,7 @@ Service.User = {
 	            os : os,
 	            dvtoken : dvtoken
 			};
-			Web.post(url, params, callback);
+			Web.post(url, params, callback, error);
 	},
 	unLinkFB : function(uid, callback) {
 		var url = Service.url + '/unlinkFB.json';
