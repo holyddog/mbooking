@@ -23,7 +23,8 @@ Page.Explore = {
 		btnSearch.tap(function() {
 			Page.open('Search', true);
 		});	
-		
+
+		Page.createShortcutBar(container);
 		self.load(container.find('.content'));
 	},
 	
