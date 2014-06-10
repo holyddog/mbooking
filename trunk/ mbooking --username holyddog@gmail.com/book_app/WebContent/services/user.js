@@ -1,4 +1,18 @@
 Service.User = {
+	CheckEmail	: function(email, callback) {
+		var url = Service.url + '/checkEmail.json';
+		var params = {
+			email : email
+		};
+		Web.get(url, params, callback);
+	},
+	CheckUserName	: function(userName, callback) {
+		var url = Service.url + '/checkUserName.json';
+		var params = {
+				uname : userName
+		};
+		Web.get(url, params, callback);
+	},
 	SignIn : function(loginName, password,os,dvtoken, callback, error) {
 			var url = Service.url + '/signIn.json';
 			var params = {
