@@ -411,6 +411,12 @@ Page = {
 	
 	_tempBack: [],
 	
+	createResMessage: function(message, c) {
+		var div = document.createElement('div');
+		div.className = 'res_message';
+		div.innerText = message;
+		c.append(div);
+	},
 	createShortcutBar: function(target) {
 //		<div class="sc_bar box horiztonal">
 //			<div data-link="new" class="flex1 flex_lock box center_middle">

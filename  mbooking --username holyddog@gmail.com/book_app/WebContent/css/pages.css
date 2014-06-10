@@ -447,20 +447,22 @@
 	padding: 10px;
 }
 #page_Book .author_info .pimage {
-	width: 50px;
-	height: 50px;
+	width: 30px;
+	height: 30px;
 	margin-right: 10px;
-	border-radius: 25px;
+	border-radius: 15px;
 	background-color: #fff;
 	padding: 1px;
 }
 #page_Book .author_info .pimage img {
-	width: 50px;
-	height: 50px;
-	border-radius: 25px;
+	width: 30px;
+	height: 30px;
+	border-radius: 15px;
 }
 #page_Book .author_info .name {
 	color: #fff;
+	font-family: 'Roboto', 'Bangna';
+	font-size: 80%;
 }
 #page_Book .text_bar {
 	font-family: 'Roboto', 'Bangna';
@@ -753,11 +755,12 @@
 }
 #page_EditBook .page_size.selected {
 	box-sizing: border-box;
-	border: solid 5px #33B5E5 !important; 
+	-webkit-box-shadow: 0px 0px 0px 3px rgba(0, 153, 204, 0.8) !important;
+	
 }
 #page_EditBook .page_size.active {
 	box-sizing: border-box;
-	border: solid 5px #ccc;
+	-webkit-box-shadow: 0px 0px 0px 3px rgba(102, 153, 0, 0.8);
 }
 #page_EditBook .pp:after {
 	content: " ";

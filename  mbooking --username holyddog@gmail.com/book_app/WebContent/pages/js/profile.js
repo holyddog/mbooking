@@ -1,6 +1,9 @@
 Page.Profile = {	
 	url: 'pages/html/profile.html',
 	init: function(params, container, append) {
+		clearInterval(Page.inv1);
+		clearInterval(Page.inv2);
+		
 		var self = this;
 		
 		var isGuest = false;
@@ -176,9 +179,14 @@ Page.Profile = {
 	loadProfile: function(uid, isGuest, container) {
 		var self = this;
 		var profile_view = container.find('#profile_view')[0];
+		profile_view.style.display = 'none';
 		var profile_header = container.find('#profile_header')[0];
 		
+		clearInterval(Page.inv1);
+		clearInterval(Page.inv2);
+		
 		var content = container.find('.content');
+		
 		Page.bodyShowLoading(content);
 		Service.User.GetProfile(uid, Account.userId, function(data) {
 			Page.bodyHideLoading(content);
@@ -265,10 +273,13 @@ Page.Profile = {
 		});
 	},
 	
+	colors: ['#6DCAEC', '#CF9FE7', '#B6DB49', '#FFD060', '#FF7979'],
+	
 	getBook: function(bid, title, cover, count, author, lcount, ccount) {
 		var div = document.createElement('div');
 		div.className = 'b book_size';
 		div.dataset.bid = bid;
+		div.style.backgroundColor = this.colors[Util.getRandomInt(0, this.colors.length - 1)];
 		if (author) {
 			div.dataset.uid = author.uid;
 		}
