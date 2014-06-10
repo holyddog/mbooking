@@ -11,7 +11,7 @@ Page.EditBook = {
 		var btnBack = container.find('[data-id=btn_b]');
 		btnBack.tap(function() {
 			Page.back(function(c, page) {
-				if(page.reverseIndex){
+				if (page.reverseIndex){
 					page.reverseIndex(c);
 				}
 			});
@@ -60,9 +60,21 @@ Page.EditBook = {
 						}
 						Page.updateShortcutBar();
 						
-						Page.back(function(c) {
+//						var cover = container.find('#book_header .book_size').css('background-image');
+//						if (cover) {
+//							cover = cover.replace('url(', '').replace(')', '').replace('_s', '');							
+//						}
+						
+//						Account.cover = 
+						
+						Page.back(function(c, page) {							
 							if (c.data('page') == 'Book') {
-								Page.back();
+								Page.back(function() {
+									var profile = $('.page[data-page=Profile]');
+									if (profile.length > 0) {
+										Page.Profile.loadProfile(Account.userId, false, profile);
+									}									
+								});
 							}
 						});
 					});								
@@ -82,18 +94,30 @@ Page.EditBook = {
 				updateAccount(data.user, bid);
 				
 				Page.back(function(c, page) {
-//					if (page.reverseIndex) {
-//						page.reverseIndex(c);
-//					}
+					if (page.reverseIndex) {
+						page.reverseIndex(c);
+					}
+					
+					if (c.data('page') == 'Book') {
+						Page.back(function() {
+							var profile = $('.page[data-page=Profile]');
+							if (profile.length > 0) {
+								Page.Profile.loadProfile(Account.userId, false, profile);
+							}									
+						});
+					}
+					else if (c.data('page') == 'Profile') {
+						page.loadProfile(Account.userId, false, c);
+					}
+					
 //					var profile = $('#page_Profile');
 //					if (profile.length > 0) {
 //						Page.Profile.loadProfile(Account.userId, false, profile);
-//					}						
+//					}					
 				});
 			});
 		};
 		
-//		var book = null;
 		var btnPub = container.find('[data-id=btn_pub]');
 		btnPub.tap(function() {
 			Page.popDialog(function(text, share) { 
@@ -118,29 +142,6 @@ Page.EditBook = {
 					}
 				}
 			}, 4);
-			
-//			if (!btnPub.hasClass('used')) {
-
-//			}
-//			else {
-//				Page.showLoading('Updating...');
-//				
-//				Service.Book.UnpublishBook(bid, Account.userId, function(data) {
-//					Page.hideLoading();
-//					updateAccount(data.user);					
-//					Page.back(function(c, page) {
-//						if(page.reverseIndex){
-//							page.reverseIndex(c);
-//						}
-//						
-//						var profile = $('#page_Profile');
-//						if (profile.length > 0) {
-//							Page.Profile.loadProfile(Account.userId, false, profile);
-//						}
-//						
-//					});
-//				});				
-//			}
 		});
 		
 		if (book_header.offsetWidth >= 600) {

@@ -53,7 +53,7 @@ Page.Book = {
 			}
 		});
 		
-		if (isGuest) {
+		if (isGuest || params.preview) {
 			container.find('.edit_book').css('visibility', 'hidden');
 		}
 		
@@ -76,16 +76,26 @@ Page.Book = {
 		Service.Book.GetBookData(params.bid, params.uid, Account.userId, function(data) {
 			Page.bodyHideLoading(content);
 			
-			if (data.liked) {
-				btnLike.addClass('liked');				
+			if (!data.error) {
+				if (data.liked) {
+					btnLike.addClass('liked');				
+				}
+				
+				self.load(container, data);				
+			}	
+			else {
+				btnShare.hide();
+				btnComment.hide();
+				btnLike.hide();
+				Page.createResMessage('No books found', content);
 			}
-			
-			self.load(container, data);
 		});
 	},
 	
 	load: function(container, bookData) {
 		var content = container.find('.content');
+		content.find('.res_message').remove();
+		
 		content.find('.btitle').text(bookData.title);
 		content.find('.bdesc').text(bookData.desc);
 		content.find('.author_info .name').text(bookData.author.dname);

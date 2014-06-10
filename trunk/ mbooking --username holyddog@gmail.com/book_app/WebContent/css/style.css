@@ -1128,3 +1128,16 @@ textarea {
 	font-size: 70%;
 	color: #999;
 }
+
+.res_message {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 200px;
+	height: 40px;
+	line-height: 40px;
+	margin-left: -100px;
+	margin-top: -20px;
+	color: #999;
+	text-align: center;
+}
