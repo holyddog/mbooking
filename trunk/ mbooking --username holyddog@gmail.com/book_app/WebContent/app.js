@@ -540,12 +540,19 @@ Page = {
 			var cover = Util.getImage(Account.cover, 2);
 			profileCover.css('background-image', 'url(' + cover + ')');
 		}
+		else {
+			profileCover.css('background-image', 'none');
+		}
+		
 		if (Account.displayName) {
 			profileCover.find('h1').text(Account.displayName);
 		}
 		var profileCover = $('#profile_cover');
 		if (Account.picture) {
 			profileCover.find('.pimage img').attr('src', Util.getImage(Account.picture, 3));
+		}
+		else {
+			profileCover.find('.pimage img').attr('src', 'images/user.jpg');
 		}
 //		var bookCount = (Account.bookCount)? Account.bookCount: 0;
 		profileCover.find('.stat').html('@' + Account.userName);// + ' &#183; ' + bookCount + ' Books</span>');
