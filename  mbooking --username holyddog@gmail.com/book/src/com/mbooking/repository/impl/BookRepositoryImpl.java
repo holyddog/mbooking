@@ -153,7 +153,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 	public Boolean delete(Long bid, Long uid) {
 		try {
 			Query query = new Query(Criteria.where("bid").is(bid));
-			query.fields().include("pbdate").include("pub");
+			query.fields().include("pbdate").include("pub").include("pic");
 			Book book = db.findOne(query, Book.class);
 			
 			query = new Query(Criteria.where("bid").is(bid).and("uid").is(uid));
@@ -164,16 +164,24 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			db.remove(query, Page.class);
 			
 			// Update book count from author
+			Update update = new Update();
+			Query userQuery = new Query(Criteria.where("uid").is(uid));
+			userQuery.fields().include("cover");
+			User user = db.findOne(userQuery, User.class);
+			if (user != null && book.getPic() != null &&  user.getCover().equals(book.getPic())) {
+				update.unset("cover");
+			}
+			
 			if (book.getPbdate() != null) {
 				if (book.getPub() != null && book.getPub()) {
-					db.updateFirst(new Query(Criteria.where("uid").is(uid)), new Update().inc("pbcount", -1), User.class);					
+					db.updateFirst(userQuery, update.inc("pbcount", -1), User.class);					
 				}				
 				else {
-					db.updateFirst(new Query(Criteria.where("uid").is(uid)), new Update().inc("prcount", -1), User.class);						
+					db.updateFirst(userQuery, update.inc("prcount", -1), User.class);						
 				}
 			}
 			else {
-				db.updateFirst(new Query(Criteria.where("uid").is(uid)), new Update().inc("drcount", -1), User.class);				
+				db.updateFirst(userQuery, update.inc("drcount", -1), User.class);				
 			}
 			
 			// Remove book image files directory
@@ -223,14 +231,15 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 
 			criteria.and("bid").is(bid);
 			query = new Query(criteria);
-			query.fields().include("title");
-			query.fields().include("desc");
-			query.fields().include("pic");
-			query.fields().include("pcount");
-			query.fields().include("pbdate");
-			query.fields().include("tags");
-			query.fields().include("lcount");
-			query.fields().include("ccount");
+//			query.fields().include("title");
+//			query.fields().include("desc");
+//			query.fields().include("pic");
+//			query.fields().include("pcount");
+//			query.fields().include("pbdate");
+//			query.fields().include("tags");
+//			query.fields().include("lcount");
+//			query.fields().include("ccount");
+//			query.fields().include("pub");
 
 			Book book = db.findOne(query, Book.class);
 
