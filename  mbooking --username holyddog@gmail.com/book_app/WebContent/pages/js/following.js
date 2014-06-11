@@ -1,6 +1,9 @@
 Page.Following = {
 	url: 'pages/html/following.html',
 	init: function(params, container) {		
+		clearInterval(Page.inv1);
+		clearInterval(Page.inv2);
+		
 		var self = this;
 		
 		// set toolbar buttons

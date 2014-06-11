@@ -173,7 +173,7 @@ Page.AddPage = {
 					pos = [x, y];
 				}
 				
-				self.addPhoto(container, img, true, pos);	
+				self.addPhoto(container, img, true, pos);
 //				container.find('[data-id=btn_rem]').hide();		
 			});
 		});

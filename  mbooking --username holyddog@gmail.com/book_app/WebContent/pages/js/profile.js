@@ -214,6 +214,13 @@ Page.Profile = {
 			if (user.fgcount) {
 				statPanel.find('[data-count=following]').text(user.fgcount);				
 			}
+			
+			statPanel.find('[data-link=followers]').click(function() {
+				Page.open('Follows', true, { uid: uid, follower: true });
+			});
+			statPanel.find('[data-link=following]').click(function() {
+				Page.open('Follows', true, { uid: uid, follower: false });
+			});
 								
 			self.loadPublicBooks(data.pubBooks, uid, container);
 			

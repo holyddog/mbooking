@@ -9,8 +9,8 @@ Config = {
 
 	FB_APP_ID: '370184839777084',
 	
-	WEB_BOOK_URL:'http://119.59.122.38/book/index.html',
-	FILE_URL: 'http://' + window.location.hostname + '/res/book',
+	WEB_BOOK_URL : 'http://' + window.location.hostname + '/book/index.html',
+	FILE_URL : 'http://' + window.location.hostname + '/res/book',
 	
 	OS: 'iOS',
     OS_Int: 1, //iOS :1, Android :2
@@ -23,7 +23,7 @@ Config = {
 };
 
 Service = {		
-	url: 'http://localhost:8080/book/data'
+	url: 'http://' + window.location.hostname + ':8080/book/data'
 };	
 
 Account = {};
@@ -483,10 +483,10 @@ Page = {
 			btnEdit.hide();
 		}
 		
-		btnAdd.tap(function() {
+		btnAdd.click(function() {
 			Page.open('CreateBook', true, { pub: true });
 		});
-		btnEdit.tap(function() {
+		btnEdit.click(function() {
 			if (Account.draftBooks && Account.draftBooks.length == 1) {
 				Page.open('EditBook', true, { bid: Account.draftBooks[0].bid });
 			}
@@ -1106,7 +1106,7 @@ Web = {
 				
 				self.bind('touchstart', function(e) {	
 					if (!allowDefault)
-						e.preventDefault();
+//						e.preventDefault();
 
 					self.pos = self.offset();
 					self.size = { w: self.width(), h: self.height() };
@@ -1303,7 +1303,7 @@ var pageLoad = function() {
 	}
 };
 $(function(){
-	$(window).hashchange(function() {
+	$(window).hashchange(function() {		
 		pageLoad();
 	});
     $(window).hashchange();
