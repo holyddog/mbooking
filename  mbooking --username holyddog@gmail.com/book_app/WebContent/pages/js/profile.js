@@ -270,6 +270,8 @@ Page.Profile = {
             	Page.Profile.callPushNote();
             	Page.Profile.callPushNote = {};
             }
+		}, function() {
+			Page.bodyHideLoading(content);			
 		});
 	},
 	
@@ -341,11 +343,19 @@ Page.Profile = {
 	},
 	
 	updateCover: function() {
-		if (Account.cover) {
-			profile_header.style.backgroundImage = 'url(' + Util.getImage(Account.cover, 1) + ')';
+		var profileHeader = document.getElementById('profile_header');
+		var profileCover = document.getElementById('profile_cover');
+		if (profileHeader && profileCover) {
+			if (Account.cover) {
+				profileHeader.style.backgroundImage = 'url(' + Util.getImage(Account.cover, 1) + ')';
 
-			var cover = Util.getImage(Account.cover, 2);
-			profile_cover.style.backgroundImage = 'url(' + cover + ')';
+				var cover = Util.getImage(Account.cover, 2);
+				profileCover.style.backgroundImage = 'url(' + cover + ')';
+			}
+			else {
+				profileHeader.style.backgroundImage = 'none';
+				profileCover.style.backgroundImage = 'none';		
+			}			
 		}
 	}
 };

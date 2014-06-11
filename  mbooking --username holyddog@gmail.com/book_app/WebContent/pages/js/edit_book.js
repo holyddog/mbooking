@@ -11,7 +11,7 @@ Page.EditBook = {
 		var btnBack = container.find('[data-id=btn_b]');
 		btnBack.tap(function() {
 			Page.back(function(c, page) {
-				if (page.reverseIndex){
+				if (page.reverseIndex) {
 					page.reverseIndex(c);
 				}
 			});
@@ -60,10 +60,18 @@ Page.EditBook = {
 						}
 						Page.updateShortcutBar();
 						
-//						var cover = container.find('#book_header .book_size').css('background-image');
-//						if (cover) {
-//							cover = cover.replace('url(', '').replace(')', '').replace('_s', '');							
-//						}
+						var cover = container.find('#book_header .book_size').css('background-image');
+						if (cover) {
+							cover = cover.replace('url(', '').replace(')', '').replace('_s', '');
+							
+							if (cover.indexOf(Account.cover) > -1) {
+								delete Account.cover;
+								localStorage.setItem('u', JSON.stringify(Account));
+								
+								Page.loadMenu();
+								Page.Profile.updateCover();
+							}
+						}
 						
 //						Account.cover = 
 						
@@ -199,7 +207,7 @@ Page.EditBook = {
 		
 		if (bid) {
 			Service.Book.GetBook(bid, Account.userId, function(data) { 
-				self.updateBook(container, data.title, data.desc);
+				self.updateBook(container, data.title, data.desc, data.pub);
 				container.find('.pcount span').text(data.pcount);
 				container.find('.book_size').css('background-image', 'url(' + Util.getImage(data.pic, 2) + ')');
 				book = data;
@@ -287,9 +295,15 @@ Page.EditBook = {
 		tagPanel.append(link);
 	},
 	
-	updateBook: function(container, title, desc) {
+	updateBook: function(container, title, desc, pub) {
 		container.find('.book_title').text(title);
 		container.find('.book_det .desc').text(desc);
+		if (!pub) {
+			container.find('.book_det .privacy').addClass('priv');			
+		}
+		else {
+			container.find('.book_det .privacy').removeClass('priv');
+		}
 	},
 	
 	reScale: function(container) {

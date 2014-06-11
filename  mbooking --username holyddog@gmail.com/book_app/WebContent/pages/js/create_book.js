@@ -12,6 +12,12 @@ Page.CreateBook = {
 		container.find('[data-id=btn_b]').tap(function() {
 			Page.back();
 		});		
+		
+		var btnCheck = container.find('[data-id=btn_c]'); 
+		btnCheck.tap(function() {
+			btnCheck.toggleClass('check');
+		});
+		
 		var btnAccept = container.find('[data-id=btn_a]');
 		btnAccept.tap(function() {
 			if (!btnAccept.hasClass('disabled')) {
@@ -67,7 +73,7 @@ Page.CreateBook = {
 				if (params && params.bid) {
 					Service.Book.EditBook(params.bid, title, desc, pub, function() {
 						Page.back(function(c, page) {
-							page.updateBook(c, title, desc);
+							page.updateBook(c, title, desc, pub);
 							
 							if (Account.draftBooks) {
 								var books = Account.draftBooks;
@@ -86,10 +92,6 @@ Page.CreateBook = {
 					Service.Book.CreateBook(inputTitle.val(), inputDesc.val(), Account.userId, pub, fn);					
 				}
 			}
-		});
-		var btnCheck = container.find('[data-id=btn_c]'); 
-		btnCheck.tap(function() {
-			btnCheck.toggleClass('check');
 		});
 		
 		if (pub) {
@@ -115,14 +117,33 @@ Page.CreateBook = {
 		
 		if (params && params.bid) {
 			container.find('.tbar .title').text('Edit Book');
-			Service.Book.GetBookByBid(params.bid, function(data) { 
-				inputTitle.val(data.title);
-				inputDesc.val(data.desc);
-				if (data.pub) {
+			
+			var editBook = $('.page[data-page=EditBook]');
+			if (editBook.length > 0) {
+				var title = editBook.find('#book_header .book_title').text();
+				var desc = editBook.find('#book_header .desc').text();
+				var pub = editBook.find('#book_header .privacy').hasClass('priv');
+				
+				inputTitle.val(title);
+				inputDesc.val(desc);
+				if (!pub) {
 					btnCheck.addClass('check');
 				}
+				else {
+					btnCheck.removeClass('check');
+				}
+				
 				checkInput();
-			});
+			}
+			
+//			Service.Book.GetBookByBid(params.bid, function(data) { 
+//				inputTitle.val(data.title);
+//				inputDesc.val(data.desc);
+//				if (data.pub) {
+//					btnCheck.addClass('check');
+//				}
+//				checkInput();
+//			});
 		}
 	}
 };

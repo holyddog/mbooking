@@ -88,13 +88,13 @@ Service.User = {
 
 		Web.post(url, params, callback);
 	},
-	GetProfile : function(userId, guestId, callback) {
+	GetProfile : function(userId, guestId, callback, error) {
 		var url = Service.url + '/getProfile.json';
 		var params = {
 			uid : userId,
 			gid : guestId
 		};
-		Web.get(url, params, callback);
+		Web.get(url, params, callback, error);
 	},
 	GetPublicBooks : function(userId, start, limit, callback) {
 		var url = Service.url + '/getPublicBooks.json';
