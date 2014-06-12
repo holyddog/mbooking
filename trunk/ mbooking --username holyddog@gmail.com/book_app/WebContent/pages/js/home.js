@@ -39,11 +39,14 @@ Page.Home = {
 							email : data.email,
 							displayName : data.dname,
 							userName : data.uname,
-							lastEditBook : data.leb,
 							cover : data.cover,
 							picture : data.pic,
 							followerCount : data.fcount,
 							bookCount : data.pbcount,
+							
+							draftCount : data.drcount,
+							draftBooks : data.books,
+							
 							fbObject : {
 								fbpic : data.fbobj.pic,
 								dname : data.fbobj.dname,
