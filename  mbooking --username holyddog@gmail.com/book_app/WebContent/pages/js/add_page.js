@@ -248,10 +248,10 @@ Page.AddPage = {
 				}
 			}
 			if (crop && crop.length == 2) {
-				if (crop[0]) {
+				if (typeof crop[1] == 'number' && crop[1] == 0) {
 					drag_img.style.webkitTransform = 'translate3d(-' + crop[0] + 'px, 0px, 0px)';				
 				}
-				else if (crop[1]) {
+				else if (typeof crop[0] == 'number' && crop[0] == 0) {
 					drag_img.style.webkitTransform = 'translate3d(0px, -' + crop[1] + 'px, 0px)';					
 				}
 			}
