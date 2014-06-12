@@ -379,9 +379,15 @@
 	display: block;
 }
 
+#page_SignUp .err_msg {
+	font-weight: normal;
+	color: red;
+	font-size: 90%;}
+
 #page_Book .btitle {
 	font-family: 'Roboto', 'Bangna';
 	font-weight: 400;
+	overflow: hidden;
 	
 	padding: 10px;
 	font-size: 180%;
