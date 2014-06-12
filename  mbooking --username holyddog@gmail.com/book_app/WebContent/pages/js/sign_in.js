@@ -35,7 +35,7 @@ Page.SignIn = {
                 Service.User.SignIn(inputText.val(), inputPwd.val(),Config.OS_Int,dvtoken, 
                 		function(data) {
                 			if (Device.PhoneGap.isReady)
-										Device.PhoneGap.setAliasPushnotification(data.email);
+								Device.PhoneGap.setAliasPushnotification(data.email);
 									
 									// Device.PhoneGap.enablePush();
 									Page.btnHideLoading(btnAccept[0]);
@@ -99,21 +99,22 @@ Page.SignIn = {
         btnAccept.tap(login, true);
 		
         $('input.signin_inp').on('keydown', function(event) {
-              if(event.keyCode==13){
-                    var inp_name = $(this).attr("name");
-                                 // alert(inp_name);
-                        if(inp_name=='login'){
-                                 $('input[name=login]').blur();
-                                 $('input[name=pwd]').focus();
-                                 
-                        }else if(inp_name=='pwd'){
-                                 
-                                 $('input[name=pwd]').blur();
-                                 if (inputText.val().length > 0 && inputPwd.val().length >= 6) {
-                                    login();
-                                 }
-                        }
-              }
+			if (event.keyCode == 13) {
+				var inp_name = $(this).attr("name");
+				// alert(inp_name);
+				if (inp_name == 'login') {
+					$('input[name=login]').blur();
+					$('input[name=pwd]').focus();
+
+				} else if (inp_name == 'pwd') {
+
+					$('input[name=pwd]').blur();
+					if (inputText.val().length > 0
+							&& inputPwd.val().length >= 6) {
+						login();
+					}
+				}
+			}
         });
         
         
