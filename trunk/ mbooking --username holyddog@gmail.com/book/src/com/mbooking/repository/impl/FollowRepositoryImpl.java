@@ -2,6 +2,7 @@ package com.mbooking.repository.impl;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,13 @@ public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 				notf.setMessage(fullMessage);
 				notf.setNtype(ConstValue.NEW_FOLLOWER);
 				db.insert(notf);
+				
+			    User author = db.findOne(new Query(Criteria.where("uid").is(auid)),User.class);
+				HashMap<String, String> map = new HashMap<String, String>();
+				map.put("page", "Profile");
+				map.put("followid",uid+"");
+				PushNotification.sendPush(String.format(ConstValue.NEW_FOLLOWER_MSG_FORMAT_PUSH_EN, foll.getDname()), Selectors.alias(author.getEmail()), null, map);
+
 			}
 			return true;
 		}
