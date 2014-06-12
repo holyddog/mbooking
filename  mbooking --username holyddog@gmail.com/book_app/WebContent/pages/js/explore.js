@@ -78,6 +78,15 @@ Page.Explore = {
 				var uid = $(this).data('uid');
 				Page.open('Profile', true, { uid: uid, back: true });
 			});
+			
+		     if(Page.Explore.callPushNote&&Page.Explore.callPushNote!={}){
+
+	                Page.Explore.callPushNote();
+
+	                Page.Explore.callPushNote={};
+
+	            }
 		});
-	}
+	},
+	callPushNote:{}
 };

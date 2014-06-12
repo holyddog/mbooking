@@ -5,9 +5,9 @@ init: function(params, container) {
 //    var content = container.find('.content');
     Page.bodyShowLoading(container);
    
-    Service.Book.GetBook(params.bid, params.uid, function(data) {
-                         self.load(container, data,params);
-                         });
+    Service.Book.GetBookData(params.bid, params.uid, Account.userId, function(data) {
+          self.load(container, data,params);
+    });
 },
 LIMIT_PAGE:1,
 reverseIndex:function(container){
@@ -15,9 +15,9 @@ reverseIndex:function(container){
 },
 load: function(container, bookData,params) {
 	var uid = (params && params.uid)? params.uid: Account.userId;
-	var isGuest = false;
-	if (uid != Account.userId) {
-		isGuest = true;
+	var canEdit = true;
+	if (uid != Account.userId||params.preview) {
+		canEdit = false;
 	}
 	container.css('-webkit-transition','background-color 500ms linear');	
 	container.css('transition','background-color 500ms linear');	
@@ -75,7 +75,7 @@ load: function(container, bookData,params) {
                 +'	<div class="first_cover hid_loading">'
                 +'      <div class="box horizontal">'
     			+'          <h1 class="btitle flex1"></h1>'
-    			+       (!isGuest?'<div class="edit_book mask_icon" style="pointer-events:all;"></div>':'')
+    			+       (canEdit?'<div class="edit_book mask_icon" style="pointer-events:all;"></div>':'')
                 +'      </div>'
                 +'		<div class="bdesc"></div>'
                 +'		<div class="bline"></div>'
@@ -216,6 +216,11 @@ load: function(container, bookData,params) {
             });
         
         	var btnLike = $('[data-id=btn_l]');
+        	
+        	if (bookData.liked) {
+				btnLike.addClass('liked');				
+			}
+        	
     		btnLike.tap(function() {
     			if (!btnLike.hasClass('liked')) {
     				btnLike.addClass('liked');			
