@@ -48,25 +48,60 @@ Page.SignUp = {
 		
 		function checkReadyToSubmit(){
 			
-			if(dname_inp.val()==''||email_inp.val()==''||uname_inp.val()==''||pwd_inp.val()==''){
-				disableDoneBtn();
-				return
-			}
+			var disable = false;
 			
-			//alert('no empty');
 			
 			if(email_inp.attr("data-error")||uname_inp.attr("data-error")||pwd_inp.attr("data-error")){
+
+				if(email_inp.attr("data-error")){
+					$('[data-lbl=email]').html(email_inp.attr("data-error"));
+				}
+				
+				if(uname_inp.attr("data-error")){
+					$('[data-lbl=uname]').html(uname_inp.attr("data-error"));
+				}
+				
+				if(pwd_inp.attr("data-error")){
+					$('[data-lbl=pwd]').html(pwd_inp.attr("data-error"));
+				}
+				
 				disableDoneBtn();
-				console.log('have error');
-				return
+				disable = true;
+
 			}
-			
-			if(between_check_email||between_check_uname)
+			else if(between_check_email||between_check_uname)
 			{
 				disableDoneBtn();
-				return	
+				disable = true;	
 			}
 			
+			if(dname_inp.val()==''||email_inp.val()==''||uname_inp.val()==''||pwd_inp.val()==''){
+				
+				if(dname_inp.val()==''){
+					$('[data-lbl=dname]').html("");
+//					$('[data-lbl=dname]').html("Please fill your displayname");
+				}
+				
+				if(email_inp.val()==''){
+					$('[data-lbl=email]').html("");
+//					$('[data-lbl=email]').html("Please fill your email");
+				}
+
+				if(uname_inp.val()==''){
+					$('[data-lbl=uname]').html("");
+//					$('[data-lbl=uname]').html("Please fill your username");
+				}
+				
+				if(pwd_inp.val()==''){
+					$('[data-lbl=pwd]').html("");
+//					$('[data-lbl=pwd]').html("Please fill your password");
+				}
+				
+				disableDoneBtn();
+				disable = true;	
+			}
+			
+			if(!disable)
 			enableDoneBtn();
 		}
 		
@@ -83,25 +118,32 @@ Page.SignUp = {
 				
 						   $(this).removeAttr("data-error");   
 						   between_check_email=true;
+						   $('[data-lbl=email]').html("");
+						   
+						   var load_inp = container.find('.input_load[data-name="email"]');
+						   Page.btnShowLoading(load_inp[0],true);
+						   load_inp.find('#cv_button').css('margin',' 12px 10px');
 						   
 						   Service.User.CheckEmail(text,function(data){
 							   between_check_email = false;
 			    				if($('input[name=email]').val()==text){
 				    				if(!data.result){
+				    					$('[data-lbl=email]').html("");
 				    					$('input[name=email]').removeAttr("data-error");		
 				    				}else{
-				    					$('input[name=email]').attr("data-error","duplicate");
+				    					$('input[name=email]').attr("data-error","email has already been used");
 				    					console.log("email duplicate");
 				    				}
 				    				checkReadyToSubmit();
 			    				}
+//			    				Page.btnHideLoading(container.find('.input_load[data-name="email"]')[0]);
 			    			});
 						   
 						   
 					   }
 				   }
 				   else{
-					  $(this).attr("data-error","format");
+					  $(this).attr("data-error","The email is incorrect format");
 					  console.log("email format");
 				   }
 				}
@@ -127,48 +169,62 @@ Page.SignUp = {
 						 
 						 if(text.length>=6&&text.length<=15){
 						   $(this).removeAttr("data-error");   
+						   $('[data-lbl=uname]').html("");
 				    		uname_timer = setTimeout(
 								    		function(){
-								    			//service check uname «éÓ
+								    			
+								    			var load_inp = container.find('.input_load[data-name="uname"]');
+												Page.btnShowLoading(load_inp[0],true);
+										        load_inp.find('#cv_button').css('margin',' 12px 10px');
+												   
 								    			Service.User.CheckUserName(text,function(data){
 								    				between_check_uname = false;
 								    				if($('input[name=uname]').val()==text){
 									    				if(!data.result){
+									    					$('[data-lbl=uname]').html("");
 									    					$('input[name=uname]').removeAttr("data-error");		
 									    				}else{
-									    					$('input[name=uname]').attr("data-error","duplicate");
+									    					$('input[name=uname]').attr("data-error","username has already been used");
 									    					console.log("uname duplicate");
 									    				}
 									    				checkReadyToSubmit();
 								    				}
-								    			});
+//								    				Page.btnHideLoading(container.find('.input_load[data-name="uname"]')[0]);
+												});
 								    		}
 								    	,3000);
 						 }
 						 else{
-							$(this).attr("data-error","length not macth");
-							console.log("uname not in range 6-15");   
+							$(this).attr("data-error","The length must be 6-15 charactors");
+							console.log("The length must be 6-15 charactors");   
 						 } 
 					 }
 					 else{
-						   $(this).attr("data-error","specail letter");
+						   $(this).attr("data-error",'only "a-z A-Z 0-9 ._-" can include');
 						   console.log("uname have specail letter");
 					 } 
 			    }
 				else if(inp_name=='pwd'){
 					if(text.length>=6){
+						$('[data-lbl=pwd]').html("");
 					   $(this).removeAttr("data-error");   
 					}
 					else{
-					   $(this).attr("data-error","shortpass");
+					   $(this).attr("data-error","6 charactors at least");
 					   console.log("pwd < 6");
 					}
 				}
 				else if(inp_name =='email'){
 					disableDoneBtn();
 					$(this).removeAttr("data-error");
+					$('[data-lbl=email]').html("");
 					return;
 				}	
+	    	}else{
+	    		var inp_name = $(this).attr("name");
+	    		if(inp_name=='uname'||inp_name=='pwd'){
+	    			$(this).removeAttr("data-error");   
+				}
 	    	}
 	    	checkReadyToSubmit();
 	    });
@@ -177,7 +233,6 @@ Page.SignUp = {
 	    $('input.signup_inp').on('keydown', function(event) {
 	    	if(event.keyCode==13){
 	    		var inp_name = $(this).attr("name");
-//	    		alert(inp_name);
 				if(inp_name=='dname'){
 					$('input[name=dname]').blur();
 					$('input[name=email]').focus();
