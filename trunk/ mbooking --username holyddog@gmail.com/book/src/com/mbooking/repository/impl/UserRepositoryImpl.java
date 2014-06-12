@@ -172,6 +172,7 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 	public Boolean changeDisplayName(Long uid, String displayName) {
 		try{
 			db.updateFirst(new Query(Criteria.where("uid").is(uid)), new Update().set("dname", displayName), User.class);
+			db.updateMulti(new Query(Criteria.where("uid").is(uid)), new Update().set("author.dname", displayName), Book.class);
 			return true;
 		} catch (Exception e) {
 			System.out.println("Unsuccess Change DisplayName, User Service error: " + e);
