@@ -145,7 +145,7 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 			Integer[] pos = new Integer[2];
 			ImageUtils.generatePicture(file, picture, imgSize, cropPos, imgPath, pos);
 			
-			Update update = new Update().set("pos", pos);
+			Update update = new Update().set("pos", pos).set("caption", caption);
 			Page retPage = db.findAndModify(query, update, new FindAndModifyOptions().returnNew(true), Page.class);
 			return retPage;
 		}
