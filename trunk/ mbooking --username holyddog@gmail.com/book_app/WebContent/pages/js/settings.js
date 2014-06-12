@@ -23,47 +23,50 @@ Page.Settings = {
 			Account = {};
 			Page.open('Home');
 	   	  if(Device.PhoneGap.isReady){
-           		 //Device.PhoneGap.logoutFacebook(function(){});
+           		 Device.PhoneGap.logoutFacebook(function(){});
            		 Device.PhoneGap.setAliasPushnotification("");
 		  }
 		});
 		self.setImage(container);
 
-		if (Account.fbObject && Account.fbObject.fbname) {
-			fblogin_check.className = "ch_logfb checked";
-			fblogin_check.style.background = "green";
+		if (Account.fbObject && Account.fbObject.dname) {
+			fblogin_check.className = "btn_check check";
 		}
         
 		var checkbox = container.find('#fblogin_check');
-        checkbox.click(function() {                     
-        	if ($(this).hasClass('checked')) {
+        checkbox.click(function() {
+        	if ($(this).hasClass('check')) {
         		MessageBox.confirm({
         			message: 'By disconnect, you will not be able to log in to The Story via Facebook',
 					callback: function(button) {
-	        			if (button == 2) {
+
+                        Page.btnShowLoading(checkbox[0],true);
+                                   checkbox.css('pointer-events','none');
+                                   
+						Device.PhoneGap.deleteAllPermission(function() {
 	        				Device.PhoneGap.logoutFacebook(function() {
-	        					fblogin_check.className = "ch_logfb";
-	        					fblogin_check.style.background = "";
+	        					fblogin_check.className = "btn_check";
 
 	        					Service.User.unLinkFB(Account.userId, function(data) {
 	        						var fbobj = {};
 	        						Account.fbObject = fbobj;
 	        						localStorage.setItem('u', JSON.stringify(Account));
+                                    Page.btnHideLoading(checkbox[0]);
+                                     checkbox.css('pointer-events','');
 	        					});
+                                                           
 	        				});
-	        			}
+						});
 	        		}
         		});
 //              navigator.notification.confirm(msg, onConfirm, 'Disconnect Facebook', 'Cancel,Disconnect');
     		} else {
-    			fblogin_check.className = "ch_logfb checked";
-    			fblogin_check.style.background = "green";
 
     			Device.PhoneGap.loginFacebook(function(user) {
     				var fn = function(data) {
 						var fbobj = {
 							fbpic: user.fbpic,
-							fbname: user.fbname,
+							dname: user.dname,
 							token: user.access_token
 						};
 
@@ -73,9 +76,9 @@ Page.Settings = {
 
 						Account.fbObject = fbobj;
 						localStorage.setItem('u', JSON.stringify(Account));
-
+                        fblogin_check.className = "btn_check check";
 					};
-    				Service.User.linkFB(Account.userId, user.fbid, user.fbpic, user.fbname, user.fbemail, user.access_token, fn);
+    				Service.User.linkFB(Account.userId, user.fbid, user.fbpic, user.dname, user.fbemail, user.access_token, fn);
     			});
     		}
         

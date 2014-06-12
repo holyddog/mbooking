@@ -1,4 +1,16 @@
+
 Page.Comments = {
+    comment_scr:{},
+    scrollToBottom: function(){
+        
+        Page.Comments.comment_scr = new IScroll('#wrapper');
+        var cover_h = $('#wrapper').height();
+        var list_h = $('.comment_list').height();
+        
+        if(list_h>cover_h){
+            Page.Comments.comment_scr.scrollTo(0,((list_h-cover_h)*-1));
+        }
+    },
 	url: 'pages/html/comments.html',
 	init: function(params, container) {
 		var self = this;
@@ -26,10 +38,12 @@ Page.Comments = {
 					pic = Account.picture;//Util.getImage(Account.picture, 3);
 				}
 				var c = $(self.createComment(pic, Account.displayName, inputMsg.val(), 'Sending...'));
-				c.prependTo(list);
+				c.appendTo(list);
 				
 				Service.Book.PostComment(params.bid, Account.userId, inputMsg.val(), function(data) {
 					c.find('.time').text(Util.getTime(new Date()));
+					
+                    Page.Comments.scrollToBottom();
 				});
 				inputMsg.val(null);
 				btnSend.addClass('disabled');
@@ -59,13 +73,17 @@ Page.Comments = {
 			for (var i = 0; i < data.length; i++) {
 				var c = data[i];
 				list.append(self.createComment(c.pic, c.dname, c.comment, c.strtime));
-			} 
+			}
+            Page.Comments.scrollToBottom();
+            
 		});
+		
+		
 	},
 	
 	createComment: function(image, name, message, time) {
 		var comment = document.createElement('div');
-		comment.className = 'comment box horizontal';
+		comment.className = 'comment box horizontal ';
 		
 		var imageDiv = document.createElement('div');
 		imageDiv.className = 'image';

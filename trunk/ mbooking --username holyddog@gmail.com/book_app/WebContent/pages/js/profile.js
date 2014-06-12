@@ -272,10 +272,11 @@ Page.Profile = {
 			}
 
 			profile_header.style.height = profile_header.offsetWidth + 'px';
-			
-			if (Device.PhoneGap.isReady && Page.Profile.callPushNote) {
-            	Page.Profile.callPushNote();
-            	Page.Profile.callPushNote = {};
+		
+            if(Page.Profile.callPushNote&&Page.Profile.callPushNote!={}){
+               Page.Profile.callPushNote();
+               Page.Profile.callPushNote={};
+
             }
 		}, function() {
 			Page.bodyHideLoading(content);			

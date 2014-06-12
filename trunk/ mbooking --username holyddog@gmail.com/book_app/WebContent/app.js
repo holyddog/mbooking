@@ -1,4 +1,3 @@
-PushNotification={};
 Config = {
 	DEBUG_MODE: true,
 	DEFAULT_PAGE: 'Home',
@@ -9,9 +8,15 @@ Config = {
 
 	FB_APP_ID: '370184839777084',
 	
-	WEB_BOOK_URL : 'http://' + window.location.hostname + '/book/index.html',
-	FILE_URL : 'http://' + window.location.hostname + '/res/book',
-	
+//<<<<<<< .mine
+	WEB_BOOK_URL:'http://119.59.122.38/book/index.html',
+//	FILE_URL: 'http://' + window.location.hostname + '/res/book',
+	FILE_URL: 'http://' + '119.59.122.38' + '/book_dev_files',
+//=======
+//	WEB_BOOK_URL : 'http://' + window.location.hostname + '/book/index.html',
+//	FILE_URL : 'http://' + window.location.hostname + '/res/book',
+//	
+//>>>>>>> .r266
 	OS: 'iOS',
     OS_Int: 1, //iOS :1, Android :2
     
@@ -22,8 +27,9 @@ Config = {
 	}
 };
 
-Service = {		
+Service = {	
 	url: 'http://' + window.location.hostname + ':8080/book/data'
+
 };	
 
 Account = {};
@@ -179,7 +185,7 @@ $(document).ready(function() {
 
 Container = {
 	getBody: function() {
-		return $('#wrapper');
+		return $('#wrap');
 	},
 	loadPage: function(container) {
 		this.getBody().empty().append(container);
@@ -217,9 +223,9 @@ Device = {
             });
         }
         ,
+    changePage:{},
     enablePush:function(){
 //        alert();
-        console.log(PushNotification);
         PushNotification.enablePush(function() {
                 console.log("enablePush");
         });
@@ -272,7 +278,7 @@ Device = {
 									fbid : user.id,
 									fbpic : user.picture.data.url,
 									access_token : access_token,
-									fbname : user.name,
+									dname : user.name,
 									fbemail : user.email
 								});
 						}
@@ -287,6 +293,16 @@ Device = {
 	        );
 	    
 	    },
+	    deleteAllPermission:function(callback){
+            
+            if (!Device.PhoneGap.isReady) return;
+            
+            FB.api('/me/permissions', 'DELETE',
+               function(response) {
+                   callback();
+            });
+        }
+        ,
 	    logoutFacebook: function(callback){
 	    	if (!Device.PhoneGap.isReady) return;
 	    	
@@ -335,7 +351,7 @@ Device = {
 						var linkToFb = function(data) {
 							var fbobj = {
 								fbpic : user.fbpic,
-								fbname : user.fbname,
+								dname : user.dname,
 								token: user.access_token
 							};
 
@@ -348,7 +364,7 @@ Device = {
 									.stringify(Account));
 							postfb();
 						};
-						Service.User.linkFB(Account.userId, user.fbid, user.fbpic, user.fbname, user.fbemail, user.access_token, linkToFb);
+						Service.User.linkFB(Account.userId, user.fbid, user.fbpic, user.dname, user.fbemail, user.access_token, linkToFb);
 					});
 				}
 			}); 
@@ -378,10 +394,10 @@ Device = {
 			} else {
 				Device.PhoneGap.loginFacebook(function(user) {
 					Service.User.linkFB(Account.userId, user.fbid, user.fbpic,
-					user.fbname, user.fbemail, user.access_token, function(data) {
+					user.dname, user.fbemail, user.access_token, function(data) {
 						var fbobj = {
 							fbpic : user.fbpic,
-							fbname : user.fbname,
+							dname : user.dname,
 							token: user.access_token
 						};
 
@@ -858,7 +874,7 @@ Page = {
 									var fn = function(data) {
 										var fbobj = {
 											fbpic: user.fbpic,
-											fbname: user.fbname,
+											dname: user.dname,
 											token: user.access_token
 										};
 
@@ -871,7 +887,7 @@ Page = {
 										
 										callback();
 									};
-									Service.User.linkFB(Account.userId, user.fbid, user.fbpic, user.fbname, user.fbemail, user.access_token, fn);
+									Service.User.linkFB(Account.userId, user.fbid, user.fbpic, user.dname, user.fbemail, user.access_token, fn);
 								});
 							};
 							
@@ -1000,7 +1016,7 @@ Page = {
 		}
 	},
 	
-	btnShowLoading: function(btn) {
+	btnShowLoading: function(btn,white) {
 		var cv = document.createElement('canvas');
 	    cv.id = "cv_button";
 	    cv.width = 20;
@@ -1023,7 +1039,10 @@ Page = {
 				i++;
 			}, 80);
 		};
-		img.src = 'images/circle_s.png';
+		if(white)
+			img.src = 'images/circle_w.png';
+		else
+			img.src = 'images/circle_s.png';
 	},
 	btnHideLoading: function(btn) {
 		if (Page.btnInterval) {
@@ -1430,7 +1449,7 @@ document.addEventListener("deviceready", function() {
                              
         Device.PhoneGap.isReady = true;
         PushNotification.getIncoming(handleIncomingPush);
-        PushNotification.resetBadge();
+
         
         
    }, false);

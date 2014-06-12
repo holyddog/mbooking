@@ -16,12 +16,17 @@ Page.Home = {
 		// set content links
 		container.find('[data-id=link_f]').tap(function() {
 			var fn = function(user) {
-				Service.User.SignInFB(user.fbid, function(data) {	
+				var dvtoken = '';
+	            if(localStorage.getItem("dvk"))
+	            dvtoken = localStorage.getItem("dvk");
+	            Page.showLoading('Loading information...');
+				Service.User.SignInFB(user.fbid,Config.OS_Int,dvtoken, function(data) {		
+					Page.hideLoading();
 					if (data.error) {
 						var params = {
 							fbid : user.fbid,
 							fbpic : user.fbpic,
-							fbname : user.fbname,
+							dname : user.dname,
 							fbemail : user.fbemail
 						};	
 						Page.open('SignUp', true, params);
@@ -41,7 +46,7 @@ Page.Home = {
 							bookCount : data.pbcount,
 							fbObject : {
 								fbpic : data.fbobj.pic,
-								fbname : data.fbobj.dname,
+								dname : data.fbobj.dname,
 								token: data.fbobj.token
 							}
 						};
