@@ -384,6 +384,12 @@
 	color: red;
 	font-size: 90%;}
 
+#page_SignUp .input_load{
+	height: 40px;
+	width: 40px;
+	background: white;
+}
+
 #page_Book .btitle {
 	font-family: 'Roboto', 'Bangna';
 	font-weight: 400;
