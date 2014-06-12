@@ -11,6 +11,7 @@ public class Like {
 	Long bid;
 	Long uid;
 	Long ldate;
+	Boolean inactive;
 
 	public ObjectId getLid() {
 		return lid;
@@ -42,5 +43,13 @@ public class Like {
 
 	public void setLdate(Long ldate) {
 		this.ldate = ldate;
+	}
+
+	public Boolean getInactive() {
+		return inactive;
+	}
+
+	public void setInactive(Boolean inactive) {
+		this.inactive = inactive;
 	}
 }

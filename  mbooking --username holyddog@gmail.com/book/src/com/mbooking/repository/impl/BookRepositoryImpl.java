@@ -12,8 +12,10 @@ import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
+import com.mbooking.constant.ConstValue;
 import com.mbooking.model.Book;
 import com.mbooking.model.Like;
+import com.mbooking.model.Notification;
 import com.mbooking.model.Page;
 import com.mbooking.model.Tag;
 import com.mbooking.model.User;
@@ -587,18 +589,39 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 	public Boolean likeBook(Long bid, Long who, boolean isLike) {
 		try {
 			if (isLike) {
-				db.updateFirst(new Query(Criteria.where("bid").is(bid)), new Update().push("likes", who).inc("lcount", 1), Book.class);
+				Book book = db.findAndModify(new Query(Criteria.where("bid").is(bid)), new Update().push("likes", who).inc("lcount", 1), FindAndModifyOptions.options().returnNew(true), Book.class);
 				
-				Like like = new Like();
-				like.setBid(bid);
-				like.setUid(who);
-				like.setLdate(System.currentTimeMillis());
+				Update update = new Update().unset("inactive").set("ldate", System.currentTimeMillis());
+				FindAndModifyOptions opt = FindAndModifyOptions.options().upsert(true).returnNew(false);
+				Like oldLike = db.findAndModify(new Query(Criteria.where("bid").is(bid).and("uid").is(who)), update, opt, Like.class);
 				
-				db.insert(like);
+				Long auid = book.getUid();
+				if (oldLike == null && auid.longValue() != who.longValue()) {
+					Notification notf = new Notification();
+					notf.setUid(auid);
+					notf.setAdate(System.currentTimeMillis());
+					notf.setUnread(true);
+					
+					Query q = new Query(Criteria.where("uid").is(who));
+					q.fields().include("uid").include("dname").include("pic");
+					User u = db.findOne(q, User.class);
+					notf.setWho(u);
+//					u.setUid(foll.getUid());
+//					u.setDname(foll.getDname());
+//					u.setPic(foll.getPic());
+					
+					String fullMessage = String.format(ConstValue.NEW_LIKE_MSG_FORMAT_EN, u.getDname());
+					notf.setMessage(fullMessage);
+					notf.setNtype(ConstValue.NEW_LIKE);
+					
+					db.insert(notf);
+				}
 			}
 			else {
 				db.updateFirst(new Query(Criteria.where("bid").is(bid)), new Update().pull("likes", who).inc("lcount", -1), Book.class);
-				db.remove(new Query(Criteria.where("bid").is(bid).and("uid").is(who)), Like.class);
+//				db.remove(new Query(Criteria.where("bid").is(bid).and("uid").is(who)), Like.class);
+				
+				db.updateFirst(new Query(Criteria.where("bid").is(bid).and("uid").is(who)), new Update().set("inactive", true), Like.class);
 			}
 			
 			return true;
