@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.query.Update;
 
 import com.mbooking.constant.ConstValue;
 import com.mbooking.model.Book;
+import com.mbooking.model.Device;
 import com.mbooking.model.FBobj;
 import com.mbooking.model.Follow;
 import com.mbooking.model.Notification;
@@ -26,8 +27,24 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 	@Autowired
 	private MongoTemplate db;
 	
+	private void addDevice(String email,Integer os,String dvtoken){
+		Query query = new Query();
+		query.addCriteria(Criteria.where("os").is(os).and("token").is(dvtoken));
+		Update update = new Update();
+		update.set("token", dvtoken);
+		update.set("os", os);
+		update.set("alias", email);
+		update.set("lstuse", System.currentTimeMillis());
+		try{
+			db.upsert(query, update, Device.class);
+		}
+		catch(Exception ex){
+			throw ex;
+		}
+	}
+	
 	@Override
-	public User signIn(String loginName, String password) {
+	public User signIn(String loginName, String password,Integer os,String dvtoken) {
 		Criteria loginCriteria = new Criteria().orOperator(
 			Criteria.where("uname").is(loginName), 
 			Criteria.where("email").is(loginName)
@@ -46,12 +63,16 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 			query.fields().include("pic").include("title").include("pcount");
 			List<Book> books = db.find(query, Book.class);
 			user.setBooks(books);
+				if(os!=null&&dvtoken!=null&&!dvtoken.equals(""))
+					addDevice(user.getEmail(),os,dvtoken);
+		
 		}
+		
 		return user;
 	}
 
 	@Override
-	public User signUp(String email, String password, String displayName, String userName) {
+	public User signUp(String email, String password, String displayName, String userName,Integer os,String dvtoken) {
 		User user = new User();
 		
 		user.setPwd(Convert.toMD5Password(password));	
@@ -61,8 +82,11 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		user.setUname(userName);
 		
 		db.insert(user);
-		
 		user.setPwd(null); // remove password before return data
+		
+		if(os!=null&&dvtoken!=null)
+		addDevice(email,os,dvtoken);
+		
 		return user;
 	}
 	
@@ -77,11 +101,11 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 	}
 
 	@Override
-	public User signInFB(Long fbid) {
-			Criteria criteria = Criteria.where("fbobj.fbid").is(fbid).and("inactive").ne(true).and("unlinkfb").exists(false);
+	public User signInFB(Long fbid,Integer os,String dvtoken) {
+			Criteria criteria = Criteria.where("fbobj._id").is(fbid).and("inactive").ne(true).and("unlinkfb").exists(false);
 			Query query = new Query(criteria);
 			query.fields().exclude("pwd");
-			query.fields().exclude("fbobj.fbid");
+			query.fields().exclude("fbobj._id");
 			
 			User user = db.findOne(query, User.class);
 			if (user != null) {
@@ -91,12 +115,14 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 				user.setBooks(books);
 			}
 			
+			if(os!=null&&dvtoken!=null&&user!=null)
+				addDevice(user.getEmail(),os,dvtoken);
 			return user;
 	}
 
 	@Override
 	public User signUpFB(String email, String displayName, String userName,String password,
-			Long fbid, String fbpic,String fbname,String fbemail) {
+			Long fbid, String fbpic,String fbname,String fbemail,Integer os,String dvtoken) {
 		
 		User user = new User();
 		user.setUid(MongoCustom.generateMaxSeq(User.class, db));
@@ -116,7 +142,9 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		}
 		
 		db.insert(user);
-
+		if(os!=null&&dvtoken!=null)
+			addDevice(fbemail,os,dvtoken);
+		
 		return user;
 	}
 	

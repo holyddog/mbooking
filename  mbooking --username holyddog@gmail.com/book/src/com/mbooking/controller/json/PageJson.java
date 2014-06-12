@@ -1,5 +1,8 @@
 package com.mbooking.controller.json;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,12 +11,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mbooking.common.ErrorResponse;
 import com.mbooking.common.ResultResponse;
 import com.mbooking.model.Book;
 import com.mbooking.model.Page;
 import com.mbooking.repository.PageRepository;
+import com.mbooking.util.ConfigReader;
+import com.mbooking.util.ImageUtils;
 
 @Controller
 public class PageJson {
@@ -40,6 +46,47 @@ public class PageJson {
 		return ErrorResponse.getError("This page cannot be saved");
 	}
 	
+
+    @RequestMapping(value = "/addMultiPage.json", method = RequestMethod.POST)
+	public @ResponseBody
+	Object uploadFileHandler(
+			@RequestParam("file") MultipartFile file,
+			@RequestParam(value = "bid") Long bookId,
+			@RequestParam(value = "uid") Long addBy
+			) {
+		if (!file.isEmpty()) {
+			try {
+				byte[] bytes = file.getBytes();
+
+				// Creating the directory to store file
+//				File dir = new File(ConfigReader.getProp("upload_path")+"u" + addBy + "/b" + bookId);
+				
+				String imgPath ="u" + addBy +File.separator+ "b" + bookId;
+				File dir = new File("C:/temp/"+imgPath);
+				if (!dir.exists())
+					dir.mkdirs();
+
+				String key = ImageUtils.uniqueString(8);
+				imgPath += File.separator + key+".jpg";
+				
+				File serverFile = new File("C:/temp/"+imgPath);
+				
+				BufferedOutputStream stream = new BufferedOutputStream(
+						new FileOutputStream(serverFile));
+				stream.write(bytes);
+				stream.close();
+
+				return  pageRepo.addMulti(imgPath,serverFile, bookId, addBy);
+				
+			} catch (Exception e) {
+				return "You failed to upload  => " + e.getMessage();
+			}
+		} else {
+			return "You failed to upload because the file was empty.";
+		}
+	}
+
+
 	@RequestMapping(method = RequestMethod.POST, value = "/changeSeq.json")
 	public @ResponseBody
 	Object changeSeq(
@@ -52,6 +99,7 @@ public class PageJson {
 		return ResultResponse.getResult("success", true);
 	}
 	
+
 	@RequestMapping(method = RequestMethod.POST, value = "/editCaption.json")
 	public @ResponseBody
 	Object editCaption(

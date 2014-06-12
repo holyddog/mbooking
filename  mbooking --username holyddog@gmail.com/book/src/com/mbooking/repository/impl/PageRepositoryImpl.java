@@ -159,6 +159,46 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 	}
 
 	@Override
+	public Boolean addMulti(String pic,File file,Long bookId, Long addBy) {
+		
+		try{
+		if(!pic.isEmpty()&&!ImageUtils.generatePictureUrl(file)){
+			return false;
+		}
+		
+		Query query = new Query(Criteria.where("bid").is(bookId));
+		Page page = new Page();	
+		Integer seq = (int) db.count(query, Page.class) + 1;
+		Long pid = MongoCustom.generateMaxSeq(Page.class, db);
+		page.setPid(pid);
+		page.setSeq(seq);
+		page.setBid(bookId);
+		page.setUid(addBy);
+		page.setCdate(System.currentTimeMillis());
+				
+		// generate picture to directory
+		page.setPic(pic);
+		db.insert(page);		
+		// update book (page count, 
+		Update update = new Update();
+		update.inc("pcount", 1);
+				
+		// set picture to cover image for seq = 1
+		if (seq.intValue() == 1) {
+			update.set("pic", pic);
+		}
+		db.updateFirst(query, update, Book.class);
+		
+		return true;
+		}
+		catch(Exception ex){
+			ex.printStackTrace();
+			return false;
+		}
+		
+	}
+	
+	@Override
 	public Page edit(Long pid, Long uid, Long bid, Long date, String pic,
 			String caption) {
 
