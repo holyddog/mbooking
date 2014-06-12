@@ -136,7 +136,7 @@ Page.SignUp = {
 				    				}
 				    				checkReadyToSubmit();
 			    				}
-//			    				Page.btnHideLoading(container.find('.input_load[data-name="email"]')[0]);
+			    				Page.btnHideLoading(container.find('.input_load[data-name="email"]')[0]);
 			    			});
 						   
 						   
@@ -189,7 +189,7 @@ Page.SignUp = {
 									    				}
 									    				checkReadyToSubmit();
 								    				}
-//								    				Page.btnHideLoading(container.find('.input_load[data-name="uname"]')[0]);
+								    				Page.btnHideLoading(container.find('.input_load[data-name="uname"]')[0]);
 												});
 								    		}
 								    	,3000);
