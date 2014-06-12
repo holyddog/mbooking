@@ -67,8 +67,8 @@ public class TestJson {
 		HashMap<String, String> map = new HashMap<String, String>();
 //		map.put("page", "Book");
 //		map.put("bid", "1");
-		map.put("page", "Profile");
-		map.put("followid","2");
+		map.put("page", "Book");
+		map.put("bid","1");
 		PushNotification.sendPush("Send the push", Selectors.alias("dev@senate.co.th"),null,map);
 		
 		return "Success";

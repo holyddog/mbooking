@@ -34,9 +34,12 @@ public interface ConstValue {
 	public static final int NEW_LIKE = 3;
 
 	public static final String NEW_LIKE_MSG_FORMAT_EN = "<b>%s</b> liked your story";
+	public static final String NEW_LIKE_MSG_FORMAT_PUSH_EN = "%s liked %s";
+	
 	public static final String NEW_FOLLOWER_MSG_FORMAT_EN = "<b>%s</b> started following you";
-	public static final String FOLLOWER_COMMENT_MSG_FORMAT_EN = "<b>%s</b> left a commented on <b>%s</b>: %s";
-
 	public static final String NEW_FOLLOWER_MSG_FORMAT_PUSH_EN = "%s started following you";
+	
+	public static final String FOLLOWER_COMMENT_MSG_FORMAT_EN = "<b>%s</b> left a commented on <b>%s</b>: %s";
 	public static final String FOLLOWER_COMMENT_MSG_FORMAT_PUSH_EN = "%s started following you";
+	
 }
