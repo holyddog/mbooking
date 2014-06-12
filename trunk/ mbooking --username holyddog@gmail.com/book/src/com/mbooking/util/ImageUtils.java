@@ -404,7 +404,86 @@ public class ImageUtils {
 		return new int[]{ x, y };
 	}
 	
+
+	public static int cropCenterAndResize(File input) {
+		int count = 0;
+		try {
+			BufferedImage src = ImageIO.read(input);
+			int imageWidth = ((Image)src).getWidth(null);
+			int imageHeight = ((Image)src).getHeight(null);
+			
+			
+			String fileName = input.getName().substring(0, input.getName().lastIndexOf('.'));
+			String fileExt = getExt(input.getName());
+			
+			// resize to 640px		
+		    int imageDir = 0; // 0 = horizontal, 1 = vertical
+			int maxHeight = 640;
+			int maxWidth = 640;
+			double imageRatio = (double) imageWidth / (double) imageHeight;	
+			if (imageWidth > imageHeight) {
+				maxWidth = (int) (maxHeight * imageRatio);
+			}
+			else if (imageWidth < imageHeight) {
+				maxHeight = (int) (maxWidth / imageRatio);
+				imageDir = 1;
+			}			
+			
+			Image image = src.getScaledInstance(maxWidth, maxHeight, Image.SCALE_SMOOTH);
+			BufferedImage newBuff = new BufferedImage(maxWidth, maxHeight, BufferedImage.TYPE_INT_RGB);
+			Graphics g = newBuff.getGraphics();
+			g.drawImage(image, 0, 0, null);
+			g.dispose();		    
+			
+		    String cImg = input.getAbsolutePath().replace("."+fileExt, "") +"_" + "c." + fileExt;
+		    if (ImageIO.write(newBuff, getExt(input.getName()), new File(cImg))) {
+		    	count++;
+		    }
+			
+			// crop to square 640x640
+			int size = 640;
+			int x = 0;
+			int y = 0;
+			
+			if (imageDir == 0) {
+				x = (int) ((((imageWidth-imageHeight)/2) * size) / imageHeight);
+			}
+			else {
+				y =  (int) ((((imageHeight-imageWidth)/2) * size) / imageWidth);
+			}
+			
+			BufferedImage dest = new BufferedImage(size, size, src.getType());
+			g = dest.getGraphics();
+			g.drawImage(newBuff, 0, 0, size, size, x, y, x + size, y + size, null);
+			g.dispose();
+		    
+		    if (ImageIO.write(dest, getExt(input.getName()), new File(cImg))) {
+		    	count++;
+		    }
+			
+			// resize to 320x320
+		    BufferedImage si = ImageIO.read(new File(cImg));
+		    Image sImage = si.getScaledInstance(320, 320, Image.SCALE_SMOOTH);
+			BufferedImage sBuff = new BufferedImage(320, 320, BufferedImage.TYPE_INT_RGB);
+			g = sBuff.getGraphics();
+			g.drawImage(sImage, 0, 0, null);
+			g.dispose();
+
+		    String sImg =  input.getAbsolutePath().replace("."+fileExt, "")+ "_" + "s." + fileExt;
+		    if (ImageIO.write(sBuff, getExt(input.getName()), new File(sImg))) {
+		    	count++;
+		    }
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			return -1;
+		}
+		return count;
+	}
+	
+
 	public static String generatePicture(File file, String base64, Integer imageSize, Integer cropPos, String imgPath, Integer[] pos) {
+
 		if (isEmpty(base64)) {
 			return null;
 		}
@@ -444,6 +523,19 @@ public class ImageUtils {
 		return null;
 	}
 	
+	public static Boolean generatePictureUrl(File file) {
+		try {			
+			
+			cropCenterAndResize(file);
+			
+			return true;
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		
+		return false;
+	}
 	
 	public static String toImageFile(String image_folder,String base64, Integer imgtype) {
 		if (isEmpty(base64)) {

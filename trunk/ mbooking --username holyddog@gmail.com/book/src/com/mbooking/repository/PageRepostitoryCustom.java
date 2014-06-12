@@ -1,5 +1,5 @@
 package com.mbooking.repository;
-
+import java.io.File;
 import java.util.List;
 
 import com.mbooking.model.Book;
@@ -21,4 +21,10 @@ public interface PageRepostitoryCustom {
 
 	public List<Page> findFollowingPages(Long uid, Integer skip, Integer limit);
 
+	public Boolean addMulti(
+			String pic,
+			File file,
+			Long bookId,	
+			Long addBy
+	);
 }

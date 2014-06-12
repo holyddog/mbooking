@@ -30,6 +30,7 @@ public class User {
 	Integer tcount; // Total book count
 
 	Object[] following;
+	Object[] everfoll;
 
 	Long lstin;		//last login
 	FBobj fbobj;
@@ -205,5 +206,11 @@ public class User {
 	public void setUnlinkfb(Boolean unlinkfb) {
 		this.unlinkfb = unlinkfb;
 	}
-	
+	public Object[] getEverfoll() {
+		return everfoll;
+	}
+
+	public void setEverfoll(Object[] everfoll) {
+		this.everfoll = everfoll;
+	}	
 }

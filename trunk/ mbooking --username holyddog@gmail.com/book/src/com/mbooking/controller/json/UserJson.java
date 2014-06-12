@@ -74,12 +74,16 @@ public class UserJson {
 		return ResultResponse.getResult("result", userRepo.findByUserName(userName) != null);
 	}
 	
+	/**/
+	
 	@RequestMapping(method = RequestMethod.POST, value = "/signIn.json")
 	public @ResponseBody Object signIn(
 			@RequestParam(value = "login") String loginName,
-			@RequestParam(value = "pwd",required = false) String password
+			@RequestParam(value = "pwd",required = false) String password,
+			@RequestParam(value = "os",required = false) Integer os,
+			@RequestParam(value = "dvtoken",required = false) String dvtoken
 			) {
-		User user = userRepo.signIn(loginName, password);
+		User user = userRepo.signIn(loginName, password,os,dvtoken);
 		if (user != null) {
 			return user;
 		}
@@ -91,23 +95,28 @@ public class UserJson {
 			@RequestParam(value = "email") String email,
 			@RequestParam(value = "dname") String displayName,
 			@RequestParam(value = "uname") String userName,
-			@RequestParam(value = "pwd") String password
+			@RequestParam(value = "pwd") String password,
+			@RequestParam(value = "os",required = false) Integer os,
+			@RequestParam(value = "dvtoken",required = false) String dvtoken
 			)
 			{
-		User user = userRepo.signUp(email, password, displayName, userName);
+		User user = userRepo.signUp(email, password, displayName, userName,os,dvtoken);
 		if (user != null) {
 			return user;
 		}
 		return ErrorResponse.getError("Sign Up unsuccess ");
 	}
 	
+	/**/
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/signInFB.json")
 	public @ResponseBody Object signInFB(
-			@RequestParam(value = "fbid") Long fbid			
+			@RequestParam(value = "fbid") Long fbid,			
+			@RequestParam(value = "os",required = false) Integer os,
+			@RequestParam(value = "dvtoken",required = false) String dvtoken
 			)
 	{
-		User user = userRepo.signInFB(fbid);
+		User user = userRepo.signInFB(fbid,os,dvtoken);
 		if (user != null) {
 			return user;
 		}
@@ -125,10 +134,12 @@ public class UserJson {
 			@RequestParam(value = "fbid") Long fbid,
 			@RequestParam(value = "fbpic") String fbpic,
 			@RequestParam(value = "fbname") String fbname,
-			@RequestParam(value = "fbemail", required = false) String fbemail
+			@RequestParam(value = "fbemail", required = false) String fbemail,
+			@RequestParam(value = "os",required = false) Integer os,
+			@RequestParam(value = "dvtoken",required = false) String dvtoken
 			)
 			{
-		User user = userRepo.signUpFB(email, displayName, userName, password, fbid, fbpic, fbname, fbemail);
+		User user = userRepo.signUpFB(email, displayName, userName, password, fbid, fbpic, fbname, fbemail,os,dvtoken);
 		if (user != null) {
 			return user;
 		}

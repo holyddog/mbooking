@@ -38,4 +38,6 @@ public interface ConstValue {
 	public static final String NEW_FOLLOWER_MSG_FORMAT_EN = "<b>%s</b> started following you";
 	public static final String FOLLOWER_COMMENT_MSG_FORMAT_EN = "<b>%s</b> left a commented on <b>%s</b>: %s";
 	
+	public static final String NEW_FOLLOWER_MSG_FORMAT_PUSH_EN = "%s started following you";
+	public static final String FOLLOWER_COMMENT_MSG_FORMAT_PUSH_EN = "%s started following you";
 }

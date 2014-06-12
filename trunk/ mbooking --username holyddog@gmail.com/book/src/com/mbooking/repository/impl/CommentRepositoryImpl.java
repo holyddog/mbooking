@@ -1,5 +1,6 @@
 package com.mbooking.repository.impl;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,9 @@ import com.mbooking.model.Notification;
 import com.mbooking.model.User;
 import com.mbooking.repository.CommentRepostitoryCustom;
 import com.mbooking.util.MongoCustom;
+import com.mbooking.util.PushNotification;
 import com.mbooking.util.TimeUtils;
+import com.urbanairship.api.push.model.audience.Selectors;
 
 public class CommentRepositoryImpl implements CommentRepostitoryCustom {
 	
@@ -52,26 +55,37 @@ public class CommentRepositoryImpl implements CommentRepostitoryCustom {
 				db.insert(comment);
 				
 				db.updateFirst(new Query(Criteria.where("bid").is(bid)), new Update().inc("ccount", 1), Book.class);
-
-				Notification notf = new Notification();
-				notf.setUid(book.getUid()); // set notify to book author
-				notf.setUnread(true);
 				
-				Book b = new Book();
-				b.setBid(book.getBid());
-				b.setPic(book.getPic());
-				b.setTitle(book.getTitle());
-				notf.setBook(b);
-				notf.setWho(user);
-				
-				notf.setAdate(now);
-				
-				String fullMessage = String.format(ConstValue.FOLLOWER_COMMENT_MSG_FORMAT_EN, user.getDname(), book.getTitle(), message);
-				notf.setMessage(fullMessage);
-				notf.setNtype(ConstValue.FOLLOWER_COMMENT);
+				if(uid!=book.getUid()){
+					Notification notf = new Notification();
+					notf.setUid(book.getUid()); // set notify to book author
+					notf.setUnread(true);
+					
+					Book b = new Book();
+					b.setBid(book.getBid());
+					b.setPic(book.getPic());
+					b.setTitle(book.getTitle());
+					notf.setBook(b);
+					notf.setWho(user);
+					
+					notf.setAdate(now);
+					
+					String fullMessage = String.format(ConstValue.FOLLOWER_COMMENT_MSG_FORMAT_EN, user.getDname(), book.getTitle(), message);
+					notf.setMessage(fullMessage);
+					notf.setNtype(ConstValue.FOLLOWER_COMMENT);
+	
+					db.insert(notf);
 
-				db.insert(notf);
-
+					Query auth_q= new Query(Criteria.where("uid").is(book.getUid()));
+					auth_q.fields().include("email");
+					User author =  db.findOne(auth_q, User.class);
+					
+					HashMap<String, String> map = new HashMap<String, String>();
+					map.put("page", "Book");
+					map.put("bid", book.getBid()+"");
+					PushNotification.sendPush(String.format(ConstValue.FOLLOWER_COMMENT_MSG_FORMAT_PUSH_EN, user.getDname(), book.getTitle(), message), Selectors.alias(author.getEmail()), null, map);
+				}
+				
 				return true;
 			} else
 				return false;
@@ -85,7 +99,7 @@ public class CommentRepositoryImpl implements CommentRepostitoryCustom {
 	public List<Comment> findCommentsByBid(Long bid,Integer skip,Integer limit) {
 		
 		Query query = new Query(Criteria.where("bid").is(bid));
-		query.sort().on("pdate",Order.DESCENDING);
+		query.sort().on("pdate",Order.ASCENDING);
 		
 		if(skip!=null&&limit!=null&&limit!=0){
 			query.skip(skip);

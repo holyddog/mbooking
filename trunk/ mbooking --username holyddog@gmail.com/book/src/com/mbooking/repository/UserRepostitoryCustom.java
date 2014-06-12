@@ -8,12 +8,12 @@ import com.mbooking.model.Notification;
 import com.mbooking.model.User;
 
 public interface UserRepostitoryCustom {
-	User signIn(String email, String password);
-	User signUp(String email, String password, String displayName, String userName);
+	User signIn(String email, String password,Integer os,String dvtoken);
+	User signUp(String email, String password, String displayName, String userName,Integer os,String dvtoken);
 	List<User> findUsersByName(String keyword);
 	
-	User signInFB(Long fbid);
-	User signUpFB(String email, String displayName, String userName,String password,Long fbid,String fbpic,String fbname,String fbemail);	
+	User signInFB(Long fbid,Integer os,String dvtoken);
+	User signUpFB(String email, String displayName, String userName,String password,Long fbid,String fbpic,String fbname,String fbemail,Integer os,String dvtoken);	
 	
 	Boolean changePassword(Long uid, String oldpassword, String newpassword);
 	HashMap<String, Object> getUserProfile(Long uid, Long guestId); 

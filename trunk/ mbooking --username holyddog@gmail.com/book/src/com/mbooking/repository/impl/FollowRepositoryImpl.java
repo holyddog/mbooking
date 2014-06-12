@@ -1,5 +1,6 @@
 package com.mbooking.repository.impl;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,8 @@ import com.mbooking.model.Follow;
 import com.mbooking.model.Notification;
 import com.mbooking.model.User;
 import com.mbooking.repository.FollowRepostitoryCustom;
+import com.mbooking.util.PushNotification;
+import com.urbanairship.api.push.model.audience.Selectors;
 
 public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 	
@@ -39,22 +42,25 @@ public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 			update.inc("fgcount", 1);
 			
 			FindAndModifyOptions opt = FindAndModifyOptions.options().returnNew(true);
-			User foll = db.findAndModify(new Query(Criteria.where("uid").is(uid)), update, opt, User.class);Notification notf = new Notification();
-			notf.setUid(auid);
-			notf.setAdate(System.currentTimeMillis());
-			notf.setUnread(true);
+			User foll = db.findAndModify(new Query(Criteria.where("uid").is(uid)), update, opt, User.class);
 			
-			User who = new User();
-			who.setUid(foll.getUid());
-			who.setDname(foll.getDname());
-			who.setPic(foll.getPic());
-			notf.setWho(who);
-			
-			String fullMessage = String.format(ConstValue.NEW_FOLLOWER_MSG_FORMAT_EN, foll.getDname());
-			notf.setMessage(fullMessage);
-			notf.setNtype(ConstValue.NEW_FOLLOWER);
-			
-			db.insert(notf);
+			if(db.count(new Query(Criteria.where("uid").is(uid).and("everfoll").in(auid)),User.class)==0){
+				Notification notf = new Notification();
+				notf.setUid(auid);
+				notf.setAdate(System.currentTimeMillis());
+				notf.setUnread(true);
+				
+				User who = new User();
+				who.setUid(foll.getUid());
+				who.setDname(foll.getDname());
+				who.setPic(foll.getPic());
+				notf.setWho(who);
+				
+				String fullMessage = String.format(ConstValue.NEW_FOLLOWER_MSG_FORMAT_EN, foll.getDname());
+				notf.setMessage(fullMessage);
+				notf.setNtype(ConstValue.NEW_FOLLOWER);
+				db.insert(notf);
+			}
 			return true;
 		}
 		catch(Exception e){
@@ -75,6 +81,13 @@ public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 			
 			db.updateFirst(new Query(Criteria.where("uid").is(uid)), update, User.class);
 
+			
+			if(db.count(new Query(Criteria.where("uid").is(uid).and("everfoll").in(auid)),User.class)==0){
+				update = new Update();
+				update.push("everfoll", auid);
+				db.updateFirst(new Query(Criteria.where("uid").is(uid)), update, User.class);
+			}
+			
 			return true;
 
 		} catch (Exception e) {

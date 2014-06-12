@@ -83,11 +83,13 @@ $(document).ready(function() {
 					var page;
 					if(i==-1)
 					{
-						 page =  $('<div class="page_nav box vertical" style="position:absolute; width:'+(bwidth/2)+'px;height:'+bheight+'px;top:'+mar_top+'px;  z-index:500; pointer-events: none; visibility: hidden; -webkit-transform-origin: left center;transform-origin:left center;-ms-transform-origin:left center;   left: 50%; -webkit-transform-style: preserve-3d;transform-style: preserve-3d;"></div>');					
+						 page =  $('<div class="page_nav box vertical" style="position:absolute; width:'+(bwidth/2)+'px;height:'+bheight+'px;top:'+mar_top+'px;  z-index:500; pointer-events: none; visibility: hidden; -webkit-transform-origin: left center; left: 50%; -webkit-transform-style: preserve-3d;"></div>');					
+						
+						
 					}
 					else{	
 					
-						 page =  $('<div class="page_nav box vertical" style="position:absolute; width:'+(bwidth/2)+'px;height:'+bheight+'px;top:'+mar_top+'px; pointer-events: none; visibility: hidden; -webkit-transform-origin: left center;transform-origin:left center;-ms-transform-origin:left center;   left: 50%; -webkit-transform-style: preserve-3d;transform-style: preserve-3d;"></div>');					
+					   page =  $('<div class="page_nav  box vertical" style="position:absolute; width:'+(bwidth/2)+'px;height:'+bheight+'px;top:'+mar_top+'px;pointer-events: none; visibility: hidden; -webkit-transform-origin: left center; left: 50%; -webkit-transform-style: preserve-3d;"></div>');					
 					}
 					
 					var frontpage='';
@@ -109,7 +111,7 @@ $(document).ready(function() {
 						+'			<div class="pimage">'
 						+'				<img src="res/images/user.jpg" />'
 						+'			</div>'
-						+'			<div class="box flex1" style="-webkit-box-align: center;-moz-box-align:center;box-align:center;-ms-flex-align:center;">'
+						+'			<div class="box flex1" style="-webkit-box-align: center;">'
 						+'					<h1 class="name"></h1>'
 						+'			</div>'
 						+'		</div>'
@@ -127,7 +129,7 @@ $(document).ready(function() {
 					
 					if( i != - 2){
 									
-						frontpage = $('<div class="frontside  box vertical" style="position:absolute; width:'+(bwidth/2)+'px;height:'+bheight+'px; background-color: white; overflow: hidden;  -webkit-backface-visibility:hidden;backface-visibility-webkit-transform-style: preserve-3d;"></div>');
+						frontpage = $('<div class="frontside  box vertical" style="position:absolute; width:'+(bwidth/2)+'px;height:'+bheight+'px; background-color: white; overflow: hidden;  -webkit-backface-visibility:hidden;-webkit-transform-style: preserve-3d;"></div>');
 						var foutframe = $('<div class=" box vertical" style="position:absolute; width:'+(bwidth*2)+'px;height:'+bheight+'px;"></div>');
 						var finframe = $('<div class=" box vertical" style="position:absolute; width:'+bwidth+'px;height:'+bheight+'px; left:-100%;"></div>');
 						if( i > - 1){
