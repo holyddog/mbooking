@@ -131,7 +131,7 @@ Page.SignUp = {
 				    					$('[data-lbl=email]').html("");
 				    					$('input[name=email]').removeAttr("data-error");		
 				    				}else{
-				    					$('input[name=email]').attr("data-error","email has already been used");
+				    					$('input[name=email]').attr("data-error","The email has already been used");
 				    					console.log("email duplicate");
 				    				}
 				    				checkReadyToSubmit();
@@ -184,7 +184,7 @@ Page.SignUp = {
 									    					$('[data-lbl=uname]').html("");
 									    					$('input[name=uname]').removeAttr("data-error");		
 									    				}else{
-									    					$('input[name=uname]').attr("data-error","username has already been used");
+									    					$('input[name=uname]').attr("data-error","Username has already been used");
 									    					console.log("uname duplicate");
 									    				}
 									    				checkReadyToSubmit();
@@ -200,7 +200,7 @@ Page.SignUp = {
 						 } 
 					 }
 					 else{
-						   $(this).attr("data-error",'only "a-z A-Z 0-9 ._-" can include');
+						   $(this).attr("data-error",'Only "a-z A-Z 0-9 ._-" can include');
 						   console.log("uname have specail letter");
 					 } 
 			    }

@@ -273,11 +273,6 @@ Page.Profile = {
 
 			profile_header.style.height = profile_header.offsetWidth + 'px';
 		
-            if(Page.Profile.callPushNote&&Page.Profile.callPushNote!={}){
-               Page.Profile.callPushNote();
-               Page.Profile.callPushNote={};
-
-            }
 		}, function() {
 			Page.bodyHideLoading(content);			
 		});
