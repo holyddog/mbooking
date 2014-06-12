@@ -237,11 +237,13 @@ Page.AddPage = {
 				case 0: {
 					drag_img.style.webkitTransform = 'translate3d(-' + ((iw / 2) - (pw / 2)) + 'px, 0px, 0px)';
 					max = -1 * (pw - iw / 2);
+					max = -1 * ((iw / 2) - (pw / 2));
 					break;
 				}
 				case 1: {
 					drag_img.style.webkitTransform = 'translate3d(0px, -' + ((ih / 2) - (ph / 2)) + 'px, 0px)';
 					max = -1 * (ph - ih / 2);
+					max = -1 * ((ih / 2) - (ph / 2));
 					break;
 				}
 			}
@@ -306,11 +308,11 @@ Page.AddPage = {
 							}
 						}
 						else { // drag left 
-							if (posX >= max) {
+							if (posX >= max * 2) {
 								drag_img.style.webkitTransform = 'translate3d(' + posX + 'px, 0px, 0px)';
 							}
-							else if (curX >= max) {
-								drag_img.style.webkitTransform = 'translate3d(' + max + 'px, 0px, 0px)';						
+							else if (curX >= max * 2) {
+								drag_img.style.webkitTransform = 'translate3d(' + max * 2 + 'px, 0px, 0px)';						
 							}					
 						}	
 						break;
@@ -320,7 +322,7 @@ Page.AddPage = {
 						var y = pos.y - target.y(e);				
 						var posY = (pos.sy - y);
 						var curY = drag_img.style.webkitTransform.split('(')[1].split('px, ')[1];
-						
+
 						if (sy < target.y(e)) { // drag down 
 							if (posY <= 0) {
 								drag_img.style.webkitTransform = 'translate3d(0px, ' + posY + 'px, 0px)';
@@ -330,11 +332,11 @@ Page.AddPage = {
 							}
 						}
 						else { // drag up 
-							if (posY >= max) {
+							if (posY >= max * 2) {
 								drag_img.style.webkitTransform = 'translate3d(0px, ' + posY + 'px, 0px)';
 							}
-							else if (curY >= max) {
-								drag_img.style.webkitTransform = 'translate3d(0px, ' + max + 'px, 0px)';						
+							else if (curY <= max * 2) {
+								drag_img.style.webkitTransform = 'translate3d(0px, ' + max * 2 + 'px, 0px)';						
 							}					
 						}
 						break;
