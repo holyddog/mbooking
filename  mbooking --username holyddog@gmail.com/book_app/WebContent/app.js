@@ -8,15 +8,12 @@ Config = {
 
 	FB_APP_ID: '370184839777084',
 	
-//<<<<<<< .mine
-	WEB_BOOK_URL:'http://119.59.122.38/book/index.html',
-//	FILE_URL: 'http://' + window.location.hostname + '/res/book',
-	FILE_URL: 'http://' + '119.59.122.38' + '/book_dev_files',
-//=======
-//	WEB_BOOK_URL : 'http://' + window.location.hostname + '/book/index.html',
-//	FILE_URL : 'http://' + window.location.hostname + '/res/book',
-//	
-//>>>>>>> .r266
+//	WEB_BOOK_URL:'http://119.59.122.38/book/index.html',
+//	FILE_URL: 'http://' + '119.59.122.38' + '/book_dev_files',
+	
+	FILE_URL: 'http://' + window.location.hostname + '/res/book',
+	WEB_BOOK_URL : 'http://' + window.location.hostname + '/book/index.html',
+
 	OS: 'iOS',
     OS_Int: 1, //iOS :1, Android :2
     
