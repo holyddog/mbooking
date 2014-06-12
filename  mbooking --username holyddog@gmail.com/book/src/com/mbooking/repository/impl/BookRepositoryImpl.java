@@ -1,6 +1,7 @@
 package com.mbooking.repository.impl;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.tomcat.util.http.fileupload.FileUtils;
@@ -22,6 +23,8 @@ import com.mbooking.model.User;
 import com.mbooking.repository.BookRepostitoryCustom;
 import com.mbooking.util.ConfigReader;
 import com.mbooking.util.MongoCustom;
+import com.mbooking.util.PushNotification;
+import com.urbanairship.api.push.model.audience.Selectors;
 
 public class BookRepositoryImpl implements BookRepostitoryCustom {
 
@@ -615,6 +618,15 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 					notf.setNtype(ConstValue.NEW_LIKE);
 					
 					db.insert(notf);
+					
+					Query auth_q= new Query(Criteria.where("uid").is(auid));
+					auth_q.fields().include("email");
+					User author =  db.findOne(auth_q, User.class);
+					
+					HashMap<String, String> map = new HashMap<String, String>();
+					map.put("page", "Book");
+					map.put("bid", book.getBid()+"");
+					PushNotification.sendPush(String.format(ConstValue.NEW_LIKE_MSG_FORMAT_PUSH_EN, u.getDname(), book.getTitle()), Selectors.alias(author.getEmail()), null, map);
 				}
 			}
 			else {
