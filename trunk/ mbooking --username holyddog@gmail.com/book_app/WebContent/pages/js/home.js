@@ -5,7 +5,7 @@ Page.Home = {
 		// check authen
 		if (localStorage.getItem('u')) {
 			Account = JSON.parse(localStorage.getItem('u'));
-			Page.open('Profile');
+			Page.open('Explore');
                        
 			if(Device.PhoneGap.isReady)
                     	Device.PhoneGap.setAliasPushnotification(Account.email);
@@ -60,7 +60,7 @@ Page.Home = {
 						localStorage.setItem("u", JSON.stringify(Account));
 						
 						Page.loadMenu();
-						Page.open('Profile');
+						Page.open('Explore');
 					}
 				});	
 			};
