@@ -509,12 +509,12 @@ Page = {
 			btnEdit.hide();
 		}
 		
-		btnAdd.tap(function() {
+		btnAdd.click(function() {
 //			e.preventDefault();
 			
 			Page.open('CreateBook', true, { pub: true });
 		});
-		btnEdit.tap(function() {
+		btnEdit.click(function() {
 //			e.preventDefault();
 			
 			if (Account.draftBooks && Account.draftBooks.length == 1) {
@@ -947,8 +947,8 @@ Page = {
 			setTimeout(function() {
 				dialog.one('click', function(e) {
 					history.back();
-				});				
-			}, 1000);
+				});		
+			}, 0);
 			window.location = '#dialog';
 		}
 		else {
