@@ -605,15 +605,22 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 					notf.setAdate(System.currentTimeMillis());
 					notf.setUnread(true);
 					
+					Book b = new Book();
+					b.setBid(book.getBid());
+					b.setPic(book.getPic());
+					b.setTitle(book.getTitle());
+					notf.setBook(b);
+					
 					Query q = new Query(Criteria.where("uid").is(who));
 					q.fields().include("uid").include("dname").include("pic");
 					User u = db.findOne(q, User.class);
 					notf.setWho(u);
+					
 //					u.setUid(foll.getUid());
 //					u.setDname(foll.getDname());
 //					u.setPic(foll.getPic());
 					
-					String fullMessage = String.format(ConstValue.NEW_LIKE_MSG_FORMAT_EN, u.getDname());
+					String fullMessage = String.format(ConstValue.NEW_LIKE_MSG_FORMAT_EN, u.getDname(), book.getTitle());
 					notf.setMessage(fullMessage);
 					notf.setNtype(ConstValue.NEW_LIKE);
 					
