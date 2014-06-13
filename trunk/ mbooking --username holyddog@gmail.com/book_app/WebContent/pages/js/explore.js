@@ -83,13 +83,10 @@ Page.Explore = {
 				Page.open('Profile', true, { uid: uid, back: true });
 			});
 			
-		     if(Page.Explore.callPushNote&&Page.Explore.callPushNote!={}){
-
-	                Page.Explore.callPushNote();
-
-	                Page.Explore.callPushNote={};
-
-	            }
+			if (Device.PhoneGap.isReady && Page.Explore.callPushNote && Page.Explore.callPushNote != {}) {
+				Page.Explore.callPushNote();
+				Page.Explore.callPushNote = {};
+			}
 		});
 	},
 	callPushNote:{}
