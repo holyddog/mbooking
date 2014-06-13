@@ -38,6 +38,7 @@ Page.EditCaption = {
 		});
 		
 		var inputText = container.find('[name=text]');
+		
 		if (params && params.text) {
 			container.find('.tbar .title').text('Edit Description');
 			btnAdd.find('.label').text('Update');
@@ -61,5 +62,9 @@ Page.EditCaption = {
 		inputText.keyup(function() {
 			updateRemainLetter(($(this).val()).length);
 		});
+		
+		setTimeout(function() {
+			inputText.trigger('click');
+		}, 100);
 	}
 };

@@ -69,12 +69,16 @@ Page.Explore = {
 				height: h + 'px',
 				margin: 0,
 				float: 'none'
-			}).click(function() {
+			}).click(function(e) {
+				e.preventDefault();
+				
 				var bid = $(this).data('bid');
 				var uid = $(this).data('uid');
 				Page.open('Book', true, { bid: bid, uid: uid });
 			});
-			panel.find('.panel').click(function() {
+			panel.find('.panel').click(function(e) {
+				e.preventDefault();
+				
 				var uid = $(this).data('uid');
 				Page.open('Profile', true, { uid: uid, back: true });
 			});

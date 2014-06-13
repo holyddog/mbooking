@@ -8,11 +8,11 @@ Config = {
 
 	FB_APP_ID: '370184839777084',
 	
-	WEB_BOOK_URL:'http://119.59.122.38/book/index.html',
-	FILE_URL: 'http://' + '119.59.122.38' + '/book_dev_files',
+//	WEB_BOOK_URL:'http://119.59.122.38/book/index.html',
+//	FILE_URL: 'http://' + '119.59.122.38' + '/book_dev_files',
 	
-//	FILE_URL: 'http://' + window.location.hostname + '/res/book',
-//	WEB_BOOK_URL : 'http://' + window.location.hostname + '/book/index.html',
+	FILE_URL: 'http://' + window.location.hostname + '/res/book',
+	WEB_BOOK_URL : 'http://' + window.location.hostname + '/book/index.html',
 
 	OS: 'iOS',
     OS_Int: 1, //iOS :1, Android :2
@@ -25,8 +25,8 @@ Config = {
 };
 
 Service = {	
-//	url: 'http://' + window.location.hostname + ':8080/book/data'
-	url: 'http://119.59.122.38/book/data'
+	url: 'http://' + window.location.hostname + ':8080/book/data'
+//	url: 'http://119.59.122.38/book/data'
 
 };	
 
@@ -37,11 +37,6 @@ income_push = false;
 Util = {
 	getRandomInt: function(min, max) {
 		return Math.floor(Math.random() * (max - min + 1)) + min;
-	},
-	getAndroidVersion: function() {
-	    var ua = navigator.userAgent; 
-	    var match = ua.match(/Android\s([0-9\.]*)/);
-	    return match ? match[1] : false;
 	},
 	getTime: function(date) {
 		var hours = date.getHours();
@@ -151,11 +146,11 @@ $(document).ready(function() {
 	win.trigger('resize');
 	
 	var sb = $('#sidebar_panel');
-	$('#overlay').bind('touchmove touchstart touchend', function(e) {
-		e.preventDefault();
-	});
+//	$('#overlay').bind('touchmove touchstart touchend', function(e) {
+//		e.preventDefault();
+//	});
 	
-	sb.find('.item').tap(function() {
+	sb.find('.item').click(function() {
 		var page = $(this).data('link');
 		
 		var hash = location.hash;	
@@ -170,9 +165,6 @@ $(document).ready(function() {
 	});
 	
 	var dialog = $('#dialog');
-	dialog.bind('click', function() {
-		history.back();
-	});
 	dialog.bind('touchmove', function(e) {
 		if ($(e.target).closest('.d_panel').length == 0) {
 			e.preventDefault();
@@ -204,6 +196,15 @@ Device = {
 			return true;
 		}
 		return false;
+	},
+	os: {
+		Android: /Android/i.test(navigator.userAgent),
+	    iOS: /iPhone|iPad|iPod/i.test(navigator.userAgent)
+	},
+	androidVer: function() {
+	    var ua = navigator.userAgent; 
+	    var match = ua.match(/Android\s([0-9\.]*)/);
+	    return match ? match[1] : false;
 	},
 	PhoneGap: {
 		isReady : false,
@@ -483,7 +484,18 @@ Page = {
 		bar.appendChild(getSep());
 		bar.appendChild(getLink('edit', 'Edit (0)', 'icons/pencil.png'));
 		
-		target.append(bar);
+//		$(bar).insertBefore(target.find('.content'));
+		
+		if (Device.os.Android) {
+			var content = target.find('.content').css('padding-bottom', '50px');
+			content.append($(bar).css({
+				'position': 'fixed',
+				'bottom': '0'
+			}));			
+		}
+		else {
+			target.append(bar);			
+		}
 		
 		var scBar = $(bar);
 		var btnAdd = scBar.find('[data-link=new]');
@@ -497,10 +509,14 @@ Page = {
 			btnEdit.hide();
 		}
 		
-		btnAdd.click(function() {
+		btnAdd.tap(function() {
+//			e.preventDefault();
+			
 			Page.open('CreateBook', true, { pub: true });
 		});
-		btnEdit.click(function() {
+		btnEdit.tap(function() {
+//			e.preventDefault();
+			
 			if (Account.draftBooks && Account.draftBooks.length == 1) {
 				Page.open('EditBook', true, { bid: Account.draftBooks[0].bid });
 			}
@@ -568,8 +584,9 @@ Page = {
 		else {
 			profileCover.find('.pimage img').attr('src', 'images/user.jpg');
 		}
-//		var bookCount = (Account.bookCount)? Account.bookCount: 0;
-		profileCover.find('.stat').html('@' + Account.userName);// + ' &#183; ' + bookCount + ' Books</span>');
+		if (Account.userName) {
+			profileCover.find('.stat').html('@' + Account.userName);
+		}
 	},
 	open: function(page, append, params) {
 		var fn = function() {
@@ -927,6 +944,11 @@ Page = {
 				}
 			}
 			
+			setTimeout(function() {
+				dialog.one('click', function(e) {
+					history.back();
+				});				
+			}, 1000);
 			window.location = '#dialog';
 		}
 		else {
@@ -1120,10 +1142,13 @@ Web = {
 			self.callback = fn;
 			
 			if (Device.isMobile()) {
+				self.bind('click', function(e) {
+					e.preventDefault();
+				});
 				
 				self.bind('touchstart', function(e) {	
 					if (!allowDefault)
-//						e.preventDefault();
+						e.preventDefault();
 
 					self.pos = self.offset();
 					self.size = { w: self.width(), h: self.height() };
@@ -1303,10 +1328,43 @@ var pageLoad = function() {
 	}
 	else if (page != 'dialog') {			
 		var slideMenu = function() {
-			setTimeout(function() {  
-				$('#overlay').css('display', 'block').tap(function() {
+			setTimeout(function() { 
+				var ov = $('#overlay').css('display', 'block').toggleClass('slide');
+				ov.click(function(e) {
 					history.back();
-				}).toggleClass('slide');
+				});
+//				var x = 0;
+//				var y = 0;
+//				var time = new Date().getTime();
+//				
+//				ov.bind('touchstart', function(e) {
+//					e.preventDefault();
+//					e.stopPropagation();
+//					
+//					$(e.target).data('ref', time);
+//					
+//				    x = e.originalEvent.touches[0].pageX;
+//					y = e.originalEvent.touches[0].pageY;
+//				});
+//				ov.bind('touchmove', function(e) {
+//					e.preventDefault();
+//					e.stopPropagation();
+//
+//				    x = e.originalEvent.touches[0].pageX;
+//					y = e.originalEvent.touches[0].pageY;
+//				});
+//				ov.bind('touchend', function(e) {
+//					e.preventDefault();	
+//					e.stopPropagation();
+//					
+//				    var elm = document.elementFromPoint(x, y);
+//				    if ($(elm).data('ref') == time) {
+//					    ov.unbind('touchmove touchstart touchend');
+//					    
+//					    
+//				    	history.back();
+//				    }
+//				});
 				$('#sidebar').toggleClass('slide');
 				Page._slideMenu = true;
 			}, 0);

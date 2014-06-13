@@ -557,6 +557,9 @@ textarea {
 #sidebar li.item.highlight {
 	background-color: #6DCAEC;
 }
+#sidebar li.item:active, #sidebar li.item:hover {
+	background-color: #6DCAEC;
+}
 
 #overlay {	
 	position: fixed;
@@ -738,6 +741,7 @@ textarea {
 	height: 50px;
 	overflow: hidden;
 	width: 100%;
+	visibility: hidden;
 }
 #dd_message .msg {	
 	padding: 10px 0;
