@@ -902,6 +902,7 @@
 }
 #page_Notifications .notf_item .msg .text {
 	font-size: 80%;
+	line-height: 18px;
 }
 #page_Notifications .notf_item .msg .time {
 	font-size: 70%;

@@ -122,7 +122,7 @@ Page.SignIn = {
 		container.find('input').each(function() {
 			var input = $(this)[0];
 			input.addEventListener('input', function() {
-				if (inputText.val().length > 0 && inputPwd.val().length >= 6) {
+				if (inputText.val().length > 0 && inputPwd.val().length > 0) {
 					btnAccept.removeClass('disabled');
 				}
 				else {

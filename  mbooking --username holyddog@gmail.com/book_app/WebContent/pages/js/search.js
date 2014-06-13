@@ -19,6 +19,7 @@ Page.Search = {
 		});
 		
 		var inputText = container.find('.input_search');
+		inputText.trigger('click');
 		
 		var clr = container.find('[data-id=clr]');
 		clr.tap(function() {
