@@ -165,6 +165,12 @@ $(document).ready(function() {
 	});
 	
 	var dialog = $('#dialog');
+//    dialog.bind('click', function(e) {
+//		if ($(e.target).closest('.d_panel').length > 0) {
+//		} else {
+//			history.back();
+//		}
+//    });
 	dialog.bind('touchmove', function(e) {
 		if ($(e.target).closest('.d_panel').length == 0) {
 			e.preventDefault();
@@ -834,6 +840,13 @@ Page = {
 						'		</a>' +
 						'	</div>' +
 						'</div>';
+						
+//						html +=
+//						'<div class="input_layout" style="padding-top: 0 !important;">' +
+//						'	<div class="input shadow_border">' +
+//						'		<textarea data-id="text_share" placeholder="Write your message" name="text"></textarea>' +
+//						'	</div>' +
+//						'</div>';
 					
 					var header = document.createElement('div');
 					header.className = 'header';
@@ -945,8 +958,11 @@ Page = {
 			}
 			
 			setTimeout(function() {
-				dialog.one('click', function(e) {
-					history.back();
+				dialog.bind('click', function(e) {
+					if ($(e.target).closest('.d_panel').length == 0) {
+						history.back();
+						dialog.unbind('click');
+					}
 				});		
 			}, 0);
 			window.location = '#dialog';
