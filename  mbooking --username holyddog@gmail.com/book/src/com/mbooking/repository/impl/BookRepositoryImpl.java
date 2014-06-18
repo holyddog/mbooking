@@ -20,6 +20,7 @@ import com.mbooking.model.Notification;
 import com.mbooking.model.Page;
 import com.mbooking.model.Tag;
 import com.mbooking.model.User;
+import com.mbooking.model.View;
 import com.mbooking.repository.BookRepostitoryCustom;
 import com.mbooking.util.ConfigReader;
 import com.mbooking.util.MongoCustom;
@@ -225,7 +226,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 	}
 
 	@Override
-	public Book findBookWithPages(Long bid, Long uid, Long gid) {
+	public Book findBookWithPages(Long bid, Long uid, Long gid, Boolean isCount) {
 		try {
 			Criteria criteria = Criteria.where("uid").is(uid);
 			Query query = new Query(criteria);
@@ -262,6 +263,13 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 				long count = db.count(new Query(Criteria.where("bid").is(bid).and("likes").is(gid)), Book.class);
 				if (count > 0) {
 					book.setLiked(true);
+				}
+				
+				if (gid.longValue() != uid.longValue() && isCount != null && isCount) {
+					db.updateFirst(query, new Update().inc("vcount", 1), Book.class);
+					Update up = new Update().inc("count", 1).set("ldate", System.currentTimeMillis());
+					db.upsert(new Query(Criteria.where("bid").is(bid).and("uid").is(uid)), up, View.class);
+//					db.upsert(query, new Update().set("tag", tag).inc("count", 1), Tag.class);
 				}
 			}
 
