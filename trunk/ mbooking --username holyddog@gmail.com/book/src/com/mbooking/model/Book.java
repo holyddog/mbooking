@@ -26,6 +26,7 @@ public class Book {
 	
 	Integer lcount; // likes count
 	Integer ccount; // comments count
+	Long vcount; // view count
 	
 	Long pbdate; // publish date
 	
@@ -215,6 +216,14 @@ public class Book {
 
 	public void setPub(Boolean pub) {
 		this.pub = pub;
+	}
+
+	public Long getVcount() {
+		return vcount;
+	}
+
+	public void setVcount(Long vcount) {
+		this.vcount = vcount;
 	}
 
 }
