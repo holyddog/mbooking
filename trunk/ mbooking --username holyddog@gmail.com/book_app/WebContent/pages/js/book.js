@@ -21,25 +21,7 @@ Page.Book = {
 		var btnShare = container.find('[data-id=btn_s]');
 		btnShare.tap(function() {
 //			Page.open('Share', true, { bid: params.bid });
-			
-			alert('share');
-			try {
-				FB.ui({
-					method : 'share',
-					href : 'https://developers.facebook.com/docs/',
-				}, function(response) {
-					alert(JSON.stringify(response));
-					
-					if (response && !response.error_code) {
-						alert('Posting completed.');
-					} else {
-						alert('Error while posting.');
-					}
-				});
-			}
-			catch (e) {
-				alert('error: ' + e.message);
-			}
+        	window.plugins.socialsharing.share(null, null, null, Config.WEB_BOOK_URL + '/?bid=' + params.bid);
 		});	
 		var btnLike = container.find('[data-id=btn_l]');
 		btnLike.tap(function() {
