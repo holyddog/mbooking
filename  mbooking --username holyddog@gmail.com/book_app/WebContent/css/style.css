@@ -192,6 +192,8 @@ textarea {
 	color: #1A1A1A;
 	position: relative;
 }
+.tbar.trans .title {
+}
 .tbar_bg {
 	position: absolute;
 	z-index: 0;

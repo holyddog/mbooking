@@ -142,22 +142,29 @@ Page.Book = {
 					Page.open('Profile', true, { uid: bookData.uid, back: true });
 				}
 				else {		
+					tbar.removeClass('trans').addClass('gray');
+					
 					container.find('.first_cover').hide();
 					container.find('.page_nav').eq(index).css('display', '-webkit-box');
 					container.find('#tap_nav').css('display', '-webkit-box');			
 				}
 			});
 			
+			var tbar = container.find('.tbar_bg');
 			container.append('<div id="tap_nav" class="fill_dock box horizontal" style="top: 0; z-index: 1000; display: none;"><div class="flex1" style="width: 50%;"></div><div class="flex1" style="width: 50%;"></div></div>');			
 			container.find('#tap_nav .flex1').click(function() {
 				var pos = $(this).index();
 				if (pos == 1) {		
 					if (index > 0) {
+						tbar.removeClass('trans').addClass('gray');
+						
 						container.find('.page_nav').eq(index).css('display', 'none');			
 						index--;
 						container.find('.page_nav').eq(index).css('display', '-webkit-box');
 					}
 					else if (index == 0) {
+						tbar.addClass('trans').removeClass('gray');
+						
 						container.find('.page_nav').eq(index).css('display', 'none');	
 						container.find('.last_cover').css('display', '-webkit-box');
 						index--;
@@ -165,6 +172,8 @@ Page.Book = {
 				}
 				else {	
 					if (index == size) {
+						tbar.addClass('trans').removeClass('gray');						
+						
 						container.find('.first_cover').show();	
 						container.find('.last_cover').hide();
 						container.find('.page_nav').eq(index).css('display', 'none');	
@@ -172,6 +181,8 @@ Page.Book = {
 						container.find('#tap_nav').css('display', 'none');
 					}
 					else if (index < size) {
+						tbar.removeClass('trans').addClass('gray');
+						
 						container.find('.page_nav').eq(index).css('display', 'none');			
 						index++;
 						container.find('.page_nav').eq(index).css('display', '-webkit-box');			
