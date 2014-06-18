@@ -8,7 +8,7 @@ Config = {
 
 	FB_APP_ID: '370184839777084',
 	
-//	WEB_BOOK_URL:'http://119.59.122.38/book/index.html',
+//	WEB_BOOK_URL:'http://119.59.122.38/book',
 //	FILE_URL: 'http://' + '119.59.122.38' + '/book_dev_files',
 	
 	FILE_URL: 'http://' + window.location.hostname + '/res/book',

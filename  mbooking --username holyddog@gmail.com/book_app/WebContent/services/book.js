@@ -104,7 +104,8 @@ Service.Book = {
 		var params = {
 			bid : bookId,
 			uid : userId,
-			gid : guestId
+			gid : guestId,
+			count: true
 			
 		};
 		Web.get(url, params, callback);
