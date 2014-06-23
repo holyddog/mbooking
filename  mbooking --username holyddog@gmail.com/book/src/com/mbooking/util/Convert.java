@@ -2,8 +2,19 @@ package com.mbooking.util;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Random;
 
 public class Convert {	
+	
+	public static String uniqueString(int length) {
+		String randChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIGKLMNOPQRSTUVWXYZ012345678901234567890123456789";
+		Random rand = new Random();
+	    char[] text = new char[length];
+	    for (int i = 0; i < length; i++) {
+	        text[i] = randChars.charAt(rand.nextInt(randChars.length()));
+	    }
+	    return new String(text);
+	}	
 	public static String getExt(String fileName) {
 		if (fileName == null) {
 			return "";

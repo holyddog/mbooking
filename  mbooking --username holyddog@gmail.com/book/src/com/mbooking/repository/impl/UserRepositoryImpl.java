@@ -1,7 +1,9 @@
 package com.mbooking.repository.impl;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -20,6 +22,7 @@ import com.mbooking.model.User;
 import com.mbooking.repository.UserRepostitoryCustom;
 import com.mbooking.util.Convert;
 import com.mbooking.util.ImageUtils;
+import com.mbooking.util.JavaMail;
 import com.mbooking.util.MongoCustom;
 import com.mbooking.util.TimeUtils;
 
@@ -374,4 +377,69 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		
 		return db.find(query, Book.class);
 	}
+
+	@Override
+	public List<User> findFBFriends(Long uid,List<Long> fbid_list) {
+		Query query = new Query(Criteria.where("fbobj._id").in(fbid_list));
+		query.fields().include("uid");
+		query.fields().include("pic");
+		query.fields().include("dname");
+		query.fields().include("fbobj.dname");
+		List<User> friends = db.find(query,User.class);
+		User user = db.findOne(new Query(Criteria.where("uid").is(uid)),User.class);
+		Object[] following = user.getFollowing();		
+		if(following!=null){
+			if(following.length!=0){
+				for(User friend :friends){
+					if(Arrays.asList(following).contains(friend.getUid())){
+						friend.setIsFollow(true);
+					}
+				}
+			}
+		}
+		return friends;
+	}
+
+	@Override
+	public Boolean sendFogetPassToEmail(String email) {
+		try{
+			int mindigit = 6;
+			int maxdigit = 8;
+			Random rand = new Random();
+			int digit = rand.nextInt(maxdigit - mindigit) + mindigit;
+			String unq_str = Convert.uniqueString(digit);
+			
+			if(db.count(new Query(Criteria.where("fgpass").is(unq_str)), User.class)>0){
+				unq_str = Convert.uniqueString(digit);
+			}
+			
+			Update update = new Update();
+			update.set("fgpass", unq_str);
+			
+			db.updateFirst(new Query(Criteria.where("email").is(email)), update, User.class);
+			
+			JavaMail sender = new JavaMail();
+						
+			sender.sendMail(email.toLowerCase(),"Forget password", "Test"+"unq_str");
+			
+			return true;
+		}catch (Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
+	}
+	
+	@Override
+	public Boolean resetForgetPass(String pass,String code) {
+		Query query = new Query(Criteria.where("fgpass").is(code));
+		if(db.count(query, User.class)>0){
+			Update update = new Update();
+			update.set("pass",Convert.toMD5Password(pass));
+			update.unset("fgpass");
+			db.updateFirst(query, update,Update.class);
+			return true;
+		}else{
+			return false;
+		}
+	}	
 }

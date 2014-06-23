@@ -1,5 +1,7 @@
 package com.mbooking.controller.json;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,20 @@ public class FollowJson {
 	BookRepository bookRepo;
 	@Autowired
 	PageRepository pageRepo;
+	
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/followMulti.json")
+	public @ResponseBody Object followMulti(
+			@RequestParam(value = "auid") String auid_str,
+			@RequestParam(value = "uid") Long uid
+			) {		
+		List<String> strlist = Arrays.asList(auid_str.split(":"));
+		List<Long> longlist = new ArrayList<Long>();
+		for(String str : strlist){
+			longlist.add(Long.parseLong(str));
+		}
+		return ResultResponse.getResult("success",  followRepo.followMulti(uid, longlist));
+	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/followAuthor.json")
 	public @ResponseBody

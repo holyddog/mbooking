@@ -1,5 +1,7 @@
 package com.mbooking.controller.json;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,21 @@ public class UserJson {
 	BookRepository bookRepo;
 	@Autowired
 	FollowRepository followRepo;
+
+	@RequestMapping(method = RequestMethod.POST, value = "/getFBFriendsList.json")
+	public @ResponseBody Object getFBFriendsList(
+			@RequestParam(value = "uid") Long uid,
+			@RequestParam(value = "fbid") String fblist_str
+			) {		
+		String[] strarr = fblist_str.split(":");
+		List<String> strlist = Arrays.asList(strarr);
+		List<Long> longlist = new ArrayList<Long>();
+		for(String str : strlist){
+			if(!str.equals(""))
+			longlist.add(Long.parseLong(str));
+		}
+		return userRepo.findFBFriends(uid,longlist);
+	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/getProfile.json")
 	public @ResponseBody Object getProfile(
@@ -210,4 +227,37 @@ public class UserJson {
 			@RequestParam(value = "uid") Long uid) {
 		return ResultResponse.getResult("result", userRepo.notfCount(uid));
 	}
+	
+	@RequestMapping(method = RequestMethod.POST,value = "/sendForgetPassToEmail")
+	public @ResponseBody
+	Object sendForgtPassToEmail(
+			@RequestParam(value = "email") String email){
+			return ResultResponse.getResult("result", userRepo.sendFogetPassToEmail(email));
+	}
+	
+	// check duplicate email
+	@RequestMapping(method = RequestMethod.GET, value = "/checkAccount.json")
+	public @ResponseBody Object checkLoginName(
+			@RequestParam(value = "user") String userName 
+			) {
+		User user = userRepo.findByEmail(userName);
+		if(user!= null){
+			return user;
+		}
+		else{
+			user = userRepo.findByUserName(userName);
+			if(user != null){
+				return user;			
+			}
+		}
+		return ResultResponse.getResult("result", user);
+	}	
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/resetForgetPass.json")
+	public @ResponseBody Object resetForgetPass(
+			@RequestParam(value = "code") String code,
+			@RequestParam(value = "pass") String pass
+			) {
+		return ResultResponse.getResult("result", userRepo.resetForgetPass(pass,code));
+	}	
 }

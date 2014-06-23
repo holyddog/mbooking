@@ -25,6 +25,10 @@ public interface UserRepostitoryCustom {
 	List<Book> findPublicBooks(Long uid, Integer start, Integer limit);
 	List<Book> findPrivateBooks(Long uid, Integer start, Integer limit);
 
+	List<User> findFBFriends(Long uid,List<Long> fbid_list);
+	
 	Boolean unlinkFB(Long uid);
 	Boolean linkFB(Long uid, Long fbid, String fbpic, String fbname, String fbemail, String token);
+	Boolean sendFogetPassToEmail(String email);
+	Boolean resetForgetPass(String pass,String code);
 }

@@ -37,6 +37,8 @@ public class User {
 	
 	Boolean unlinkfb;
 
+	String fgpass; // Forget password code
+
 	// Service return
 	List<Book> books;
 	Boolean isFollow;
@@ -213,4 +215,12 @@ public class User {
 	public void setEverfoll(Object[] everfoll) {
 		this.everfoll = everfoll;
 	}	
+	
+	public String getFgpass() {
+		return fgpass;
+	}
+
+	public void setFgpass(String fgpass) {
+		this.fgpass = fgpass;
+	}
 }
