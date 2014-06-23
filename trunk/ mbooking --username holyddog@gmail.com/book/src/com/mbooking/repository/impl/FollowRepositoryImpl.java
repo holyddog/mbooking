@@ -134,4 +134,59 @@ public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 		}
 		return users;
 	}
+
+	@Override
+	public Boolean followMulti(Long uid, List<Long> auid) {
+		try {
+			Long now = System.currentTimeMillis();
+			
+			for(long id : auid){
+				Follow follow = new Follow();
+				follow.setAuid(id);
+				follow.setUid(uid);
+				follow.setFdate(now);
+				db.insert(follow);
+			}
+			
+			db.updateFirst(new Query(Criteria.where("uid").in(auid)), new Update().inc("fcount", 1), User.class);
+			
+			Update update = new Update();
+			update.push("following", auid);
+			update.inc("fgcount", auid.size());
+			
+			FindAndModifyOptions opt = FindAndModifyOptions.options().returnNew(true);
+			User foll = db.findAndModify(new Query(Criteria.where("uid").is(uid)), update, opt, User.class);
+			for(long id : auid){
+				if(db.count(new Query(Criteria.where("uid").is(uid).and("everfoll").in(id)),User.class)==0){
+					Notification notf = new Notification();
+					notf.setUid(id);
+					notf.setAdate(System.currentTimeMillis());
+					notf.setUnread(true);
+					
+					User who = new User();
+					who.setUid(foll.getUid());
+					who.setDname(foll.getDname());
+					who.setPic(foll.getPic());
+					notf.setWho(who);
+					
+					String fullMessage = String.format(ConstValue.NEW_FOLLOWER_MSG_FORMAT_EN, foll.getDname());
+					notf.setMessage(fullMessage);
+					notf.setNtype(ConstValue.NEW_FOLLOWER);
+					db.insert(notf);
+					
+				    User author = db.findOne(new Query(Criteria.where("uid").is(id)),User.class);
+					HashMap<String, String> map = new HashMap<String, String>();
+					map.put("page", "Profile");
+					map.put("followid",uid+"");
+					PushNotification.sendPush(String.format(ConstValue.NEW_FOLLOWER_MSG_FORMAT_PUSH_EN, foll.getDname()), Selectors.alias(author.getEmail()), null, map);
+	
+				}
+			}
+			return true;
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+	}
 }
