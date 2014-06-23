@@ -270,9 +270,13 @@ Device = {
 	        
 			this._getPhoto(opts);
 		},
-    loginFacebook: function(callback){
+		loginFacebook: function(callback,permissions){
 	    	if (!Device.PhoneGap.isReady) return;
-            
+        
+            if(!permissions){
+                permissions = "email,publish_actions";
+            }
+        
 	    	FB.login(function(response) {
 				if (response.authResponse) {
 					var access_token = FB.getAuthResponse()['accessToken'];
@@ -292,7 +296,7 @@ Device = {
 					console.log('login response:' + response.error);
 				}
 	        },
-	        { scope: "email,publish_actions"
+	        { scope: permissions
                      
             }
 	        );
@@ -305,6 +309,54 @@ Device = {
             FB.api('/me/permissions', 'DELETE',
                function(response) {
                    callback();
+            });
+        },
+        getFacebookFreiends:function(callback){
+            if (!Device.PhoneGap.isReady) return;
+            
+            function getFriend(access_token){
+                FB.api('/me/friends',
+                       {
+                        fields: 'id, name, picture',
+                        access_token : access_token
+                       },
+                       function(response) {
+                           if(response.data) {
+                               var friends = new Array(response.data.length);
+                               var fbid ="";
+                               $.each(response.data,function(index,friend) {
+                                      friends[index] = {fid:friend.id,name:friend.name,pic:friend.picture.data.url};
+                                      fbid += friend.id+":";
+                               });
+                                //alert(JSON.stringify(friends));
+                                callback({friends:friends,fbid:fbid});
+                            } else {
+                               console.log("Error from get fb friends");
+                           }
+                       });
+            }
+            
+            FB.getLoginStatus(function(response) {
+                var token=false;
+                if(Account){
+                    if(Account.fbObject){
+                        if(Account.fbObject.token){
+                            token = Account.fbObject.token;
+                        }
+                    }
+                }
+                              
+	            if (response && response.status === 'connected'&&token) {
+                    getFriend();
+                }
+                else{
+                    Device.PhoneGap.loginFacebook(
+                        function(user){
+                            getFriend(user.access_token);
+                        },
+                        "user_friends"
+                    );
+                }
             });
         }
         ,
