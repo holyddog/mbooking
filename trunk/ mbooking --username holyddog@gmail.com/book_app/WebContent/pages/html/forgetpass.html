@@ -1,0 +1,52 @@
+<div class="tbar_bg gray"></div>
+<div class="tbar">	
+	<a data-id="btn_b" class="btn" style="left: 0;"><span class="back"></span></a>
+	<div class="title">Forget Password</div>
+	<a data-id="btn_a" class="btn_box disabled" style="right: 0;"><span class="glass"></span></a>
+</div>
+<div class="content gray flex1 box vertical">
+	
+	<div class="flex1">
+	</div>
+
+	<div class="user_detail" style="display:none;">
+		<div class=" box horizontal" style="padding: 10px;">
+			<div class="uimage">
+				<img src="images/user.jpg"
+					style="width: 50px; height: 50px; border-radius: 25px;">
+			</div>
+			<div class="msg flex1" style="padding: 0 10px;">
+				<div class="text" style="font-size: 80%; line-height: 18px;">
+					<b data-id="uname"></b>
+				</div>
+				<div 
+					style="font-size: 70%; color: #777; margin-top: 5px;">Would
+					you like to reset your password?</div>
+
+			</div>
+		</div>
+		<div class=" box horizontal" style="padding: 10px;">
+			<div data-id=sendmail class="flex1"
+				style="background: #CCC; font-size: 75%; padding: 10px; color: #666;">Send
+				Reset Password to Your Email</div>
+			<div  data-id=cancel style="background: white; margin-left: 10px; width: 40px; height: 40px;">
+				<div
+					style="background:#777; -webkit-mask-image: url(icons/cancel.png); width: 100%; height: 100%; -webkit-mask-size: 40%; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;">
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="input_layout">
+		<div class="label flow_hidden">
+			<div class="fleft">Find you account</div>
+			<div data-lbl="uname" class="err_msg fright" style="font-weight: normal;color: red;font-size: 90%;"></div>
+		</div>
+		<div class="input shadow_border">
+			<form>
+				<input title='Search' name="user" placeholder="Username or Email"/>
+			</form>
+		</div>
+	</div>
+	<div style="-moz-box-flex: 2;-webkit-box-flex: 2;box-flex: 2;"></div>
+</div>	

@@ -175,5 +175,39 @@ Service.User = {
 			uid: uid
 		};
 		Web.get(url, params, callback);
+	},
+	FindFBFriend:function(uid,fbid,callback){
+		var url = Service.url + '/getFBFriendsList.json';
+		var params = {
+			uid:uid,
+			fbid: fbid //list
+		};
+		Web.post(url, params, callback);
+	},
+	FollowMulti:function(uid,callback){
+		var url = Service.url + '/followMulti.json';
+		var params = {
+			uid: uid,
+			auid:auld	//list
+		};
+		Web.post(url, params, callback);
+	},
+	
+	
+	CheckAccount:function(user,callback){
+		var url = Service.url + '/checkAccount.json';
+		var params = {
+			user:user
+		};
+		Web.get(url, params, callback);
+	},
+	
+	SendForgetPassToEmail:function(email,callback){
+		var url = Service.url + '/sendForgetPassToEmail.json';
+		var params = {
+				email:email
+		};
+		Web.post(url, params, callback);
 	}
+	
 };

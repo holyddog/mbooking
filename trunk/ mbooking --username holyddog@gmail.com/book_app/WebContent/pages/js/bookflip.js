@@ -89,7 +89,15 @@ load: function(container, bookData,params) {
                 +'		</div>'
                 +'		<div class="bottom_info">'
                 +'			<div class="text_bar flow_hidden">'
-                +'				<span class="fright">42 Pages</span>'
+                +'				<div class="clabel fleft">'
+                +'					<div class="icon mask_icon like"></div>'
+                +'					<div class="lcount text">0</div>'
+                +'				</div>'
+                +'				<div class="clabel fleft">'
+                +'					<div class="icon mask_icon comment"></div>'
+                +'					<div class="ccount text">0</div>'
+                +'				</div>'
+                +'				<span class="fright pcount">0</span>'
                 +'			</div>'
                 +'		</div>'
                 +'	</div>'
@@ -224,11 +232,18 @@ load: function(container, bookData,params) {
     		btnLike.tap(function() {
     			if (!btnLike.hasClass('liked')) {
     				btnLike.addClass('liked');			
-    				Service.Book.LikeBook(params.bid, Account.userId, true, function(data) {});				
+    				Service.Book.LikeBook(params.bid, Account.userId, true, function(data) {
+    					var likes = parseInt(container.find('.text_bar .lcount').html())+1;
+    					container.find('.text_bar .lcount').text(likes);
+    				});				
     			}
     			else {
     				btnLike.removeClass('liked');			
-    				Service.Book.LikeBook(params.bid, Account.userId, false, function(data) {});				
+    				Service.Book.LikeBook(params.bid, Account.userId, false, function(data) {
+    					
+    					var likes = parseInt(container.find('.text_bar .lcount').html())-1;
+    					container.find('.text_bar .lcount').text(likes);
+    				});				
     			}
     		});
             
@@ -785,8 +800,11 @@ load: function(container, bookData,params) {
 			if (bookData.author.pic) {
 				container.find('.author_info img').attr('src', /* Config.FILE_URL + */Util.getImage(bookData.author.pic, 3));
 			}
-			container.find('.text_bar .fright').text(bookData.pcount + ' Page'
-							+ ((bookData.pcount > 1) ? 's' : ''));
+			container.find('.text_bar .fright').text(bookData.pcount);
+			if (bookData.lcount) content.find('.text_bar .lcount').text(bookData.lcount);
+			if (bookData.ccount) content.find('.text_bar .ccount').text(bookData.ccount);
+			
+			
 			bindSwipe();
       }
       var count = 0;

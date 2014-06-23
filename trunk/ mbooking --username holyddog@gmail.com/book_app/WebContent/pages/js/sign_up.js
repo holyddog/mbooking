@@ -5,7 +5,7 @@ Page.SignUp = {
 		// check authen
 		if (localStorage.getItem('u')) {
 			Account = JSON.parse(localStorage.getItem('u'));
-			Page.open('Profile');
+			Page.open('Explore');
 			
 			return;
 		}
@@ -290,7 +290,7 @@ Page.SignUp = {
 				}
 
 				localStorage.setItem("u", JSON.stringify(Account));
-				Page.open('Profile');
+				Page.open('FollowFriend',true,{fromSignUp:true});
 			}
 
 			var dvtoken = '';

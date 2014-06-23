@@ -307,7 +307,9 @@ textarea {
 	font-size: 90%;
 	color: #222;
 }
-
+.btn span.next {
+	-webkit-mask-image: url(../icons/next.png);
+}
 .btn span.list {
 	-webkit-mask-image: url(../icons/list.png);
 }
@@ -399,6 +401,10 @@ textarea {
 	background-color: #FFBB33;
 }
 
+.btn_box span.glass {
+	-webkit-mask-image: url(../icons/glass.png);
+}
+
 .btn_box span.accept {
 	-webkit-mask-image: url(../icons/accept.png);
 }
@@ -418,7 +424,6 @@ textarea {
 .btn_img span.icon.add {
 	-webkit-mask-image: url(../icons/add.png);
 }
-
 .mask_icon.next {
 	-webkit-mask-image: url(../icons/next.png);	
 }

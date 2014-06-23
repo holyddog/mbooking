@@ -130,5 +130,10 @@ Page.SignIn = {
 				}
 			}, false);
 		});
+		
+		container.find('.text_link').tap(function(){
+			Page.open('ForgetPass');
+			location.reload();
+		});
 	}
 };

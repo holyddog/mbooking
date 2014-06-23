@@ -9,6 +9,9 @@ Page.Settings = {
 		});	
 		
 		// set content links
+        container.find('[data-id=find_friend]').tap(function() {
+            Page.open('FollowFriend', true);
+        });
 		container.find('[data-id=chg_pic]').tap(function() {
 			Page.open('ChangePic', true);
 		});
@@ -48,8 +51,7 @@ Page.Settings = {
 	        					fblogin_check.className = "btn_check";
 
 	        					Service.User.unLinkFB(Account.userId, function(data) {
-	        						var fbobj = {};
-	        						Account.fbObject = fbobj;
+                                    delete Account.fbObject;
 	        						localStorage.setItem('u', JSON.stringify(Account));
                                     Page.btnHideLoading(checkbox[0]);
                                      checkbox.css('pointer-events','');

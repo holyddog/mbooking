@@ -910,6 +910,101 @@
 	margin-top: 5px;
 }
 
+#page_FollowFriend .friend_item {
+	padding: 10px; 
+	-webkit-box-shadow: 0px 0px 2px #aaa;
+	background-color: #fff;
+}
+#page_FollowFriend .friend_item .uimage {
+	width: 50px;
+	height: 50px;
+}
+#page_FollowFriend .friend_item .uimage img {
+	width: 50px;
+	height: 50px;
+	border-radius: 25px;
+}
+#page_FollowFriend .friend_item .msg {
+	padding: 0 10px;
+}
+
+#page_FollowFriend .friend_item .msg .name {
+	font-size: 80%;
+	font-weight:bold;
+	color: #0099CC;
+	width:100%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+#page_FollowFriend .friend_item .msg .fbname {
+	font-size:80%;
+	color:#AAA;
+	sfont-weight:bold;
+	width:100%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+#page_FollowFriend .friend_item .follbtn {
+	padding: 15px 20px;
+	font-size: 12px;
+	color: #fff;
+	background-color: #6DCAEC;
+	height: 0px;
+	line-height: 0px;
+	margin-top: 10px;
+}
+
+#page_FollowFriend .friend_item .follbtn.following{
+	background-color: #99CC00;
+}
+
+#page_FollowFriend .content{
+	background-color: #f7f7f7;
+}
+
+#page_FollowFriend .content .findfriend_box{
+	padding:10px;
+}
+
+#page_FollowFriend .content .findfriend_box .fbbtn{
+	padding:10px;
+	background-color:#8b9dc3;
+	color:#fff;
+	text-align:center;
+	font-size: 85%;
+}
+
+#page_FollowFriend .content .findfriend_box .contactbtn{
+	padding:10px; 
+	background-color:#BBB;
+	margin-top:10px;
+	color:#fff;
+	text-align:center;
+	font-size: 85%;
+	opacity: .7;
+}
+
+#page_FollowFriend .content .findfriend_box .skipbtn{
+	margin-top: 40px;
+	color: gray;
+	text-align: center;
+	font-size: 90%;
+	width: 50px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#page_FollowFriend .content .findfriend_box .nofbfrendlb{
+	color: darkgray;
+	text-align: center;
+	font-size: 95%;
+	margin-left: auto;
+	margin-right: auto;
+    display:none;
+}
+
 #page_Search .tab_cat {
 	border-bottom: solid 1px #ddd;
 }
