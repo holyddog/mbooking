@@ -70,14 +70,18 @@ Page.FollowFriend = {
                                 var item = $(this);
             //                    alert(item.attr('data-id'));
                                 if(item.hasClass('following')){
-                                    Service.Book.UnFollowAuthor(item.attr('data-id'), Account.userId, function() {
+                                    Service.Book.UnFollowAuthor(item.attr('data-id'), Account.userId, function(data) {
                                         item.removeClass('following');
                                         item.html('Follow');
+                    					Account.following = data.following;
+                    					localStorage.setItem("u", JSON.stringify(Account));
                                     });
                                 }else{
-                                    Service.Book.FollowAuthor(item.attr('data-id'), Account.userId, function() {
+                                    Service.Book.FollowAuthor(item.attr('data-id'), Account.userId, function(data) {
                                         item.addClass('following');
                                         item.html('Following');
+                    					Account.following = data.following;
+                    					localStorage.setItem("u", JSON.stringify(Account));
                                     });
                                 }
                             });

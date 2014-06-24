@@ -31,7 +31,33 @@ Page.Notifications = {
 			
 			list.find('.notf_item').bind('click', function() {
 				var item = $(this);
+				if(item.data('href'))
 				window.location.href = item.data('href');
+			});
+			
+			list.find('.msg').bind('click', function() {
+				var item = $(this);
+				if(item.data('href'))
+				window.location.href = item.data('href');
+			});
+			
+			list.find('.uimage').bind('click', function() {
+				var item = $(this);
+				if(item.data('href'))
+				window.location.href = item.data('href');
+			});
+			
+			list.find('.follow_btn').bind('click', function() {
+				var item = $(this);
+				if(item.data('uid'))
+				{
+//					item.css('pointer-events','none');
+					item.hide();
+					Service.Book.FollowAuthor(item.data('uid'), Account.userId, function(data) {
+						Account.following = data.following;
+    					localStorage.setItem("u", JSON.stringify(Account));
+                    });
+				}
 			});
 		});
 	},
@@ -55,7 +81,7 @@ Page.Notifications = {
 		if (book) {
 			notfDiv.dataset.href = '#Book?append=true&bid=' + book.bid + '&uid=' + data.uid;
 		}
-		else {
+		else if(data.ntype!=1) {
 			notfDiv.dataset.href = '#Profile?append=true&uid=' + user.uid + '&back=true';
 		}
 		
@@ -78,6 +104,22 @@ Page.Notifications = {
 		
 		notfDiv.appendChild(uimage);
 		notfDiv.appendChild(msg);
+		
+		if(data.ntype==1&&(Account.following).indexOf(data.who.uid)==-1){
+			
+			uimage.dataset.href = '#Profile?append=true&uid=' + user.uid + '&back=true';
+			msg.dataset.href = '#Profile?append=true&uid=' + user.uid + '&back=true';
+	
+			var follbtn = document.createElement('div');
+			follbtn.className = 'follow_btn';
+			follbtn.dataset.uid=user.uid;
+			
+			follbtn.innerHTML = "+ Follow";
+			
+			notfDiv.appendChild(follbtn);
+		}else if(data.ntype==1){
+			notfDiv.dataset.href = '#Profile?append=true&uid=' + user.uid + '&back=true';
+		}
 		
 		return notfDiv;			
 	}

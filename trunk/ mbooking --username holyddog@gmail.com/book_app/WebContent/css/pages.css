@@ -909,6 +909,15 @@
 	color: #777;
 	margin-top: 5px;
 }
+#page_Notifications .notf_item .follow_btn {
+	padding: 15px 20px;
+	font-size: 12px;
+	color: #fff;
+	background-color: #6DCAEC;
+	height: 0px;
+	line-height: 0px;
+	margin-top: 10px;
+}
 
 #page_FollowFriend .friend_item {
 	padding: 10px; 
