@@ -8,9 +8,9 @@ import com.mbooking.model.Page;
 import com.mbooking.model.User;
 
 public interface FollowRepostitoryCustom {
-	public Boolean followMulti(Long uid, List<Long> auid);
-	public Boolean followAuthor(Long uid, Long auid);
-	public Boolean unfollowAuthor(Long uid, Long auid);
+	public User followMulti(Long uid, List<Long> auid);
+	public User followAuthor(Long uid, Long auid);
+	public User unfollowAuthor(Long uid, Long auid);
 	public Boolean isFollow(Long uid, Long auid);
 	
 	public List<User> getFollowing(Long uid);

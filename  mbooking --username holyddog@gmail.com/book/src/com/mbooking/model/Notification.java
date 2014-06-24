@@ -19,6 +19,7 @@ public class Notification {
 	User who; // user reference (who notified)
 	Boolean unread;
 
+
 	// pretty time
 	String time;
 
@@ -92,5 +93,7 @@ public class Notification {
 
 	public void setUnread(Boolean unread) {
 		this.unread = unread;
-	}
+	}	
+	
+
 }

@@ -26,7 +26,7 @@ public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 	private MongoTemplate db;
 
 	@Override
-	public Boolean followAuthor(Long uid, Long auid) {	
+	public User followAuthor(Long uid, Long auid) {	
 		try {
 			Long now = System.currentTimeMillis();
 			
@@ -43,7 +43,12 @@ public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 			update.inc("fgcount", 1);
 			
 			FindAndModifyOptions opt = FindAndModifyOptions.options().returnNew(true);
-			User foll = db.findAndModify(new Query(Criteria.where("uid").is(uid)), update, opt, User.class);
+			Query follq = new Query(Criteria.where("uid").is(uid));
+			follq.fields().include("uid");
+			follq.fields().include("dname");
+			follq.fields().include("pic");
+			follq.fields().include("following");
+			User foll = db.findAndModify(follq, update, opt, User.class);
 			
 			if(db.count(new Query(Criteria.where("uid").is(uid).and("everfoll").in(auid)),User.class)==0){
 				Notification notf = new Notification();
@@ -60,6 +65,7 @@ public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 				String fullMessage = String.format(ConstValue.NEW_FOLLOWER_MSG_FORMAT_EN, foll.getDname());
 				notf.setMessage(fullMessage);
 				notf.setNtype(ConstValue.NEW_FOLLOWER);
+					
 				db.insert(notf);
 				
 			    User author = db.findOne(new Query(Criteria.where("uid").is(auid)),User.class);
@@ -69,16 +75,16 @@ public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 				PushNotification.sendPush(String.format(ConstValue.NEW_FOLLOWER_MSG_FORMAT_PUSH_EN, foll.getDname()), Selectors.alias(author.getEmail()), null, map);
 
 			}
-			return true;
+			return foll;
 		}
 		catch(Exception e){
 			e.printStackTrace();
-			return false;
+			return null;
 		}
 	}
 
 	@Override
-	public Boolean unfollowAuthor(Long uid, Long auid) {
+	public User unfollowAuthor(Long uid, Long auid) {
 		try {
 			db.remove(new Query(Criteria.where("uid").is(uid).and("auid").is(auid)), Follow.class);
 			db.updateFirst(new Query(Criteria.where("uid").is(auid)), new Update().inc("fcount", -1), User.class);
@@ -87,7 +93,10 @@ public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 			update.pull("following", auid);
 			update.inc("fgcount", -1);
 			
-			db.updateFirst(new Query(Criteria.where("uid").is(uid)), update, User.class);
+			FindAndModifyOptions opt = FindAndModifyOptions.options().returnNew(true);
+			Query follq = new Query(Criteria.where("uid").is(uid));
+			follq.fields().include("following");
+			User foll = db.findAndModify(follq, update, opt, User.class);
 
 			
 			if(db.count(new Query(Criteria.where("uid").is(uid).and("everfoll").in(auid)),User.class)==0){
@@ -96,11 +105,11 @@ public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 				db.updateFirst(new Query(Criteria.where("uid").is(uid)), update, User.class);
 			}
 			
-			return true;
+			return foll;
 
 		} catch (Exception e) {
 			System.out.println(e);
-			return false;
+			return null;
 		}
 	}
 
@@ -136,7 +145,7 @@ public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 	}
 
 	@Override
-	public Boolean followMulti(Long uid, List<Long> auid) {
+	public User followMulti(Long uid, List<Long> auid) {
 		try {
 			Long now = System.currentTimeMillis();
 			
@@ -155,7 +164,13 @@ public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 			update.inc("fgcount", auid.size());
 			
 			FindAndModifyOptions opt = FindAndModifyOptions.options().returnNew(true);
-			User foll = db.findAndModify(new Query(Criteria.where("uid").is(uid)), update, opt, User.class);
+			Query follq = new Query(Criteria.where("uid").is(uid));
+			follq.fields().include("uid");
+			follq.fields().include("dname");
+			follq.fields().include("pic");
+			follq.fields().include("following");
+
+			User foll = db.findAndModify(follq, update, opt, User.class);
 			for(long id : auid){
 				if(db.count(new Query(Criteria.where("uid").is(uid).and("everfoll").in(id)),User.class)==0){
 					Notification notf = new Notification();
@@ -182,11 +197,11 @@ public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 	
 				}
 			}
-			return true;
+			return foll;
 		}
 		catch(Exception e){
 			e.printStackTrace();
-			return false;
+			return null;
 		}
 	}
 }

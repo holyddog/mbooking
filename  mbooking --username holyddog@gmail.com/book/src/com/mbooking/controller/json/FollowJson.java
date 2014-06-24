@@ -42,7 +42,12 @@ public class FollowJson {
 		for(String str : strlist){
 			longlist.add(Long.parseLong(str));
 		}
-		return ResultResponse.getResult("success",  followRepo.followMulti(uid, longlist));
+		User user =  followRepo.followMulti(uid, longlist);
+		if (user != null) {
+			return user;
+		}
+
+		return ErrorResponse.getError("Internal Error : can't follow");
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/followAuthor.json")
@@ -52,7 +57,13 @@ public class FollowJson {
 			@RequestParam(value = "uid") Long uid
 		) {
 		
-		return ResultResponse.getResult("success",  followRepo.followAuthor(uid, auid));
+		User user = followRepo.followAuthor(uid, auid);
+		
+		if (user != null) {
+			return user;
+		}
+
+		return ErrorResponse.getError("Internal Error : can't follow");
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/unfollowAuthor.json")
@@ -62,7 +73,14 @@ public class FollowJson {
 			@RequestParam(value = "uid") Long uid
 		) {
 		
-		return ResultResponse.getResult("success",  followRepo.unfollowAuthor(uid, auid));
+		User user = followRepo.unfollowAuthor(uid, auid);
+		
+		if (user != null) {
+			return user;
+		}
+
+		return ErrorResponse.getError("Internal Error : can't unfollow");
+		
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/getFollowBooksByUID.json")
