@@ -43,7 +43,7 @@ Page.Home = {
 							picture : data.pic,
 							followerCount : data.fcount,
 							bookCount : data.pbcount,
-							
+							following:data.following,
 							draftCount : data.drcount,
 							draftBooks : data.books,
 							

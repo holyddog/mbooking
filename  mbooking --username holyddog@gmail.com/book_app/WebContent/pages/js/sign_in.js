@@ -55,6 +55,8 @@ Page.SignIn = {
 												};
 										}
 
+										
+										
 										Account = {
 											userId : data.uid,
 											email : data.email,
@@ -64,15 +66,17 @@ Page.SignIn = {
 											cover : data.cover,
 											bookCount : data.pbcount,
 											draftCount : data.drcount,
-
+											following:data.following,	
 											draftBooks : data.books,
-
+												
 											// followerCount: data.fcount,
 											// bookCount: data.pbcount
 
 											fbObject : fbobj
 										};
-
+										
+										//console.log(Account);
+										
 										if (data.fbobj && data.fbobj.email) {
 											Account.fbObject.fbemail = data.fbobj.email;
 										}
