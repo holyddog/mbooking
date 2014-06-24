@@ -26,6 +26,12 @@ body {
 @font-face {
 	font-family: 'Roboto';
 	font-style: normal;
+	font-weight: 500;
+	src: url(Roboto-Regular.ttf);
+}
+@font-face {
+	font-family: 'Roboto';
+	font-style: normal;
 	font-weight: 700;
 	src: url(Roboto-Bold.ttf);
 }
