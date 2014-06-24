@@ -1,6 +1,7 @@
 Page.Home = {
 	url: 'pages/html/home.html',
 	init: function(params, container) {
+        
 		// check authen
 		if (localStorage.getItem('u')) {
 			Account = JSON.parse(localStorage.getItem('u'));
@@ -11,16 +12,6 @@ Page.Home = {
 			
 			return;
 		}
-		
-		var panel = container.find('#login_panel');
-		
-		var owl = container.find("#owl-example").owlCarousel({
-			singleItem: true
-		});
-		owl.find('.owl-item .item').height(window.innerHeight);
-		owl.find('.owl-controls').css('bottom', panel[0].offsetHeight + 'px');
-		owl.find('.owl-item .item .promo').height((window.innerHeight - panel[0].offsetHeight - 30) + 'px');
-		owl.find('.owl-item .item .image').height((window.innerHeight - panel[0].offsetHeight) / 2 + 'px');
 		
 		// set content links
 		container.find('[data-id=link_f]').tap(function() {
@@ -52,7 +43,7 @@ Page.Home = {
 							picture : data.pic,
 							followerCount : data.fcount,
 							bookCount : data.pbcount,
-							following:data.following,
+							
 							draftCount : data.drcount,
 							draftBooks : data.books,
 							

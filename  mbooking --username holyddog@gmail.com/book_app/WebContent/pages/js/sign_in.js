@@ -14,7 +14,7 @@ Page.SignIn = {
 		var inputText = container.find('input[name=login]');
 		var inputPwd = container.find('input[name=pwd]');
 		
-        inputText.focus();
+//        inputText.focus();
         
 		// set toolbar buttons
 		container.find('[data-id=btn_b]').tap(function() {
