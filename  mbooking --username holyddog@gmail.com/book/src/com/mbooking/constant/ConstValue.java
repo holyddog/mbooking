@@ -28,7 +28,7 @@ public interface ConstValue {
 	public static final int NONE_TYPE = 0;
 	public static final int PAGE_IMG_TYPE = 1;
 	public static final int PROFILE_IMG_TYPE = 2;
-	public static final int COVER_IMG_TYPE = 2;
+	public static final int COVER_IMG_TYPE = 3;
 
 	// Notification Type
 	public static final int NEW_FOLLOWER = 1;

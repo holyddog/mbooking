@@ -568,10 +568,10 @@ public class ImageUtils {
 				cropSquareAndResize(file, profilePicFile,
 						ConstValue.PROFILE_SIZE, true);
 			} else if (imgtype == ConstValue.COVER_IMG_TYPE) {
-
-				File profilePicFile = new File(uploadPath + "/" + key + "_cv.jpg");
+				File profilePicFile = new File(uploadPath + "/" + key + "_c.jpg");
 
 				cropSquareAndResize(file, profilePicFile, ConstValue.COVER_SIZE, true);
+				resize(profilePicFile, new File(uploadPath + "/" + key + "_s.jpg"), 320, 320);
 			}
 			return "/" + image_folder + "/" + image;
 		} catch (IOException e) {
