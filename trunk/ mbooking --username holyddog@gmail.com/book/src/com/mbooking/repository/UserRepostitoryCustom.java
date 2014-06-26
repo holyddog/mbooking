@@ -16,6 +16,7 @@ public interface UserRepostitoryCustom {
 	User signUpFB(String email, String displayName, String userName,String password,Long fbid,String fbpic,String fbname,String fbemail,Integer os,String dvtoken);	
 	
 	Boolean changePassword(Long uid, String oldpassword, String newpassword);
+	Boolean changeCover(Long uid, String newCover);
 	HashMap<String, Object> getUserProfile(Long uid, Long guestId); 
 	Boolean changeDisplayName(Long uid, String displayName);
 	String changePic(Long uid, String pic);

@@ -338,14 +338,14 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			update = new Update();
 			update.set("pbcount", bookCount);
 			update.set("drcount", draftCount);
-			update.set("cover", cover);
+//			update.set("cover", cover);
 
 			db.updateFirst(new Query(Criteria.where("uid").is(uid)), update, User.class);
 			
 			user = new User();
 			user.setPbcount(bookCount);
 			user.setDrcount(draftCount);
-			user.setCover(cover);
+//			user.setCover(cover);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
