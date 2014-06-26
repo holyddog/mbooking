@@ -207,6 +207,14 @@ public class UserJson {
 		return ResultResponse.getResult("picture", userRepo.changePic(uid, pic));
 	}
 	
+	@RequestMapping(method = RequestMethod.POST, value = "/changeProfileCover.json")
+	public @ResponseBody Object changeProfileCover(
+			@RequestParam(value = "uid") Long uid,
+			@RequestParam(value = "pic") String pic
+			) {
+		return ResultResponse.getResult("picture", userRepo.changeCover(uid, pic));
+	}
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/getNotificationByUid.json")
 	public @ResponseBody
 	Object getNotifications(

@@ -379,16 +379,16 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 	}
 	
 	@Override
-	public Boolean changeCover(Long uid, String newCover) {
+	public String changeCover(Long uid, String newCover) {
 		try {
+			String img_path = "";
 			if (newCover != null) {
-				String img_path = ImageUtils.toImageFile(ConstValue.USER_FOLDER + uid, newCover, ConstValue.PROFILE_IMG_TYPE);
+				img_path = ImageUtils.toImageFile(ConstValue.USER_FOLDER + uid, newCover, ConstValue.COVER_IMG_TYPE);
 				db.updateFirst(new Query(Criteria.where("uid").is(uid)), new Update().set("cover", img_path), User.class);
-
 			}
-			return true;
+			return img_path;
 		} catch (Exception e) {
-			return false;
+			return "";
 		}
 	}
 
