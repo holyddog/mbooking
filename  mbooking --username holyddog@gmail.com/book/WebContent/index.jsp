@@ -7,7 +7,7 @@
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:fb="http://ogp.me/ns/fb#">     
 <head>
-	<title>#{bookView.book.title} - #{initParam['appName']}</title>
+	<title>#{(bookView.book != null)? bookView.book.title: 'The story not found'} - #{initParam['appName']}</title>
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
@@ -48,7 +48,8 @@
 				</div>
 			</div>
 			<div id="wrapper">
-				<div id="content">
+				<t:div rendered="#{bookView.book == null}" styleClass="warn_msg">We couldn't find that story</t:div>
+				<t:div id="content" rendered="#{bookView.book != null}">
 					<div id="story">
 					<ui:repeat var="p" value="#{bookView.pages}">
 						<div class="page">
@@ -78,7 +79,7 @@
 						</div>
 						<a id="btn_prev" href="javascript:void(0);" class="change left"></a> <a id="btn_next" href="javascript:void(0);" class="change right"></a>
 					</div>
-				</div>
+				</t:div>
 				<!-- 
 				<div id="share">
 					<ul class="share_list">
