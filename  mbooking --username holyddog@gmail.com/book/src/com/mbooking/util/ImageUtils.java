@@ -541,41 +541,40 @@ public class ImageUtils {
 		if (isEmpty(base64)) {
 			return null;
 		}
-		
-		String uploadPath = ConfigReader.getProp("upload_path")+"/"+image_folder;
-		
-		if(!new File(uploadPath).exists())
-		{
-			new File(uploadPath).mkdirs();	
+
+		String uploadPath = ConfigReader.getProp("upload_path") + "/" + image_folder;
+
+		if (!new File(uploadPath).exists()) {
+			new File(uploadPath).mkdirs();
 		}
 
 		try {
 
-		String key = uniqueString(8);
-		String image = key + ".jpg";
-		byte[] b = new Base64().decode(base64.getBytes());
-		
-		
-	
+			String key = uniqueString(8);
+			String image = key + ".jpg";
+			byte[] b = new Base64().decode(base64.getBytes());
+
 			File file = new File(uploadPath + "/" + image);
-			FileOutputStream output = new FileOutputStream(file);  
-			output.write(b);  
-			output.flush();  
+			FileOutputStream output = new FileOutputStream(file);
+			output.write(b);
+			output.flush();
 			output.close();
 
-			if (imgtype==ConstValue.PAGE_IMG_TYPE) {
-				
-				cropSquareAndResizeCustom(file,uploadPath,key);
+			if (imgtype == ConstValue.PAGE_IMG_TYPE) {
+				cropSquareAndResizeCustom(file, uploadPath, key);
+			} else if (imgtype == ConstValue.PROFILE_IMG_TYPE) {
+				File profilePicFile = new File(uploadPath + "/" + key + "_sp.jpg"); // Small Profile Pic
+
+				cropSquareAndResize(file, profilePicFile,
+						ConstValue.PROFILE_SIZE, true);
+			} else if (imgtype == ConstValue.COVER_IMG_TYPE) {
+
+				File profilePicFile = new File(uploadPath + "/" + key + "_cv.jpg");
+
+				cropSquareAndResize(file, profilePicFile, ConstValue.COVER_SIZE, true);
 			}
-			else if(imgtype==ConstValue.PROFILE_IMG_TYPE){
-				
-				 File profilePicFile = new File(uploadPath + "/" + key+ "_sp.jpg");	// Small Profile Pic	
-				
-				cropSquareAndResize(file, profilePicFile, ConstValue.PROFILE_SIZE, true);
-			}
-			return "/"+image_folder+"/" + image;	
-		} 
-		catch (IOException e) {
+			return "/" + image_folder + "/" + image;
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;

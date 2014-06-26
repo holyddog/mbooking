@@ -377,6 +377,20 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		
 		return db.find(query, Book.class);
 	}
+	
+	@Override
+	public Boolean changeCover(Long uid, String newCover) {
+		try {
+			if (newCover != null) {
+				String img_path = ImageUtils.toImageFile(ConstValue.USER_FOLDER + uid, newCover, ConstValue.PROFILE_IMG_TYPE);
+				db.updateFirst(new Query(Criteria.where("uid").is(uid)), new Update().set("cover", img_path), User.class);
+
+			}
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
 
 	@Override
 	public List<User> findFBFriends(Long uid,List<Long> fbid_list) {

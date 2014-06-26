@@ -11,6 +11,7 @@ public interface ConstValue {
 
 	public static final int LIMIT_ITEM = 20;
 	public static final int PROFILE_SIZE = 125;
+	public static final int COVER_SIZE = 640;
 
 	public static final int SMALL_SIZE = 270;
 	public static final int NORMAL_SIZE = 500;
@@ -27,6 +28,7 @@ public interface ConstValue {
 	public static final int NONE_TYPE = 0;
 	public static final int PAGE_IMG_TYPE = 1;
 	public static final int PROFILE_IMG_TYPE = 2;
+	public static final int COVER_IMG_TYPE = 2;
 
 	// Notification Type
 	public static final int NEW_FOLLOWER = 1;
