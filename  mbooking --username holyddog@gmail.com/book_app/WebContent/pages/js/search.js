@@ -99,6 +99,7 @@ Page.Search = {
 //		</div>
 		var div = document.createElement('div');
 		div.className = 'tag_item';
+		div.dataset.tag = tag.toLowerCase();
 		
 		var label = document.createElement('div');
 		label.className = 'label';
@@ -193,6 +194,10 @@ Page.Search = {
 						var tag = data[i];
 						panel.append(self.getTag(tag.tag, tag.count));
 					}
+					panel.find('.tag_item').click(function() {
+						var uid = $(this).data('uid');
+						Page.open('Profile', true, { uid: uid, back: true });
+					});
 				});
 			}
 		}

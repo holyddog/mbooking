@@ -19,7 +19,7 @@ Page.EditBook = {
 		
 		var updateAccount = function(u, bid) {
 			if (u) {
-				Account.cover = u.cover;
+//				Account.cover = u.cover;
 				Account.bookCount = u.pbcount;
 				Account.draftCount = u.drcount;
 				
@@ -36,9 +36,9 @@ Page.EditBook = {
 				
 				localStorage.setItem('u', JSON.stringify(Account));
 				
-				if ($('#page_Profile').length) {
-					Page.Profile.updateCover();					
-				}
+//				if ($('#page_Profile').length) {
+//					Page.Profile.updateCover();					
+//				}
 			}
 		};
 		
@@ -60,18 +60,18 @@ Page.EditBook = {
 						}
 						Page.updateShortcutBar();
 						
-						var cover = container.find('#book_header .book_size').css('background-image');
-						if (cover) {
-							cover = cover.replace('url(', '').replace(')', '').replace('_s', '');
-							
-							if (cover.indexOf(Account.cover) > -1) {
-								delete Account.cover;
-								localStorage.setItem('u', JSON.stringify(Account));
-								
-								Page.loadMenu();
-								Page.Profile.updateCover();
-							}
-						}
+//						var cover = container.find('#book_header .book_size').css('background-image');
+//						if (cover) {
+//							cover = cover.replace('url(', '').replace(')', '').replace('_s', '');
+//							
+//							if (cover.indexOf(Account.cover) > -1) {
+//								delete Account.cover;
+//								localStorage.setItem('u', JSON.stringify(Account));
+//								
+//								Page.loadMenu();
+//								Page.Profile.updateCover();
+//							}
+//						}
 						
 //						Account.cover = 
 						
@@ -93,11 +93,11 @@ Page.EditBook = {
 		var publishBook = function(showLoad) {
 			if (showLoad) {
 				Page.showLoading('Publishing...');
-			}			
+			}
 			
-			var img = container.find('.book_size').css('background-image');
-			img = img.replace('url(' + Config.FILE_URL, '').replace(')', '').replace('_s', '');
-			Service.Book.PublishBook(bid, Account.userId, img, function(data) {	   					
+//			var img = container.find('.book_size').css('background-image');
+//			img = img.replace('url(' + Config.FILE_URL, '').replace(')', '').replace('_s', '');
+			Service.Book.PublishBook(bid, Account.userId, '', function(data) {	   					
 				Page.hideLoading();
 				updateAccount(data.user, bid);
 				
@@ -116,12 +116,7 @@ Page.EditBook = {
 					}
 					else if (c.data('page') == 'Profile') {
 						page.loadProfile(Account.userId, false, c);
-					}
-					
-//					var profile = $('#page_Profile');
-//					if (profile.length > 0) {
-//						Page.Profile.loadProfile(Account.userId, false, profile);
-//					}					
+					}			
 				});
 			});
 		};

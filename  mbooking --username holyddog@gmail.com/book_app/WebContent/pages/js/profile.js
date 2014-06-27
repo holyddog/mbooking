@@ -63,6 +63,75 @@ Page.Profile = {
 		if (!isGuest) {
 			btnFollow.hide();
 			btnNotf.show();
+			
+			container.find('.pimage').click(function() {
+				Page.popDialog(function(img) {
+//					self.addPhoto(container, img);
+					
+//					var newImage = container.find('.pimage img').css({
+//						width: 'auto',
+//						height: 'auto',
+//						left: '0px',
+//						top: '0px'
+//					}).attr('src', 'data:image/jpg;base64,' + img);
+//					newImage.load(function() {
+//						var iw = newImage.width();
+//						var ih = newImage.height();
+//						if (iw > ih) {
+//							newImage.css({
+//								'height': '68px'
+//							});
+//							newImage.css({
+//								'left': -1 * ((newImage.width() / 2) - 34) + 'px'
+//							});
+//						}
+//						else {
+//							newImage.css({
+//								'width': '68px'
+//							});	
+//							newImage.css({
+//								'top': -1 * ((newImage.height() / 2) - 34) + 'px'
+//							});						
+//						}
+//					});
+					setTimeout(function() {
+						Page.showLoading('Uploading...');						
+					}, 300);
+					
+					Service.User.ChangeProfilePic(Account.userId, img, function(data) {
+						Page.hideLoading();
+						MessageBox.drop('Picture changed');
+						
+						container.find('.pimage img').attr('src', Util.getImage(data.picture, 3));
+						
+						Account.picture = data.picture;
+						localStorage.setItem('u', JSON.stringify(Account));
+					});
+				});
+			});
+			
+			var editCover = container.find('.edit_cover').show();
+			editCover.click(function() {
+				Page.popDialog(function(img) {
+					setTimeout(function() {
+						Page.showLoading('Uploading...');						
+					}, 300);
+					
+					Service.User.ChangeProfileCover(Account.userId, img, function(data) {
+						Page.hideLoading();
+						MessageBox.drop('Cover changed');
+						
+						Account.cover = data.picture;
+						localStorage.setItem('u', JSON.stringify(Account));
+						
+						var header = container.find('#profile_header');
+						header.css({
+							'background-image': 'url(' + Util.getImage(data.picture, 1) + ')'
+						});
+						Page.loadMenu();
+					});
+				});
+			});
 		}
 		else {
 			btnFollow.show();
@@ -103,6 +172,28 @@ Page.Profile = {
 					}
 				}, 1);
 			}
+			else if (ptab.index() == 3) {
+				var ptab3 = container.find('#ptab3');
+				if (ptab3.find('.b').length == 0) {
+					var minHeight = container.find('.content').height() - container.find('#profile_header').height() - container.find('#xbar').height();
+					ptab3.css('min-height', (minHeight - 20) + 'px');
+					
+					Page.bodyShowLoading(ptab3);
+					Service.User.GetFavBooks(uid, 0, 100, function(data) { 
+						Page.bodyHideLoading(ptab3);
+						
+						for (var i = 0; i < data.length; i++) {
+							var b = data[i];
+							ptab3.append(self.getBook(b.bid, b.title, b.pic, b.pcount, b.author, b.lcount, b.ccount));
+						}
+						ptab3.find('.book_size').click(function() {
+							var b = $(this);
+							self.openBook(b, b.data('uid'));
+						});
+						self.resizeBook(ptab3);					
+					});
+				}
+			}
 		});
 
 		Page.createShortcutBar(container);
@@ -135,7 +226,7 @@ Page.Profile = {
 		
 		for (var i = 0; i < pubBooks.length; i++) {
 			var b = pubBooks[i];
-			ptab1.append(self.getBook(b.bid, b.title, b.pic, b.pcount, b.lcount, b.ccount));
+			ptab1.append(self.getBook(b.bid, b.title, b.pic, b.pcount, b.author, b.lcount, b.ccount));
 		}
 		ptab1.find('.book_size').click(function() {
 			self.openBook($(this), uid);
@@ -153,7 +244,7 @@ Page.Profile = {
 		
 		for (var i = 0; i < priBooks.length; i++) {
 			var b = priBooks[i];
-			ptab2.append(self.getBook(b.bid, b.title, b.pic, b.pcount, b.lcount, b.ccount));
+			ptab2.append(self.getBook(b.bid, b.title, b.pic, b.pcount, b.author, b.lcount, b.ccount));
 		}
 		ptab2.find('.book_size').click(function() {
 			self.openBook($(this), uid);
@@ -171,7 +262,7 @@ Page.Profile = {
 		
 		for (var i = 0; i < drBooks.length; i++) {
 			var b = drBooks[i];
-			ptab3.append(self.getBook(b.bid, b.title, b.pic, b.pcount, b.lcount, b.ccount));
+			ptab3.append(self.getBook(b.bid, b.title, b.pic, b.pcount, b.author, b.lcount, b.ccount));
 		}
 		ptab3.find('.book_size').click(function() {
 			var b = $(this);

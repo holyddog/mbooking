@@ -52,6 +52,16 @@ Service.Book = {
 		Web.post(url, params, callback);
 	},
 
+	FavBook: function(bid, uid, fav, callback) {
+		var url = Service.url + '/favBook.json';
+		var params = {
+			bid : bid,
+			uid : uid,
+			fav : fav
+		};
+		Web.post(url, params, callback);
+	},
+
 //	EditBook : function(bookID, bookName, desc, userID, picName, startDate,
 //			endDate, tags, callback) {
 //		var url = Service.url + '/editBook.json';
@@ -183,11 +193,11 @@ Service.Book = {
 		Web.post(url, params, callback);
 	},
 
-	GetPublishBooks : function(callback) {
-		var url = Service.url + '/getPublishBooks.json';
-		var params = {};
-		Web.get(url, params, callback);
-	},
+//	GetPublishBooks : function(callback) {
+//		var url = Service.url + '/getPublishBooks.json';
+//		var params = {};
+//		Web.get(url, params, callback);
+//	},
 	
 	GetPublishBooks : function(skip, limit, callback) {
 		var url = Service.url + '/getPublishBooks.json';
@@ -198,6 +208,17 @@ Service.Book = {
 			
 		if(limit!=null&&limit!=undefined)
 			params.limit = limit;
+		
+		Web.get(url, params, callback);
+	},
+	
+	GetPublishBooksByTag : function(tag, skip, limit, callback) {
+		var url = Service.url + '/getPublishBooksByTag.json';
+		var params = {
+			tag: tag,
+			skip: skip,
+			limit: limit
+		};
 		
 		Web.get(url, params, callback);
 	},
