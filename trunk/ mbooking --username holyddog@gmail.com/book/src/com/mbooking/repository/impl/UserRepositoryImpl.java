@@ -1,5 +1,6 @@
 package com.mbooking.repository.impl;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +17,7 @@ import com.mbooking.constant.ConstValue;
 import com.mbooking.model.Book;
 import com.mbooking.model.Device;
 import com.mbooking.model.FBobj;
+import com.mbooking.model.Favourite;
 import com.mbooking.model.Follow;
 import com.mbooking.model.Notification;
 import com.mbooking.model.User;
@@ -361,6 +363,8 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		query.fields().include("title");
 		query.fields().include("pic");
 		query.fields().include("pcount");
+		query.fields().include("lcount");
+		query.fields().include("ccount");
 		
 		return db.find(query, Book.class);
 	}
@@ -374,8 +378,32 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		query.fields().include("title");
 		query.fields().include("pic");
 		query.fields().include("pcount");
+		query.fields().include("lcount");
+		query.fields().include("ccount");
 		
 		return db.find(query, Book.class);
+	}
+
+	@Override
+	public List<Book> findFavBooks(Long uid, Integer start, Integer limit) {
+		List<Favourite> favList = db.find(new Query(Criteria.where("uid").is(uid)), Favourite.class);
+		List<Book> bookList = new ArrayList<Book>();
+		for (int i = 0; i < favList.size(); i++) {
+			Long bid = favList.get(i).getBid();
+			
+			Query query = new Query(Criteria.where("bid").is(bid));
+			
+			query.fields().include("title");
+			query.fields().include("pic");
+			query.fields().include("pcount");
+			query.fields().include("lcount");
+			query.fields().include("ccount");
+			query.fields().include("author");
+			
+			bookList.add(db.findOne(query, Book.class));
+		}
+		
+		return bookList;
 	}
 	
 	@Override

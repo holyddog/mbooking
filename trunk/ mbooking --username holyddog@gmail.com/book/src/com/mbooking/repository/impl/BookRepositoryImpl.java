@@ -1,7 +1,6 @@
 package com.mbooking.repository.impl;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
 
 import org.apache.tomcat.util.http.fileupload.FileUtils;
@@ -15,6 +14,7 @@ import org.springframework.data.mongodb.core.query.Update;
 
 import com.mbooking.constant.ConstValue;
 import com.mbooking.model.Book;
+import com.mbooking.model.Favourite;
 import com.mbooking.model.Like;
 import com.mbooking.model.Notification;
 import com.mbooking.model.Page;
@@ -24,8 +24,6 @@ import com.mbooking.model.View;
 import com.mbooking.repository.BookRepostitoryCustom;
 import com.mbooking.util.ConfigReader;
 import com.mbooking.util.MongoCustom;
-import com.mbooking.util.PushNotification;
-import com.urbanairship.api.push.model.audience.Selectors;
 
 public class BookRepositoryImpl implements BookRepostitoryCustom {
 
@@ -264,6 +262,9 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 				if (count > 0) {
 					book.setLiked(true);
 				}
+				if (db.count(new Query(Criteria.where("bid").is(bid).and("uid").is(gid)), Favourite.class) > 0) {
+					book.setFaved(true);
+				}
 				
 				if (gid.longValue() != uid.longValue() && isCount != null && isCount) {
 					db.updateFirst(query, new Update().inc("vcount", 1), Book.class);
@@ -416,27 +417,23 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			query.skip(skip).limit(limit);
 
 		List<Book> books = db.find(query, Book.class);
+		return books;
+	}	
+	
+	@Override
+	public List<Book> findByPbdateExistsByTag(String tag, Integer skip, Integer limit) {
+		Criteria criteria = Criteria.where("pbdate").exists(true).and("pub").is(true).and("tags").regex("^(?i)" + tag + "(?i)");
+		Query query = new Query(criteria);
 
-//		HashMap<Long, User> authors_map = new HashMap<Long, User>();
-//		for (int i = 0; i < books.size(); i++) {
-//			Long uid = books.get(i).getUid();
-//			if (authors_map.get(uid) == null) {
-//				Query user_query = new Query(Criteria.where("uid").is(uid));
-//				user_query.fields().include("uid");
-//				user_query.fields().include("pic");
-//				user_query.fields().include("dname");
-//				User user = db.findOne(user_query, User.class);
-//				authors_map.put(uid, user);
-//			}
-//			User author = authors_map.get(uid);
-//			if (author != null) {
-//				books.get(i).setAuthor(author);
-//			}
-//		}
+		query.sort().on("pbdate", Order.DESCENDING);
+		query.fields().include("bid").include("title").include("pic").include("uid").include("pcount").include("ccount").include("lcount").include("author");
 
+		if (skip != null && limit != null && limit != 0)
+			query.skip(skip).limit(limit);
+
+		List<Book> books = db.find(query, Book.class);
 		return books;
 	}
-	
 	
 	public List<Book> findFollowingBooks(Long uid, Integer start, Integer limit) {
 		try {
@@ -548,12 +545,23 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 	@Override
 	public Boolean addTag(Long bid, String tag) {
 		try {
-			long count = db.count(new Query(Criteria.where("bid").is(bid).and("tags").is(tag)), Book.class);
+			long count = db.count(new Query(Criteria.where("bid").is(bid).and("tags").regex("^(?i)" + tag + "(?i)")), Book.class);
 			if (count > 0) {
 				return false;
 			}
 			db.updateFirst(new Query(Criteria.where("bid").is(bid)), new Update().push("tags", tag), Book.class);
-			db.upsert(new Query(Criteria.where("tag").is(tag)), new Update().set("tag", tag).inc("count", 1), Tag.class);
+			
+			tag = tag.toLowerCase();
+			if (db.count(new Query(Criteria.where("tag").is(tag)), Tag.class) > 0) {
+				db.updateFirst(new Query(Criteria.where("tag").is(tag)), new Update().inc("count", 1), Tag.class);
+			}
+			else {
+				Tag t = new Tag();
+				t.setTag(tag);
+				t.setCount(1);
+				db.insert(t);
+			}
+//			db.upsert(new Query(Criteria.where("tag").is(tag)), new Update().set("tag", tag).inc("count", 1), Tag.class);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -565,7 +573,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 	public Boolean removeTag(Long bid, String tag) {
 		try {
 			db.updateFirst(new Query(Criteria.where("bid").is(bid)), new Update().pull("tags", tag), Book.class);
-			db.updateFirst(new Query(Criteria.where("tag").is(tag)), new Update().set("tag", tag).inc("count", -1), Tag.class);
+			db.updateFirst(new Query(Criteria.where("tag").is(tag.toLowerCase())), new Update().inc("count", -1), Tag.class);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -634,14 +642,14 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 					
 					db.insert(notf);
 					
-					Query auth_q= new Query(Criteria.where("uid").is(auid));
-					auth_q.fields().include("email");
-					User author =  db.findOne(auth_q, User.class);
-					
-					HashMap<String, String> map = new HashMap<String, String>();
-					map.put("page", "Book");
-					map.put("bid", book.getBid()+"");
-					PushNotification.sendPush(String.format(ConstValue.NEW_LIKE_MSG_FORMAT_PUSH_EN, u.getDname(), book.getTitle()), Selectors.alias(author.getEmail()), null, map);
+//					Query auth_q= new Query(Criteria.where("uid").is(auid));
+//					auth_q.fields().include("email");
+//					User author =  db.findOne(auth_q, User.class);
+//					
+//					HashMap<String, String> map = new HashMap<String, String>();
+//					map.put("page", "Book");
+//					map.put("bid", book.getBid()+"");
+//					PushNotification.sendPush(String.format(ConstValue.NEW_LIKE_MSG_FORMAT_PUSH_EN, u.getDname(), book.getTitle()), Selectors.alias(author.getEmail()), null, map);
 				}
 			}
 			else {
@@ -656,5 +664,26 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	@Override
+	public Boolean favBook(Long bid, Long who, boolean fav) {
+		Query query = new Query(Criteria.where("bid").is(bid).and("uid").is(who));
+		if (fav) {
+			if (db.count(query, Favourite.class) > 0) {
+				return true;
+			}
+			else {
+				Favourite f = new Favourite();
+				f.setBid(bid);
+				f.setUid(who);
+				f.setFdate(System.currentTimeMillis());
+				db.insert(f);
+			}			
+		}
+		else {
+			db.remove(query, Favourite.class);
+		}
+		return true;
 	}	
 }
