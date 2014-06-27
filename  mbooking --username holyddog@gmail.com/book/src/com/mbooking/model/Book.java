@@ -38,6 +38,7 @@ public class Book {
 	// Return from Service Only , Not in db
 	User author;
 	Boolean liked;
+	Boolean faved;
 	List<Page> pages;
 	String strtime;
 
@@ -91,6 +92,14 @@ public class Book {
 
 	public void setLiked(Boolean liked) {
 		this.liked = liked;
+	}
+
+	public Boolean getFaved() {
+		return faved;
+	}
+
+	public void setFaved(Boolean faved) {
+		this.faved = faved;
 	}
 
 	public String[] getTags() {

@@ -30,8 +30,10 @@ public interface BookRepostitoryCustom {
 	public List<Tag> findTags(String keyword);
 	public String findLastCover(Long uid);
 	public Boolean likeBook(Long bid, Long who, boolean like);
+	public Boolean favBook(Long bid, Long who, boolean fav);
 	
 	public List<Book> findByPbdateExists(boolean exists,Integer skip,Integer limit);
+	public List<Book> findByPbdateExistsByTag(String tag, Integer skip, Integer limit);
 	
 	public List<Book> findFollowingBooks(Long uid,Integer skip,Integer limit);
 

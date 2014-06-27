@@ -17,7 +17,6 @@ import com.mbooking.model.Notification;
 import com.mbooking.model.User;
 import com.mbooking.repository.BookRepository;
 import com.mbooking.repository.FollowRepository;
-import com.mbooking.repository.NotificationRepository;
 import com.mbooking.repository.UserRepository;
 
 @Controller
@@ -66,6 +65,14 @@ public class UserJson {
 			@RequestParam(value = "start") Integer start,
 			@RequestParam(value = "limit") Integer limit) {
 		return userRepo.findPrivateBooks(uid, start, limit);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/getFavBooks.json")
+	public @ResponseBody Object getFavBooks(
+			@RequestParam(value = "uid") Long uid,
+			@RequestParam(value = "start") Integer start,
+			@RequestParam(value = "limit") Integer limit) {
+		return userRepo.findFavBooks(uid, start, limit);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/getMyLastBooks.json")

@@ -25,6 +25,7 @@ public interface UserRepostitoryCustom {
 	
 	List<Book> findPublicBooks(Long uid, Integer start, Integer limit);
 	List<Book> findPrivateBooks(Long uid, Integer start, Integer limit);
+	List<Book> findFavBooks(Long uid, Integer start, Integer limit);
 
 	List<User> findFBFriends(Long uid,List<Long> fbid_list);
 	

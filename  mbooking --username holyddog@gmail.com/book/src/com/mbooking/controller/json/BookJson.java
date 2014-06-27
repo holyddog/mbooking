@@ -138,6 +138,20 @@ public class BookJson {
 
 		return ErrorResponse.getError("Has no publish books");
 	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/getPublishBooksByTag.json")
+	public @ResponseBody
+	Object getPublishBooksByTag(
+			@RequestParam(value = "tag") String tag,
+			@RequestParam(value = "skip", required = false) Integer  skip,
+			@RequestParam(value = "limit", required = false) Integer limit)  {
+		
+		List<Book> books = bookRepo.findByPbdateExistsByTag(tag, skip, limit);
+		if (books != null) {
+			return books;
+		}
+		return ErrorResponse.getError("Has no publish books");
+	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/publishBook.json")
 	public @ResponseBody
@@ -192,5 +206,15 @@ public class BookJson {
 			@RequestParam(value = "like") Boolean like
 			) {
 		return ResultResponse.getResult("success", bookRepo.likeBook(bid, uid, like));
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/favBook.json")
+	public @ResponseBody
+	Object favBook(
+			@RequestParam(value = "bid") Long bid,
+			@RequestParam(value = "uid") Long uid,
+			@RequestParam(value = "fav") Boolean fav
+			) {
+		return ResultResponse.getResult("success", bookRepo.favBook(bid, uid, fav));
 	}
 }
