@@ -400,14 +400,29 @@
 	width: 68px;
 	height: 68px;
 	border-radius: 35px;
-	padding: 1px;
+	border: solid 1px #fff;
+	position: relative;
+	overflow: hidden;
+}
+#page_Profile .edit_cover {
+	z-index: 1001;
+	position: absolute;
+	background-color: #fff;
+	width: 50px;
+	height: 50px;
+	right: 0;
+	display: none;
+	top: 0;
+	-webkit-mask-image: url(../icons/picture.png);
+	-webkit-mask-size: 16px;
 }
 #page_Profile .pbox .pimage img {
 	line-height: 0;
 	display: block;
+	border-radius: 34px;
 	width: 68px;
 	height: 68px;
-	border-radius: 34px;
+	position: absolute;
 }
 #page_Profile .stat_panel {
 	padding: 10px 10px 10px 0;

@@ -114,6 +114,15 @@ Service.User = {
 		};
 		Web.get(url, params, callback);
 	},
+	GetFavBooks : function(userId, start, limit, callback) {
+		var url = Service.url + '/getFavBooks.json';
+		var params = {
+			uid : userId,
+			start : start,
+			limit: limit
+		};
+		Web.get(url, params, callback);
+	},
 	ChangePassword : function(uid, oldpassword, newpassword, callback) {
 		var url = Service.url + '/changePassword.json';
 		var params = {
@@ -136,6 +145,14 @@ Service.User = {
 		var params = {
 			uid: uid,
 			pic:pic
+		};
+		Web.post(url, params, callback);
+	},
+	ChangeProfileCover: function(uid, pic, callback) {
+		var url = Service.url + '/changeProfileCover.json';
+		var params = {
+			uid: uid,
+			pic: pic
 		};
 		Web.post(url, params, callback);
 	},

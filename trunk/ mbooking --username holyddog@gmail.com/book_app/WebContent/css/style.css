@@ -308,6 +308,12 @@ textarea {
 .btn.liked span {
 	background-color: #fff;	
 }
+.btn.stared {
+	background-color: #99CC00;
+}
+.btn.stared span {
+	background-color: #fff;	
+}
 
 .btn font {
 	font-size: 90%;
@@ -315,6 +321,9 @@ textarea {
 }
 .btn span.next {
 	-webkit-mask-image: url(../icons/next.png);
+}
+.btn span.star {
+	-webkit-mask-image: url(../icons/star.png);
 }
 .btn span.list {
 	-webkit-mask-image: url(../icons/list.png);
