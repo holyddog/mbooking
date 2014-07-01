@@ -12,14 +12,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.mbooking.common.ErrorResponse;
 import com.mbooking.common.ResultResponse;
 import com.mbooking.model.Comment;
+import com.mbooking.repository.ActivityRepository;
 import com.mbooking.repository.CommentRepository;
-
 
 @Controller
 public class CommentJson {
 	@Autowired
 	CommentRepository commentRepo;
-
+	@Autowired
+	ActivityRepository actRepo;
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/postComment.json")
 	public @ResponseBody
@@ -29,7 +30,11 @@ public class CommentJson {
 			@RequestParam(value = "comment") String comment
 		) {
 		
-		return ResultResponse.getResult("success",  commentRepo.createComment(bid, uid, comment));
+		boolean success = commentRepo.createComment(bid, uid, comment);
+		if (success) {
+			actRepo.commented(uid, bid, comment);
+		}
+		return ResultResponse.getResult("success", success);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/findCommentsByBid.json")

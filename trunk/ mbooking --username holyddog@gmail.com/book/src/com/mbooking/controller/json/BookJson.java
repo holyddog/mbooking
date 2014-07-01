@@ -12,13 +12,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.mbooking.common.ErrorResponse;
 import com.mbooking.common.ResultResponse;
 import com.mbooking.model.Book;
+import com.mbooking.model.User;
+import com.mbooking.repository.ActivityRepository;
 import com.mbooking.repository.BookRepository;
-import com.mbooking.util.PushNotification;
 
 @Controller
 public class BookJson {
 	@Autowired
 	BookRepository bookRepo;
+	@Autowired
+	ActivityRepository actRepo;
 
 	@RequestMapping(method = RequestMethod.POST, value = "/createBook.json")
 	public @ResponseBody
@@ -160,7 +163,11 @@ public class BookJson {
 			@RequestParam(value = "uid") Long uid,
 			@RequestParam(value = "cover") String cover) {
 
-		return ResultResponse.getResult("user", bookRepo.publishBook(bid, uid, cover));
+		User user = bookRepo.publishBook(bid, uid, cover);
+		if (user != null) {
+			actRepo.published(uid, bid);
+		}
+		return ResultResponse.getResult("user", user);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/unpublishBook.json")
@@ -205,7 +212,11 @@ public class BookJson {
 			@RequestParam(value = "uid") Long uid,
 			@RequestParam(value = "like") Boolean like
 			) {
-		return ResultResponse.getResult("success", bookRepo.likeBook(bid, uid, like));
+		boolean success = bookRepo.likeBook(bid, uid, like);
+		if (success) {
+			actRepo.liked(uid, bid);
+		}
+		return ResultResponse.getResult("success", success);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/favBook.json")
@@ -215,6 +226,10 @@ public class BookJson {
 			@RequestParam(value = "uid") Long uid,
 			@RequestParam(value = "fav") Boolean fav
 			) {
-		return ResultResponse.getResult("success", bookRepo.favBook(bid, uid, fav));
+		boolean success = bookRepo.favBook(bid, uid, fav);
+		if (success) {
+			actRepo.favourite(uid, bid);
+		}
+		return ResultResponse.getResult("success", success);
 	}
 }

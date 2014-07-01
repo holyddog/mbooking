@@ -16,7 +16,6 @@ import com.mbooking.common.ResultResponse;
 import com.mbooking.model.Notification;
 import com.mbooking.model.User;
 import com.mbooking.repository.BookRepository;
-import com.mbooking.repository.FollowRepository;
 import com.mbooking.repository.UserRepository;
 
 @Controller
@@ -25,8 +24,6 @@ public class UserJson {
 	UserRepository userRepo;	
 	@Autowired
 	BookRepository bookRepo;
-	@Autowired
-	FollowRepository followRepo;
 
 	@RequestMapping(method = RequestMethod.POST, value = "/getFBFriendsList.json")
 	public @ResponseBody Object getFBFriendsList(
