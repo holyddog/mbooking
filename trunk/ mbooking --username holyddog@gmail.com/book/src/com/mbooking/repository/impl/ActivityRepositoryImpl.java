@@ -1,8 +1,11 @@
 package com.mbooking.repository.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
@@ -198,6 +201,22 @@ public class ActivityRepositoryImpl implements ActivityRepostitoryCustom {
 				return "<b>" + args[0] + "</b> commented on a story";
 			}
 		}
+		return null;
+	}
+
+	@Override
+	public List<Activity> findFollowActivities(Long uid, Integer start, Integer limit) {
+		Query query = new Query(Criteria.where("uid").is(uid));
+		query.fields().include("following");
+		User user = db.findOne(query, User.class);
+		if (user.getFollowing() != null && user.getFollowing().length > 0) {			
+			query = new Query(Criteria.where("uid").in(user.getFollowing()));
+			query.sort().on("adate", Order.DESCENDING);
+			query.skip(start).limit(limit);
+			
+			return db.find(query, Activity.class);
+		}
+		
 		return null;
 	}
 }

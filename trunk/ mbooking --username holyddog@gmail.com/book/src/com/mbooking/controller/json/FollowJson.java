@@ -100,6 +100,17 @@ public class FollowJson {
 		return ErrorResponse.getError("Unsuccess to find following books by uid: "+uid);
 	}
 	
+	@RequestMapping(method = RequestMethod.GET, value = "/getFollowActivity.json")
+	public @ResponseBody
+	Object getFollowActivity(
+			@RequestParam(value = "uid") Long uid,
+			@RequestParam(value = "skip", required = false) Integer skip,
+			@RequestParam(value = "limit", required = false) Integer limit
+		) {
+		
+		return actRepo.findFollowActivities(uid, skip, limit);
+	}
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/getFollowPagessByUID.json")
 	public @ResponseBody
 	Object getFollowPagessByUID(
