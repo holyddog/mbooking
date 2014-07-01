@@ -17,14 +17,16 @@ import com.mbooking.common.ErrorResponse;
 import com.mbooking.common.ResultResponse;
 import com.mbooking.model.Book;
 import com.mbooking.model.Page;
+import com.mbooking.repository.ActivityRepository;
 import com.mbooking.repository.PageRepository;
-import com.mbooking.util.ConfigReader;
 import com.mbooking.util.ImageUtils;
 
 @Controller
 public class PageJson {
 	@Autowired
 	PageRepository pageRepo;
+	@Autowired
+	ActivityRepository actRepo;
 
 	@RequestMapping(method = RequestMethod.POST, value = "/addPage.json")
 	public @ResponseBody
@@ -41,6 +43,7 @@ public class PageJson {
 	{
 		Page page = pageRepo.add(pageId, picture, imageSize, cropPos, caption, bookId, addBy);
 		if (page != null) {
+			actRepo.newPage(addBy, bookId);
 			return page;
 		}
 		return ErrorResponse.getError("This page cannot be saved");

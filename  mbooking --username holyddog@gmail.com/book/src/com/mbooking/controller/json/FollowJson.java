@@ -12,15 +12,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mbooking.common.ErrorResponse;
-import com.mbooking.common.ResultResponse;
 import com.mbooking.model.Book;
-import com.mbooking.model.Follow;
 import com.mbooking.model.Page;
 import com.mbooking.model.User;
+import com.mbooking.repository.ActivityRepository;
 import com.mbooking.repository.BookRepository;
 import com.mbooking.repository.FollowRepository;
 import com.mbooking.repository.PageRepository;
-
 
 @Controller
 public class FollowJson {
@@ -30,7 +28,8 @@ public class FollowJson {
 	BookRepository bookRepo;
 	@Autowired
 	PageRepository pageRepo;
-	
+	@Autowired
+	ActivityRepository actRepo;	
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/followMulti.json")
 	public @ResponseBody Object followMulti(
@@ -60,6 +59,7 @@ public class FollowJson {
 		User user = followRepo.followAuthor(uid, auid);
 		
 		if (user != null) {
+			actRepo.startedFollowing(uid, auid);
 			return user;
 		}
 
