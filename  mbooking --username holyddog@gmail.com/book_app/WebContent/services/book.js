@@ -288,11 +288,21 @@ Service.Book = {
 		Web.get(url, params, callback);
 	},
 	
-	GetFollowBooksByUID: function(userID,callback){
-		var url = Service.url + '/getFollowBooksByUID.json';
+//	GetFollowBooksByUID: function(userID,callback){
+//		var url = Service.url + '/getFollowBooksByUID.json';
+//		var params = {
+//				uid	:userID
+//		};
+//		Web.get(url, params, callback);
+//	},
+	
+	GetFollowActivity: function(uid, skip, limit, callback){
+		var url = Service.url + '/getFollowActivity.json';
 		var params = {
-				uid	:userID
-		};
+			uid: uid,
+			skip: skip,
+			limit: limit
+		};		
 		Web.get(url, params, callback);
 	},
 	

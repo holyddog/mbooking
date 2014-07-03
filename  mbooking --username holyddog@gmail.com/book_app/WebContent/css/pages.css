@@ -1028,6 +1028,100 @@
 	margin-top: 10px;
 }
 
+#page_Following .apanel {
+	background-color: #fff;
+	margin: 10px;
+	padding: 10px;
+}
+#page_Following .uref {
+	padding: 0 10px;
+}
+#page_Following .apanel .uimage {
+	background-color: #ddd;
+	width: 50px;
+	height: 50px;
+	border-radius: 25px;
+	overflow: hidden;
+}
+#page_Following .apanel .time {
+	font-size: 70%; color: #999;margin-bottom: 5px;
+}
+#page_Following .apanel .uimage img {
+	width: 50px;
+	height: 50px;
+}
+#page_Following .apanel .uinfo {
+	font-size: 80%; 
+	line-height: 18px;
+	color: #777;
+}
+#page_Following .comment {
+	margin-bottom: 10px; font-size: 80%;
+}
+#page_Following .apanel .bpic {
+	width: 50px;height: 50px;background-color: #ddd;
+}
+#page_Following .apanel .bpic img {
+	width: 100%;height: 100%;
+}
+#page_Following .apanel .upic {
+	width: 50px;height: 50px;background-color: #ddd; overflow: hidden; border-radius: 25px;
+}
+#page_Following .apanel .upic img {
+	width: 100%; height: 100%;
+}
+#page_Following .ubox {
+	margin: 10px;
+}
+#page_Following .apanel .blabel {
+	font-size: 80%;
+	line-height: 50px;
+	padding: 0 10px;
+	text-align: left;
+	overflow: hidden;
+	font-weight: bold;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+#page_Following .apanel .ulabel {
+	font-size: 80%;
+	font-weight: bold;
+	margin-top: 5px;
+	color: #0099CC;
+	text-align: left;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+#page_Following .apanel .uname {
+	font-size: 70%; color: #999;
+}
+#page_Following .border {
+	padding: 10px; background-color: #fff; border: solid 1px #ddd;
+}
+#page_Following .apanel .uinfo b {
+	color: #0099CC;
+}
+#page_Following .tab_cat {
+	border-bottom: solid 1px #ddd;
+	background-color: #fff;
+}
+#page_Following .tab_cat .sep {
+	width: 1px;
+	height: 30px;
+	margin-top: 10px;
+	background-color: #ddd;
+}
+#page_Following .tab_cat .tab {
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+	font-size: 80%;	
+}
+#page_Following .tab_cat .tab.active {
+	color: #33B5E5;
+}
+
 #page_FollowFriend .friend_item {
 	padding: 10px; 
 	-webkit-box-shadow: 0px 0px 2px #aaa;
