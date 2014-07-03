@@ -8,8 +8,20 @@
 		<span class="notf_count"></span>
 	</a>
 </div>
-<div class="content gray flex1 box vertical">
-	<div class="book_con">
+<div class="content gray flex1 box vertical no_scroll">	
+	<div class="tab_cat box horizontal">
+		<div class="tab flex1 flex_lock active" data-link="foll_tab1">ACTIVITY</div>
+		<div class="sep"></div>
+		<div class="tab flex1 flex_lock" data-link="foll_tab2">BOOK</div>
+	</div>	
+	<div id="foll_tab1" class="flex1 overflow_scroll">
+		<div class="act_con">
+		</div>
+		<div class="load_more relative"></div>
 	</div>
-	<div class="load_more relative"></div>
+	<div id="foll_tab2" class="flex1 overflow_scroll" style="display: none;">
+		<div class="book_con">
+		</div>
+		<div class="load_more relative"></div>
+	</div>
 </div>		

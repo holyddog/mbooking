@@ -6,12 +6,20 @@ Page.Following = {
 		
 		var self = this;
 		
+		var tab1 = container.find('#foll_tab1');
+		var tab2 = container.find('#foll_tab2');
+		
 		// set toolbar buttons
 		container.find('[data-id=btn_m]').tap(function() {
 			Page.slideMenu();
 		});	
 		container.find('[data-id=btn_r]').tap(function() {
-			self.load(container);
+			if (tab2.is(':visible')) {
+				self.load(container);				
+			}
+			else {	
+				self.loadActivity(container);
+			}
 		});	
 		var btnAdd = container.find('[data-id=btn_a]');
 		btnAdd.tap(function() {
@@ -23,8 +31,96 @@ Page.Following = {
 			Page.open('Notifications', true);
 		});	
 		
+		var tabs = container.find('.tab');
+		tabs.tap(function() {
+			var t = $(this);
+			var index = t.index();
+			
+			tabs.removeClass('active');
+			t.addClass('active');
+			
+			tab1.hide();
+			tab2.hide();
+			
+			var tab = container.find('#' + t.data('link'));
+			tab.show();
+			
+			if (index == 0) {
+			}
+			else {
+				if (container.find('.book_con').find('.b').length == 0) {
+					self.load(container);					
+				}
+			}
+		});
+
+		self.loadActivity(container);
 		Page.createShortcutBar(container);
-		self.load(container);		
+	},
+	
+	getBook: function(data) {
+//		<div class="box horizontal border">
+//			<div class="bpic">
+//				<img src="http://192.168.0.113/res/book/u1/b63/6o7t9D2U_s.jpg">
+//			</div>
+//			<div class="blabel flex1">Unde deleniti incidunt qui magnis</div>
+//		</div>
+		var box = document.createElement('box');
+		box.className = 'box horizontal border';
+		box.dataset.bid = data.bid;
+		box.dataset.uid = data.author.uid;
+		
+		var bpic = document.createElement('div');
+		bpic.className = 'bpic';
+		var img = document.createElement('img');
+		img.src = Util.getImage(data.pic, 2);
+		bpic.appendChild(img);
+		
+		var blabel = document.createElement('div');
+		blabel.className = 'blabel flex1';
+		blabel.innerText = data.title;
+		
+		box.appendChild(bpic);
+		box.appendChild(blabel);
+		
+		return box;
+	},
+	
+	getUser: function(data) {
+//		<div class="box horizontal border">
+//			<div class="upic">
+//				<img src="http://192.168.0.113/res/book/u2/3eY4e0ee_sp.jpg">
+//			</div>
+//			<div class="uref flex1">
+//				<div class="ulabel">Monkey D Luffy</div>
+//				<div class="uname">@luffy</div>
+//			</div>
+//		</div>
+		var box = document.createElement('box');
+		box.className = 'box horizontal border';
+		box.dataset.uid = data.uid;
+		
+		var upic = document.createElement('div');
+		upic.className = 'upic';
+		var img = document.createElement('img');
+		img.src = Util.getImage(data.pic, 3);
+		upic.appendChild(img);
+		
+		var uref = document.createElement('div');
+		uref.className = 'uref flex1';
+		var ulabel = document.createElement('div');
+		ulabel.className = 'ulabel';
+		ulabel.innerText = data.dname;
+		var uname = document.createElement('div');
+		uname.className = 'uname';
+		uname.innerText = '@' + data.uname;
+		uref.appendChild(ulabel);
+		uref.appendChild(uname);
+		
+		box.appendChild(upic);
+		box.appendChild(uref);
+		
+		return box;
 	},
 	
 	getAuthor: function(uid, name, pic) {
@@ -69,6 +165,8 @@ Page.Following = {
 		return adiv;
 	},
 	
+	
+	
 	load: function(container) {		
 		var self = this;
 		clearInterval(Page.inv1);
@@ -82,16 +180,100 @@ Page.Following = {
 			self.loadItems(data, container, panel);
 			
 			if (data.length >= Config.LIMIT_ITEM) {
-				self.runInterval(container, panel);
+				self.runInterval_1(container, panel, container.find('#foll_tab2'));
 			}
 		});
 	},
 	
-	runInterval: function(container, panel) {		
+	loadActivity: function(container) {
 		var self = this;
+
 		var content = container.find('.content');
+		var panel = container.find('.act_con');
+		panel.empty();
+		
+		Page.bodyShowLoading(content);
+		Service.Book.GetFollowActivity(Account.userId, 0, Config.LIMIT_ITEM, function(data) {
+			Page.bodyHideLoading(content);
+			self.loadActivityItems(data, container, panel);
+			
+			if (data.length >= Config.LIMIT_ITEM) {
+				self.runInterval_2(container, panel, container.find('#foll_tab1'));
+			}
+		});
+	},
+	
+	getActivity: function(type, user, message, adate, book, who, comment) {
+//		<div class="apanel box horizontal">
+//			<div class="uimage">
+//				<img src="http://192.168.0.113/res/book/u1/ghjlq4BX_sp.jpg" />
+//			</div>
+//			<div class="ubox flex1">
+//				<div class="uinfo"><b>Chanon Trising</b> liked a story</div>
+//				<div class="time">9 mins ago</div>
+//				<div class="ref"></div>
+//			</div>
+//		</div>
+		var self = this;
+		
+		var panel = document.createElement('div');
+		panel.className = 'apanel box horizontal';
+		
+		var uimage = document.createElement('div');
+		uimage.className = 'uimage';
+		uimage.dataset.uid = user.uid;
+		var img = document.createElement('img');
+		img.src = Util.getImage(user.pic, 3);
+		
+		uimage.appendChild(img);
+				
+		var ubox = document.createElement('div');
+		ubox.className = 'ubox flex1';
+		var uinfo = document.createElement('div');
+		uinfo.className = 'uinfo';
+		uinfo.innerHTML = message;
+		uinfo.dataset.uid = user.uid;
+		
+		var time = document.createElement('div');
+		time.className = 'time';
+		time.innerText = adate;
+		var ref = document.createElement('div');
+		ref.className = 'ref';
+		
+		if (type > 0 && type < 5) {
+			var b = book;
+			ref.appendChild(Page.Profile.getBook(b.bid, b.title, b.pic, b.pcount, b.author, b.lcount, b.ccount));
+		}
+		else if (type == 5) {
+			ref.appendChild(self.getUser(who));
+		}
+		else if (type == 6) {
+			ref.appendChild(self.getBook(book));
+		}
+		
+		ubox.appendChild(uinfo);
+		ubox.appendChild(time);
+		
+		if (type == 6) {
+			var com = document.createElement('div');
+			com.className = 'comment';
+			com.innerText = comment;
+			ubox.appendChild(com);
+		}
+		
+		ubox.appendChild(ref);
+		
+		
+		panel.appendChild(uimage);
+		panel.appendChild(ubox);
+		
+		return panel;
+	},
+	
+	runInterval_1: function(container, panel, content) {		
+		var self = this;
 		var start = container.find('.book_size').length;
-		var more = container.find('.load_more');
+		var more = content.find('.load_more');
 		Page.inv1 = setInterval(function() {
 			if (!more.is(':visible') && content[0].scrollHeight - content[0].scrollTop <= content[0].offsetHeight) {
 				more.show();
@@ -105,6 +287,29 @@ Page.Following = {
 					
 					if (data.length < Config.LIMIT_ITEM) {
 						clearInterval(Page.inv1);
+					}
+				});
+			}
+		}, 1);
+	},
+	
+	runInterval_2: function(container, panel, content) {		
+		var self = this;
+		var start = container.find('.apanel').length;
+		var more = content.find('.load_more');
+		Page.inv2 = setInterval(function() {
+			if (!more.is(':visible') && content[0].scrollHeight - content[0].scrollTop <= content[0].offsetHeight) {
+				more.show();
+				Page.bodyShowLoading(more);
+				
+				Service.Book.GetFollowActivity(Account.userId, start, Config.LIMIT_ITEM, function(data) {
+					self.loadActivityItems(data, container, panel);
+					start += data.length;
+					more.hide();
+					Page.bodyHideLoading(more);
+					
+					if (data.length < Config.LIMIT_ITEM) {
+						clearInterval(Page.inv2);
 					}
 				});
 			}
@@ -125,7 +330,42 @@ Page.Following = {
 			
 			panel.append(div);
 		}
+		self.resize(container, panel);		
+	},
+	
+	loadActivityItems: function(data, container, panel) {
+		var self = this;
 		
+		for (var i = 0; i < data.length; i++) {
+			var a = data[i];
+			
+//			var div = document.createElement('div');
+//			div.className = 'book';
+//			
+//			div.appendChild(Page.Profile.getBook(b.bid, b.title, b.pic, b.pcount, b.author, b.lcount, b.ccount));
+//			div.appendChild(self.getAuthor(b.author.uid, b.author.dname, b.author.pic));
+//			
+			panel.append(self.getActivity(a.type, a.user, a.message, a.dateStr, a.book, a.who, a.comment));
+		}
+		
+		container.find('.uimage, .uinfo').click(function() {
+			var target = $(this);
+			Page.open('Profile', true, { uid: target.data('uid'), back: true });
+		});
+		container.find('.box.border').click(function() {
+			var target = $(this);
+			if (target.data('bid')) {
+				Page.open('Book', true, { bid: target.data('bid'), uid: target.data('uid') });				
+			}
+			else {
+				Page.open('Profile', true, { uid: target.data('uid'), back: true });
+			}
+		});
+		
+		self.resize(container, panel);		
+	},
+	
+	resize: function(container, panel) {
 		var ratio = 2;
 		if (panel[0].offsetWidth >= 600) {
 			ratio = 3;
