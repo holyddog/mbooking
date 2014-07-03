@@ -13,6 +13,7 @@ import com.mbooking.model.Activity;
 import com.mbooking.model.Book;
 import com.mbooking.model.User;
 import com.mbooking.repository.ActivityRepostitoryCustom;
+import com.mbooking.util.TimeUtils;
 
 public class ActivityRepositoryImpl implements ActivityRepostitoryCustom {
 	
@@ -24,7 +25,6 @@ public class ActivityRepositoryImpl implements ActivityRepostitoryCustom {
 		Long now = System.currentTimeMillis();
 		
 		User user = getUser(uid);
-		Book book = getBook(bid);
 		
 		Activity act = new Activity();
 		act.setType(Activity.PUBLISHED);
@@ -32,7 +32,7 @@ public class ActivityRepositoryImpl implements ActivityRepostitoryCustom {
 		act.setMessage(getMessage(Activity.PUBLISHED, new String[] { user.getDname() }));
 		act.setUid(uid);
 		act.setUser(user);
-		act.setBook(book);
+		act.setBid(bid);
 		
 		db.insert(act);
 	}
@@ -52,7 +52,8 @@ public class ActivityRepositoryImpl implements ActivityRepostitoryCustom {
 
 		User user = getUser(uid);
 		if (act != null) {
-			String message = getMessage(Activity.NEW_PAGE, new String[] { user.getDname(), act.getPcount().toString() });
+			Integer pcount = (act.getPcount().intValue() + 1);
+			String message = getMessage(Activity.NEW_PAGE, new String[] { user.getDname(), pcount.toString() });
 			Update update = new Update().inc("pcount", 1).set("message", message).set("adate", now);
 			db.updateFirst(query, update, Activity.class);
 		}
@@ -62,8 +63,8 @@ public class ActivityRepositoryImpl implements ActivityRepostitoryCustom {
 			a.setAdate(now);
 			a.setMessage(getMessage(Activity.NEW_PAGE, new String[] { user.getDname(), "1" }));
 			a.setUid(uid);
+			a.setBid(bid);
 			a.setUser(user);
-			a.setBook(book);
 			
 			a.setPcount(1);
 			
@@ -81,7 +82,6 @@ public class ActivityRepositoryImpl implements ActivityRepostitoryCustom {
 		// insert like activity at first time
 		if (count == 0) {
 			User user = getUser(uid);
-			Book book = getBook(bid);
 			
 			Activity act = new Activity();
 			act.setType(Activity.LIKED);
@@ -89,7 +89,7 @@ public class ActivityRepositoryImpl implements ActivityRepostitoryCustom {
 			act.setMessage(getMessage(Activity.LIKED, new String[] { user.getDname() }));
 			act.setUid(uid);
 			act.setUser(user);
-			act.setBook(book);
+			act.setBid(bid);
 			
 			db.insert(act);			
 		}
@@ -105,7 +105,6 @@ public class ActivityRepositoryImpl implements ActivityRepostitoryCustom {
 		// insert like activity at first time
 		if (count == 0) {
 			User user = getUser(uid);
-			Book book = getBook(bid);
 			
 			Activity act = new Activity();
 			act.setType(Activity.FAVOURITE);
@@ -113,7 +112,7 @@ public class ActivityRepositoryImpl implements ActivityRepostitoryCustom {
 			act.setMessage(getMessage(Activity.FAVOURITE, new String[] { user.getDname() }));
 			act.setUid(uid);
 			act.setUser(user);
-			act.setBook(book);
+			act.setBid(bid);
 			
 			db.insert(act);			
 		}
@@ -148,7 +147,6 @@ public class ActivityRepositoryImpl implements ActivityRepostitoryCustom {
 		Long now = System.currentTimeMillis();
 		
 		User user = getUser(uid);
-		Book book = getBook(bid);
 		
 		Activity act = new Activity();
 		act.setType(Activity.COMMENTED);
@@ -156,7 +154,7 @@ public class ActivityRepositoryImpl implements ActivityRepostitoryCustom {
 		act.setMessage(getMessage(Activity.COMMENTED, new String[] { user.getDname() }));
 		act.setUid(uid);
 		act.setUser(user);
-		act.setBook(book);
+		act.setBid(bid);
 		act.setComment(comment);
 		
 		db.insert(act);
@@ -170,7 +168,7 @@ public class ActivityRepositoryImpl implements ActivityRepostitoryCustom {
 	
 	private Book getBook(Long bid) {
 		Query query = new Query(Criteria.where("bid").is(bid));
-		query.fields().include("title").include("pic").include("pcount").include("lcount").include("ccount").include("pbdate");
+		query.fields().include("title").include("pic").include("pcount").include("lcount").include("ccount").include("pbdate").include("author");
 		return db.findOne(query, Book.class);
 	}
 	
@@ -214,7 +212,14 @@ public class ActivityRepositoryImpl implements ActivityRepostitoryCustom {
 			query.sort().on("adate", Order.DESCENDING);
 			query.skip(start).limit(limit);
 			
-			return db.find(query, Activity.class);
+			long now = System.currentTimeMillis();
+			List<Activity> list = db.find(query, Activity.class);
+			for (int i = 0; i < list.size(); i++) {
+				Activity a = list.get(i);
+				a.setBook(getBook(a.getBid()));
+				a.setDateStr(TimeUtils.timefromNow(a.getAdate(), now));				
+			}	
+			return list;
 		}
 		
 		return null;
