@@ -29,9 +29,10 @@ public class Activity {
 	
 	Long adate;
 	
-	Book book; // bid, title, lcount, ccount, pcount, pic
+	Long bid;
 	User who; // uid, dname, uname, pic
-	
+
+	Book book;
 	String message;
 	String dateStr;
 	
@@ -100,5 +101,11 @@ public class Activity {
 	}
 	public void setPcount(Integer pcount) {
 		this.pcount = pcount;
+	}
+	public Long getBid() {
+		return bid;
+	}
+	public void setBid(Long bid) {
+		this.bid = bid;
 	}
 }
