@@ -543,23 +543,13 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 	}
 
 	@Override
-	public Boolean addTag(Long bid, String tag) {
+	public Boolean addTag(Long bid, String tags) {
 		try {
-			long count = db.count(new Query(Criteria.where("bid").is(bid).and("tags").regex("^(?i)" + tag + "(?i)")), Book.class);
-			if (count > 0) {
-				return false;
-			}
-			db.updateFirst(new Query(Criteria.where("bid").is(bid)), new Update().push("tags", tag), Book.class);
-			
-			tag = tag.toLowerCase();
-			if (db.count(new Query(Criteria.where("tag").is(tag)), Tag.class) > 0) {
-				db.updateFirst(new Query(Criteria.where("tag").is(tag)), new Update().inc("count", 1), Tag.class);
-			}
-			else {
-				Tag t = new Tag();
-				t.setTag(tag);
-				t.setCount(1);
-				db.insert(t);
+			String[] tagArr = tags.split("[,]");
+			for (int i = 0; i < tagArr.length; i++) {
+				if (tagArr[i].trim().length() > 0) {
+					insertTag(bid, tagArr[i].trim());					
+				}
 			}
 //			db.upsert(new Query(Criteria.where("tag").is(tag)), new Update().set("tag", tag).inc("count", 1), Tag.class);
 			return true;
@@ -567,6 +557,26 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	private boolean insertTag(Long bid, String tag) {
+		long count = db.count(new Query(Criteria.where("bid").is(bid).and("tags").regex("^(?i)" + tag + "(?i)")), Book.class);
+		if (count > 0) {
+			return false;
+		}
+		db.updateFirst(new Query(Criteria.where("bid").is(bid)), new Update().push("tags", tag), Book.class);
+		
+		tag = tag.toLowerCase();
+		if (db.count(new Query(Criteria.where("tag").is(tag)), Tag.class) > 0) {
+			db.updateFirst(new Query(Criteria.where("tag").is(tag)), new Update().inc("count", 1), Tag.class);
+		}
+		else {
+			Tag t = new Tag();
+			t.setTag(tag);
+			t.setCount(1);
+			db.insert(t);
+		}
+		return true;
 	}
 
 	@Override
