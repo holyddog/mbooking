@@ -11,6 +11,7 @@ public class Page {
 	@Indexed
 	Long bid;
 	Long uid;
+	String ref;
 	
 	Integer seq;
 	Long cdate;	//Create Date
@@ -83,6 +84,12 @@ public class Page {
 		this.pos = pos;
 	}
 	
+	public String getRef() {
+		return ref;
+	}
+	public void setRef(String ref) {
+		this.ref = ref;
+	}
 	// Return from Service Only , Not in db
 	public User getAuthor() {
 		return author;

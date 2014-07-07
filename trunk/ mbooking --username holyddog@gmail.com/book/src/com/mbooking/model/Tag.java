@@ -8,6 +8,9 @@ public class Tag {
 	@Id
 	String tag;
 	Integer count;
+	String label;
+	Boolean cat;
+	Integer seq;
 
 	public String getTag() {
 		return tag;
@@ -23,5 +26,21 @@ public class Tag {
 
 	public void setCount(Integer count) {
 		this.count = count;
+	}
+
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
+	}
+
+	public Boolean getCat() {
+		return cat;
+	}
+
+	public void setCat(Boolean cat) {
+		this.cat = cat;
 	}
 }
