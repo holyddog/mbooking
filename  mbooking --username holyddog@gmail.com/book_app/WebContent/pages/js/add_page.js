@@ -8,10 +8,13 @@ Page.AddPage = {
 		var boxPhoto = container.find('#box_photo')[0];
 		if (pid) {
 			container.find('.tbar .title').text('Edit Page');
-			self.loadPage(container, pid);
+			self.loadPage(container, pid, params.count);
 		}
 		else {
 			boxPhoto.style.height = boxPhoto.offsetWidth + 'px';
+			if (params.count) {
+				container.find('.pline .pnum').text((params.count + 1) + ' of ' + params.count);				
+			}
 		}
 		
 		var adjPhoto = container.find('#adj_photo');
@@ -21,6 +24,11 @@ Page.AddPage = {
 				self.addPhoto(container, img);
 			});
 		});		
+		
+		var link = container.find('.ref_link');
+		link.tap(function() {
+			Page.open('EditRef', true, { text: link.data('raw') });
+		});
 		
 		var descText = container.find('#desc_text');
 		container.find('#box_desc').tap(function() {
@@ -139,7 +147,7 @@ Page.AddPage = {
 		self.checkAccept(container);
 	},
 	
-	loadPage: function(container, pid) {
+	loadPage: function(container, pid, pcount) {
 		var self = this;
 		var content = container.find('.content');
 		var boxPhoto = container.find('#box_photo')[0];
@@ -157,6 +165,8 @@ Page.AddPage = {
 				boxPhoto.style.display = 'block';
 				boxPhoto.style.height = boxPhoto.offsetWidth + 'px';
 				boxDesc.style.display = '-webkit-box';
+				
+				container.find('.pline .pnum').text(data.seq + ' of ' + pcount);
 				
 //				img.css({
 //					'-webkit-transform': 'translate3d(0px, 0px, 0px)'
@@ -183,6 +193,10 @@ Page.AddPage = {
 		container.find('#desc_text').show().text(text);
 		container.find('#desc_label').hide();
 		this.checkAccept(container);
+	},
+	
+	updateRef: function(container, raw) {
+		container.find('.ref_link').data('raw', raw);
 	},
 	
 	editPhoto: function(container, loaded, crop) {

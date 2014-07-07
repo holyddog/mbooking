@@ -124,7 +124,7 @@ Page.Profile = {
 						Account.cover = data.picture;
 						localStorage.setItem('u', JSON.stringify(Account));
 						
-						var header = container.find('#profile_header');
+						var header = container.find('#profile_page');
 						header.css({
 							'background-image': 'url(' + Util.getImage(data.picture, 1) + ')'
 						});
@@ -296,7 +296,7 @@ Page.Profile = {
 				content.find('.pimage img').attr('src', Util.getImage(user.pic, 3));
 			}
 			if (user.cover) {
-				profile_header.style.backgroundImage = 'url(' + Util.getImage(user.cover, 1) + ')';
+				document.getElementById('profile_page').style.backgroundImage = 'url(' + Util.getImage(user.cover, 1) + ')';
 			}
 			
 			var statPanel = content.find('.stat_panel');
@@ -441,7 +441,7 @@ Page.Profile = {
 	},
 	
 	updateCover: function() {
-		var profileHeader = document.getElementById('profile_header');
+		var profileHeader = document.getElementById('profile_page');
 		var profileCover = document.getElementById('profile_cover');
 		if (profileHeader && profileCover) {
 			if (Account.cover) {

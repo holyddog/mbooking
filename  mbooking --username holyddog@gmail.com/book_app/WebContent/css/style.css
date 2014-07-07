@@ -239,6 +239,12 @@ textarea {
 .tbar .btn.highlight {
 	background-color: #6DCAEC;
 }
+.tbar.trans .btn.highlight {
+	background-color: transparent;
+}
+.tbar.trans .btn.highlight span {
+	background-color: #6DCAEC !important;
+}
 .tbar .btn_box {
 	color: #fff;
 	background-color: #33B5E5;
@@ -303,16 +309,14 @@ textarea {
 	opacity: .5;
 }
 .btn.liked {
-	background-color: #33B5E5;
 }
 .btn.liked span {
-	background-color: #fff;	
+	background-color: #33B5E5 !important;	
 }
 .btn.stared {
-	background-color: #99CC00;
 }
 .btn.stared span {
-	background-color: #fff;	
+	background-color: #FFBB33 !important;	
 }
 
 .btn font {
@@ -525,6 +529,7 @@ textarea {
 	overflow-y: scroll; 
 	-webkit-overflow-scrolling: touch; 
 }
+
 .content.no_scroll {
 	overflow: hidden; 
 	overflow-y: hidden; 
@@ -553,10 +558,10 @@ textarea {
 	width: 260px;
 	background-color: #ccc;
 	text-align: left;
-	z-index: 100;
+	z-index: 100;	
 	-webkit-box-shadow: 4px 3px 5px 0px rgba(50, 50, 50, 0);
 	
-	overflow-y: scroll; 
+	overflow-y: hidden;
 	-webkit-overflow-scrolling: touch; 
 	-webkit-transition: .25s -webkit-transform ease-in-out;
 	-webkit-transform: translateX(-260px);
@@ -577,9 +582,6 @@ textarea {
 	-webkit-box-shadow: 0px 0px 2px #aaa;
 }
 #sidebar li.item.highlight {
-	background-color: #6DCAEC;
-}
-#sidebar li.item:active, #sidebar li.item:hover {
 	background-color: #6DCAEC;
 }
 
@@ -621,11 +623,12 @@ textarea {
 
 #profile_cover {
 	padding: 0px !important;
-	height: auto !important;
+	height: 200px !important;
 }
 #profile_cover .box {
 	padding: 15px;
 	background-color: rgba(0, 0, 0, .3);
+	padding-top: 30px;
 }
 .profile_item {
 	line-height: 0;
@@ -637,15 +640,21 @@ textarea {
 }
 .profile_item .pimage {
 	background-color: #ddd;
-	border-radius: 25px;
+	border-radius: 50%;
+	border: solid 1px #fff;
+	width: 90px;
+	height: 90px;
+	overflow: hidden;
+	margin: 0 auto;
 }
 .profile_item .pimage img {
-	width: 50px;
-	height: 50px;
-	border-radius: 25px;
+	width: 100%;
+	height: 100%;
 }
 .profile_item .info {
-	padding-left: 10px;
+    padding-top: 10px;
+    text-align: center;
+    padding-bottom: 5px;
 }
 .profile_item .info h1 {
 	font-family: 'Roboto', 'Bangna';

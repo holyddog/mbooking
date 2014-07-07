@@ -99,8 +99,9 @@ Page.Book = {
 				var page = $('<div class="page_nav fill_dock box vertical" style="background-color: white; visibility: hidden;"></div>');
 				var pic = $('<div class="pic_box relative" style="background-color: #ccc; overflow: hidden;"><img style="position: absolute; width: 100%; height: 100%;" src="' + Util.getImage(data[i].pic, 1) + '"></div>');
 				// -webkit-box-align: center;
-				content.append(page.append(pic).append('<div class="flex1 box center_middle" style="padding: 15px;">' + data[i].caption + '</div><div style="line-height: 15px; padding: 0 10px 10px; font-size: 80%; text-align: right;">' + (i + 1) + ' of ' + data.length + '</div>'));
-				pic.css('height', pic.width());
+
+				var pline = '<div class="pline">' + (i + 1) + ' of ' + data.length + '</div>';
+				content.append(page.append(pic).append('<div class="flex1 box center_middle" style="padding: 15px;">' + data[i].caption + '</div>' + pline));
 			}		
 			
 			var finish = function(count) {				
