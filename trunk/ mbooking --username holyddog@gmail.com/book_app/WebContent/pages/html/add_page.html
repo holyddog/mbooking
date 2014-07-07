@@ -1,5 +1,4 @@
-<div class="tbar_bg gray"></div>
-<div class="tbar box horizontal">
+<div class="tbar trans" style="z-index: 1001; height: 0px;">
 	<!-- 
 	<div data-id="btn_c" class="tbar_btn flex1 flex_lock box center_middle">
 		<div class="box horizontal">
@@ -16,11 +15,11 @@
 		</div>
 	</div>
 	-->	
-	<a data-id="btn_c" class="btn" style="left: 0;"><span class="back"></span></a>
-	<div class="title">New Page</div>
+	<a data-id="btn_c" class="btn" style="left: 0;"><span class="back" style="background-color: #fff;"></span></a>
+	<div class="title" style="color: #fff; opacity: 0">New Page</div>
 	<a data-id="btn_a" class="btn_box disabled" style="right: 0;"><span class="accept"></span></a>
 </div>
-<div class="content gray flex1 box vertical">	
+<div class="content flex1 box vertical no_scroll">	
 	<div id="box_photo">
 		<div id="add_photo" class="fill_dock box center_middle">
 			<div id="photo_label">
@@ -41,5 +40,11 @@
 	<div id="box_desc" class="flex1 box">
 		<div id="desc_label">Tap to add a description</div>
 		<div id="desc_text" style="display: none;"></div>
+	</div>
+	<div class="pline box horizontal">
+		<div class="ref flex1">
+			<a class="ref_link block fleft">+ Reference</a>
+		</div>
+		<div class="pnum"></div>
 	</div>
 </div>		

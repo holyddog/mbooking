@@ -13,7 +13,8 @@ Page.Tag = {
 		container.find('[data-id=btn_r]').tap(function() {
 			self.load(params.tag, container);
 		});	
-
+		
+		container.find('.tbar .title').text('#' + params.tag);
 		self.load(params.tag, container.find('.content'));
 	},
 	

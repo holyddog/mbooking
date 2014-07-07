@@ -162,7 +162,8 @@ Page.EditBook = {
 			if (self.move) {
 				return;
 			}
-			Page.open('AddPage', true, { bid: bid });
+			var pcount = parseInt(container.find('.pcount span').text());
+			Page.open('AddPage', true, { bid: bid, count: pcount });
 		});
 		
 		container.find('.tab_page a').click(function() {
@@ -334,7 +335,8 @@ Page.EditBook = {
 					history.back();
 					
 					setTimeout(function() {
-						Page.open('AddPage', true, { bid: self.bid, pid: item.dataset.pid });						
+						var pcount = parseInt(container.find('.pcount span').text());
+						Page.open('AddPage', true, { bid: self.bid, pid: item.dataset.pid, count: pcount });						
 					}, 100);
 				}
 				else if (text == 'delete') {

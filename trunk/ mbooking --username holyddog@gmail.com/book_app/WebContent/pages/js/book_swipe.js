@@ -54,6 +54,7 @@ Page.Book = {
 			btnComment.hide();
 			btnShare.hide();
 			btnLike.hide();
+			btnFav.hide();
 //			btnBack.find('span')[0].className = 'back';
 		}
 		
@@ -102,13 +103,14 @@ Page.Book = {
 		var size = 0;
 
 		var data = bookData.pages;
-		var ph = window.innerHeight - 50;
+		var ph = window.innerHeight;
 		if (data.length) {		
 			for (var i = 0; i < data.length; i++) {
 				var page = $('<div class="page_item box vertical" style="background-color: white; height: ' + ph + 'px"></div>');
 				var pic = $('<div class="pic_box relative" style="background-color: #ccc; overflow: hidden;"><img style="position: absolute; width: 100%; height: 100%;" src="' + Util.getImage(data[i].pic, 1) + '"></div>');
 				// -webkit-box-align: center;
-				content.append(page.append(pic).append('<div class="flex1 box center_middle" style="padding: 15px;">' + data[i].caption + '</div><div style="line-height: 15px; padding: 0 10px 10px; font-size: 80%; text-align: right;">' + (i + 1) + ' of ' + data.length + '</div>'));
+				var pline = '<div class="pline box horizontal"><div class="ref flex1"></div><div class="pnum">' + (i + 1) + ' of ' + data.length + '</div></div>';
+				content.append(page.append(pic).append('<div class="page_cap flex1 box center_middle" style="padding: 15px;">' + data[i].caption + '</div>' + pline));
 				pic.css('height', pic.width());
 			}	
 		}

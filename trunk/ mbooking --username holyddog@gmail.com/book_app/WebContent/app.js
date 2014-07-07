@@ -150,7 +150,7 @@ $(document).ready(function() {
 //		e.preventDefault();
 //	});
 	
-	sb.find('.item').click(function() {
+	sb.find('.item').tap(function() {
 		var page = $(this).data('link');
 		
 		var hash = location.hash;	
@@ -740,7 +740,7 @@ Page = {
 						var it = items[i];
 						ul.appendChild(getItem(it.name, it.label));
 					}
-					dialog.find('.d_panel').append(ul);
+					dialog.find('.d_panel').css('overflow-y', 'hidden').append(ul);
 					
 					dialog.find('[data-link=camera]').tap(function() {	
 						if (Page._callbackDialog) {
@@ -797,7 +797,7 @@ Page = {
 						var it = items[i];
 						ul.appendChild(getItem(it.name, it.label));
 					}
-					dialog.find('.d_panel').append(ul);
+					dialog.find('.d_panel').css('overflow-y', 'hidden').append(ul);
 					
 					dialog.find('[data-link=edit]').click(function() {	
 						Page._callbackDialog('edit');
@@ -814,7 +814,7 @@ Page = {
 					break;
 				}
 				case 3: {
-					var dPanel = dialog.find('.d_panel');
+					var dPanel = dialog.find('.d_panel').css('overflow-y', 'scroll');
 					dPanel.width(window.innerWidth - 30);
 					dPanel.css('max-height', window.innerHeight - 30);
 					
@@ -854,7 +854,7 @@ Page = {
 					break;
 				}
 				case 4: {
-					var dPanel = dialog.find('.d_panel');
+					var dPanel = dialog.find('.d_panel').css('overflow-y', 'hidden');
 					dPanel.width(window.innerWidth - 30);
 					dPanel.css('max-height', window.innerHeight - 30);
 					

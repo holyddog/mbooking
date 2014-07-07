@@ -110,6 +110,28 @@
 	color: darkgray;
 }
 
+#page_AddPage .content:after {
+	content: " ";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 50px;
+	background-image: -webkit-linear-gradient(top, rgba(0,0,0,0.4), rgba(0,0,0,0) 100%);
+}
+#page_AddPage .tbar .btn_box {
+	background-color: transparent !important;
+}
+
+#page_AddPage .tbar .btn_box span {
+	background-color: #33B5E5 !important;
+	opacity: 1 !important;
+}
+#page_AddPage .tbar .btn_box.disabled span {
+	background-color: #fff !important;
+	opacity: .5 !important;
+}
+
 #page_AddPage .tbar_btn.highlight {
 	background-color: #6DCAEC;
 }
@@ -135,7 +157,7 @@
 	
 	width: 50px; 
 	height: 50px; 
-	top: 0; 
+	bottom: 0; 
 	right: 0; 
 	position: absolute;
 	background-color: #fff;
@@ -155,8 +177,7 @@
 #page_AddPage #box_photo {
 	position: relative;
 	height: 0;
-	margin: 10px;
-	background-color: #fff;
+	background-color: #eee;
 	background-position: center center;
 	background-repeat: no-repeat;
 }
@@ -175,16 +196,45 @@
 	color: #777;
 }
 #page_AddPage #box_desc {
-	-webkit-box-align: center; height: 0; margin: 0 10px 10px; background-color: #fff;
+	-webkit-box-align: center;
+	height: 0;
+	background-color: #fff;
+	padding: 10px;
+	font-size: 90%;
 }
-#page_AddPage #box_photo {
-	-webkit-box-align: center; height: 0; margin: 10px; background-color: #fff;
+#page_AddPage .pline {
+	height: 35px;
+	font-size: 80%;
+	border-top: solid 1px #e2e2e2;
+	margin: 0 10px;
+	overflow: hidden;
+	line-height: 35px;
+	background-color: #fff;
+}
+#page_AddPage .page_cap {
+	font-size: 90%;
+}
+#page_AddPage .pline .ref {
+	font-size: 90%;
+	color: #777;
+	text-align: left;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+#page_AddPage .pline .ref .ref_link {
+	padding: 0 5px;
+}
+#page_AddPage .pline .ref .ref_link.highlight {
+	background-color: #6DCAEC;		
 }
 #page_AddPage #desc_label {
-	color: #999; text-align: center; width: 100%;
+	color: #999; width: 100%;
+	text-align: center;
 }
 #page_AddPage #desc_text {
-	padding: 10px;
+	width: 100%;
+	text-align: center;
 }
 
 #page_BookList .book_list {
@@ -331,7 +381,6 @@
 
 #page_Profile #profile_header {
 	max-height: 250px;
-	background-color: #aaa;
 	position: relative;
 	background-size: 100%;
 	background-position: center center;
@@ -343,6 +392,11 @@
 #page_Profile .link_add {
 	float: left;
 	margin: 5px;
+}
+#page_Profile .content {
+	background-size: 100%;
+	background-position: center top;
+	background-repeat: no-repeat;
 }
 
 #page_Profile .link_add .icon {
@@ -475,6 +529,7 @@
 	overflow: hidden; 
 	padding: 5px;
 	position: relative;
+	background-color: #eee;
 }
 #page_Profile .tpage .btn_more {
 	position: absolute;
@@ -499,6 +554,38 @@
 	background: white;
 }
 
+#page_Book .content:after {
+	content: " ";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 50px;
+	background-image: -webkit-linear-gradient(top, rgba(0,0,0,0.4), rgba(0,0,0,0) 100%);
+}
+#page_Book .pline {
+	height: 35px;
+	font-size: 80%;
+	border-top: solid 1px #e2e2e2;
+	margin: 0 10px;
+	overflow: hidden;
+	line-height: 35px;
+}
+#page_Book .page_cap {
+	font-size: 90%;
+}
+#page_Book .pline .ref {
+	font-size: 90%;
+	color: #777;
+	text-align: left;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+#page_Book .pline .pnum {
+	text-align: right;
+	padding-left: 10px;
+}
 #page_Book .btitle {
 	font-family: 'Roboto', 'Bangna';
 	font-weight: 400;
@@ -508,7 +595,6 @@
 	font-size: 180%;
 	color: #fff;
 	line-height: 40px;
-	margin-top: 10px;
 }
 #page_Book .edit_book {
 	margin-top: 10px;
@@ -611,7 +697,7 @@
 #page_Book #tap_nav .flex1.highlight {
 }
 #page_Book .first_cover {
-	
+	padding-top: 50px;
 }
 #page_Book .last_cover {
 	display: none;
@@ -1299,4 +1385,24 @@
 	background-color: red;
 	float: right;
 	margin-top: 15px; 
+}
+
+#page_AddTag #tag_list {
+	background-color: #fff;
+}
+
+#page_AddTag .tag_item {
+	line-height: 0;
+	padding: 10px 15px;
+	-webkit-box-shadow: 0px 0px 2px #aaa;
+	background-color: #fff;
+}
+#page_AddTag .tag_item .label {
+	font-size: 90%;
+	line-height: 30px;
+}
+#page_AddTag .tag_item .count {
+	font-size:70%;
+	line-height: 20px;
+	color: #999;
 }

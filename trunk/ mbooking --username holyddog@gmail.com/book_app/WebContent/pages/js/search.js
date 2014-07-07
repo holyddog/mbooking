@@ -195,8 +195,8 @@ Page.Search = {
 						panel.append(self.getTag(tag.tag, tag.count));
 					}
 					panel.find('.tag_item').click(function() {
-						var uid = $(this).data('uid');
-						Page.open('Profile', true, { uid: uid, back: true });
+						var tag = $(this).data('tag');
+						Page.open('Tag', true, { tag: tag });
 					});
 				});
 			}
