@@ -95,7 +95,7 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 	}
 	
 	@Override
-	public Page add(Long pid, String picture, Integer imgSize, Integer cropPos, String caption, Long bookId, Long addBy) {	
+	public Page add(Long pid, String picture, Integer imgSize, Integer cropPos, String caption, String ref, Long bookId, Long addBy) {	
 		if (pid == null) {	
 			// insert new page data
 			Page page = new Page();
@@ -110,6 +110,7 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 			page.setCaption(caption);
 			page.setBid(bookId);
 			page.setUid(addBy);
+			page.setRef(ref);
 			page.setCdate(System.currentTimeMillis());
 			
 			// generate picture to directory
@@ -146,6 +147,11 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 			ImageUtils.generatePicture(file, picture, imgSize, cropPos, imgPath, pos);
 			
 			Update update = new Update().set("pos", pos).set("caption", caption);
+			
+			if (ref != null && ref.trim().length() > 0) {
+				update.set("ref", ref);
+			}
+			
 			Page retPage = db.findAndModify(query, update, new FindAndModifyOptions().returnNew(true), Page.class);
 			return retPage;
 		}
