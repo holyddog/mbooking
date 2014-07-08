@@ -18,16 +18,14 @@
   	</context-param>
   	<context-param>
     	<param-name>root</param-name>
+    	<!-- <param-value>http://localhost:8080/book</param-value>-->
     	<param-value>http://119.59.122.38/book</param-value>
   	</context-param>
   	<context-param>
     	<param-name>file</param-name>
-    	<param-value>http://119.59.122.38/res/book</param-value>
+    	<!-- <param-value>http://119.59.122.38/res/book</param-value>-->
+    	<param-value>http://119.59.122.38/book_dev_files</param-value>
     </context-param>
-	<context-param>
-		<param-name>book_dev_files</param-name>
-		<param-value>http://119.59.122.38/book_dev_files</param-value>
-	</context-param>
   	<context-param>    
     	<param-name>upload</param-name>
   		<param-value>D:/Resources/book</param-value>

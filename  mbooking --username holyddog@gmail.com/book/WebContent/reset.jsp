@@ -23,29 +23,42 @@
 			<f:subview id="formView" rendered="#{!resetView.success}">
 				<t:div rendered="#{!resetView.valid}">Invalid key</t:div>
 				<t:div rendered="#{resetView.valid}">
-					<form method="post" action="data/reset">
-						<div class="input_layout">
-							<div class="label">Current Password</div>
-							<div class="input shadow_border">
-								<input name="pwd" type="password" />
-							</div>
+					<div class="fill_dock box vertical">
+					<div class="flex1 box vertical">
+						<div class="flex1"></div>
+						<div id="reset_message">
+							<div class="title">Reset "IN Story" Password of</div> 
+							<img src="#{initParam['file']}#{resetView.pic}" onerror="if (this.src != '#{initParam['root']}/res/images/user.jpg') this.src = '#{initParam['root']}/res/images/user.jpg';"></img>
+							<div class="accountname">#{resetView.dname}</div>
 						</div>
+					</div>
+					<form id="resetpass" method="post" action="data/reset">
 						<div class="input_layout">
-							<div class="label">New Password</div>
+							<div class="label">
+								<div class="fleft label">New Password</div>
+								<div data-lbl="npwd" class="err_msg fright label"></div>
+							</div>
+							<input name="key" style="display:none" type="hidden" value=	"#{request.getParameter('key')}"/>
 							<div class="input shadow_border">
 								<input name="npwd" placeholder="At least 6 characters" type="password" />
 							</div>
 						</div>	
 						<div class="input_layout">
-							<div class="label">Confirm Password</div>
+							<div class="label">
+								<div class="fleft label">Confirm Password</div>
+								<div data-lbl="cpwd" class="err_msg fright label"></div>
+							</div>
 							<div class="input shadow_border">
 								<input name="cpwd" placeholder="At least 6 characters" type="password" />
 							</div>
 						</div>
 						<div class="input_layout">
-							<button type="submit">Submit</button>
+							<button class="submit_btn disable" type="submit">Submit</button>
 						</div>
 					</form>
+					<div class="flex2"></div>
+					</div>
+					<script type="text/javascript" src="#{initParam['root']}/res/reset.js"></script>
 				</t:div>
 			</f:subview>
 		</f:view>
