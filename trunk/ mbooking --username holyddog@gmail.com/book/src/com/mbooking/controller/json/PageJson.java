@@ -36,12 +36,13 @@ public class PageJson {
 			@RequestParam(value = "size") Integer imageSize,
 			@RequestParam(value = "crop") Integer cropPos,
 			@RequestParam(value = "caption", required = false) String caption,
+			@RequestParam(value = "ref", required = false) String ref,
 			@RequestParam(value = "bid") Long bookId,
 			@RequestParam(value = "uid") Long addBy
 
 	) 
 	{
-		Page page = pageRepo.add(pageId, picture, imageSize, cropPos, caption, bookId, addBy);
+		Page page = pageRepo.add(pageId, picture, imageSize, cropPos, caption, ref, bookId, addBy);
 		if (page != null) {
 			actRepo.newPage(addBy, bookId);
 			return page;
