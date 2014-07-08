@@ -29,6 +29,11 @@ public class User {
 	
 	Integer tcount; // Total book count
 
+	Boolean exguide;	//Explore Guide
+	Boolean bguide;	//Explore Guide
+	Boolean epguide;	//Explore Edit Page
+
+	
 	Object[] following;
 	Object[] everfoll;
 
@@ -223,4 +228,27 @@ public class User {
 	public void setFgpass(String fgpass) {
 		this.fgpass = fgpass;
 	}
+	public Boolean getExguide() {
+		return exguide;
+	}
+
+	public void setExguide(Boolean exguide) {
+		this.exguide = exguide;
+	}
+
+	public Boolean getBguide() {
+		return bguide;
+	}
+
+	public void setBguide(Boolean bguide) {
+		this.bguide = bguide;
+	}
+
+	public Boolean getEpguide() {
+		return epguide;
+	}
+
+	public void setEpguide(Boolean epguide) {
+		this.epguide = epguide;
+	}	
 }

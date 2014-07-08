@@ -272,4 +272,12 @@ public class UserJson {
 			) {
 		return ResultResponse.getResult("result", userRepo.resetForgetPass(pass,code));
 	}	
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/viewGuide.json")
+	public @ResponseBody Object viewGuide(
+			@RequestParam(value = "guide") String guide,
+			@RequestParam(value = "uid") Long uid
+			) {
+		return ResultResponse.getResult("result", userRepo.viewedGuide(guide,uid));
+	}	
 }

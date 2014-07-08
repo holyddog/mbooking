@@ -33,4 +33,8 @@ public interface UserRepostitoryCustom {
 	Boolean linkFB(Long uid, Long fbid, String fbpic, String fbname, String fbemail, String token);
 	Boolean sendFogetPassToEmail(String email);
 	Boolean resetForgetPass(String pass,String code);
+	User findUserByForgetPwdKey(String code);
+	
+	Boolean viewedGuide(String guide,Long uid);
+	
 }
