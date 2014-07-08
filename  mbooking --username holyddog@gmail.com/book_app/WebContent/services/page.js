@@ -18,7 +18,7 @@ Service.Page = {
 		Web.get(url, params, callback);
 	},
 	
-	AddPage: function(pid, picture, imageSize, cropPos, caption, bookId, addBy, callback) {
+	AddPage: function(pid, picture, imageSize, cropPos, caption, ref, bookId, addBy, callback) {
 		var url = Service.url + '/addPage.json';
 		var params = {
 			pid: pid,
@@ -27,7 +27,8 @@ Service.Page = {
 			crop: cropPos,
 			caption : caption,
 			bid : bookId, 
-			uid : addBy
+			uid : addBy,
+			ref: ref
 		};
 		Web.post(url, params, callback);
 	},
