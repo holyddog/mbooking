@@ -8,7 +8,8 @@ Page.EditRef = {
 		});
 		
 		var inputText = container.find('[name=text]');
-		
+
+		var btnAdd = container.find('[data-id=link_a]');
 		if (params && params.text) {
 			container.find('.tbar .title').text('Edit Reference');
 			btnAdd.find('.label').text('Update');
@@ -21,7 +22,6 @@ Page.EditRef = {
 		};
 		focus(inputText[0]);		
 
-		var btnAdd = container.find('[data-id=link_a]');
 		btnAdd.click(function() {
 			var val = inputText.val();
 			if (val && val.length > 0)

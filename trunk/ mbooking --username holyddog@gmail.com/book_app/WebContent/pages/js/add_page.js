@@ -59,7 +59,7 @@ Page.AddPage = {
 					pic = pic.substring(pic.lastIndexOf('/') + 1, pic.length);
 				}
 				
-				Service.Page.AddPage(pid, pic, drag_img.parentNode.offsetWidth, pos, desc_text.innerText, bid, Account.userId, function(data) {
+				Service.Page.AddPage(pid, pic, drag_img.parentNode.offsetWidth, pos, desc_text.innerText, link.data('raw'), bid, Account.userId, function(data) {
 					Page.btnHideLoading(btnAccept[0]);
 					
 					Page.back(function(c, page) {						
