@@ -39,6 +39,7 @@ public class FollowJson {
 		List<String> strlist = Arrays.asList(auid_str.split(":"));
 		List<Long> longlist = new ArrayList<Long>();
 		for(String str : strlist){
+			if(!str.equals(""))
 			longlist.add(Long.parseLong(str));
 		}
 		User user =  followRepo.followMulti(uid, longlist);

@@ -45,7 +45,7 @@ public class JavaMail {
 		InternetAddress fromAddress = null;
 		InternetAddress toAddress = null;
 		try {
-			fromAddress = new InternetAddress("\"Mugendai\" <" + from + ">");
+			fromAddress = new InternetAddress("\"IN Story\" <" + from + ">");
 			toAddress = new InternetAddress(to);
 		} 
 		catch (AddressException e) {

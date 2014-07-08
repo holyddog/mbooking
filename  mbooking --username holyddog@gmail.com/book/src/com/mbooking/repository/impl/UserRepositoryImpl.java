@@ -85,7 +85,9 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		user.setEmail(email);
 		user.setDname(displayName);
 		user.setUname(userName);
-		
+		user.setExguide(true);
+		user.setBguide(true);
+		user.setEpguide(true);
 		db.insert(user);
 		user.setPwd(null); // remove password before return data
 		
@@ -122,6 +124,7 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 			
 			if(os!=null&&dvtoken!=null&&user!=null)
 				addDevice(user.getEmail(),os,dvtoken);
+			
 			return user;
 	}
 
@@ -135,6 +138,9 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		user.setDname(displayName);
 		user.setUname(userName);
 		user.setPwd(Convert.toMD5Password(password));	
+		user.setExguide(true);
+		user.setBguide(true);
+		user.setEpguide(true);
 
 		if(fbid!=null){
 			FBobj fbobj = new FBobj();
@@ -445,8 +451,8 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 	@Override
 	public Boolean sendFogetPassToEmail(String email) {
 		try{
-			int mindigit = 6;
-			int maxdigit = 8;
+			int mindigit = 18;
+			int maxdigit = 20;
 			Random rand = new Random();
 			int digit = rand.nextInt(maxdigit - mindigit) + mindigit;
 			String unq_str = Convert.uniqueString(digit);
@@ -462,7 +468,9 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 			
 			JavaMail sender = new JavaMail();
 						
-			sender.sendMail(email.toLowerCase(),"Forget password", "Test"+"unq_str");
+			sender.sendMail(email.toLowerCase(),"Forget password",
+					"<html>From your change password request, <a href='http://119.59.122.38/book/reset.jsf?key="+unq_str+"'>Click Here</a> to reset your password </html>"
+			);
 			
 			return true;
 		}catch (Exception ex) {
@@ -473,15 +481,59 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 	
 	@Override
 	public Boolean resetForgetPass(String pass,String code) {
+		if (code == null) {
+			return null;
+		}
+		else if(code.isEmpty() || code.equals(""))
+		{
+			return null;
+		}
+		
 		Query query = new Query(Criteria.where("fgpass").is(code));
 		if(db.count(query, User.class)>0){
 			Update update = new Update();
 			update.set("pass",Convert.toMD5Password(pass));
 			update.unset("fgpass");
-			db.updateFirst(query, update,Update.class);
+			db.updateFirst(query, update,User.class);
 			return true;
 		}else{
 			return false;
 		}
+	}
+
+	@Override
+	public User findUserByForgetPwdKey(String code) {
+		if (code == null) {
+			return null;
+		}
+		else if(code.isEmpty() || code.equals(""))
+		{
+			return null;
+		}
+		
+		Query query = new Query(Criteria.where("fgpass").is(code));
+		query.fields().include("dname");
+		query.fields().include("pic");
+		return db.findOne(query, User.class);
+	}
+
+	@Override
+	public Boolean viewedGuide(String guide,Long uid) {
+		Update update = new Update();
+		
+		if(guide.equals("exguide"))
+			update.unset("exguide");
+		
+		if(guide.equals("bguide"))
+			update.unset("bguide");
+		
+		if(guide.equals("epguide"))
+			update.unset("epguide");
+		
+		db.updateFirst(new Query(Criteria.where("uid").is(uid)), update, User.class);
+		
+		return true;
 	}	
+	
+	
 }

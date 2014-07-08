@@ -2,6 +2,7 @@ package com.mbooking.repository.impl;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -18,6 +19,9 @@ import com.mbooking.model.Notification;
 import com.mbooking.model.User;
 import com.mbooking.repository.FollowRepostitoryCustom;
 import com.mbooking.util.PushNotification;
+import com.mongodb.BasicDBList;
+import com.mongodb.BasicDBObject;
+import com.mongodb.BasicDBObjectBuilder;
 import com.urbanairship.api.push.model.audience.Selectors;
 
 public class FollowRepositoryImpl implements FollowRepostitoryCustom {
@@ -39,8 +43,7 @@ public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 			db.updateFirst(new Query(Criteria.where("uid").is(auid)), new Update().inc("fcount", 1), User.class);
 			
 			Update update = new Update();
-			update.push("following", auid);
-			update.inc("fgcount", 1);
+			update.addToSet("following", auid);
 			
 			FindAndModifyOptions opt = FindAndModifyOptions.options().returnNew(true);
 			Query follq = new Query(Criteria.where("uid").is(uid));
@@ -49,6 +52,13 @@ public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 			follq.fields().include("pic");
 			follq.fields().include("following");
 			User foll = db.findAndModify(follq, update, opt, User.class);
+			
+			update = new Update();
+			int count = 0;
+			if(foll.getFollowing()!=null&&foll.getFollowing().getClass().isArray())
+			count = foll.getFollowing().length;
+			update.set("fgcount",count);
+			db.updateFirst(follq,update, User.class);
 			
 			if(db.count(new Query(Criteria.where("uid").is(uid).and("everfoll").in(auid)),User.class)==0){
 				Notification notf = new Notification();
@@ -91,13 +101,18 @@ public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 			
 			Update update = new Update();
 			update.pull("following", auid);
-			update.inc("fgcount", -1);
 			
 			FindAndModifyOptions opt = FindAndModifyOptions.options().returnNew(true);
 			Query follq = new Query(Criteria.where("uid").is(uid));
 			follq.fields().include("following");
 			User foll = db.findAndModify(follq, update, opt, User.class);
 
+			update = new Update();
+			int count = 0;
+			if(foll.getFollowing()!=null&&foll.getFollowing().getClass().isArray())
+			count = foll.getFollowing().length;
+			update.set("fgcount",count);
+			db.updateFirst(follq,update, User.class);
 			
 			if(db.count(new Query(Criteria.where("uid").is(uid).and("everfoll").in(auid)),User.class)==0){
 				update = new Update();
@@ -160,9 +175,13 @@ public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 			db.updateFirst(new Query(Criteria.where("uid").in(auid)), new Update().inc("fcount", 1), User.class);
 			
 			Update update = new Update();
-			update.push("following", auid);
-			update.inc("fgcount", auid.size());
 			
+			 BasicDBList eachList = new BasicDBList();
+		     for (Object value : auid.toArray()) {
+		            eachList.add(value);
+		     }
+			update.addToSet("following", BasicDBObjectBuilder.start("$each", eachList).get());
+			//update.pushAll("following", auid.toArray());
 			FindAndModifyOptions opt = FindAndModifyOptions.options().returnNew(true);
 			Query follq = new Query(Criteria.where("uid").is(uid));
 			follq.fields().include("uid");
@@ -171,6 +190,14 @@ public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 			follq.fields().include("following");
 
 			User foll = db.findAndModify(follq, update, opt, User.class);
+			
+			update = new Update();
+			int count = 0;
+			if(foll.getFollowing()!=null&&foll.getFollowing().getClass().isArray())
+			count = foll.getFollowing().length;
+			update.set("fgcount",count);
+			db.updateFirst(follq,update, User.class);
+			
 			for(long id : auid){
 				if(db.count(new Query(Criteria.where("uid").is(uid).and("everfoll").in(id)),User.class)==0){
 					Notification notf = new Notification();
