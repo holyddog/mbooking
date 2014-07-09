@@ -26,8 +26,8 @@ Config = {
 };
 
 Service = {	
-	url: 'http://' + window.location.hostname + ':8080/book/data'
-//	url: 'http://119.59.122.38/book/data'
+//	url: 'http://' + window.location.hostname + ':8080/book/data'
+	url: 'http://119.59.122.38/book/data'
 };	
 
 Account = {};
@@ -1613,7 +1613,7 @@ document.addEventListener("deviceready", function() {
               }
               else if(topage=="Book"){
                 if(event.extras.bid){
-                    params = { bid: event.extras.bid, uid: Account.userId };
+                    params = { bid: event.extras.bid, uid:event.extras.uid };
                 }
                 else{
                     return;
