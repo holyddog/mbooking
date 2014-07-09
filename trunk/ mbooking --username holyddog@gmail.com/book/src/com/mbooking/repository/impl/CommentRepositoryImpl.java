@@ -83,6 +83,7 @@ public class CommentRepositoryImpl implements CommentRepostitoryCustom {
 					HashMap<String, String> map = new HashMap<String, String>();
 					map.put("page", "Book");
 					map.put("bid", book.getBid()+"");
+					map.put("uid",book.getUid()+"");
 					PushNotification.sendPush(String.format(ConstValue.FOLLOWER_COMMENT_MSG_FORMAT_PUSH_EN, user.getDname(), book.getTitle(), message), Selectors.alias(author.getEmail()), null, map);
 				}
 				
