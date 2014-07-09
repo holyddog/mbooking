@@ -421,10 +421,16 @@ textarea {
 }
 
 .btn.acceptnot {
-	background-color: #939393;
+	background-color: #AA66CC;
 }
-.btn.acceptnot.accept {
-	background-color: #669900;
+
+.btn.acceptnot span.add_notf {
+	-webkit-mask-image: url(../icons/add_notf.png);
+	-webkit-mask-size: 25px;
+}
+.btn.acceptnot.accept span.add_notf {
+	-webkit-mask-image: url(../icons/get_notf.png);
+	-webkit-mask-size: 25px;
 }
 
 .btn_box span.glass {
