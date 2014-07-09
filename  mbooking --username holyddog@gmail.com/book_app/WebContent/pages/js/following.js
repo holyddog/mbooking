@@ -242,7 +242,16 @@ Page.Following = {
 		
 		if (type > 0 && type < 5) {
 			var b = book;
-			ref.appendChild(Page.Profile.getBook(b.bid, b.title, b.pic, b.pcount, b.author, b.lcount, b.ccount));
+			if (b) {
+				ref.appendChild(Page.Profile.getBook(b.bid, b.title, b.pic, b.pcount, b.author, b.lcount, b.ccount));				
+			}
+			else {
+				var del = document.createElement('span');
+				del.style.fontSize = '80%';
+				del.style.color = '#555';
+				del.innerText = 'story deleted';
+				ref.appendChild(del);
+			}
 		}
 		else if (type == 5) {
 			ref.appendChild(self.getUser(who));
@@ -361,8 +370,8 @@ Page.Following = {
 				Page.open('Profile', true, { uid: target.data('uid'), back: true });
 			}
 		});
-		
-		self.resize(container, panel);		
+
+		self.resize(container, panel);	
 	},
 	
 	loaded: false,
