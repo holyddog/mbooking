@@ -116,7 +116,7 @@ Page.CreateBook = {
 		}, false);
 		
 		if (params && params.bid) {
-			container.find('.tbar .title').text('Edit Book');
+			container.find('.tbar .title').text('Edit Story');
 			
 			var editBook = $('.page[data-page=EditBook]');
 			if (editBook.length > 0) {

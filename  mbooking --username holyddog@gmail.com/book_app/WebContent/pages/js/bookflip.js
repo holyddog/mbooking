@@ -53,19 +53,19 @@ load: function(container, bookData,params) {
             var tbar_btn_back = '';
             
             if(!params.preview){
-                tbar_btn =  '<a data-id="btn_l" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="like"></span></a>'
-                    +'<a data-id="btn_c" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="comment"></span></a>'
-                    +'<a data-id="btn_s" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="share"></span></a> ';
+                tbar_btn =  '<a data-id="btn_l" class="btn" style="position: relative; float: right; pointer-events:all;"><span style="background-color: #fff;" class="like"></span></a>'
+                    +'<a data-id="btn_c" class="btn" style="position: relative; float: right; pointer-events:all;"><span style="background-color: #fff;" class="comment"></span></a>'
+                    +'<a data-id="btn_s" class="btn" style="position: relative; float: right; pointer-events:all;"><span style="background-color: #fff;" class="share"></span></a> ';
                 
                 tbar_btn_bp =  '<a data-id="btn_l" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="like"style="background-color:#FBFBFB;"></span></a>'
                     +'<a data-id="btn_c" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="comment"style="background-color:#FBFBFB;"></span></a>'
                     +'<a data-id="btn_s" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="share"style="background-color:#FBFBFB;"></span></a> ';
             }
             
-            var cover_page = '<div class="tbar_bg trans cover_book"></div>'
+            var cover_page = '<div class="tbar_bg cover_book"></div>'
                 +'<div class="grad_overlay fill_dock hid_loading"></div>'
-                +'<div class="tbar" style="pointer-events:none;">	'
-                +'<a data-id="btn_b" class="btn" style="left: 0; pointer-events:all;"><span class="'+((params.preview)?"back":"cancel")+'"></span></a>'
+                +'<div class="tbar" style="height: 0px; pointer-events:none;">	'
+                +'<a data-id="btn_b" class="btn" style="left: 0; pointer-events:all;"><span style="z-index: 100; background-color: #fff;" class="'+((params.preview)?"back":"cancel")+'"></span></a>'
                 +'<div class="title"></div>'
                 +tbar_btn
                 +'</div>'
