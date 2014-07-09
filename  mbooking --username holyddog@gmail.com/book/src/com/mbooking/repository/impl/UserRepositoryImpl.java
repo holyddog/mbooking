@@ -328,6 +328,11 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		else {			
 			boolean isFollow = db.count(new Query(Criteria.where("auid").is(uid).and("uid").is(guestId)), Follow.class) > 0;
 			map.put("isFollow", isFollow);			
+			
+			if(isFollow){
+				boolean isRecvNot = db.count(new Query(Criteria.where("uid").is(guestId).and("recvnot").in(uid)), User.class) > 0;
+				map.put("isRecvNot", isRecvNot);	
+			}
 		}
 		
 		return map;

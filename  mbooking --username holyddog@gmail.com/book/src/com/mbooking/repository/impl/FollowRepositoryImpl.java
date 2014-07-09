@@ -101,6 +101,7 @@ public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 			
 			Update update = new Update();
 			update.pull("following", auid);
+			update.pull("recvnot", auid);
 			
 			FindAndModifyOptions opt = FindAndModifyOptions.options().returnNew(true);
 			Query follq = new Query(Criteria.where("uid").is(uid));
@@ -229,6 +230,31 @@ public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 		catch(Exception e){
 			e.printStackTrace();
 			return null;
+		}
+	}
+
+	@Override
+	public Boolean allowFollowingNotification(Long uid, Long auid, Boolean allow) {
+		try{
+			Update update = new Update();
+			Update fupdate = new Update();
+			
+			if(allow){
+				update.addToSet("recvnot", auid);
+				fupdate.set("acptnot", true);
+			}
+			else{
+				update.pull("recvnot", auid);
+				fupdate.unset("acptnot");
+			}
+			db.updateFirst(new Query(Criteria.where("uid").is(uid)), update, User.class);
+			db.updateFirst(new Query(Criteria.where("uid").is(uid).and("auid").is(auid)), fupdate, Follow.class);
+			
+			return true;
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
 		}
 	}
 }

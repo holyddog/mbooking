@@ -1,6 +1,8 @@
 package com.mbooking.repository.impl;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.tomcat.util.http.fileupload.FileUtils;
@@ -15,6 +17,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import com.mbooking.constant.ConstValue;
 import com.mbooking.model.Book;
 import com.mbooking.model.Favourite;
+import com.mbooking.model.Follow;
 import com.mbooking.model.Like;
 import com.mbooking.model.Notification;
 import com.mbooking.model.Page;
@@ -24,6 +27,8 @@ import com.mbooking.model.View;
 import com.mbooking.repository.BookRepostitoryCustom;
 import com.mbooking.util.ConfigReader;
 import com.mbooking.util.MongoCustom;
+import com.mbooking.util.PushNotification;
+import com.urbanairship.api.push.model.audience.Selectors;
 
 public class BookRepositoryImpl implements BookRepostitoryCustom {
 
@@ -348,6 +353,52 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			user.setPbcount(bookCount);
 			user.setDrcount(draftCount);
 //			user.setCover(cover);
+			
+			Query bookq = new Query(Criteria.where("bid").in(bid));
+			bookq.fields().include("title");
+			bookq.fields().include("pub");
+			Book book = db.findOne(bookq, Book.class);
+			
+			if(book!=null){
+				if(book.getPub()){
+					Query acptnotq = new Query(Criteria.where("recvnot").in(uid));
+					acptnotq.fields().include("uid");
+					acptnotq.fields().include("email");
+					List<User> users = db.find(acptnotq,User.class);
+					
+					if(users!=null){
+					
+						Query whoq = new Query(Criteria.where("uid").is(uid));
+						whoq.fields().include("uid");
+						whoq.fields().include("dname");
+						whoq.fields().include("pic");
+						
+						User who = db.findOne(whoq,User.class);
+						
+						for(int i=0;i<users.size();i++){
+							User recvnot = users.get(i);
+							
+							Notification notf = new Notification();
+							notf.setUid(recvnot.getUid());
+							notf.setAdate(System.currentTimeMillis());
+							notf.setUnread(true);
+							notf.setWho(who);
+							notf.setBook(book);
+							
+							String fullMessage = String.format(ConstValue.NEW_PUBLISH_BOOK_MSG_FORMAT_EN, who.getDname(),book.getTitle());
+							notf.setMessage(fullMessage);
+							notf.setNtype(ConstValue.NEW_PUBLISH_BOOK);
+							db.insert(notf);
+		
+							HashMap<String, String> map = new HashMap<String, String>();
+							map.put("page", "Book");
+							map.put("bid",bid+"");
+							PushNotification.sendPush(String.format(ConstValue.NEW_PUBLISH_BOOK_MSG_FORMAT_PUSH_EN, who.getDname(),book.getTitle()), Selectors.alias(recvnot.getEmail()), null, map);
+			
+						}
+					}
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

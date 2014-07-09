@@ -13,6 +13,8 @@ public interface FollowRepostitoryCustom {
 	public User unfollowAuthor(Long uid, Long auid);
 	public Boolean isFollow(Long uid, Long auid);
 	
+	public Boolean allowFollowingNotification(Long uid, Long auid,Boolean allow);
+	
 	public List<User> getFollowing(Long uid);
 	public List<User> getFollowers(Long uid);
 	

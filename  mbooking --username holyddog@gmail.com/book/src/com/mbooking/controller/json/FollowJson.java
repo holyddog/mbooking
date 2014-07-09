@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mbooking.common.ErrorResponse;
+import com.mbooking.common.ResultResponse;
 import com.mbooking.model.Book;
 import com.mbooking.model.Page;
 import com.mbooking.model.User;
@@ -153,4 +154,13 @@ public class FollowJson {
 		return ErrorResponse.getError("Internal Error");
 	}	
 	
+	@RequestMapping(method = RequestMethod.POST, value = "/allowFollowingNotification.json")
+	public @ResponseBody
+	Object allowFollowingNotification(
+			@RequestParam(value = "auid") Long auid,
+			@RequestParam(value = "uid") Long uid,
+			@RequestParam(value = "allow") Boolean allow
+		) {
+		return ResultResponse.getResult("result", followRepo.allowFollowingNotification(uid, auid, allow)!= false);		
+	}
 }
