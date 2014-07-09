@@ -1,6 +1,6 @@
 Page.Following = {
 	url: 'pages/html/following.html',
-	init: function(params, container) {		
+	init: function(params, container) {			
 		clearInterval(Page.inv1);
 		clearInterval(Page.inv2);
 		
@@ -365,17 +365,24 @@ Page.Following = {
 		self.resize(container, panel);		
 	},
 	
+	loaded: false,
+	bookSize: {},
+	
 	resize: function(container, panel) {
-		var ratio = 2;
-		if (panel[0].offsetWidth >= 600) {
-			ratio = 3;
+		if (!this.loaded) {
+			var ratio = 2;
+			if (panel[0].offsetWidth >= 600) {
+				ratio = 3;
+			}
+			
+			this.bookSize.w = (panel[0].offsetWidth / ratio) - 15;
+			this.bookSize.h = (this.bookSize.w * 4) / 3;
+			this.loaded = true;
 		}
 		
-		var w = (panel[0].offsetWidth / ratio) - 15;
-		var h = (w * 4) / 3;
 		container.find('.book_size').css({
-			width: w + 'px',
-			height: h + 'px',
+			width: this.bookSize.w + 'px',
+			height: this.bookSize.h + 'px',
 			margin: 0,
 			float: 'none'
 		}).click(function() {
