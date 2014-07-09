@@ -45,7 +45,7 @@ Page.FollowFriend = {
 //		alert(Account.userId);
         fbbtn.hide();
         findfriend_box.hide();
-        Page.bodyShowLoading(list, true);
+        Page.bodyShowLoading(list);
         
 //        var while_load = setTimeout(function(){
 //                                    fbbtn.show();
@@ -61,27 +61,77 @@ Page.FollowFriend = {
                                    
                     Service.User.FindFBFriend(Account.userId,fbdata.fbid,function(data){
                         if(data.length!=0){
+                        	
+                        	var freindDiv = document.createElement('div');
+                    		freindDiv.className = 'friend_item box horizontal';
+                    		freindDiv.style.backgroundColor= "#eee";
+                    		
+                    		var fnumberDiv = document.createElement('div');
+                    		fnumberDiv.className = 'friendnum flex1 box';
+                    		fnumberDiv.innerHTML = '<div class="num">'+data.length+'</div> Friends on In Story';
+                    		
+                    		var follbtn = document.createElement('div');
+                			follbtn.className = 'follallbtn';
+                			follbtn.innerHTML = "Follow All";
+                			freindDiv.appendChild(fnumberDiv);
+                			freindDiv.appendChild(follbtn);
+                    		
+                        	list.append(freindDiv);
+                            var had_follall=true;
+                                              
                             for (var i = 0; i < data.length; i++) {
                                 var c = data[i];
                                 list.append(self.createItem(c));
+                                if(!data[i].isFollow){
+                                    had_follall = false;
+                                }
                             }
 
+                            if(had_follall){
+                                container.find('.follallbtn').hide();
+                            }
+                            
+                            container.find('.follallbtn').bind('click',function(){
+                                $(this).hide();
+                               var foll="";
+                               var notfoll_items = container.find('.follbtn').not('.following');
+                               notfoll_items.each(function(){
+                                    foll+=$(this).attr('data-id')+":";
+                               });
+                               Service.Book.FollowMulti(foll, Account.userId, function() {
+//                                    alert('Succuess');
+                                    notfoll_items.addClass('following');
+                                    notfoll_items.html('Following');
+                               });
+                            });
+                                              
                             list.find('.follbtn').bind('click', function() {
                                 var item = $(this);
             //                    alert(item.attr('data-id'));
                                 if(item.hasClass('following')){
-                                    Service.Book.UnFollowAuthor(item.attr('data-id'), Account.userId, function(data) {
+                                    Service.Book.UnFollowAuthor(item.attr('data-id'), Account.userId, function() {
                                         item.removeClass('following');
-                                        item.html('Follow');
-                    					Account.following = data.following;
-                    					localStorage.setItem("u", JSON.stringify(Account));
+                                        item.html('+ Follow');
+                                        Account.following = data.following;
+                                        localStorage.setItem("u", JSON.stringify(Account));
+                                        container.find('.follallbtn').show();
                                     });
                                 }else{
-                                    Service.Book.FollowAuthor(item.attr('data-id'), Account.userId, function(data) {
+                                    Service.Book.FollowAuthor(item.attr('data-id'), Account.userId, function() {
                                         item.addClass('following');
                                         item.html('Following');
-                    					Account.following = data.following;
-                    					localStorage.setItem("u", JSON.stringify(Account));
+                                        Account.following = data.following;
+                                        localStorage.setItem("u", JSON.stringify(Account));
+                                        
+                                        var count = 0;
+                                        container.find('.following').each(function(){
+                                            count++;
+                                        });
+                                        
+                                        if(count==data.length){
+                                            container.find('.follallbtn').hide();
+                                        }
+                                    
                                     });
                                 }
                             });
@@ -89,7 +139,7 @@ Page.FollowFriend = {
                             if(params.fromSignUp){
                                 container.find('[data-id=btn_n]').show();
                                 container.find('[data-id=btn_n]').tap(function() {
-                                    Page.open('Profile');
+                                    Page.open('Explore');
                                 });
                             }
                         }
@@ -125,8 +175,8 @@ Page.FollowFriend = {
 //			+	'	</div>'
 //			+	'</div>';
 
-		var notfDiv = document.createElement('div');
-		notfDiv.className = 'friend_item box horizontal';
+		var freindDiv = document.createElement('div');
+		freindDiv.className = 'friend_item box horizontal';
 		
 		var uimage = document.createElement('div');
 		uimage.className = 'uimage';
@@ -150,18 +200,18 @@ Page.FollowFriend = {
 		var att=document.createAttribute("data-id");
 		att.value=user.uid;
 		if(!user.isFollow){
-            follbtn.innerHTML = 'Follow';
+            follbtn.innerHTML = '+ Follow';
             follbtn.className = 'follbtn';
         }else{
             follbtn.innerHTML = 'Following';
             follbtn.className = 'follbtn following';
         }
         
-		notfDiv.appendChild(uimage);
-		notfDiv.appendChild(msg);
-		notfDiv.appendChild(follbtn);
+		freindDiv.appendChild(uimage);
+		freindDiv.appendChild(msg);
+		freindDiv.appendChild(follbtn);
 		follbtn.setAttributeNode(att);
 		
-		return notfDiv;			
+		return freindDiv;			
 	}
 };

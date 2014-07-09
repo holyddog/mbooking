@@ -199,17 +199,17 @@ Service.Book = {
 //		Web.get(url, params, callback);
 //	},
 	
-	GetPublishBooks : function(skip, limit, callback) {
+	GetPublishBooks : function(skip, limit, callback,notconnect,retry,wait) {
 		var url = Service.url + '/getPublishBooks.json';
 		var params = {};
 		
 		if(skip!=null&&skip!=undefined)
 			params.skip = skip;
-			
+        
 		if(limit!=null&&limit!=undefined)
 			params.limit = limit;
 		
-		Web.get(url, params, callback);
+		Web.get(url, params, callback,null,notconnect,retry,wait);
 	},
 	
 	GetPublishBooksByTag : function(tag, skip, limit, callback) {
@@ -261,7 +261,15 @@ Service.Book = {
 	},		
 	
 	//Follow
-	
+    FollowMulti: function(authorID,userID,callback){
+        var url = Service.url + '/followMulti.json';
+        var params = {
+            auid	:authorID,  //String "id1:id2:id3"
+            uid		:userID
+        };
+        Web.post(url, params, callback);
+    },
+    
 	FollowAuthor: function(authorID,userID,callback){
 		var url = Service.url + '/followAuthor.json';
 		var params = {
@@ -374,6 +382,15 @@ Service.Book = {
 		params.limit = limit;
 		
 		Web.get(url, params, callback);
+	},
+	AcceptNotification: function(uid, auid, allow,callback){
+		var url = Service.url + '/allowFollowingNotification.json';
+		var params = {
+				uid:uid,
+				auid:auid,
+				allow:allow
+		};
+		Web.post(url, params, callback);
 	}
 	
 };

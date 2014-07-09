@@ -57,7 +57,34 @@ Page.Profile = {
 				});					
 			}
 		});
+		
+		
 
+		var btnAcceptNot = container.find('[data-id=btn_no]');
+		btnAcceptNot.tap(function() {
+//				btnAcceptNot.css('pointer-events','none');
+			if(btnFollow.hasClass('follow')){
+				if(!btnAcceptNot.hasClass('accept')){
+					Service.Book.AcceptNotification(Account.userId, uid, true,
+						function(){
+							btnAcceptNot.addClass('accept');		
+//							btnAcceptNot.css('pointer-events','');
+						}
+					);
+				}
+				else{
+					Service.Book.AcceptNotification(Account.userId, uid, false,
+							function(){
+								btnAcceptNot.removeClass('accept');		
+//								btnAcceptNot.css('pointer-events','');
+							}
+					);
+				}
+			}
+		});
+		
+		
+		
 		var profileView = container.find('#profile_view');	
 		
 		if (!isGuest) {
@@ -362,6 +389,11 @@ Page.Profile = {
 			else {
 				if (data.isFollow) {
 					container.find('[data-id=btn_f]').html('FOLLOWING').addClass('follow');
+					var accept_notbtn = container.find('[data-id=btn_no]');
+					accept_notbtn.show();
+					if(data.isRecvNot){
+						accept_notbtn.addClass('accept');	
+					}
 				}
 				textBar.text('Books by ' + user.dname).show();
 			}

@@ -46,6 +46,26 @@ Page.Book = {
 			}
 		});
 		
+		if(window.navigator.onLine){
+			if(Account.bguide){
+				$('.user_guide').tap(
+					function(){
+						$('.user_guide').fadeOut();
+					}
+				);
+				Service.User.ViewGuide("bguide", Account.userId,
+					function(){
+						delete Account["bguide"];
+					}
+				);
+			}else{
+				$('.user_guide').hide();
+			}
+		}
+		else{
+			$('.user_guide').hide();
+		}
+		
 		if (isGuest || params.preview) {
 			container.find('.edit_book').css('visibility', 'hidden');
 		}

@@ -11,7 +11,7 @@ Page.Explore = {
 			Page.slideMenu();
 		});	
 		container.find('[data-id=btn_r]').tap(function() {
-			self.load(container);
+			self.load($('#page_Explore').find('.content'));
 		});	
 		var btnAdd = container.find('[data-id=btn_a]');
 		btnAdd.tap(function() {
@@ -26,9 +26,44 @@ Page.Explore = {
 		btnSearch.tap(function() {
 			Page.open('Search', true);
 		});	
-
+		
+		if (window.navigator.onLine) {
+			if (Account.exguide) {
+				container.find('.book_con').css('pointer-events', 'none');
+				var menu_btn = container.find('[data-id=btn_m]');
+				menu_btn.unbind();
+				menu_btn.tap(function() {
+					$('.user_guide').fadeOut();
+					Page.slideMenu();
+					menu_btn.unbind();
+					menu_btn.tap(function() {
+						Page.slideMenu();
+					});
+				});
+				$('.skip_btn').css('pointer-events', 'none');
+				container.find('.content').tap(
+					function() {
+						container.find('.content').unbind();
+						$('.book_con').css('pointer-events', '');
+						$('.user_guide').fadeOut();
+					}
+				);
+				Service.User.ViewGuide("exguide", Account.userId,
+					function() {
+						delete Account["exguide"];
+					}
+				);
+			} else {
+				$('.user_guide').hide();
+			}
+		}else {
+			$('.user_guide').hide();
+		}
+		
 		Page.createShortcutBar(container);
 		self.load(container.find('.content'));
+		
+	
 	},
 	
 	load: function(content, pwidth) {
@@ -87,7 +122,19 @@ Page.Explore = {
 				Page.Explore.callPushNote();
 				Page.Explore.callPushNote = {};
 			}
-		});
+		},
+        function(){
+                Page.bodyHideLoading($('#page_Explore').find('.content'));
+        },
+        function(){
+                Page.Explore.load($('#page_Explore').find('.content'));
+        },
+        function(){
+                Page.bodyShowLoading($('#page_Explore').find('.content'));
+        }                             
+                                     
+        );
+
 	},
 	callPushNote:{}
 };

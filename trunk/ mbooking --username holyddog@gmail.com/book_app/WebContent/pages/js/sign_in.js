@@ -68,14 +68,17 @@ Page.SignIn = {
 											draftCount : data.drcount,
 											following:data.following,	
 											draftBooks : data.books,
-												
+										
+											exguide: data.exguide,
+											bguide: data.bguide,
+											epguide: data.epguide,
 											// followerCount: data.fcount,
 											// bookCount: data.pbcount
 
 											fbObject : fbobj
 										};
 										
-										//console.log(Account);
+										console.log(Account);
 										
 										if (data.fbobj && data.fbobj.email) {
 											Account.fbObject.fbemail = data.fbobj.email;
