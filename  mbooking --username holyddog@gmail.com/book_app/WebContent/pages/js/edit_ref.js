@@ -24,7 +24,6 @@ Page.EditRef = {
 
 		btnAdd.click(function() {
 			var val = inputText.val();
-			if (val && val.length > 0)
 			Page.back(function(c, page) {
 				page.updateRef(c, val);
 			});

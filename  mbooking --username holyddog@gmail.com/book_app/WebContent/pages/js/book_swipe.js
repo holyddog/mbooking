@@ -109,7 +109,24 @@ Page.Book = {
 				var page = $('<div class="page_item box vertical" style="background-color: white; height: ' + ph + 'px"></div>');
 				var pic = $('<div class="pic_box relative" style="background-color: #ccc; overflow: hidden;"><img style="position: absolute; width: 100%; height: 100%;" src="' + Util.getImage(data[i].pic, 1) + '"></div>');
 				// -webkit-box-align: center;
-				var pline = '<div class="pline box horizontal"><div class="ref flex1"></div><div class="pnum">' + (i + 1) + ' of ' + data.length + '</div></div>';
+				
+				var refStr = '';
+				var ref = data[i].ref;
+				if (ref) {
+					if (/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w\?\=\&\+\.-]*)*\/?$/ig.test(ref)) {
+						var url = ref.split(/\s+/g)[0];
+						var newUrl = url.replace(/^(https?:\/\/)?(www.)?/ig, '');
+						if (newUrl.indexOf('/') > -1) {
+							newUrl = newUrl.substring(0, newUrl.indexOf('/'));
+						}
+						refStr = '<div class="ext_url"><a target="_blank" class="block" href="' + url + '">' + newUrl + '</a></div>';
+					}
+					else {
+						refStr = ref;
+					}
+				}
+				
+				var pline = '<div class="pline box horizontal"><div class="ref flex1">' + refStr + '</div><div class="pnum">' + (i + 1) + ' of ' + data.length + '</div></div>';
 				content.append(page.append(pic).append('<div class="page_cap flex1 box center_middle" style="padding: 15px;">' + data[i].caption + '</div>' + pline));
 				pic.css('height', pic.width());
 			}	

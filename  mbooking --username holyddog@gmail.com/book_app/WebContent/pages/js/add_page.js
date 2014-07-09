@@ -167,7 +167,7 @@ Page.AddPage = {
 				boxDesc.style.display = '-webkit-box';
 				
 				container.find('.pline .pnum').text(data.seq + ' of ' + pcount);
-				
+				self.updateRef(container, data.ref);
 //				img.css({
 //					'-webkit-transform': 'translate3d(0px, 0px, 0px)'
 //				});
@@ -195,8 +195,30 @@ Page.AddPage = {
 		this.checkAccept(container);
 	},
 	
-	updateRef: function(container, raw) {
-		container.find('.ref_link').data('raw', raw);
+	updateRef: function(container, ref) {
+		var oref = container.find('.ref');
+		oref.find('.ext_url').remove();
+		if (ref) {
+			container.find('.ref_link').hide().data('raw', ref);
+			
+			if (/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w\?\=\&\+\.-]*)*\/?$/ig.test(ref)) {
+				var url = ref.split(/\s+/g)[0];
+				var newUrl = url.replace(/^(https?:\/\/)?(www.)?/ig, '');
+				if (newUrl.indexOf('/') > -1) {
+					newUrl = newUrl.substring(0, newUrl.indexOf('/'));
+				}
+				oref.append('<div class="ext_url"><a target="_blank" class="block" href="' + url + '">' + newUrl + '</a><span class="mask_icon"></span></div>');
+			}
+			else {
+				oref.append('<div class="ext_url"><div class="label" style="width:' + (oref.width() - 50) + 'px;">' + ref + '</div><span class="mask_icon"></span></div>');				
+			}
+			oref.find('.mask_icon').tap(function() {
+				Page.open('EditRef', true, { text: ref });
+			});
+		}
+		else {
+			container.find('.ref_link').show().data('raw', null);
+		}
 	},
 	
 	editPhoto: function(container, loaded, crop) {
