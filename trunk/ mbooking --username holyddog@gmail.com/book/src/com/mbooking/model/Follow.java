@@ -15,6 +15,7 @@ public class Follow {
 	Long fdate;
 	
 	User user;
+	Boolean acptnot;
 
 	public ObjectId getFid() {
 		return fid;
@@ -55,4 +56,13 @@ public class Follow {
 	public void setUser(User user) {
 		this.user = user;
 	}	
+	
+	public Boolean getAcptnot() {
+		return acptnot;
+	}
+
+	public void setAcptnot(Boolean acptnot) {
+		this.acptnot = acptnot;
+	}
+
 }

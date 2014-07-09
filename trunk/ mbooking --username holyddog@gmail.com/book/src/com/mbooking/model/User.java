@@ -33,10 +33,10 @@ public class User {
 	Boolean bguide;	//Explore Guide
 	Boolean epguide;	//Explore Edit Page
 
-	
 	Object[] following;
 	Object[] everfoll;
-
+	Object[] recvnot;	//recieve notification
+	
 	Long lstin;		//last login
 	FBobj fbobj;
 	
@@ -48,9 +48,9 @@ public class User {
 	List<Book> books;
 	Boolean isFollow;
 	String cover; // cover image from last publish book
-	
-	
-	
+	Boolean isRecvNot;
+
+
 	public Long getUid() {
 		return uid;
 	}
@@ -251,4 +251,20 @@ public class User {
 	public void setEpguide(Boolean epguide) {
 		this.epguide = epguide;
 	}	
+	
+	public Object[] getRecvnot() {
+		return recvnot;
+	}
+
+	public void setRecvnot(Object[] recvnot) {
+		this.recvnot = recvnot;
+	}
+	
+	public Boolean getIsRecvNot() {
+		return isRecvNot;
+	}
+
+	public void setIsRecvNot(Boolean isRecvNot) {
+		this.isRecvNot = isRecvNot;
+	}
 }
