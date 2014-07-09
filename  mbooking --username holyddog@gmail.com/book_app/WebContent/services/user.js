@@ -175,7 +175,7 @@ Service.User = {
 		var params = {
 			uid: uid
 		};
-		Web.get(url, params, callback);
+		Web.update(url, params, callback);
 	},
 	
 	FindFollowing: function(uid, callback) {
@@ -223,6 +223,15 @@ Service.User = {
 		var url = Service.url + '/sendForgetPassToEmail.json';
 		var params = {
 				email:email
+		};
+		Web.post(url, params, callback);
+	},
+	
+	ViewGuide:function(guide,uid,callback){
+		var url = Service.url + '/viewGuide.json';
+		var params = {
+				guide:guide,
+				uid:uid
 		};
 		Web.post(url, params, callback);
 	}

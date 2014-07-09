@@ -6,7 +6,6 @@ Page.EditBook = {
 		var bid = (params)? params.bid: undefined;
 		this.bid = bid;		
 //		container.css('z-index','1001');
-		
 		// set toolbar buttons
 		var btnBack = container.find('[data-id=btn_b]');
 		btnBack.tap(function() {
@@ -16,6 +15,43 @@ Page.EditBook = {
 				}
 			});
 		});
+		
+		if(window.navigator.onLine){
+			if(Account.epguide){		
+				setTimeout(function(){
+					var add_btn = container.find('[data-id=link_a]');
+					var add_btn_offset =add_btn.offset();
+					console.log(add_btn_offset.top);
+					console.log(add_btn_offset.left);
+					var gmargin_top = add_btn_offset.top-50;
+					var gmargin_left = add_btn_offset.left + add_btn.width()-90;
+					
+					$('[data-id=addpage_guide]').css("top",gmargin_top+"px");
+					$('[data-id=addpage_guide]').css("left",gmargin_left+"px");		
+				},100);
+				$('.user_guide').css('pointer-events', 'all');
+				container.find('.user_guide').tap(
+					function(){
+						container.find('.user_guide').unbind();
+						$('.user_guide').fadeOut();
+					}
+				);
+				Service.User.ViewGuide("epguide", Account.userId,
+					function(){
+						delete Account["epguide"];
+					}
+				);
+			}else{
+				$('.user_guide').hide();
+			}
+		}
+		else{
+			$('.user_guide').hide();
+		}
+
+		
+		
+//		right: 62px; bottom:47px
 		
 		var updateAccount = function(u, bid) {
 			if (u) {

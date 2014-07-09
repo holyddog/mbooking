@@ -420,6 +420,13 @@ textarea {
 	background-color: #FFBB33;
 }
 
+.btn.acceptnot {
+	background-color: #939393;
+}
+.btn.acceptnot.accept {
+	background-color: #669900;
+}
+
 .btn_box span.glass {
 	-webkit-mask-image: url(../icons/glass.png);
 }
@@ -775,24 +782,37 @@ textarea {
 	visibility: hidden;
 }
 #dd_message .msg {	
-	padding: 10px 0;
-	width: 100%;
+	padding: 5px;
 	background-color: #99CC00;
-	line-height: 30px;
+	height: 4s0px;
 	color: #fff;
 	font-size: 80%;
-	
 	-webkit-transform: translateY(-50px);
 	-webkit-transition: .3s -webkit-transform ease-in-out;
 }
 #dd_message.error .msg {
 	background-color: #FF4444;
 }
+#dd_message.warning .msg {
+	background-color: #FFBB33;
+}
 #dd_message.show {
 	visibility: visible;
 }
 #dd_message.show .msg {
 	-webkit-transform: translateY(0px);
+}
+
+#dd_message .msg .text{
+	line-height: 40px;
+}
+
+#dd_message .msg .retry_btn{
+	background-color: #FF8800;
+	padding: 10px;
+	line-height: 20px;
+	border-radius: 3px;
+	display: none;
 }
 
 #dialog {
@@ -802,6 +822,11 @@ textarea {
 	z-index: 2000;
 	display: -webkit-box;
 }
+
+#dialog.drop {
+	background-color: #99CC00;
+}
+
 #dialog.show {	
 	width: 100%;
 	height: 100%;

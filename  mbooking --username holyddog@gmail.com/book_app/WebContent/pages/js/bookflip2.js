@@ -2,6 +2,7 @@ Page.Book = {
 url: 'pages/html/blank.html',
 init: function(params, container) {
     var self = this;
+//    var content = container.find('.content');
     Page.bodyShowLoading(container);
    
     Service.Book.GetBookData(params.bid, params.uid, Account.userId, function(data) {
@@ -24,6 +25,7 @@ load: function(container, bookData,params) {
 	container.css('background','#EEEEEE');
     var window_width = $(window).width();
 	var index = 0;
+    // generate book pages
     var data = bookData.pages;
     data.push({});
     if (data.length) {
@@ -265,11 +267,24 @@ load: function(container, bookData,params) {
         var state=0;//1:next, -1:back
         var zcount=0;
         var lockpage=false;
-        var duration=250;//ms
+        var duration=150;//ms
 
       var maxdis		= 20;
       var maxdis_time = 10;
                 var locktimer = null;
+//        if(os=='Android')
+//        	duration= 400;
+//        
+//        var prev_nav = container.find('.page_nav');
+//        
+//        prev_nav.unbind('transitionend webkitTransitionEnd');
+//        prev_nav.bind('transitionend webkitTransitionEnd', function(){
+//                                         clearTimeout(locktimer);
+//                                         lockpage=false;
+//                                         $('[data-id=page_shadow]').css('-webkit-transition' ,'opacity 0ms ease-in-out');                
+//        });
+        
+        //
         var sndpage = false;
         
         function startnextpage(){
@@ -358,9 +373,30 @@ load: function(container, bookData,params) {
                 index--;
             }
         }
-
+//        if(os!='Android'){
+//        function shadowchange(angle,front_right_elm,back_left_elm,back_right_elm,front_left_elm){
+//			if(angle>=-90&&angle<0){
+//				front_right_elm.style.opacity=  (-angle/1000);	
+//    			back_left_elm.style.opacity=  '0';	
+//    			back_right_elm.style.opacity=  '0';	
+//    			front_left_elm.style.opacity= (((90+angle)*5)/1000);		
+//        		
+//			}else if(angle>-180&&angle<=-90){
+//				front_right_elm.style.opacity=  '0';	
+//    			back_left_elm.style.opacity=  (((-angle-90)*5)/1000);	
+//    			back_right_elm.style.opacity=  ((180+angle)/1000);
+//    			front_left_elm.style.opacity=  '0';		            		
+//			}else{
+//				front_right_elm.style.opacity=  '0';	
+//    			back_left_elm.style.opacity=  '0';	
+//    			back_right_elm.style.opacity=  '0';
+//    			front_left_elm.style.opacity=  '0';		
+//			}
+//        }
+//        }
         function dodrag(x){
         	var angle=null;
+//        	page_shadow
         	var page_nav = container.find('.page_nav').eq(index);
         	if(distance>=0&&distance<=w){
         		var cdx = (1 - (2*distance)/w );
@@ -371,21 +407,38 @@ load: function(container, bookData,params) {
 	            angle =Math.floor(Math.acos(cdx)* (180 / Math.PI))*-1;
 	            
 	            	
-	            if(angle !=ang_tmp){       	
+	            if(angle !=ang_tmp){
+//	            	if(os!='Android'){
+//		            	var prev_nav = null;
+//		            			if(index>=0)
+//		            			prev_nav = container.find('.page_nav').eq(index+1);
+//		                
+//		                var next_nav = null;
+//		            			if(index<=data.length){
+//		            			next_nav = container.find('.page_nav').eq(index-1);
+//		            			}
+//		            			
+//		            	var back_left_elm = prev_nav.find('.backside').find('[data-id=page_shadow]')[0];
+//		            	var front_right_elm = page_nav.find('.frontside').find('[data-id=page_shadow]')[0];
+//		            	var back_right_elm = page_nav.find('.backside').find('[data-id=page_shadow]')[0];
+//		            	var front_left_elm = next_nav.find('.frontside').find('[data-id=page_shadow]')[0];
+//		            	
+//		            	shadowchange(angle,front_right_elm,back_left_elm,back_right_elm,front_left_elm);
+//	                }          	
 	            	ang_tmp = angle;
 	            	page_nav[0].style.webkitTransition=  '';
 	                
 	                if(ang_tmp<=-170){
-	                	page_nav[0].style.webkitTransition=  '200ms ease-in-out';
+	                	page_nav[0].style.webkitTransition=  '80ms ease-in-out';
 	                    ang_tmp = -180;
-	                    lockpage=false;
+//	                    lockpage=false;
 	                }
 	                
 	                if(ang_tmp>=-10){
 //	                	console.log("ang_tmp!!	 "+ang_tmp);
-	                	page_nav[0].style.webkitTransition=  '200ms ease-in-out';
+	                	page_nav[0].style.webkitTransition=  '80ms ease-in-out';
 	                    ang_tmp = -1;
-	                    lockpage=false;
+//	                    lockpage=false;
 	               }
 //	                
 	                page_nav[0].style.webkitTransform = "perspective(100em) rotate3d(0, 1, 0,"+ang_tmp+"deg)";
@@ -394,19 +447,19 @@ load: function(container, bookData,params) {
         		
         		
         		    if((ang_tmp<=-90)){
-		            	page_nav[0].style.webkitTransition=  '200ms ease-in-out';
+		            	page_nav[0].style.webkitTransition=  '80ms ease-in-out';
 		                ang_tmp = -180;
 		                page_nav[0].style.webkitTransform = "perspective(100em) rotate3d(0, 1, 0,"+ang_tmp+"deg)";
-		                lockpage=false;
+//		                lockpage=false;
 		            }
 		            
 	                else{
 //	                	console.log(ang_tmp);	
-		            	page_nav[0].style.webkitTransition=  '200ms ease-in-out';
+		            	page_nav[0].style.webkitTransition=  '80ms ease-in-out';
 		            	ang_tmp = -1;
 		            	page_nav[0].style.webkitTransform = "perspective(100em) rotate3d(0, 0, 0,"+ang_tmp+"deg)";
 		            	startx = x;
-		            	lockpage=false;
+//		            	lockpage=false;
 		            }
         		    if((state==1&&ang_tmp<=-90)||(state==-1&&ang_tmp>-90)){
         		        startx = x+w;
@@ -426,20 +479,76 @@ load: function(container, bookData,params) {
                                    }, duration+25);
             
         	var page_nav = container.find('.page_nav').eq(index);
-
+//	        if(os!='Android'){
+//	        	function shadowchangeflip(){
+//	                var timeCounter = 0;
+//	                var ang_tmp = 0;
+//	                var angle = 0;
+//	            	
+//	                var prev_nav = null;
+//	    			if(index>=0)
+//	    				prev_nav = container.find('.page_nav').eq(index+1);
+//	        
+//	    			var next_nav = null;
+//	    			if(index<=data.length){
+//	    				next_nav = container.find('.page_nav').eq(index-1);
+//	    			}
+//	    			
+//	                (function updateShadow() {
+//	                  setTimeout(function() {
+//	                    if (timeCounter++ < duration) {
+//	                    	var el = page_nav[0];
+//	                    	var st = window.getComputedStyle(el, null);
+//	                    	var tr = st.getPropertyValue("-webkit-transform");
+//	                    	var matrix = new WebKitCSSMatrix(tr);
+//	                    	angle = Math.round(( Math.acos(matrix.a) * (180/Math.PI)))*-1;
+//	                    	if(angle !=ang_tmp){
+//	                    		ang_tmp = angle;
+//	                        			
+//	                        	var back_left_elm = prev_nav.find('.backside').find('[data-id=page_shadow]')[0];
+//	                        	var front_right_elm = page_nav.find('.frontside').find('[data-id=page_shadow]')[0];
+//	                        	var back_right_elm = page_nav.find('.backside').find('[data-id=page_shadow]')[0];
+//	                        	var front_left_elm = next_nav.find('.frontside').find('[data-id=page_shadow]')[0];                     	
+//	                        	shadowchange(angle,front_right_elm,back_left_elm,back_right_elm,front_left_elm);                    	
+//	                        }
+//	                    	
+//	                    	updateShadow();
+//	                    }
+//	                  }, 1);
+//	                })();
+//	        		
+//	        	}
+//	        }
+        	
             function flipnext(){
-                lockpage=true;
+//                lockpage=true;
+//                setTimeout(
+//                    function(){lockpage=false;},
+//                    50
+//                );
                 page_nav[0].style.webkitTransition=  duration+'ms ease-in-out';
                 page_nav[0].style.webkitTransform = "perspective(100em) rotate3d(0, 1, 0, -180deg)";    
+//    	        if(os!='Android')
+//                shadowchangeflip();
             }
             
             function flipback(){
-                lockpage=true;
+//                lockpage=true;
+//                setTimeout(
+//                    function(){lockpage=false;},
+//                    50
+//                );
                 page_nav[0].style.webkitTransition=  duration+'ms ease-in-out';
                 page_nav[0].style.webkitTransform = "perspective(100em) rotate3d(0, 1, 0, -1deg)";
+    	       
+//                if(os!='Android')
+//                shadowchangeflip();
             }
             
             if(isdrag){
+//                console.log("tempx "+tempst_x);
+//                console.log("x "+x);
+//                console.log(x-tempst_x);
                 if(state==1){
                     if(x-tempst_x>0){
                     	if(index>0){
@@ -536,6 +645,7 @@ load: function(container, bookData,params) {
                         }
                         startbackpage();
                     }
+//                    console.log("tempx: "+tempst_x+", x: "+x+" state:"+state);
                 }
                 
                 
@@ -544,33 +654,36 @@ load: function(container, bookData,params) {
                     timer = setTimeout(function(){
                                        isdrag = true;
                                        tempst_x = x;
+//                                       console.log("tempst_x=x :"+x);
                                        clearTimeout (timer);
                                        timer = null;
                                        }, time_ms);
                 }
                 
                 
-                if((tempst_x-x>maxdistance||tempst_x-x<-maxdistance)){
-                	clearTimeout (timer);	
-                    timer=null;
-                	isdrag =false;
-                	dochangepage();  
-                    tempst_x=null;	
-                    startx =null;
-                    
-                   	
-                }else{
+//                if((tempst_x-x>maxdistance||tempst_x-x<-maxdistance)&&!isdrag){
+//                if((tempst_x-x>maxdistance||tempst_x-x<-maxdistance)){
+//                	clearTimeout (timer);	
+//                    timer=null;
+//                	isdrag =false;
+//                	dochangepage();  
+//                    tempst_x=null;	
+//                    startx =null;
+//                    
+//                   	
+//                }else{
                     distance = startx-x;
                     if(state ==-1){
                         distance = distance*-1;
                     }
                     
                     if((!(index==data.length&&state ==-1&&!sndpage))&&!(index==0&&state ==1)){	
+//                        console.log(index);
                        if(os!='Android')
                     	dodrag(x);
                     }
-                }
-            }  
+//                }
+            }
         }
         function endTimer(){
             clearTimeout(timer);	
@@ -578,13 +691,19 @@ load: function(container, bookData,params) {
         }
         //////////////////////////////
         
-        
+        var lock_timer ;
         function start(x){
+            
         	 if(!lockpage){
 	            state = 0;
 	            startx = x;
 	            beginTimer(x);
         	 }
+            lockpage=true;
+            clearTimeout(lock_timer);
+            lock_timer = setTimeout(
+                function(){lockpage=false;},
+            30);
         }
         
         function move(x){
@@ -594,10 +713,10 @@ load: function(container, bookData,params) {
         }
         
         function end(x){
-            if(!lockpage){
+//            if(!lockpage){
                 endTimer();
             	dochangepage(x);
-            }
+//            }
         }
         
         function bindSwipe(){
@@ -717,8 +836,10 @@ load: function(container, bookData,params) {
 				 if (count < data.length-1) {	
 					count++;
 						
+//					setTimeout(function(){
+//					if (count != 2)
 						loadpagepic();	
-
+//					},1000);
 					
 					if (count == 1) {
 						firstLoad();

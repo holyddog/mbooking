@@ -4,15 +4,16 @@ Config = {
 	LIMIT_ITEM: 20,
 	SLIDE_DELAY: 250,
 	FADE_DELAY: 250,
-	INTERVAL_DELAY: 1000, //60000, // 1 minute
-
+	INTERVAL_DELAY: 30000, //60000, // 1 minute
+	SERVICE_TIMEOUT:7000,
+	
 	FB_APP_ID: '370184839777084',
 	
-//	WEB_BOOK_URL:'http://119.59.122.38/book',
-//	FILE_URL: 'http://' + '119.59.122.38' + '/book_dev_files',
+	WEB_BOOK_URL:'http://119.59.122.38/book',
+	FILE_URL: 'http://' + '119.59.122.38' + '/book_dev_files',
 	
-	FILE_URL: 'http://' + window.location.hostname + '/res/book',
-	WEB_BOOK_URL : 'http://' + window.location.hostname + '/book/index.html',
+//	FILE_URL: 'http://' + window.location.hostname + '/res/book',
+//	WEB_BOOK_URL : 'http://' + window.location.hostname + '/book/index.html',
 
 	OS: 'iOS',
     OS_Int: 1, //iOS :1, Android :2
@@ -27,7 +28,6 @@ Config = {
 Service = {	
 	url: 'http://' + window.location.hostname + ':8080/book/data'
 //	url: 'http://119.59.122.38/book/data'
-
 };	
 
 Account = {};
@@ -119,7 +119,7 @@ MessageBox = {
 	drop: function(message) {
 		var dd = document.getElementById('dd_message');
 		dd.style.zIndex = 2000;
-		dd.children[0].innerText = message;
+		dd.children[0].children[0].innerText = message;
 		var temp = dd.className;
 		dd.className = temp + ' show';
 		
@@ -129,6 +129,27 @@ MessageBox = {
 				dd.style.zIndex = -1;
 			}, 300);
 		}, 5000);
+	},
+	drop_retry: function(message,retry) {
+		var dd = document.getElementById('dd_message');
+		dd.style.zIndex = 2000;
+		dd.children[0].children[0].innerText = message;
+		var temp = dd.className;
+		dd.className = temp + ' warning show';
+		var retry_btn = $('#dd_message').find('.retry_btn');
+		retry_btn.show();
+		retry_btn.tap(function(){
+			dd.className = temp;
+			dd.style.zIndex = -1;
+			
+			if(retry)
+			retry();	
+		});
+	},
+	hide_drop:function(){
+        var dd = document.getElementById('dd_message');
+        dd.className = ((dd.className+"").replace(' warning','')).replace(' show','');
+        dd.style.zIndex = -1;
 	}
 };
 
@@ -218,11 +239,13 @@ Device = {
         isOnScreen : false,
         onNotification : false,
         setAliasPushnotification : function(email){
+        	if (!Device.PhoneGap.isReady) return;
             PushNotification.setAlias(email, function() {
                 console.log("Set Alias Success: " + email);
             });
         },
         disablePush:function(){
+        	if (!Device.PhoneGap.isReady) return;
             PushNotification.disablePush(function() {
                 console.log("disablePush");
             });
@@ -1168,39 +1191,131 @@ Web = {
 			dataType: 'html'
 		});
 	},
-	get: function(url, params, success, error) {
-		$.ajax({
-			url: url,
-			success: success,
-			error: function(xhr) {
-				console.warn('Internal Error on "GET": ' + xhr.responseText);
-				
-				if (typeof error == 'function') {
-					error(xhr);
-				}
-			},
-			data: params,
-			cache: !Config.DEBUG_MODE,
-			dataType: 'json'
-		});
-	},
-	post: function(url, params, success, error) {
-		$.ajax({
-			type: 'POST',
-			url: url,
-			success: success,
-			error: function(xhr) {
-				console.warn('Internal Error on "GET": ' + xhr.responseText);
-				
-				if (typeof error == 'function') {
-					error(xhr);
-				}
-			},
-			data: params,
-			cache: !Config.DEBUG_MODE,
-			dataType: 'json'
-		});
-	}
+	get: function(url, params, success, error,notconnect,retry,wait) {
+        var doget = function(){
+        	MessageBox.hide_drop();
+            if(navigator.onLine){
+                var istimeout=false;
+                var getreq_timer = setTimeout(
+                    function(){
+                        if(!istimeout){
+                            MessageBox.drop_retry('Connection time out please try again',retry);
+                            istimeout = true;
+                            if(notconnect)
+                                notconnect();
+
+                        }
+                    },
+                    Config.SERVICE_TIMEOUT
+                );
+                
+                $.ajax({
+                       url: url,
+                       success: function(data){
+                            istimeout = true;
+                            clearTimeout(getreq_timer);
+                            success(data);
+                       
+                       },
+                       error: function(xhr,status) {
+                           if(status=='timeout'){
+                                if(!istimeout){
+                                    clearTimeout(getreq_timer);
+                                    MessageBox.drop_retry('Connection time out please try again',retry);
+                                    istimeout = true;
+                                    if(notconnect)
+                                       notconnect();
+                                }
+                           }
+                           else{
+                               console.warn('Internal Error on "GET": ' + xhr.responseText);
+                               if (typeof error == 'function') {
+                                error(xhr);
+                               }
+                           }
+                       },
+                       data: params,
+                       cache: !Config.DEBUG_MODE,
+                       dataType: 'json',
+                       timeout:Config.SERVICE_TIMEOUT
+                       });
+            }else{
+               if(notconnect)
+               notconnect();
+                
+                MessageBox.drop_retry('No Internet Connection',
+                    function(){
+                            var timeout = 300;
+                            if(navigator.onLine){
+                                timeout = 5000;
+                            }
+                            
+                            if(wait)
+                            wait();
+                            
+                            setTimeout(
+                                function(){
+                                    if(retry)
+                                    retry();
+                                },
+                                timeout
+                            );
+                    }
+                );
+              
+            }
+        };
+        doget();
+    },
+    update: function(url, params, success, error) {
+        if(navigator.onLine){
+            $.ajax({
+                   url: url,
+                   success: success,
+                   error: function(xhr,status) {
+                       if(status=='timeout'){
+                       
+                       }
+                       else{
+                           console.warn('Internal Error on "GET": ' + xhr.responseText);
+                           if (typeof error == 'function') {
+                            error(xhr);
+                           }
+                       }
+                   },
+                   data: params,
+                   cache: !Config.DEBUG_MODE,
+                   dataType: 'json'
+                   });
+        }
+    },
+    post: function(url, params, success, error) {
+        if(navigator.onLine){
+            $.ajax({
+                   type: 'POST',
+                   url: url,
+                   success: success,
+                   error: function(xhr,status) {
+                    if(status=='timeout'){
+                   
+                    }
+                    else{
+                       console.warn('Internal Error on "GET": ' + xhr.responseText);
+                       if (typeof error == 'function') {
+                       error(xhr);
+                       }
+                    }
+                   },
+                   data: params,
+                   cache: !Config.DEBUG_MODE,
+                   dataType: 'json'
+                   });
+        }else{
+            
+            MessageBox.drop('No Internet Connection');
+            
+        }
+    }
 };
 
 (function($){ 
