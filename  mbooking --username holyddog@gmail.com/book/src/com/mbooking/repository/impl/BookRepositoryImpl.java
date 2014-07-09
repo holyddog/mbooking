@@ -393,6 +393,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 							HashMap<String, String> map = new HashMap<String, String>();
 							map.put("page", "Book");
 							map.put("bid",bid+"");
+							map.put("uid",uid+"");
 							PushNotification.sendPush(String.format(ConstValue.NEW_PUBLISH_BOOK_MSG_FORMAT_PUSH_EN, who.getDname(),book.getTitle()), Selectors.alias(recvnot.getEmail()), null, map);
 			
 						}
