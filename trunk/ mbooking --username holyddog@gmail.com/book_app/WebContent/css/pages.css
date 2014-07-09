@@ -124,8 +124,10 @@
 }
 
 #page_AddPage .tbar .btn_box span {
-	background-color: #33B5E5 !important;
 	opacity: 1 !important;
+}
+#page_AddPage .tbar .btn_box.highlight span {
+	background-color: #6DCAEC !important;
 }
 #page_AddPage .tbar .btn_box.disabled span {
 	background-color: #fff !important;
@@ -133,7 +135,7 @@
 }
 
 #page_AddPage .tbar_btn.highlight {
-	background-color: #6DCAEC;
+	background-color: #6DCAEC !important;
 }
 #page_AddPage .tbar_icon {
 	width: 30px; height: 30px; -webkit-mask-size: 16px; background-color: #555;
@@ -222,11 +224,37 @@
 	white-space: nowrap;
 	text-overflow: ellipsis;
 }
+#page_AddPage .pline .ref .label {
+	font-size: 90%;
+	color: #777;
+	text-align: left;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	width: 80px;
+}
 #page_AddPage .pline .ref .ref_link {
 	padding: 0 5px;
 }
 #page_AddPage .pline .ref .ref_link.highlight {
 	background-color: #6DCAEC;		
+}
+#page_AddPage .ref .ext_url {	
+	display: block;
+	float: left;
+	padding-right: 40px;
+	position: relative;
+}
+#page_AddPage .ref .ext_url span {
+	display: block;
+	background-color: #777;
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 35px;
+	height: 35px;
+	-webkit-mask-size: 15px;
+	-webkit-mask-image: url(../icons/pencil.png);
 }
 #page_AddPage #desc_label {
 	color: #999; width: 100%;
