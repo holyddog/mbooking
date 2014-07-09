@@ -73,7 +73,12 @@ Page.Following = {
 		var bpic = document.createElement('div');
 		bpic.className = 'bpic';
 		var img = document.createElement('img');
-		img.src = Util.getImage(data.pic, 2);
+		
+		if(data.pic)
+			img.src = Util.getImage(data.pic, 2);
+		else
+			img.src = 'images/user.jpg';
+		
 		bpic.appendChild(img);
 		
 		var blabel = document.createElement('div');
@@ -103,7 +108,11 @@ Page.Following = {
 		var upic = document.createElement('div');
 		upic.className = 'upic';
 		var img = document.createElement('img');
-		img.src = Util.getImage(data.pic, 3);
+		
+		if(pic)
+			img.src = Util.getImage(data.pic, 3);
+		else
+			img.src = 'images/user.jpg';
 		upic.appendChild(img);
 		
 		var uref = document.createElement('div');
@@ -223,7 +232,11 @@ Page.Following = {
 		uimage.className = 'uimage';
 		uimage.dataset.uid = user.uid;
 		var img = document.createElement('img');
-		img.src = Util.getImage(user.pic, 3);
+		
+		if(user.pic)
+			img.src = Util.getImage(user.pic, 3);
+		else
+			img.src = 'images/user.jpg';
 		
 		uimage.appendChild(img);
 				
