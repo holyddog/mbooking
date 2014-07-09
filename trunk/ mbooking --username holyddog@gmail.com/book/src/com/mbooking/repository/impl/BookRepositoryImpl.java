@@ -251,6 +251,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			query.fields().include("seq");
 			query.fields().include("pic");
 			query.fields().include("caption");
+			query.fields().include("ref");
 			query.sort().on("seq", Order.ASCENDING);
 			List<Page> pages = db.find(query, Page.class);
 
