@@ -22,15 +22,16 @@ public class JavaMail {
 	private MimeMessage _simpleMessage;
 	
 	public JavaMail() {		
-		String smtp = "mail.senate.co.th";
-		String port = "25";
-		String authUser = "chanon@senate.co.th";
-		String authPwd = "whitedog";
+		String smtp = "smtp.gmail.com";
+		String port = "587";
+		String authUser = "InStory.Me@gmail.com";
+		String authPwd = "InStoryK2728123";
+		
 		
 		Properties props = new Properties();
 		props.put("mail.smtp.host", smtp);
 		props.put("mail.smtp.port", port);
-		
+		props.put("mail.smtp.starttls.enable", "true");
 		props.put("mail.smtp.auth", "true");
 		
 		SMTPAuthenticator auth = new SMTPAuthenticator(authUser, authPwd);
@@ -40,12 +41,12 @@ public class JavaMail {
 	}
 	
 	public boolean sendMail(String to, String subject, String text) {
-		String from = "chanon@senate.co.th";
+		String from = "InStory.Me@gmail.com";
 		
 		InternetAddress fromAddress = null;
 		InternetAddress toAddress = null;
 		try {
-			fromAddress = new InternetAddress("\"IN Story\" <" + from + ">");
+			fromAddress = new InternetAddress("\"InStory\" <" + from + ">");
 			toAddress = new InternetAddress(to);
 		} 
 		catch (AddressException e) {
