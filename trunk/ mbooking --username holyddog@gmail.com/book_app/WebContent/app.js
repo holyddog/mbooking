@@ -5,7 +5,7 @@ Config = {
 	SLIDE_DELAY: 250,
 	FADE_DELAY: 250,
 	INTERVAL_DELAY: 30000, //60000, // 1 minute
-	SERVICE_TIMEOUT:7000,
+	SERVICE_TIMEOUT:8000,
 	
 	FB_APP_ID: '370184839777084',
 	
@@ -1198,7 +1198,7 @@ Web = {
                 var istimeout=false;
                 var getreq_timer = setTimeout(
                     function(){
-                        if(!istimeout){
+                        if(!istimeout&&retry){
                             MessageBox.drop_retry('Connection time out please try again',retry);
                             istimeout = true;
                             if(notconnect)
@@ -1219,7 +1219,7 @@ Web = {
                        },
                        error: function(xhr,status) {
                            if(status=='timeout'){
-                                if(!istimeout){
+                                if(!istimeout&&retry){
                                     clearTimeout(getreq_timer);
                                     MessageBox.drop_retry('Connection time out please try again',retry);
                                     istimeout = true;
