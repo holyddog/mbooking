@@ -32,60 +32,68 @@ public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 	@Override
 	public User followAuthor(Long uid, Long auid) {	
 		try {
-			Long now = System.currentTimeMillis();
 			
-			Follow follow = new Follow();
-			follow.setAuid(auid);
-			follow.setUid(uid);
-			follow.setFdate(now);
-			db.insert(follow);
-			
-			db.updateFirst(new Query(Criteria.where("uid").is(auid)), new Update().inc("fcount", 1), User.class);
-			
-			Update update = new Update();
-			update.addToSet("following", auid);
-			
-			FindAndModifyOptions opt = FindAndModifyOptions.options().returnNew(true);
-			Query follq = new Query(Criteria.where("uid").is(uid));
-			follq.fields().include("uid");
-			follq.fields().include("dname");
-			follq.fields().include("pic");
-			follq.fields().include("following");
-			User foll = db.findAndModify(follq, update, opt, User.class);
-			
-			update = new Update();
-			int count = 0;
-			if(foll.getFollowing()!=null&&foll.getFollowing().getClass().isArray())
-			count = foll.getFollowing().length;
-			update.set("fgcount",count);
-			db.updateFirst(follq,update, User.class);
-			
-			if(db.count(new Query(Criteria.where("uid").is(uid).and("everfoll").in(auid)),User.class)==0){
-				Notification notf = new Notification();
-				notf.setUid(auid);
-				notf.setAdate(System.currentTimeMillis());
-				notf.setUnread(true);
+			if(db.count(new Query(Criteria.where("uid").is(uid).and("auid").is(auid)), Follow.class)==0){
+				Long now = System.currentTimeMillis();
+				Follow follow = new Follow();
+				follow.setAuid(auid);
+				follow.setUid(uid);
+				follow.setFdate(now);
+				db.insert(follow);
+	//			db.updateFirst(new Query(Criteria.where("uid").is(auid)), new Update().inc("fcount", 1), User.class);
+				Integer count_followers = (int)(long)db.count(new Query(Criteria.where("auid").is(auid)),Follow.class);
+				db.updateFirst(new Query(Criteria.where("uid").is(auid)), new Update().set("fcount",count_followers), User.class);
 				
-				User who = new User();
-				who.setUid(foll.getUid());
-				who.setDname(foll.getDname());
-				who.setPic(foll.getPic());
-				notf.setWho(who);
 				
-				String fullMessage = String.format(ConstValue.NEW_FOLLOWER_MSG_FORMAT_EN, foll.getDname());
-				notf.setMessage(fullMessage);
-				notf.setNtype(ConstValue.NEW_FOLLOWER);
+				Update update = new Update();
+				update.addToSet("following", auid);
+				
+				FindAndModifyOptions opt = FindAndModifyOptions.options().returnNew(true);
+				Query follq = new Query(Criteria.where("uid").is(uid));
+				follq.fields().include("uid");
+				follq.fields().include("dname");
+				follq.fields().include("pic");
+				follq.fields().include("following");
+				User foll = db.findAndModify(follq, update, opt, User.class);
+				
+				update = new Update();
+				int count = 0;
+				if(foll.getFollowing()!=null&&foll.getFollowing().getClass().isArray())
+				count = foll.getFollowing().length;
+				update.set("fgcount",count);
+				db.updateFirst(follq,update, User.class);
+				
+				if(db.count(new Query(Criteria.where("uid").is(uid).and("everfoll").in(auid)),User.class)==0){
+					Notification notf = new Notification();
+					notf.setUid(auid);
+					notf.setAdate(System.currentTimeMillis());
+					notf.setUnread(true);
 					
-				db.insert(notf);
-				
-			    User author = db.findOne(new Query(Criteria.where("uid").is(auid)),User.class);
-				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("page", "Profile");
-				map.put("followid",uid+"");
-				PushNotification.sendPush(String.format(ConstValue.NEW_FOLLOWER_MSG_FORMAT_PUSH_EN, foll.getDname()), Selectors.alias(author.getEmail()), null, map);
-
+					User who = new User();
+					who.setUid(foll.getUid());
+					who.setDname(foll.getDname());
+					who.setPic(foll.getPic());
+					notf.setWho(who);
+					
+					String fullMessage = String.format(ConstValue.NEW_FOLLOWER_MSG_FORMAT_EN, foll.getDname());
+					notf.setMessage(fullMessage);
+					notf.setNtype(ConstValue.NEW_FOLLOWER);
+						
+					db.insert(notf);
+					
+				    User author = db.findOne(new Query(Criteria.where("uid").is(auid)),User.class);
+					HashMap<String, String> map = new HashMap<String, String>();
+					map.put("page", "Profile");
+					map.put("followid",uid+"");
+					PushNotification.sendPush(String.format(ConstValue.NEW_FOLLOWER_MSG_FORMAT_PUSH_EN, foll.getDname()), Selectors.alias(author.getEmail()), null, map);
+	
+				}
+					return foll;
 			}
-			return foll;
+			else{
+				return null;
+			}
+			
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -97,7 +105,10 @@ public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 	public User unfollowAuthor(Long uid, Long auid) {
 		try {
 			db.remove(new Query(Criteria.where("uid").is(uid).and("auid").is(auid)), Follow.class);
-			db.updateFirst(new Query(Criteria.where("uid").is(auid)), new Update().inc("fcount", -1), User.class);
+			
+			Integer count_followers = (int)(long)db.count(new Query(Criteria.where("auid").is(auid)),Follow.class);
+			db.updateFirst(new Query(Criteria.where("uid").is(auid)), new Update().set("fcount",count_followers), User.class);
+//			db.updateFirst(new Query(Criteria.where("uid").is(auid)), new Update().inc("fcount", -1), User.class);
 			
 			Update update = new Update();
 			update.pull("following", auid);
@@ -166,14 +177,19 @@ public class FollowRepositoryImpl implements FollowRepostitoryCustom {
 			Long now = System.currentTimeMillis();
 			
 			for(long id : auid){
-				Follow follow = new Follow();
-				follow.setAuid(id);
-				follow.setUid(uid);
-				follow.setFdate(now);
-				db.insert(follow);
+				
+				if(db.count(new Query(Criteria.where("uid").is(uid).and("auid").is(id)), Follow.class)==0){
+					Follow follow = new Follow();
+					follow.setAuid(id);
+					follow.setUid(uid);
+					follow.setFdate(now);
+					db.insert(follow);
+					
+					Integer count_followers = (int)(long)db.count(new Query(Criteria.where("auid").is(id)),Follow.class);
+					db.updateFirst(new Query(Criteria.where("uid").is(id)), new Update().set("fcount",count_followers), User.class);
+//					db.updateFirst(new Query(Criteria.where("uid").is(id)), new Update().inc("fcount", 1), User.class);
+				}
 			}
-			
-			db.updateFirst(new Query(Criteria.where("uid").in(auid)), new Update().inc("fcount", 1), User.class);
 			
 			Update update = new Update();
 			
