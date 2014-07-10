@@ -24,6 +24,16 @@ init: function(params, container) {
 		$('.user_guide').hide();
 	}
     
+    var closebefore_btn = container.find('[data-id=btn_cb]');
+   
+    closebefore_btn.find('span').attr('class', params.preview?"back":"cancel");
+    
+    closebefore_btn.tap(
+			function(){
+				Page.back();
+			}
+	);
+    
     Service.Book.GetBookData(params.bid, params.uid, Account.userId, function(data) {
           self.load(container, data,params);
     });
@@ -187,10 +197,6 @@ load: function(container, bookData,params) {
                 
             }
             
-            
-            
-
-            
          
                 //back 2 pages
                 backpage = $('<div class="backside fill_dock box vertical" style="background-color: white; overflow: hidden; width:50%; position:absolute; -webkit-transform:  rotate3d(0, 1, 0, 180deg); -webkit-backface-visibility:hidden;-webkit-transform-style: preserve-3d;"></div>');
@@ -242,9 +248,9 @@ load: function(container, bookData,params) {
             var btnShare = $('[data-id=btn_s]');
             btnShare.tap(function(success) {
                          
-            	Page.open('Share', true, { bid: params.bid });
-                container.css('display','none');
-                         
+//            	Page.open('Share', true, { bid: params.bid });
+//                container.css('display','none');
+            	window.plugins.socialsharing.share(null, null, null, Config.WEB_BOOK_URL + '/?bid=' + params.bid);
             });
         
         	var btnLike = $('[data-id=btn_l]');
@@ -712,7 +718,7 @@ load: function(container, bookData,params) {
 
       function firstLoad(){
     		Page.bodyHideLoading(container);
-
+    		container.find('[data-id=btn_cb]').hide();
 			var content = container.find('.content');
 			// show panel
 			content.removeClass('gray').addClass('no_color');
