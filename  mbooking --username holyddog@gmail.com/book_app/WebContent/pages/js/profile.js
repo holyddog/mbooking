@@ -45,18 +45,20 @@ Page.Profile = {
 		
 		btnFollow.tap(function() {
 			if (btnFollow.hasClass('follow')) {
+				btnAcceptNot.hide();
+				btnAcceptNot.removeClass('accept');
+				btnFollow.html('+ FOLLOW').removeClass('follow');
+				
 				Service.Book.UnFollowAuthor(uid, Account.userId, function(data) {
-					btnAcceptNot.hide();
-					btnAcceptNot.removeClass('accept');
-					btnFollow.html('+ FOLLOW').removeClass('follow');
 					Account.following = data.following;
 					localStorage.setItem("u", JSON.stringify(Account));
 				});					
 			}
 			else {
+				btnAcceptNot.show();
+				btnFollow.html('FOLLOWING').addClass('follow');
+			
 				Service.Book.FollowAuthor(uid, Account.userId, function(data) {
-					btnAcceptNot.show();
-					btnFollow.html('FOLLOWING').addClass('follow');
 					Account.following = data.following;
 					localStorage.setItem("u", JSON.stringify(Account));
 				});					
