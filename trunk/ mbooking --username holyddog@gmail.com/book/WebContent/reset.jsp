@@ -19,15 +19,51 @@
 </head>	
 	<body>
 		<f:view>	
-			<f:subview id="successView" rendered="#{resetView.success}">Success</f:subview>
+			<f:subview id="successView" rendered="#{resetView.success}">
+			 	<div class="fill_dock box vertical">
+					<div class="flex1"></div>
+						<div class="box" style="margin-top:50px;width:50px;height:50px; margin-left:auto; margin-right:auto;">
+								<div style="width:50px;height:50px; background-color:#99CC00;-webkit-mask-image: url(#{initParam['root']}/res/images/accept.png);"></div>
+						</div>
+						<div style="text-align:center;margin-top:30px;">
+							<div style="font-size:30px; color:#33B5E5;">
+									Success to change password !
+							</div>
+							<div style="margin-top:50px;font-size:15px; color:gray;padding-left:20px;padding-right:20px;">
+									Please go back to "InStory" and sign in with your new password again.
+							</div>		
+						</div>
+					<div class="flex2"></div>
+				</div>			
+			</f:subview>
 			<f:subview id="formView" rendered="#{!resetView.success}">
-				<t:div rendered="#{!resetView.valid}">Invalid key</t:div>
+				<t:div rendered="#{!resetView.valid}">
+					<div class="fill_dock box vertical">
+						<div class="flex1"></div>
+							<div class="box" style="margin-top:50px;width:125px;height:50px; margin-left:auto; margin-right:auto;">
+								<div style="width:50px;height:50px; margin-right:25px; background-color:gray;-webkit-mask-image: url(#{initParam['root']}/res/images/pencil.png);"></div>
+								<div style="width:50px;height:50px; background-color:gray;-webkit-mask-image: url(#{initParam['root']}/res/images/cancel.png);"></div>
+							</div>
+							<div style="text-align:center;margin-top:30px;">
+								<div style="font-size:30px; color:gray;">
+										Invalid page URL !
+								</div>
+								<div style="margin-top:50px;font-size:15px;">
+										Please try to do your operation again.
+								</div>		
+								<div style="margin-top:10px; font-size:12px; font-style:italic;">
+										If you have question or problem contact us at "www.instory.me".
+								</div>
+							</div>
+						<div class="flex2"></div>
+					</div>
+				</t:div>
 				<t:div rendered="#{resetView.valid}">
 					<div class="fill_dock box vertical">
 					<div class="flex1 box vertical">
 						<div class="flex1"></div>
 						<div id="reset_message">
-							<div class="title">Reset "IN Story" Password of</div> 
+							<div class="title">Reset "InStory" Password of</div> 
 							<img src="#{initParam['file']}#{resetView.pic}" onerror="if (this.src != '#{initParam['root']}/res/images/user.jpg') this.src = '#{initParam['root']}/res/images/user.jpg';"></img>
 							<div class="accountname">#{resetView.dname}</div>
 						</div>
