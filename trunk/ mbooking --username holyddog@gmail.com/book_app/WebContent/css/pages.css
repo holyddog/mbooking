@@ -722,6 +722,17 @@
 #page_Book .page_nav {
 	top: 0;
 }
+
+#page_Book .page_nav .pic_box:after {
+	content: " ";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 50px;
+	background-image: -webkit-linear-gradient(top, rgba(0,0,0,0.4), rgba(0,0,0,0) 100%);
+}
+
 #page_Book #tap_nav .flex1.highlight {
 }
 #page_Book .first_cover {
