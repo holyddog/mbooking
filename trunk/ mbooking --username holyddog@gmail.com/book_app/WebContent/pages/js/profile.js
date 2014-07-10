@@ -41,9 +41,13 @@ Page.Profile = {
 		}
 		
 		var btnFollow = container.find('[data-id=btn_f]');
+		var btnAcceptNot = container.find('[data-id=btn_no]');
+		
 		btnFollow.tap(function() {
 			if (btnFollow.hasClass('follow')) {
 				Service.Book.UnFollowAuthor(uid, Account.userId, function(data) {
+					btnAcceptNot.hide();
+					btnAcceptNot.removeClass('accept');
 					btnFollow.html('+ FOLLOW').removeClass('follow');
 					Account.following = data.following;
 					localStorage.setItem("u", JSON.stringify(Account));
@@ -51,6 +55,7 @@ Page.Profile = {
 			}
 			else {
 				Service.Book.FollowAuthor(uid, Account.userId, function(data) {
+					btnAcceptNot.show();
 					btnFollow.html('FOLLOWING').addClass('follow');
 					Account.following = data.following;
 					localStorage.setItem("u", JSON.stringify(Account));
@@ -58,9 +63,7 @@ Page.Profile = {
 			}
 		});
 		
-		
-
-		var btnAcceptNot = container.find('[data-id=btn_no]');
+	
 		btnAcceptNot.tap(function() {
 //				btnAcceptNot.css('pointer-events','none');
 			if(btnFollow.hasClass('follow')){

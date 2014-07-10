@@ -4,9 +4,31 @@ init: function(params, container) {
     var self = this;
     Page.bodyShowLoading(container);
    
+    if(window.navigator.onLine){
+		if(Account.bguide){
+			$('.user_guide').tap(
+				function(){
+					$('.user_guide').fadeOut();
+				}
+			);
+			Service.User.ViewGuide("bguide", Account.userId,
+				function(){
+					delete Account["bguide"];
+				}
+			);
+		}else{
+			$('.user_guide').hide();
+		}
+	}
+	else{
+		$('.user_guide').hide();
+	}
+    
     Service.Book.GetBookData(params.bid, params.uid, Account.userId, function(data) {
           self.load(container, data,params);
     });
+    
+    
 },
 LIMIT_PAGE:1,
 reverseIndex:function(container){
@@ -54,17 +76,19 @@ load: function(container, bookData,params) {
             
             if(!params.preview){
                 tbar_btn =  '<a data-id="btn_l" class="btn" style="position: relative; float: right; pointer-events:all;"><span style="background-color: #fff;" class="like"></span></a>'
+                	+'<a data-id="btn_f" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="star"style="background-color:#fff;"></span></a>'
                     +'<a data-id="btn_c" class="btn" style="position: relative; float: right; pointer-events:all;"><span style="background-color: #fff;" class="comment"></span></a>'
                     +'<a data-id="btn_s" class="btn" style="position: relative; float: right; pointer-events:all;"><span style="background-color: #fff;" class="share"></span></a> ';
                 
                 tbar_btn_bp =  '<a data-id="btn_l" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="like"style="background-color:#FBFBFB;"></span></a>'
+                	+'<a data-id="btn_f" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="star"style="background-color:#FBFBFB;"></span></a>'
                     +'<a data-id="btn_c" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="comment"style="background-color:#FBFBFB;"></span></a>'
                     +'<a data-id="btn_s" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="share"style="background-color:#FBFBFB;"></span></a> ';
             }
             
             var cover_page = '<div class="tbar_bg cover_book"></div>'
                 +'<div class="grad_overlay fill_dock hid_loading"></div>'
-                +'<div class="tbar" style="height: 0px; pointer-events:none;">	'
+                +'<div class="tbar" style="height: 0px; pointer-events:none; z-index:1001">	'
                 +'<a data-id="btn_b" class="btn" style="left: 0; pointer-events:all;"><span style="z-index: 100; background-color: #fff;" class="'+((params.preview)?"back":"cancel")+'"></span></a>'
                 +'<div class="title"></div>'
                 +tbar_btn
@@ -107,7 +131,7 @@ load: function(container, bookData,params) {
                 +'<div class="title"></div>'
                 +tbar_btn_bp
                 +'</div>'
-                +'<div class="content flex1 box vertical '+f_ev_str+'" style="background:#131313; pointer-events:all;">'
+                +'<div class=" flex1 box vertical '+f_ev_str+'" style="background:#131313; pointer-events:all;">'
                 +'	<div class="flex1" style=" background: url('+"'images/thank1.jpg'"+'); background-position: center; background-size: 100% auto; background-repeat: no-repeat;"></div>'
                 +'		<div class="bottom_info">'
                 +'			<div class="text_bar flow_hidden" style="text-align: center;padding: 30px;">'
@@ -118,14 +142,16 @@ load: function(container, bookData,params) {
             
           
             
-            var title_bar_left =$('<div class="tbar" style="pointer-events:none;"><div class="title"></div>'
-                    +'<a data-id="btn_b" class="btn" style="left: 0; pointer-events:all;"><span class="'+((params.preview)?"back":"cancel")+'"></span></a>'
+            var title_bar_left =$('<div class="tbar" style="height: 0px; pointer-events:none; z-index:1001"><div class="title"></div>'
+                    +'<a data-id="btn_b" class="btn" style="left: 0; pointer-events:all;"><span style="background-color: #fff;" class="'+((params.preview)?"back":"cancel")+'"></span></a>'
+                    +'<a data-id="btn_s" class="btn" style="position: relative; float: right; pointer-events:all;margin-right:150px;"><span style="background-color: #fff;" class="share"></span></a> '
                     +'</div>');
             
-            var title_bar_right =$('<div class="tbar" style="pointer-events:none;"><div class="title"></div>'
-                    +'<a data-id="btn_l" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="like"></span></a>'
-                    +'<a data-id="btn_c" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="comment"></span></a>'
-                    +'<a data-id="btn_s" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="share"></span></a> '
+            var title_bar_right =$('<div class="tbar" style="height: 0px; pointer-events:none; z-index:1001"><div class="title"></div>'
+                    +'<a data-id="btn_l" class="btn" style="position: relative; float: right; pointer-events:all;"><span style="background-color: #fff;" class="like"></span></a>'
+                    +'<a data-id="btn_f" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="star"style="background-color:#fff;"></span></a>'
+                    +'<a data-id="btn_c" class="btn" style="position: relative; float: right; pointer-events:all;"><span style="background-color: #fff;" class="comment"></span></a>'
+                    +'<a data-id="btn_s" class="btn" style="position: relative; float: right; pointer-events:all;"><span style="background-color: #fff;" class="share"></span></a> '
                     +'</div>');
          
             var shadowf =  $('<div class="fill_dock" data-id="page_shadow" style="opacity:0; background:black; z-index:1"></div>');
@@ -144,7 +170,7 @@ load: function(container, bookData,params) {
                 var finframe = $('<div class="fill_dock box vertical" style="position:absolute; left:-100%;"></div>');
                 if( i > - 1&&i<data.length-1){
                	fpic = $('<div class="pic_box relative f_ev" data-id="pic_box'+(i)+'"  style="background-color: #EEEEEE; overflow: hidden;width: '+window_width+'px; height: '+window_width+'px;"><img  data-id="'+i+'" style="visibility:hidden;opacity:0;transition:opacity 0.25s linear; position: absolute; width: 100%; height: 100%;"></div>');
-                    var fcaption = $('<div class="flex1 box f_ev"  data-id="txt'+(i)+'"  style="visibility:hidden;opacity:0;transition:opacity 0.25s linear; padding: 10px; -webkit-box-align: center;">' + data[i].caption + '</div><div style="line-height: 15px; padding: 0 10px 10px; font-size: 80%; text-align: right;">' + (i+1) + ' of ' + (data.length-1) + '</div>');
+                    var fcaption = $('<div class="flex1 box f_ev center_middle"  data-id="txt'+(i)+'"  style="visibility:hidden;opacity:0;transition:opacity 0.25s linear; padding: 10px; -webkit-box-align: center;text-alig">' + data[i].caption + '</div><div style="line-height: 15px; padding: 0 10px 10px; font-size: 80%; text-align: right;">' + (i+1) + ' of ' + (data.length-1) + '</div>');
                     foutframe.append(shadowf).append(title_bar_right).append(fpic).append(fcaption);
                 }
                 else if(i==-1){
@@ -172,7 +198,7 @@ load: function(container, bookData,params) {
                 
                 if( i !=-2&&i<data.length-2){
                 	pic = $('<div class="pic_box relative bk_ev"  data-id="pic_box'+(i+1)+'" style=" background-color: #EEEEEE; overflow: hidden; width: '+window_width+'px; height: '+window_width+'px;"><img  data-id="'+(i+1)+'" style="visibility:hidden;opacity:0;transition:opacity 0.25s linear; position: absolute; width: 100%; height: 100%;"></div>');
-                    var caption = $('<div class ="flex1 box bk_ev" data-id="txt'+(i+1)+'" style="visibility:hidden;opacity:0;transition:opacity 0.25s linear; padding: 10px; -webkit-box-align: center;">' + data[i+1].caption + '</div><div style="line-height: 15px; padding: 0 10px 10px; font-size: 80%; text-align: right;">' + (i + 2) + ' of ' + (data.length-1) + '</div>');
+                    var caption = $('<div class ="flex1 box bk_ev center_middle" data-id="txt'+(i+1)+'" style="visibility:hidden;opacity:0;transition:opacity 0.25s linear; padding: 10px; -webkit-box-align: center;">' + data[i+1].caption + '</div><div style="line-height: 15px; padding: 0 10px 10px; font-size: 80%; text-align: right;">' + (i + 2) + ' of ' + (data.length-1) + '</div>');
                     outframe.append(shadowb).append(title_bar_left).append(pic).append(caption);//.append($(btn_b_str));
                 }
                 else if(i==data.length-2){
@@ -245,6 +271,21 @@ load: function(container, bookData,params) {
     			}
     		});
             
+    		var btnFav = container.find('[data-id=btn_f]');
+    		if (bookData.faved) {
+				btnFav.addClass('stared');
+			}
+    		btnFav.tap(function() {
+    			if (!btnFav.hasClass('stared')) {
+    				btnFav.addClass('stared');			
+    				Service.Book.FavBook(params.bid, Account.userId, true, function(data) {});				
+    			}
+    			else {
+    				btnFav.removeClass('stared');			
+    				Service.Book.FavBook(params.bid, Account.userId, false, function(data) {});				
+    			}
+    		});
+    		
         
         var btnSetting = container.find('.edit_book');
         btnSetting.tap(function() {
