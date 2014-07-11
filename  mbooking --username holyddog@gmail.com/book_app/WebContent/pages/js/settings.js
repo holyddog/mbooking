@@ -33,6 +33,7 @@ Page.Settings = {
 		container.find('[data-id=terms]').tap(function() {
 			Page.open('TermsOfUse', true);
 		});
+		
 		self.setImage(container);
 
 		if (Account.fbObject && Account.fbObject.dname) {

@@ -48,7 +48,7 @@
 	background-color: #fff;
 }
 #page_Home #owl-example .item {
-	background-size: auto 100%;
+	background-size: 100% auto;
 	background-position: center center;
 	background-repeat: no-repeat;
 }
@@ -1446,42 +1446,42 @@
 
 }
 
-#page_EditBook .user_guide,#page_Explore .user_guide{
+#page_EditBook .user_guide,#page_Explore .user_guide,#page_Following .user_guide{
 	z-index: 20;
 	position: absolute;
 	pointer-events: none;
 }
 
-#page_EditBook .user_guide .bggradient,#page_Explore .user_guide .bggradient{
+#page_EditBook .user_guide .bggradient,#page_Explore .user_guide .bggradient,#page_Following .user_guide .bggradient{
   background: linear-gradient(180deg,transparent,rgb(20, 20, 20),rgb(15, 15, 15),rgb(20, 20, 20),transparent);
   opacity: 0.8;
 }
 
-#page_EditBook .user_guide .guide_item,#page_Explore .user_guide .guide_item{
+#page_EditBook .user_guide .guide_item,#page_Explore .user_guide .guide_item,#page_Following .user_guide .guide_item{
 	background-size: auto 100%;
 	background-repeat: no-repeat;
 }
 
-#page_Book .user_guide .border, #page_EditBook .user_guide .border, #page_Explore .user_guide .border{
+#page_Book .user_guide .border, #page_EditBook .user_guide .border, #page_Explore .user_guide .border, #page_Following .user_guide .borders{
 	padding :5px;
 	background:rgba(4, 200, 174,0.5);
 }
 
-#page_Book .user_guide .name_lbl,#page_EditBook .user_guide .name_lbl,#page_Explore .user_guide .name_lbl{
+#page_Book .user_guide .name_lbl,#page_EditBook .user_guide .name_lbl,#page_Explore .user_guide .name_lbl,#page_Following .user_guide .name_lbl{
 	color: #fff;
 	background: #222;
 	line-height: 25px;
 	text-align: center;
 	padding: 5px;
 }
-#page_Book .user_guide .desc,#page_EditBook .user_guide .desc,#page_Explore .user_guide .desc{
+#page_Book .user_guide .desc,#page_EditBook .user_guide .desc,#page_Explore .user_guide .desc,#page_Following .user_guide .desc{
 	background: rgba(4, 200, 174,0.5);
 	padding: 5px;
 	color: #fff;
 	font-size:13px
 }
 
-#page_Book .user_guide,#page_Explore .user_guide{
+#page_Book .user_guide,#page_Explore .user_guide,#page_Following .user_guide{
 	z-index: 20000;
 	position: absolute;
 	pointer-events: none;
@@ -1492,7 +1492,7 @@
 	opacity:0.5;
 }
 
-#page_Book .user_guide .skip_btn,#page_EditBook .user_guide .skip_btn,#page_Explore .user_guide .skip_btn{
+#page_Book .user_guide .skip_btn,#page_EditBook .user_guide .skip_btn,#page_Explore .user_guide .skip_btn,#page_Following .user_guide .skip_btn{
 	position: absolute;
 	color: white;
 	background: #222;
