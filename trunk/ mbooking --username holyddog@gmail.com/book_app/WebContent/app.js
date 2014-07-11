@@ -26,8 +26,8 @@ Config = {
 };
 
 Service = {	
-//	url: 'http://' + window.location.hostname + ':8080/book/data'
-	url: 'http://119.59.122.38/book/data'
+	url: 'http://' + window.location.hostname + ':8080/book/data'
+//	url: 'http://119.59.122.38/book/data'
 };	
 
 Account = {};

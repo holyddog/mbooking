@@ -31,6 +31,27 @@ Page.Following = {
 			Page.open('Notifications', true);
 		});	
 		
+		if(window.navigator.onLine){
+		$('.user_guide').css('pointer-events','all');
+			if(Account.fguide){
+				$('.user_guide').tap(
+					function(){
+						$('.user_guide').fadeOut();
+					}
+				);
+				Service.User.ViewGuide("fguide", Account.userId,
+					function(){
+						delete Account["fguide"];
+					}
+				);
+			}else{
+				$('.user_guide').hide();
+			}
+		}
+		else{
+			$('.user_guide').hide();
+		}
+		
 		var tabs = container.find('.tab');
 		tabs.tap(function() {
 			var t = $(this);

@@ -279,7 +279,8 @@ Page.SignUp = {
 					userName : data.uname,
 					exguide: data.exguide,
 					bguide: data.bguide,
-					epguide: data.epguide
+					epguide: data.epguide,
+					fguide: data.fguide
 				};
 
 				if (data.fbobj) {

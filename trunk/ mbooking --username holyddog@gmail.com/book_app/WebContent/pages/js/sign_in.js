@@ -72,6 +72,7 @@ Page.SignIn = {
 											exguide: data.exguide,
 											bguide: data.bguide,
 											epguide: data.epguide,
+											fguide: data.fguide,
 											// followerCount: data.fcount,
 											// bookCount: data.pbcount
 
