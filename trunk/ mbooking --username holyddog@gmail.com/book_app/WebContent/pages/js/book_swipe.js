@@ -150,6 +150,7 @@ Page.Book = {
 				content.append(page.append(pic).append('<div class="page_cap flex1 box center_middle" style="padding: 15px;">' + data[i].caption + '</div>' + pline));
 				pic.css('height', pic.width());
 			}	
+			content.find('.last_cover').appendTo(content);
 		}
 		container.find(".content").owlCarousel({
 			singleItem: true,
