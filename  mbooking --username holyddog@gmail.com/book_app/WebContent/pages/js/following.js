@@ -130,10 +130,11 @@ Page.Following = {
 		upic.className = 'upic';
 		var img = document.createElement('img');
 		
-		if(pic)
+		if(upic)
 			img.src = Util.getImage(data.pic, 3);
 		else
 			img.src = 'images/user.jpg';
+		
 		upic.appendChild(img);
 		
 		var uref = document.createElement('div');
