@@ -95,8 +95,10 @@ Page.Following = {
 		bpic.className = 'bpic';
 		var img = document.createElement('img');
 		
-		if(data.pic)
+		if(data.pic){
 			img.src = Util.getImage(data.pic, 2);
+			img.setAttribute("onerror", "this.src = 'images/user.jpg';");
+		}
 		else
 			img.src = 'images/user.jpg';
 		
@@ -130,8 +132,10 @@ Page.Following = {
 		upic.className = 'upic';
 		var img = document.createElement('img');
 		
-		if(upic)
+		if(upic){
 			img.src = Util.getImage(data.pic, 3);
+			img.setAttribute("onerror", "this.src = 'images/user.jpg';");
+		}
 		else
 			img.src = 'images/user.jpg';
 		
@@ -175,6 +179,7 @@ Page.Following = {
 		img.className = 'image';
 		if (pic) {
 			img.src = Util.getImage(pic, 3);
+			img.setAttribute("onerror", "this.src = 'images/user.jpg';");
 		}
 		else {
 			img.src = 'images/user.jpg';
@@ -255,8 +260,10 @@ Page.Following = {
 		uimage.dataset.uid = user.uid;
 		var img = document.createElement('img');
 		
-		if(user.pic)
+		if(user.pic){
 			img.src = Util.getImage(user.pic, 3);
+			img.setAttribute("onerror", "this.src = 'images/user.jpg';");
+		}
 		else
 			img.src = 'images/user.jpg';
 		

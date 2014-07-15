@@ -135,6 +135,7 @@ Page.Profile = {
 						MessageBox.drop('Picture changed');
 						
 						container.find('.pimage img').attr('src', Util.getImage(data.picture, 3));
+						container.find('.pimage img').attr("onerror", "this.src = 'images/user.jpg';");
 						
 						Account.picture = data.picture;
 						localStorage.setItem('u', JSON.stringify(Account));
@@ -326,6 +327,7 @@ Page.Profile = {
 			content.find('.header_title span.uname').text('@' + user.uname);
 			if (user.pic) {
 				content.find('.pimage img').attr('src', Util.getImage(user.pic, 3));
+				container.find('.pimage img').attr("onerror", "this.src = 'images/user.jpg';");
 			}
 			if (user.cover) {
 				document.getElementById('profile_page').style.backgroundImage = 'url(' + Util.getImage(user.cover, 1) + ')';
