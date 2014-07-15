@@ -94,7 +94,12 @@ load: function(container, bookData,params) {
                 	+'<a data-id="btn_f" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="star"style="background-color:#FBFBFB;"></span></a>'
                     +'<a data-id="btn_c" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="comment"style="background-color:#FBFBFB;"></span></a>'
                     +'<a data-id="btn_s" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="share"style="background-color:#FBFBFB;"></span></a> ';
+            
             }
+            else{
+            	tbar_btn_bp='<div class="tbar" style="height: 0px; pointer-events:none; "><div class="title"></div></div>';
+            }
+           
             
             var cover_page = '<div class="tbar_bg cover_book"></div>'
                 +'<div class="grad_overlay fill_dock hid_loading"></div>'
@@ -154,21 +159,21 @@ load: function(container, bookData,params) {
             
             var title_bar_left =$('<div class="tbar" style="height: 0px; pointer-events:none; z-index:1001"><div class="title"></div>'
                     +'<a data-id="btn_b" class="btn" style="left: 0; pointer-events:all;"><span style="background-color: #fff;" class="'+((params.preview)?"back":"cancel")+'"></span></a>'
-                    +'<a data-id="btn_s" class="btn" style="position: relative; float: right; pointer-events:all;margin-right:150px;"><span style="background-color: #fff;" class="share"></span></a> '
+                    +((!params.preview)?'<a data-id="btn_s" class="btn" style="position: relative; float: right; pointer-events:all;margin-right:150px;"><span style="background-color: #fff;" class="share"></span></a> ':'')
                     +'</div>');
             
             var title_bar_right =$('<div class="tbar" style="height: 0px; pointer-events:none; z-index:1001"><div class="title"></div>'
                     +'<a data-id="btn_l" class="btn" style="position: relative; float: right; pointer-events:all;"><span style="background-color: #fff;" class="like"></span></a>'
                     +'<a data-id="btn_f" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="star"style="background-color:#fff;"></span></a>'
                     +'<a data-id="btn_c" class="btn" style="position: relative; float: right; pointer-events:all;"><span style="background-color: #fff;" class="comment"></span></a>'
-                    +'<a data-id="btn_s" class="btn" style="position: relative; float: right; pointer-events:all;"><span style="background-color: #fff;" class="share"></span></a> '
+                    +((!params.preview)?'<a data-id="btn_s" class="btn" style="position: relative; float: right; pointer-events:all;margin-right:150px;"><span style="background-color: #fff;" class="share"></span></a> ':'')
                     +'</div>');
          
             var shadowf =  $('<div class="fill_dock" data-id="page_shadow" style="opacity:0; background:black; z-index:1"></div>');
             var shadowb =  $('<div class="fill_dock" data-id="page_shadow" style="opacity:0; background:black; z-index:1"></div>');
             
             if (params.preview) {
-                title_bar_right=$('<div class="tbar" style="pointer-events:none; "><div class="title"></div></div>');
+                title_bar_right=$('<div class="tbar" style="height: 0px; pointer-events:none; "><div class="title"></div></div>');
 
             }
             

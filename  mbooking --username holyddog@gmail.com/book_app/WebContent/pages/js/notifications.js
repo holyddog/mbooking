@@ -75,6 +75,10 @@ Page.Notifications = {
 		var user = data.who;
 		var book = data.book;
 		
+		if(user){
+			data.pic = user.pic;
+		}
+		
 		var notfDiv = document.createElement('div');
 		notfDiv.className = 'notf_item box horizontal';
 		
@@ -82,13 +86,15 @@ Page.Notifications = {
 			notfDiv.dataset.href = '#Book?append=true&bid=' + book.bid + '&uid=' + data.uid;
 		}
 		else if(data.ntype!=1) {
-			notfDiv.dataset.href = '#Profile?append=true&uid=' + user.uid + '&back=true';
+			notfDiv.dataset.href = '#Profile?append=true&uid=' + data.uid + '&back=true';
 		}
 		
 		var uimage = document.createElement('div');
 		uimage.className = 'uimage';
 		var img = document.createElement('img');
-		img.src = (user.pic)? Util.getImage(user.pic, 3): 'images/user.jpg';
+		var scr_url = Util.getImage(data.pic, 3);
+		img.src = (data.pic)? scr_url: 'images/user.jpg';
+		img.setAttribute("onerror", "this.src = 'images/user.jpg';");
 		uimage.appendChild(img);
 		
 		var msg = document.createElement('div');
