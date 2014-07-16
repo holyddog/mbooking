@@ -34,62 +34,64 @@ Page.SignIn = {
                 
                 Service.User.SignIn(inputText.val(), inputPwd.val(),Config.OS_Int,dvtoken, 
                 		function(data) {
-                			if (Device.PhoneGap.isReady)
+                			if (Device.PhoneGap.isReady) {
 								Device.PhoneGap.setAliasPushnotification(data.email);
+                			}
 									
-									// Device.PhoneGap.enablePush();
-									Page.btnHideLoading(btnAccept[0]);
 
-									if (data.error) {
-										MessageBox.alert({
-											message : data.error.message
-										});
-									}
-									else {
-										var fbobj = {};
-										if (data.fbobj) {
-											if (data.fbobj.fbid)
-												fbobj = {
-													fbpic : data.fbobj.pic,
-													dname : data.fbobj.dname
-												};
-										}
+							// Device.PhoneGap.enablePush();
+							Page.btnHideLoading(btnAccept[0]);
 
-										
-										
-										Account = {
-											userId : data.uid,
-											email : data.email,
-											displayName : data.dname,
-											userName : data.uname,
-											picture : data.pic,
-											cover : data.cover,
-											bookCount : data.pbcount,
-											draftCount : data.drcount,
-											following:data.following,	
-											draftBooks : data.books,
-										
-											exguide: data.exguide,
-											bguide: data.bguide,
-											epguide: data.epguide,
-											fguide: data.fguide,
-											// followerCount: data.fcount,
-											// bookCount: data.pbcount
-
-											fbObject : fbobj
+							if (data.error) {
+								MessageBox.alert({
+									message : data.error.message
+								});
+							} else {
+								var fbobj = {};
+								if (data.fbobj) {
+									if (data.fbobj.fbid)
+										fbobj = {
+											fbpic : data.fbobj.pic,
+											dname : data.fbobj.dname
 										};
-										
-										console.log(Account);
-										
-										if (data.fbobj && data.fbobj.email) {
-											Account.fbObject.fbemail = data.fbobj.email;
-										}
-										localStorage.setItem("u", JSON
-												.stringify(Account));
+								}
 
-										Page.loadMenu();
-										Page.open('Explore');
+								Account = {
+									userId : data.uid,
+									email : data.email,
+									displayName : data.dname,
+									userName : data.uname,
+									picture : data.pic,
+									cover : data.cover,
+									bookCount : data.pbcount,
+									draftCount : data.drcount,
+									following : data.following,
+									draftBooks : data.books,
+
+									exguide : data.exguide,
+									bguide : data.bguide,
+									epguide : data.epguide,
+									fguide : data.fguide,
+									// followerCount: data.fcount,
+									// bookCount: data.pbcount
+
+									fbObject : fbobj
+								};
+
+								
+								try {
+									if (data.fbobj && data.fbobj.email) {
+										Account.fbObject.fbemail = data.fbobj.email;
 									}
+									localStorage.setItem("u", JSON.stringify(Account));
+								}
+								catch (e) {
+									console.error(e.message);
+								}
+								
+								Page.loadMenu();
+								Page.open('Explore');
+							}
                          }, function() {					
                                     MessageBox.alert({
                                                      message: 'An internal error occurred',
