@@ -168,7 +168,7 @@ public class ActivityRepositoryImpl implements ActivityRepostitoryCustom {
 	
 	private Book getBook(Long bid) {
 		Query query = new Query(Criteria.where("bid").is(bid));
-		query.fields().include("title").include("pic").include("pcount").include("lcount").include("ccount").include("pbdate").include("author");
+		query.fields().include("title").include("pic").include("pcount").include("key").include("lcount").include("ccount").include("pbdate").include("author");
 		return db.findOne(query, Book.class);
 	}
 	

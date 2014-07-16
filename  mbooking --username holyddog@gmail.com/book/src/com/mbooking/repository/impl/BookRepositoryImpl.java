@@ -313,6 +313,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			query.fields().include("pbdate");
 			query.fields().include("uid");
 			query.fields().include("lcount");
+			query.fields().include("key");
 			query.fields().include("ccount");
 
 			Book book = db.findOne(query, Book.class);
@@ -478,7 +479,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 		Query query = new Query(criteria);
 
 		query.sort().on("pbdate", Order.DESCENDING);
-		query.fields().include("bid").include("title").include("pic").include("uid").include("pcount").include("ccount").include("lcount").include("author");
+		query.fields().include("bid").include("title").include("pic").include("uid").include("pcount").include("ccount").include("key").include("lcount").include("author");
 
 		if (skip != null && limit != null && limit != 0)
 			query.skip(skip).limit(limit);
@@ -493,7 +494,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 		Query query = new Query(criteria);
 
 		query.sort().on("pbdate", Order.DESCENDING);
-		query.fields().include("bid").include("title").include("pic").include("uid").include("pcount").include("ccount").include("lcount").include("author");
+		query.fields().include("bid").include("title").include("pic").include("uid").include("pcount").include("ccount").include("key").include("lcount").include("author");
 
 		if (skip != null && limit != null && limit != 0)
 			query.skip(skip).limit(limit);
@@ -510,7 +511,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			if (user.getFollowing() != null && user.getFollowing().length > 0) {			
 				query = new Query(Criteria.where("uid").in(user.getFollowing()).and("pub").is(true).and("pbdate").exists(true));
 				query.sort().on("pbdate", Order.DESCENDING);
-				query.fields().include("title").include("pic").include("uid").include("pcount").include("author").include("ccount").include("lcount");
+				query.fields().include("title").include("pic").include("uid").include("pcount").include("author").include("ccount").include("lcount").include("key");
 				query.skip(start).limit(limit);
 				
 				return db.find(query, Book.class);
@@ -586,7 +587,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 		if(skip!=null&&limit!=null&&limit!=0)
 		query.skip(skip).limit(limit);
 		
-		query.fields().include("title").include("pic").include("pcount").include("ccount").include("lcount");
+		query.fields().include("title").include("pic").include("pcount").include("ccount").include("lcount").include("key");
 		return db.find(query, Book.class);
 	
 	}
@@ -663,7 +664,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 		Criteria criteria = Criteria.where("title").regex("^(?i)" + keyword + "(?i)").and("pbdate").exists(true).and("pub").is(true);
 		Query query  = new Query(criteria);
 		query.limit(50);
-		query.fields().include("title").include("pic").include("lcount").include("ccount").include("pcount").include("ccount").include("lcount").include("author");
+		query.fields().include("title").include("pic").include("key").include("ccount").include("pcount").include("ccount").include("lcount").include("author");
 		return db.find(query, Book.class);
 	}	
 
@@ -677,7 +678,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 	@Override
 	public List<Book> findBooksByTag(String tag) {
 		Query query  = new Query(Criteria.where("tags").is(tag).and("pbdate").exists(true).and("pub").is(true));
-		query.fields().include("title").include("pic").include("lcount").include("ccount").include("pcount").include("ccount").include("lcount").include("author");
+		query.fields().include("title").include("pic").include("key").include("ccount").include("pcount").include("ccount").include("lcount").include("author");
 		return db.find(query, Book.class);		
 	}
 
