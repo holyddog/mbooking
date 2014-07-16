@@ -9,19 +9,19 @@ Page.Settings = {
 		});	
 		
 		// set content links
-        container.find('[data-id=find_friend]').tap(function() {
+        container.find('[data-id=find_friend]').click(function() {
             Page.open('FollowFriend', true);
         });
-		container.find('[data-id=chg_pic]').tap(function() {
+		container.find('[data-id=chg_pic]').click(function() {
 			Page.open('ChangePic', true);
 		});
-		container.find('[data-id=chg_pwd]').tap(function() {
+		container.find('[data-id=chg_pwd]').click(function() {
 			Page.open('ChangePwd', true);
 		});
-		container.find('[data-id=disp_name]').tap(function() {
+		container.find('[data-id=disp_name]').click(function() {
 			Page.open('ChangeName', true);
 		});
-		container.find('[data-id=sign_out]').tap(function() {			
+		container.find('[data-id=sign_out]').click(function() {			
             localStorage.removeItem('u');
 			Account = {};
 			Page.open('Home');
@@ -30,7 +30,7 @@ Page.Settings = {
            		 Device.PhoneGap.setAliasPushnotification("");
 		  }
 		});
-		container.find('[data-id=terms]').tap(function() {
+		container.find('[data-id=terms]').click(function() {
 			Page.open('TermsOfUse', true);
 		});
 		
