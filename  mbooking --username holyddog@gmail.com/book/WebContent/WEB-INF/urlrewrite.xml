@@ -10,5 +10,9 @@
   		<to>$1$2$3</to>
 	</outbound-rule>
 	
+	<rule>
+	    <from>^/b/([\d\w]+)(\/)?$</from>
+	    <to>/book.jsf?key=$1</to>
+	</rule>	
 </urlrewrite>
 
