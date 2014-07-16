@@ -304,17 +304,17 @@ Service.Book = {
 //		Web.get(url, params, callback);
 //	},
 	
-	GetFollowActivity: function(uid, skip, limit, callback){
+	GetFollowActivity: function(uid, skip, limit, callback,error){
 		var url = Service.url + '/getFollowActivity.json';
 		var params = {
 			uid: uid,
 			skip: skip,
 			limit: limit
 		};		
-		Web.get(url, params, callback);
+		Web.get(url, params, callback,error);
 	},
 	
-	GetFollowBooksByUID: function(userID,skip,limit,callback){
+	GetFollowBooksByUID: function(userID,skip,limit,callback,error){
 		var url = Service.url + '/getFollowBooksByUID.json';
 		var params = {
 				uid	:userID
@@ -326,7 +326,7 @@ Service.Book = {
 		if(limit!=null&&limit!=undefined)
 			params.limit = limit;
 		
-		Web.get(url, params, callback);
+		Web.get(url, params, callback,error);
 	},
 	
 	GetFollowPagessByUID: function(userID,skip,limit,callback){

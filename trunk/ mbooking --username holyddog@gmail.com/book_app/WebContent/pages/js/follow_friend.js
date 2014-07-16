@@ -2,7 +2,6 @@ Page.FollowFriend = {
 	url: 'pages/html/follow_friend.html',
 	init: function(params, container) {
 		var self = this;
-		container.find('[data-id=btn_n]').hide();
 		// set toolbar buttons
 
         if(params.fromSignUp){
@@ -13,9 +12,15 @@ Page.FollowFriend = {
             });
             
             container.find('.skipbtn').tap(function() {
+            	Page.loadMenu();
+                Page.open('Explore');
+            });
+            container.find('[data-id=btn_n]').tap(function() {
+            	Page.loadMenu();
                 Page.open('Explore');
             });
         }else{
+    		container.find('[data-id=btn_n]').hide();
             if(Account.fbObject&&Account.fbObject!={}){
                 container.find('.findfriend_box').hide();
                 Page.bodyShowLoading(container.find('.content'), true);
@@ -139,6 +144,7 @@ Page.FollowFriend = {
                             if(params.fromSignUp){
                                 container.find('[data-id=btn_n]').show();
                                 container.find('[data-id=btn_n]').tap(function() {
+                                	Page.loadMenu();
                                     Page.open('Explore');
                                 });
                             }

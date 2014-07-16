@@ -5,6 +5,7 @@ Page.SignUp = {
 		// check authen
 		if (localStorage.getItem('u')) {
 			Account = JSON.parse(localStorage.getItem('u'));
+			Page.loadMenu();
 			Page.open('Explore');
 			
 			return;

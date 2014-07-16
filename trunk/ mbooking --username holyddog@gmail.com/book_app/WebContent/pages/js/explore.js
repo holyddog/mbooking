@@ -46,6 +46,11 @@ Page.Explore = {
 						container.find('.content').unbind();
 						$('.book_con').css('pointer-events', '');
 						$('.user_guide').fadeOut();
+						Service.User.ViewGuide("exguide", Account.userId,
+								function() {
+									delete Account["exguide"];
+								}
+						);
 					}
 				);
 				Service.User.ViewGuide("exguide", Account.userId,

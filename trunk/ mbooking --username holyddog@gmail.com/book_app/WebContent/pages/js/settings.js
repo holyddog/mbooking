@@ -24,6 +24,7 @@ Page.Settings = {
 		container.find('[data-id=sign_out]').click(function() {			
             localStorage.removeItem('u');
 			Account = {};
+			Page.loadMenu();
 			Page.open('Home');
 	   	  if(Device.PhoneGap.isReady){
            		 Device.PhoneGap.logoutFacebook(function(){});
