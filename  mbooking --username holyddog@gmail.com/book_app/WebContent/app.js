@@ -13,7 +13,7 @@ Config = {
 //	FILE_URL: 'http://' + 'instory.me' + '/f',
 	
 	FILE_URL: 'http://' + window.location.hostname + '/res/book',
-	WEB_BOOK_URL : 'http://' + window.location.hostname + '/book/index.html',
+	WEB_BOOK_URL : 'http://' + window.location.hostname + ':8080/book',
 
 	OS: 'iOS',
     OS_Int: 1, //iOS :1, Android :2

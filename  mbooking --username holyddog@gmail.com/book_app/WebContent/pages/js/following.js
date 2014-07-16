@@ -422,7 +422,7 @@ Page.Following = {
 		container.find('.box.border').click(function() {
 			var target = $(this);
 			if (target.data('bid')) {
-				Page.open('Book', true, { bid: target.data('bid'), uid: target.data('uid') });				
+				Page.open('Book', true, { bid: target.data('bid'), uid: target.data('uid'), uid: target.data('key') });				
 			}
 			else {
 				Page.open('Profile', true, { uid: target.data('uid'), back: true });
@@ -455,7 +455,8 @@ Page.Following = {
 		}).click(function() {
 			var bid = $(this).data('bid');
 			var uid = $(this).data('uid');
-			Page.open('Book', true, { bid: bid, uid: uid });
+			var key = $(this).data('key');
+			Page.open('Book', true, { bid: bid, uid: uid, key: key });
 		});
 		panel.find('.panel').click(function() {
 			var uid = $(this).data('uid');
