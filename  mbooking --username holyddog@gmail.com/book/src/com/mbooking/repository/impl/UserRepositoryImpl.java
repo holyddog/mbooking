@@ -296,6 +296,7 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		query.fields().include("pic");
 		query.fields().include("pcount");
 		query.fields().include("lcount");
+		query.fields().include("key");
 		query.fields().include("ccount");
 		
 		List<Book> pubBooks = db.find(query, Book.class);
@@ -311,6 +312,7 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 			query.fields().include("pic");
 			query.fields().include("pcount");
 			query.fields().include("lcount");
+			query.fields().include("key");
 			query.fields().include("ccount");
 			
 			List<Book> priBooks = db.find(query, Book.class);
@@ -375,6 +377,7 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		query.fields().include("pic");
 		query.fields().include("pcount");
 		query.fields().include("lcount");
+		query.fields().include("key");
 		query.fields().include("ccount");
 		
 		return db.find(query, Book.class);
@@ -390,6 +393,7 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		query.fields().include("pic");
 		query.fields().include("pcount");
 		query.fields().include("lcount");
+		query.fields().include("key");
 		query.fields().include("ccount");
 		
 		return db.find(query, Book.class);
@@ -408,6 +412,7 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 			query.fields().include("pic");
 			query.fields().include("pcount");
 			query.fields().include("lcount");
+			query.fields().include("key");
 			query.fields().include("ccount");
 			query.fields().include("author");
 			
