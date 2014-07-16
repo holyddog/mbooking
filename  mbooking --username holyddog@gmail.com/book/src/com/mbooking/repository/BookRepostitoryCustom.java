@@ -39,5 +39,5 @@ public interface BookRepostitoryCustom {
 
 	public List<Book> findBooksByUid(Long uid,Integer pbstate,Integer skip,Integer limit);
 
-	public Book findBookWithPagesByBid(Long bid);
+	public Book findBookWithPagesByBid(Long bid, String key);
 }
