@@ -20,12 +20,12 @@ public class BookView {
 	@Autowired
 	BookRepository bookRepo;
 	
-	@Value("#{request.getParameter('bid')}")
-	private Long bookId;
+	@Value("#{request.getParameter('key')}")
+	private String key;
 	
 	@PostConstruct
 	public void init() {
-		book = bookRepo.findBookWithPagesByBid(bookId);
+		book = bookRepo.findBookWithPagesByBid(null, key);
 		
 		if (book != null) {
 			coverPic = getImage(book.getPic(), "_c");

@@ -10,7 +10,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Book {
 	@Id
 	Long bid;
-	@Indexed
+	@Indexed(unique=true)
+	String key;
 	String title;
 	String desc;
 	String period;
@@ -52,6 +53,14 @@ public class Book {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
 	}
 
 	public String getDesc() {

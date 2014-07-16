@@ -1,7 +1,6 @@
 package com.mbooking.repository.impl;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,7 +16,6 @@ import org.springframework.data.mongodb.core.query.Update;
 import com.mbooking.constant.ConstValue;
 import com.mbooking.model.Book;
 import com.mbooking.model.Favourite;
-import com.mbooking.model.Follow;
 import com.mbooking.model.Like;
 import com.mbooking.model.Notification;
 import com.mbooking.model.Page;
@@ -26,6 +24,7 @@ import com.mbooking.model.User;
 import com.mbooking.model.View;
 import com.mbooking.repository.BookRepostitoryCustom;
 import com.mbooking.util.ConfigReader;
+import com.mbooking.util.Convert;
 import com.mbooking.util.MongoCustom;
 import com.mbooking.util.PushNotification;
 import com.urbanairship.api.push.model.audience.Selectors;
@@ -34,6 +33,14 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 
 	@Autowired
 	private MongoTemplate db;
+	
+	private String genKey() {
+		String key = Convert.uniqueString(10);
+		while (db.findOne(new Query(Criteria.where("key").is(key)), Book.class) != null) {
+			key = Convert.uniqueString(10);
+		}
+		return key;
+	}
 
 	@Override
 	public Book create(Long bookId, String title, String desc, Long fdate, Long tdate,
@@ -108,6 +115,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			Book book = new Book();
 			Long bid = MongoCustom.generateMaxSeq(Book.class, db);
 			
+			book.setKey(genKey());
 			book.setBid(bid);	
 			book.setTitle(title);
 			book.setDesc(desc);
@@ -288,9 +296,15 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 	}
 	
 	@Override
-	public Book findBookWithPagesByBid(Long bid) {
+	public Book findBookWithPagesByBid(Long bid, String key) {
 		try {
-			Criteria criteria = Criteria.where("bid").is(bid);
+			Criteria criteria = null;
+			if (bid != null) {
+				criteria = Criteria.where("bid").is(bid);				
+			}
+			else {
+				criteria = Criteria.where("key").is(key);
+			}
 			Query query = new Query(criteria);
 			query.fields().include("title");
 			query.fields().include("desc");
@@ -748,5 +762,5 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			db.remove(query, Favourite.class);
 		}
 		return true;
-	}	
+	}
 }

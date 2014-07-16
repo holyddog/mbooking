@@ -102,7 +102,7 @@ public class BookJson {
 	Object getBookByUid(
 			@RequestParam(value = "bid") Long bid) {
 
-		Book book = bookRepo.findBookWithPagesByBid(bid);	
+		Book book = bookRepo.findBookWithPagesByBid(bid, null);	
 
 		if (book != null) {
 			return book;
