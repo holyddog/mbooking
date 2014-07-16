@@ -9,11 +9,11 @@ Config = {
 	
 	FB_APP_ID: '370184839777084',
 	
-	WEB_BOOK_URL:'http://119.59.122.38/book',
-	FILE_URL: 'http://' + '119.59.122.38' + '/book_dev_files',
+//	WEB_BOOK_URL:'http://instory.me',
+//	FILE_URL: 'http://' + 'instory.me' + '/f',
 	
-//	FILE_URL: 'http://' + window.location.hostname + '/res/book',
-//	WEB_BOOK_URL : 'http://' + window.location.hostname + '/book/index.html',
+	FILE_URL: 'http://' + window.location.hostname + '/res/book',
+	WEB_BOOK_URL : 'http://' + window.location.hostname + '/book/index.html',
 
 	OS: 'iOS',
     OS_Int: 1, //iOS :1, Android :2
@@ -27,7 +27,7 @@ Config = {
 
 Service = {	
 	url: 'http://' + window.location.hostname + ':8080/book/data'
-//	url: 'http://119.59.122.38/book/data'
+//	url: 'http://instory.me/data'
 };	
 
 Account = {};
