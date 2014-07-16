@@ -217,7 +217,7 @@ Page.Profile = {
 						
 						for (var i = 0; i < data.length; i++) {
 							var b = data[i];
-							ptab3.append(self.getBook(b.bid, b.title, b.pic, b.pcount, b.author, b.lcount, b.ccount));
+							ptab3.append(self.getBook(b.bid, b.title, b.pic, b.pcount, b.author, b.lcount, b.ccount, b.key));
 						}
 						ptab3.find('.book_size').click(function() {
 							var b = $(this);
@@ -242,7 +242,7 @@ Page.Profile = {
 	openBook: function(b, uid) {
 		var bid = b.data('bid');
 		if (bid) {
-			Page.open('Book', true, { bid: bid, uid: uid });
+			Page.open('Book', true, { bid: bid, uid: uid, key: b.data('key') });
 		}
 		else {
 			Page.open('CreateBook', true, { pub: b.data('pub') });
@@ -259,7 +259,7 @@ Page.Profile = {
 		
 		for (var i = 0; i < pubBooks.length; i++) {
 			var b = pubBooks[i];
-			ptab1.append(self.getBook(b.bid, b.title, b.pic, b.pcount, b.author, b.lcount, b.ccount));
+			ptab1.append(self.getBook(b.bid, b.title, b.pic, b.pcount, b.author, b.lcount, b.ccount, b.key));
 		}
 		ptab1.find('.book_size').click(function() {
 			self.openBook($(this), uid);
@@ -277,7 +277,7 @@ Page.Profile = {
 		
 		for (var i = 0; i < priBooks.length; i++) {
 			var b = priBooks[i];
-			ptab2.append(self.getBook(b.bid, b.title, b.pic, b.pcount, b.author, b.lcount, b.ccount));
+			ptab2.append(self.getBook(b.bid, b.title, b.pic, b.pcount, b.author, b.lcount, b.ccount, b.key));
 		}
 		ptab2.find('.book_size').click(function() {
 			self.openBook($(this), uid);
@@ -295,7 +295,7 @@ Page.Profile = {
 		
 		for (var i = 0; i < drBooks.length; i++) {
 			var b = drBooks[i];
-			ptab3.append(self.getBook(b.bid, b.title, b.pic, b.pcount, b.author, b.lcount, b.ccount));
+			ptab3.append(self.getBook(b.bid, b.title, b.pic, b.pcount, b.author, b.lcount, b.ccount, b.key));
 		}
 		ptab3.find('.book_size').click(function() {
 			var b = $(this);
@@ -414,10 +414,11 @@ Page.Profile = {
 	
 	colors: ['#6DCAEC', '#CF9FE7', '#B6DB49', '#FFD060', '#FF7979'],
 	
-	getBook: function(bid, title, cover, count, author, lcount, ccount) {
+	getBook: function(bid, title, cover, count, author, lcount, ccount, key) {
 		var div = document.createElement('div');
 		div.className = 'b book_size';
 		div.dataset.bid = bid;
+		div.dataset.key = key;
 		div.style.backgroundColor = this.colors[Util.getRandomInt(0, this.colors.length - 1)];
 		if (author) {
 			div.dataset.uid = author.uid;

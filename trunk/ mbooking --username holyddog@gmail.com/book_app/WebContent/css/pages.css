@@ -742,14 +742,14 @@
 	font-family: 'Roboto', 'Bangna';
 }
 #page_Book .last_cover .end_box {
-	/*height: 70px;
+	height: 70px;
 	display: block;
 	line-height: 70px;
 	color: #fff;
 	font-size: 180%;
 	text-align: center;
 	font-family: 'Roboto', 'Bangna';
-	font-weight: 400;*/
+	font-weight: 400;
 }
 /*#page_Book .last_cover .end_box {
 	width: 70px;

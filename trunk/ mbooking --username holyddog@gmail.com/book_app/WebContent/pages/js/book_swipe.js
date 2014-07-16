@@ -20,8 +20,13 @@ Page.Book = {
 		});
 		var btnShare = container.find('[data-id=btn_s]');
 		btnShare.tap(function() {
-//			Page.open('Share', true, { bid: params.bid });
-        	window.plugins.socialsharing.share(null, null, null, Config.WEB_BOOK_URL + '/?bid=' + params.bid);
+			var url = Config.WEB_BOOK_URL + '/b/' + params.key;
+			if (Device.PhoneGap.isReady) {
+	        	window.plugins.socialsharing.share(null, null, null, url);				
+			}
+			else {
+				window.open(url);
+			}
 		});	
 		var btnLike = container.find('[data-id=btn_l]');
 		btnLike.tap(function() {

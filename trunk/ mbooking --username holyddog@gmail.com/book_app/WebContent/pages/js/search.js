@@ -177,7 +177,8 @@ Page.Search = {
 					}).click(function() {
 						var bid = $(this).data('bid');
 						var uid = $(this).data('uid');
-						Page.open('Book', true, { bid: bid, uid: uid });
+						var key = $(this).data('key');
+						Page.open('Book', true, { bid: bid, uid: uid, key: key });
 					});
 					panel.find('.panel').click(function() {
 						var uid = $(this).data('uid');
