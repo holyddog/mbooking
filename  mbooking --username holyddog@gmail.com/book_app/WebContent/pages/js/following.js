@@ -206,7 +206,7 @@ Page.Following = {
 	load: function(container) {		
 		var self = this;
 		clearInterval(Page.inv1);
-
+		Page.bodyHideNoItem(container.find('#foll_tab2'));
 		var content = container.find('.content');
 		var panel = container.find('.book_con');
 		panel.empty();
@@ -217,24 +217,40 @@ Page.Following = {
 			
 			if (data.length >= Config.LIMIT_ITEM) {
 				self.runInterval_1(container, panel, container.find('#foll_tab2'));
+			}else if(data.error||data.length==0){
+				Page.bodyHideLoading(content);
+				Page.bodyNoItem(container.find('#foll_tab2'),"No Stroy Found");
+			}
+		},
+		function(error){
+			if(error.responseText=="" && error.status == 200){
+				Page.bodyHideLoading(content);
+				Page.bodyNoItem(container.find('#foll_tab2'),"No Stroy Found");
 			}
 		});
 	},
 	
 	loadActivity: function(container) {
 		var self = this;
-
+		Page.bodyHideNoItem(container.find('#foll_tab1'));
 		var content = container.find('.content');
 		var panel = container.find('.act_con');
 		panel.empty();
 		
 		Page.bodyShowLoading(content);
-		Service.Book.GetFollowActivity(Account.userId, 0, Config.LIMIT_ITEM, function(data) {
+		Service.Book.GetFollowActivity(Account.userId, 0, Config.LIMIT_ITEM,
+		function(data) {
 			Page.bodyHideLoading(content);
 			self.loadActivityItems(data, container, panel);
 			
 			if (data.length >= Config.LIMIT_ITEM) {
 				self.runInterval_2(container, panel, container.find('#foll_tab1'));
+			}
+		},
+		function(error){
+			if(error.responseText=="" && error.status == 200){
+				Page.bodyHideLoading(content);
+				Page.bodyNoItem(container.find('#foll_tab1'),"No Activity Found");
 			}
 		});
 	},

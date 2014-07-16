@@ -127,6 +127,19 @@ textarea {
 	display: none;
 }
 
+.content_noitem {
+	position: absolute; 
+	top: 50%; 
+	width:100%;
+}
+
+.content_noitem .labeltext{
+	height:20px;
+	text-align: center;
+	color:#808080;
+	margin-top: -20px;
+}
+
 #overlay_loading {
 	position: absolute;
 	width: 100%;

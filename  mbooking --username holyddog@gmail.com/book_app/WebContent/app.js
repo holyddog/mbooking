@@ -1127,6 +1127,17 @@ Page = {
 		}
 	},
 	
+	bodyNoItem: function(content,text) {
+		var dv = document.createElement('div');
+		dv.className = 'content_noitem box vertical';
+		dv.innerHTML = "<div class='labeltext'>"+text+"</div>";
+		content.append(dv);
+	},
+
+	bodyHideNoItem: function(content) {
+		content.children('.content_noitem').remove();
+	},
+	
 	btnShowLoading: function(btn,white) {
 		var cv = document.createElement('canvas');
 	    cv.id = "cv_button";
@@ -1228,7 +1239,8 @@ Web = {
                                 }
                            }
                            else{
-                               console.warn('Internal Error on "GET": ' + xhr.responseText);
+                        	   console.log(xhr);
+                               console.log('Internal Error on "GET": ' + xhr.responseText);
                                if (typeof error == 'function') {
                                 error(xhr);
                                }
