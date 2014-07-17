@@ -5,17 +5,16 @@ Config = {
 	SLIDE_DELAY: 250,
 	FADE_DELAY: 250,
 	INTERVAL_DELAY: 30000, //60000, // 1 minute
-	SERVICE_TIMEOUT:8000,
+	SERVICE_TIMEOUT:15000,
 	
 	FB_APP_ID: '370184839777084',
 	
 	WEB_BOOK_URL:'http://instory.me',
 	FILE_URL: 'http://' + 'instory.me' + '/f',
 	
-
 //	FILE_URL: 'http://' + window.location.hostname + '/res/book',
+	FILE_URL: 'http://119.59.122.38/book_dev_files',
 //	WEB_BOOK_URL : 'http://' + window.location.hostname + ':8080/book',
-
 
 	OS: 'iOS',
     OS_Int: 1, //iOS :1, Android :2
@@ -28,8 +27,8 @@ Config = {
 };
 
 Service = {	
-//	url: 'http://' + window.location.hostname + ':8080/book/data'
-	url: 'http://instory.me/data'
+	url: 'http://' + window.location.hostname + ':8080/book/data'
+//	url: 'http://instory.me/data'
 };	
 
 Account = {};
@@ -77,6 +76,8 @@ Util = {
 		return Config.FILE_URL + file.substring(0, file.lastIndexOf('.')) + suffix + file.substring(file.lastIndexOf('.'), file.length);
 	}
 };
+
+var droptimer ={};
 
 MessageBox = {
 	confirm: function(config) {
@@ -139,19 +140,33 @@ MessageBox = {
 		var temp = dd.className;
 		dd.className = temp + ' warning show';
 		var retry_btn = $('#dd_message').find('.retry_btn');
-		retry_btn.show();
-		retry_btn.tap(function(){
-			dd.className = temp;
-			dd.style.zIndex = -1;
+		
+		clearTimeout(droptimer);
+		
+		if(retry){
+			retry_btn.show();
+			retry_btn.tap(function(){
+				dd.className = temp;
+				dd.style.zIndex = -1;
+				retry();	
+				retry_btn.hide();
+			});
+		}else{
 			
-			if(retry)
-			retry();	
-		});
+			droptimer = setTimeout(function() {
+				dd.className = temp;
+				setTimeout(function() {
+					dd.style.zIndex = -1;
+				}, 300);
+			}, 3000);
+			
+		}
 	},
 	hide_drop:function(){
         var dd = document.getElementById('dd_message');
         dd.className = ((dd.className+"").replace(' warning','')).replace(' show','');
         dd.style.zIndex = -1;
+        $('#dd_message').find('.retry_btn').hide();
 	}
 };
 
@@ -1215,7 +1230,7 @@ Web = {
                 var istimeout=false;
                 var getreq_timer = setTimeout(
                     function(){
-                        if(!istimeout&&retry){
+                        if(!istimeout){
                             MessageBox.drop_retry('Connection time out please try again',retry);
                             istimeout = true;
                             if(notconnect)
