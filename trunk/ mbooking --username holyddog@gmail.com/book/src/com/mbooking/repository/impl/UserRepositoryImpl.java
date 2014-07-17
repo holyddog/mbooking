@@ -88,6 +88,7 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		user.setExguide(true);
 		user.setBguide(true);
 		user.setEpguide(true);
+		user.setFguide(true);
 		db.insert(user);
 		user.setPwd(null); // remove password before return data
 		
@@ -141,6 +142,7 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		user.setExguide(true);
 		user.setBguide(true);
 		user.setEpguide(true);
+		user.setFguide(true);
 
 		if(fbid!=null){
 			FBobj fbobj = new FBobj();
@@ -539,6 +541,9 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		
 		if(guide.equals("epguide"))
 			update.unset("epguide");
+		
+		if(guide.equals("fguide"))
+			update.unset("fguide");
 		
 		db.updateFirst(new Query(Criteria.where("uid").is(uid)), update, User.class);
 		

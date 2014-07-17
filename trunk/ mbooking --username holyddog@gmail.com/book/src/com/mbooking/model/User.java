@@ -30,8 +30,9 @@ public class User {
 	Integer tcount; // Total book count
 
 	Boolean exguide;	//Explore Guide
-	Boolean bguide;	//Explore Guide
-	Boolean epguide;	//Explore Edit Page
+	Boolean bguide;	//Book Guide
+	Boolean epguide;	//Edit Page Guide
+	Boolean fguide;	//
 
 	Object[] following;
 	Object[] everfoll;
@@ -266,5 +267,13 @@ public class User {
 
 	public void setIsRecvNot(Boolean isRecvNot) {
 		this.isRecvNot = isRecvNot;
+	}
+	
+	public Boolean getFguide() {
+		return fguide;
+	}
+
+	public void setFguide(Boolean fguide) {
+		this.fguide = fguide;
 	}
 }
