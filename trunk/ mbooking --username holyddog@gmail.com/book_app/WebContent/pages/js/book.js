@@ -35,7 +35,7 @@ Page.Book = {
 			}
 		});
 		
-		if(window.navigator.onLine){
+		if(/*window.navigator.onLine*/true){
 			if(Account.bguide){
 				$('.user_guide').tap(
 					function(){

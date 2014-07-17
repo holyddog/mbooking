@@ -4,7 +4,7 @@ init: function(params, container) {
     var self = this;
     Page.bodyShowLoading(container);
    
-    if(window.navigator.onLine){
+    if(/*window.navigator.onLine*/true){
 		if(Account.bguide){
 			$('.user_guide').tap(
 				function(){

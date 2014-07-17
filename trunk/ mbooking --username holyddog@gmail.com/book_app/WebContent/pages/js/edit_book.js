@@ -16,7 +16,7 @@ Page.EditBook = {
 			});
 		});
 		
-		if(window.navigator.onLine){
+		if(/*window.navigator.onLine*/true){
 			if(Account.epguide){		
 				setTimeout(function(){
 					var add_btn = container.find('[data-id=link_a]');

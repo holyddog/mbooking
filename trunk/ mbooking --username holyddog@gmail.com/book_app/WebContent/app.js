@@ -1205,7 +1205,7 @@ Web = {
 	get: function(url, params, success, error,notconnect,retry,wait) {
         var doget = function(){
         	MessageBox.hide_drop();
-            if(navigator.onLine){
+            if(/*navigator.onLine*/true){
                 var istimeout=false;
                 var getreq_timer = setTimeout(
                     function(){
@@ -1258,7 +1258,7 @@ Web = {
                 MessageBox.drop_retry('No Internet Connection',
                     function(){
                             var timeout = 300;
-                            if(navigator.onLine){
+                            if(/*navigator.onLine*/true){
                                 timeout = 5000;
                             }
                             
@@ -1280,7 +1280,7 @@ Web = {
         doget();
     },
     update: function(url, params, success, error) {
-        if(navigator.onLine){
+        if(/*navigator.onLine*/true){
             $.ajax({
                    url: url,
                    success: success,
@@ -1302,7 +1302,7 @@ Web = {
         }
     },
     post: function(url, params, success, error) {
-        if(navigator.onLine){
+        if(/*navigator.onLine*/true){
             $.ajax({
                    type: 'POST',
                    url: url,
@@ -1589,6 +1589,7 @@ document.addEventListener("deviceready", function() {
 	Device.PhoneGap.isReady = true;
 	Device.PhoneGap.PictureSourceType = navigator.camera.PictureSourceType;
 	Device.PhoneGap.DestinationType = navigator.camera.DestinationType;
+	
 //    PushNotification= cordova.require('cordova/PushNotification');
             
 //                          alert();
