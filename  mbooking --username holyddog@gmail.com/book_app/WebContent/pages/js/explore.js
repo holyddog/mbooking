@@ -27,7 +27,7 @@ Page.Explore = {
 			Page.open('Search', true);
 		});	
 		
-		if (window.navigator.onLine) {
+		if (/*window.navigator.onLine*/true) {
 			if (Account.exguide) {
 				container.find('.book_con').css('pointer-events', 'none');
 				var menu_btn = container.find('[data-id=btn_m]');

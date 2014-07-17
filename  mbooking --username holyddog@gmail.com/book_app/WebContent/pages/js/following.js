@@ -31,7 +31,7 @@ Page.Following = {
 			Page.open('Notifications', true);
 		});	
 		
-		if(window.navigator.onLine){
+		if(/*window.navigator.onLine*/true){
 		$('.user_guide').css('pointer-events','all');
 			if(Account.fguide){
 				$('.user_guide').tap(
