@@ -4,18 +4,18 @@ Config = {
 	LIMIT_ITEM: 20,
 	SLIDE_DELAY: 250,
 	FADE_DELAY: 250,
+	
 	INTERVAL_DELAY: 30000, //60000, // 1 minute
 	SERVICE_TIMEOUT:15000,
 	
 	FB_APP_ID: '370184839777084',
 	
-	WEB_BOOK_URL:'http://instory.me',
-	FILE_URL: 'http://' + 'instory.me' + '/f',
+//	WEB_BOOK_URL:'http://instory.me',
+//	FILE_URL: 'http://' + 'instory.me' + '/f',
 	
-//	FILE_URL: 'http://' + window.location.hostname + '/res/book',
-	FILE_URL: 'http://119.59.122.38/book_dev_files',
-//	WEB_BOOK_URL : 'http://' + window.location.hostname + ':8080/book',
-
+	FILE_URL: 'http://' + window.location.hostname + '/res/book',
+	WEB_BOOK_URL : 'http://' + window.location.hostname + ':8080/book',
+	
 	OS: 'iOS',
     OS_Int: 1, //iOS :1, Android :2
     
@@ -1080,19 +1080,12 @@ Page = {
 			}
 			
 			var cv = document.getElementById('cv_loading');
-			var ctx = cv.getContext('2d');
-			
-			var img = new Image();
-			img.onload = function() {
-				ctx.drawImage(img, 0, 0, 720, 40);
-
-				var i = 1;
-				Page.interval = setInterval(function() {
-					ctx.drawImage(img, (i % 18) * -40, 0, 720, 40);
-					i++;
-				}, 80);
-			};
-			img.src = 'images/circle.png';
+			cv.style.backgroundImage = 'url(images/circle.png)';
+			var i = 1;
+			Page.interval = setInterval(function() {
+				cv.style.backgroundPosition = ((i % 18) * -40) + 'px';
+				i++;
+			}, 80);
 		}, 0);
 	},
 	hideLoading: function() {
@@ -1109,29 +1102,18 @@ Page = {
 	},
 	
 	bodyShowLoading: function(content, white) {
-		var cv = document.createElement('canvas');
+		var cv = document.createElement('div');
 		cv.className = 'content_loading';
-		cv.width = 40;
-		cv.height = 40;
+		cv.style.width = '40px';
+		cv.style.height = '40px';
+		cv.style.backgroundImage = 'url(images/circle.png)';
 		content.append(cv);
-		
-		var ctx = cv.getContext('2d');		
-		var img = new Image();
-		img.onload = function() {
-			ctx.drawImage(img, 0, 0, 720, 40);
 
-			var i = 1;
-			Page.bodyInterval = setInterval(function() {
-				ctx.drawImage(img, (i % 18) * -40, 0, 720, 40);
-				i++;
-			}, 80);
-		};
-		if (white) {
-			img.src = 'images/circle.png';
-		}
-		else {
-			img.src = 'images/circle_g.png';			
-		}
+		var i = 1;
+		Page.bodyInterval = setInterval(function() {
+			cv.style.backgroundPosition = ((i % 18) * -40) + 'px';
+			i++;
+		}, 80);
 	},
 	
 	bodyHideLoading: function(content) {
@@ -1140,7 +1122,7 @@ Page = {
 			Page.bodyInterval = undefined;
 		}
 		if (content) {
-			content.children('canvas').remove();
+			content.find('.content_loading').remove();
 		}
 	},
 	
@@ -1159,33 +1141,34 @@ Page = {
 		content.children('.content_noitem').remove();
 	},
 	
-	btnShowLoading: function(btn,white) {
-		var cv = document.createElement('canvas');
+	btnShowLoading: function(btn, white) {
+		var cv = document.createElement('div');
 	    cv.id = "cv_button";
-	    cv.width = 20;
-	    cv.height = 20;
-	    cv.style.margin= '15px 0';
+	    cv.style.width = '20px';
+	    cv.style.height = '20px';
+	    cv.style.margin= '15px';
+	    cv.style.backgroundImage = 'url(images/circle_s.png)';
 
 	    btn.children[0].style.display = 'none';
-	    btn.appendChild(cv);	    
+	    btn.appendChild(cv);    
+	    
+	    var i = 1;
+		Page.btnInterval = setInterval(function() {
+			cv.style.backgroundPosition = ((i % 18) * -20) + 'px';
+			i++;
+		}, 80);
 		
 		//var cv = document.getElementById('cv_button');
-		var ctx = cv.getContext('2d');
-		
-		var img = new Image();
-		img.onload = function() {
-			ctx.drawImage(img, 0, 0, 360, 20);
-
-			var i = 1;
-			Page.btnInterval = setInterval(function() {
-				ctx.drawImage(img, (i % 18) * -20, 0, 360, 20);
-				i++;
-			}, 80);
-		};
-		if(white)
-			img.src = 'images/circle_w.png';
-		else
-			img.src = 'images/circle_s.png';
+//		var ctx = cv.getContext('2d');
+//		
+//		var img = new Image();
+//		img.onload = function() {
+//			ctx.drawImage(img, 0, 0, 360, 20);
+//		};
+//		if(white)
+//			img.src = 'images/circle_w.png';
+//		else
+//			img.src = 'images/circle_s.png';
 	},
 	btnHideLoading: function(btn) {
 		if (Page.btnInterval) {
