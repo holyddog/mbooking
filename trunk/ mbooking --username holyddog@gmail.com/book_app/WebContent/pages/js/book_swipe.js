@@ -90,6 +90,8 @@ Page.Book = {
 		Service.Book.GetBookData(params.bid, params.uid, Account.userId, function(data) {
 			Page.bodyHideLoading(content);
 			
+			content.find('.end_box').show();
+			
 			if (!data.error) {
 				if (data.liked) {
 					btnLike.addClass('liked');				
