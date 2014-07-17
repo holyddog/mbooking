@@ -349,7 +349,11 @@ Page.Profile = {
 			});
 			statPanel.find('[data-link=following]').click(function() {
 				Page.open('Follows', true, { uid: uid, follower: false });
-			});
+			});			
+
+			profile_header.style.height = profile_header.offsetWidth + 'px';
+			var minHeight = container.find('.content').height() - container.find('#profile_header').height() - container.find('#xbar').height();
+			container.find('.tpage').css('min-height', (minHeight - 10) + 'px');
 								
 			self.loadPublicBooks(data.pubBooks, uid, container);
 			
@@ -404,8 +408,6 @@ Page.Profile = {
 				}
 				textBar.text('Books by ' + user.dname).show();
 			}
-
-			profile_header.style.height = profile_header.offsetWidth + 'px';
 		
 		}, function() {
 			Page.bodyHideLoading(content);			
