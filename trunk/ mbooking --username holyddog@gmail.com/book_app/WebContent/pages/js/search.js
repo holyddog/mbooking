@@ -153,7 +153,7 @@ Page.Search = {
 						var div = document.createElement('div');
 						div.className = 'book';
 						
-						div.appendChild(Page.Profile.getBook(b.bid, b.title, b.pic, b.pcount, b.author, b.lcount, b.ccount));
+						div.appendChild(Page.Profile.getBook(b.bid, b.title, b.pic, b.pcount, b.author, b.lcount, b.ccount, b.key));
 						div.appendChild(Page.Following.getAuthor(b.author.uid, b.author.dname, b.author.pic));
 						
 						bcon.appendChild(div);
