@@ -240,6 +240,7 @@ Page.EditBook = {
 		if (bid) {
 			Service.Book.GetBook(bid, Account.userId, function(data) { 
 				self.updateBook(container, data.title, data.desc, data.pub);
+				self.key = data.key;
 				container.find('.pcount span').text(data.pcount);
 				container.find('.book_size').css('background-image', 'url(' + Util.getImage(data.pic, 2) + ')');
 				book = data;
@@ -269,10 +270,11 @@ Page.EditBook = {
 	bookPages: [],
 	ratio: 2,
 	move: false,
+	key: null,
 	
 	fbPost: function(bid, title, desc, pic, callback) {
 		var post = function() {
-			var link = Config.WEB_BOOK_URL + '?bid=' + bid;
+			var link = Config.WEB_BOOK_URL + '/b/' + self.key;
 			
 			var privacy = {
 				"value" : "EVERYONE"
@@ -285,7 +287,7 @@ Page.EditBook = {
 				description : desc,
 				picture : pic,
 
-				caption : "The Story Application",
+				caption : "instory.me",
 				privacy: privacy
 	        };
 	    	var cb = function(response) {	    		
