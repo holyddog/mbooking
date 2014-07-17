@@ -12,8 +12,10 @@ Config = {
 	WEB_BOOK_URL:'http://instory.me',
 	FILE_URL: 'http://' + 'instory.me' + '/f',
 	
+
 //	FILE_URL: 'http://' + window.location.hostname + '/res/book',
 //	WEB_BOOK_URL : 'http://' + window.location.hostname + ':8080/book',
+
 
 	OS: 'iOS',
     OS_Int: 1, //iOS :1, Android :2
@@ -563,7 +565,7 @@ Page = {
 		
 		bar.appendChild(getLink('new', 'Create', 'icons/add.png'));
 		bar.appendChild(getSep());
-		bar.appendChild(getLink('edit', 'Edit (0)', 'icons/pencil.png'));
+		bar.appendChild(getLink('edit', 'Draft (0)', 'icons/pencil.png'));
 		
 //		$(bar).insertBefore(target.find('.content'));
 		
@@ -1127,10 +1129,14 @@ Page = {
 		}
 	},
 	
-	bodyNoItem: function(content,text) {
+	bodyNoItem: function(content,text,margin_top) {
 		var dv = document.createElement('div');
 		dv.className = 'content_noitem box vertical';
-		dv.innerHTML = "<div class='labeltext'>"+text+"</div>";
+		dv.innerHTML = "<div class='labeltext'"+(margin_top?"style='margin-top:"+margin_top+"'":"")+">"+text+"</div>";
+		if(margin_top){
+			dv.style.top=0;
+		}
+		
 		content.append(dv);
 	},
 
