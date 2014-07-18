@@ -446,8 +446,11 @@ Page.Following = {
 			this.bookSize.w = (panel[0].offsetWidth / ratio) - 15;
 			this.bookSize.h = (this.bookSize.w * 4) / 3;
 			this.loaded = true;
-		}
-		
+		}		
+
+		container.find('.book').css({
+			width: this.bookSize.w + 'px'
+		});
 		container.find('.book_size').css({
 			width: this.bookSize.w + 'px',
 			height: this.bookSize.h + 'px',
