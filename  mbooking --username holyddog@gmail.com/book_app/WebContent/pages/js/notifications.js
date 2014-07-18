@@ -122,20 +122,24 @@ Page.Notifications = {
 		notfDiv.appendChild(uimage);
 		notfDiv.appendChild(msg);
 		
-		if(data.ntype==1&&(Account.following).indexOf(data.who.uid)==-1){
-			
-			uimage.dataset.href = '#Profile?append=true&uid=' + user.uid + '&back=true';
-			msg.dataset.href = '#Profile?append=true&uid=' + user.uid + '&back=true';
-	
+
+		if (data.ntype == 1 && Account.following && (Account.following).indexOf(data.who.uid) == -1) {
+
+			uimage.dataset.href = '#Profile?append=true&uid=' + user.uid
+					+ '&back=true';
+			msg.dataset.href = '#Profile?append=true&uid=' + user.uid
+					+ '&back=true';
+
 			var follbtn = document.createElement('div');
 			follbtn.className = 'follow_btn';
-			follbtn.dataset.uid=user.uid;
-			
+			follbtn.dataset.uid = user.uid;
+
 			follbtn.innerHTML = "+ Follow";
-			
+
 			notfDiv.appendChild(follbtn);
-		}else if(data.ntype==1){
-			notfDiv.dataset.href = '#Profile?append=true&uid=' + user.uid + '&back=true';
+		} else if (data.ntype == 1) {
+			notfDiv.dataset.href = '#Profile?append=true&uid=' + user.uid
+					+ '&back=true';
 		}
 		
 		return notfDiv;			
