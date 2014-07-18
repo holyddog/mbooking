@@ -16,6 +16,16 @@ Page.Search = {
 			
 			container.find('.res_panel').removeClass('active');
 			container.find('#' + link.data('link')).addClass('active');
+			
+			if(link.data('link')=="user_tab"){
+				container.find('.input_search').attr("placeholder", "Search for user");
+			}
+			else if(link.data('link')=="book_tab"){
+				container.find('.input_search').attr("placeholder", "Search for story");
+			}
+			else if(link.data('link')=="tag_tab"){
+				container.find('.input_search').attr("placeholder", "Search for tag");
+			}
 		});
 		
 		var inputText = container.find('.input_search');
@@ -82,7 +92,13 @@ Page.Search = {
 		h1.innerText = user.dname;
 		var stat = document.createElement('div');
 		stat.className = 'stat';
-		stat.innerHTML = '@' + user.uname + '<span>' + ((user.pbcount)? user.pbcount: 0) + ' Books</span>';
+		
+		var count = 0;
+		if(user.pbcount){
+			count = user.pbcount;
+		}
+
+		stat.innerHTML = '@' + user.uname + '<span>' + count + (count>1?' Stories':' Story')+'</span>';
 		
 		info.appendChild(h1);
 		info.appendChild(stat);
@@ -106,7 +122,8 @@ Page.Search = {
 		label.innerText = '#' + tag;
 		var c = document.createElement('div');
 		c.className = 'count';
-		c.innerText = count + ' Books';
+
+		c.innerText = count + (count>1?' Stories':' Story');
 		
 		div.appendChild(label);
 		div.appendChild(c);
@@ -124,21 +141,29 @@ Page.Search = {
 			var type = panel.data('type');			
 
 			if (type == 'user') {
+				Page.bodyHideNoItem(panel);
 				Page.bodyShowLoading(panel, true);
 				
 				Service.Search.Users(keyword, function(data) {
 					Page.bodyHideLoading(panel);
 					
-					for (var i = 0; i < data.length; i++) {
-						panel.append(self.getUser(data[i]));
+					if(data.length!=0){
+						for (var i = 0; i < data.length; i++) {
+							panel.append(self.getUser(data[i]));
+						}
+						
+						panel.find('.user_item').click(function() {
+							var uid = $(this).data('uid');
+							Page.open('Profile', true, { back: true, uid: uid });
+						});
+					}
+					else{
+						Page.bodyNoItem(panel,"Find user not found","20%");
 					}
 					
-					panel.find('.user_item').click(function() {
-						var uid = $(this).data('uid');
-						Page.open('Profile', true, { back: true, uid: uid });
-					});
 				});
 			} else if (type == 'book') {
+				Page.bodyHideNoItem(panel);
 				Page.bodyShowLoading(panel, true);
 				
 				Service.Search.Books(keyword, function(data) {
@@ -147,58 +172,71 @@ Page.Search = {
 					var bcon = document.createElement('div');
 					bcon.className = 'book_con';
 					
-					for (var i = 0; i < data.length; i++) {
-						var b = data[i];
+					if(data.length!=0){
+					
+						for (var i = 0; i < data.length; i++) {
+							var b = data[i];
+							
+							var div = document.createElement('div');
+							div.className = 'book';
+							
+							div.appendChild(Page.Profile.getBook(b.bid, b.title, b.pic, b.pcount, b.author, b.lcount, b.ccount, b.key));
+							div.appendChild(Page.Following.getAuthor(b.author.uid, b.author.dname, b.author.pic));
+							
+							bcon.appendChild(div);
+						}
+						panel.append(bcon);
 						
-						var div = document.createElement('div');
-						div.className = 'book';
+						var panelWidth = panel[0].offsetWidth;
 						
-						div.appendChild(Page.Profile.getBook(b.bid, b.title, b.pic, b.pcount, b.author, b.lcount, b.ccount, b.key));
-						div.appendChild(Page.Following.getAuthor(b.author.uid, b.author.dname, b.author.pic));
+						var ratio = 2;
+						if (panelWidth >= 600) {
+							ratio = 3;
+						}
 						
-						bcon.appendChild(div);
+						var w = (panelWidth / ratio) - 15;
+						var h = (w * 4) / 3;
+						panel.find('.book_size').css({
+							width: w + 'px',
+							height: h + 'px',
+							margin: 0,
+							float: 'none'
+						}).click(function() {
+							var bid = $(this).data('bid');
+							var uid = $(this).data('uid');
+							var key = $(this).data('key');
+							Page.open('Book', true, { bid: bid, uid: uid, key: key });
+						});
+						panel.find('.panel').click(function() {
+							var uid = $(this).data('uid');
+							Page.open('Profile', true, { uid: uid, back: true });
+						});
+					
 					}
-					panel.append(bcon);
-					
-					var panelWidth = panel[0].offsetWidth;
-					
-					var ratio = 2;
-					if (panelWidth >= 600) {
-						ratio = 3;
+					else{
+						Page.bodyNoItem(panel,"Find story not found","20%");
 					}
-					
-					var w = (panelWidth / ratio) - 15;
-					var h = (w * 4) / 3;
-					panel.find('.book_size').css({
-						width: w + 'px',
-						height: h + 'px',
-						margin: 0,
-						float: 'none'
-					}).click(function() {
-						var bid = $(this).data('bid');
-						var uid = $(this).data('uid');
-						var key = $(this).data('key');
-						Page.open('Book', true, { bid: bid, uid: uid, key: key });
-					});
-					panel.find('.panel').click(function() {
-						var uid = $(this).data('uid');
-						Page.open('Profile', true, { uid: uid, back: true });
-					});
 				});
 			} else if (type == 'tag') {
+				Page.bodyHideNoItem(panel);
 				Page.bodyShowLoading(panel, true);
 				
 				Service.Search.Tags(keyword, function(data) {
 					Page.bodyHideLoading(panel);
 					
-					for (var i = 0; i < data.length; i++) {
-						var tag = data[i];
-						panel.append(self.getTag(tag.tag, tag.count));
+					if(data.length!=0){
+						for (var i = 0; i < data.length; i++) {
+							var tag = data[i];
+							panel.append(self.getTag(tag.tag, tag.count));
+						}
+						panel.find('.tag_item').click(function() {
+							var tag = $(this).data('tag');
+							Page.open('Tag', true, { tag: tag });
+						});
 					}
-					panel.find('.tag_item').click(function() {
-						var tag = $(this).data('tag');
-						Page.open('Tag', true, { tag: tag });
-					});
+					else{
+						Page.bodyNoItem(panel,"Find story by tag not found","20%");
+					}
 				});
 			}
 		}

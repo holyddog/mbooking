@@ -183,12 +183,18 @@ Page.Profile = {
 			
 			if (ptab.index() == 2) {
 				var content = container.find('.content');
-				var ptab2 = container.find('#ptab2').css('padding-bottom', '75px');
+				var ptab2 = container.find('#ptab2');
+				
+				if(ptab2.find('.b').length!=0)
+				ptab2.css('padding-bottom', '75px');
+				
 				var start2 = ptab2.find('.b').length;
 				var more2 = ptab2.find('.btn_more');
 				Page.inv2 = setInterval(function() {
 					if (!ptab2.hasClass('loading') && content[0].scrollHeight - content[0].scrollTop <= content[0].offsetHeight) {
 						ptab2.addClass('loading');
+						
+						if(ptab2.find('.b').length!=0)
 						Page.bodyShowLoading(more2);
 						
 						Service.User.GetPrivateBooks(uid, start2, Config.LIMIT_ITEM, function(data) { 
@@ -207,23 +213,43 @@ Page.Profile = {
 			}
 			else if (ptab.index() == 3) {
 				var ptab3 = container.find('#ptab3');
+				
+				Page.bodyHideNoItem(ptab3);
+				ptab3.height("");
+				
 				if (ptab3.find('.b').length == 0) {
 					var minHeight = container.find('.content').height() - container.find('#profile_header').height() - container.find('#xbar').height();
 					ptab3.css('min-height', (minHeight - 20) + 'px');
 					
 					Page.bodyShowLoading(ptab3);
 					Service.User.GetFavBooks(uid, 0, 100, function(data) { 
-						Page.bodyHideLoading(ptab3);
 						
-						for (var i = 0; i < data.length; i++) {
-							var b = data[i];
-							ptab3.append(self.getBook(b.bid, b.title, b.pic, b.pcount, b.author, b.lcount, b.ccount, b.key));
+						if(data.length!=0){
+							Page.bodyHideLoading(ptab3);
+							for (var i = 0; i < data.length; i++) {
+								var b = data[i];
+								ptab3.append(self.getBook(b.bid, b.title, b.pic, b.pcount, b.author, b.lcount, b.ccount, b.key));
+							}
+							
+							ptab3.find('.book_size').click(function() {
+								var b = $(this);
+								self.openBook(b, b.data('uid'));
+							});
+							
+							self.resizeBook(ptab3);	
+
 						}
-						ptab3.find('.book_size').click(function() {
-							var b = $(this);
-							self.openBook(b, b.data('uid'));
-						});
-						self.resizeBook(ptab3);					
+						else{
+							ptab3.height(((window.innerHeight - 400) +"px"));
+							Page.bodyHideLoading(ptab3);
+							setTimeout(
+								function(){
+									Page.bodyNoItem(ptab3,"You have no favourite story");
+								},
+								200
+							);
+								
+						}
 					});
 				}
 			}
@@ -316,7 +342,13 @@ Page.Profile = {
 		var content = container.find('.content');
 		
 		Page.bodyShowLoading(content);
+		Page.bodyHideNoItem(content.find('#ptab1'));
+		Page.bodyHideNoItem(content.find('#ptab2'));
+		content.find('#ptab1').height("");
+		content.find('#ptab2').height("");
+		
 		Service.User.GetProfile(uid, Account.userId, function(data) {
+			console.log(data);
 			Page.bodyHideLoading(content);
 			
 			profile_view.style.display = 'block';
@@ -355,30 +387,36 @@ Page.Profile = {
 			var minHeight = container.find('.content').height() - container.find('#profile_header').height() - container.find('#xbar').height();
 			container.find('.tpage').css('min-height', (minHeight - 10) + 'px');
 								
-			self.loadPublicBooks(data.pubBooks, uid, container);
-			
-			if (data.pubBooks.length + 1 == Config.LIMIT_ITEM) {
-				var ptab1 = container.find('#ptab1').css('padding-bottom', '75px');
-				var start1 = ptab1.find('.b').length;
-				var more1 = ptab1.find('.btn_more');
-				Page.inv1 = setInterval(function() {
-					if (!ptab1.hasClass('loading') && content[0].scrollHeight - content[0].scrollTop <= content[0].offsetHeight) {
-						ptab1.addClass('loading');
-						Page.bodyShowLoading(more1);
-						
-						Service.User.GetPublicBooks(uid, start1, Config.LIMIT_ITEM, function(data) { 
-							self.loadPublicBooks(data, uid, container, true);
-							start1 += data.length;
-							ptab1.removeClass('loading');
-							Page.bodyHideLoading(more1);
+			if(data.pubBooks.length!=0){
+				self.loadPublicBooks(data.pubBooks, uid, container);
+				
+				if (data.pubBooks.length + 1 == Config.LIMIT_ITEM) {
+					var ptab1 = container.find('#ptab1').css('padding-bottom', '75px');
+					var start1 = ptab1.find('.b').length;
+					var more1 = ptab1.find('.btn_more');
+					Page.inv1 = setInterval(function() {
+						if (!ptab1.hasClass('loading') && content[0].scrollHeight - content[0].scrollTop <= content[0].offsetHeight) {
+							ptab1.addClass('loading');
+							Page.bodyShowLoading(more1);
 							
-							if (data.length < Config.LIMIT_ITEM) {
-								clearInterval(Page.inv1);
-								ptab1.css('padding-bottom', '5px');
-							}
-						});
-					}
-				}, 1);
+							Service.User.GetPublicBooks(uid, start1, Config.LIMIT_ITEM, function(data) { 
+								self.loadPublicBooks(data, uid, container, true);
+								start1 += data.length;
+								ptab1.removeClass('loading');
+								Page.bodyHideLoading(more1);
+								
+								if (data.length < Config.LIMIT_ITEM) {
+									clearInterval(Page.inv1);
+									ptab1.css('padding-bottom', '5px');
+								}
+							});
+						}
+					}, 1);
+				}
+			}
+			else{
+				content.find('#ptab1').height(((window.innerHeight - 400) +"px"));
+				Page.bodyNoItem(content.find('#ptab1'),"You have no published story");
 			}
 
 			container.find('#xbar .flex1').hide();
@@ -393,8 +431,13 @@ Page.Profile = {
 				container.find('#xbar .flex1').show();
 				textBar.hide();
 				
-				self.loadPrivateBooks(data.priBooks, uid, container);
-				
+				if(data.priBooks.length!=0){
+					self.loadPrivateBooks(data.priBooks, uid, container);
+				}
+				else{
+					content.find('#ptab2').height(((window.innerHeight - 400) +"px"));
+					Page.bodyNoItem(content.find('#ptab2'),"You have no private story");
+				}
 //				self.loadDraftBooks(data.drBooks, uid, container);
 			}
 			else {
@@ -409,8 +452,10 @@ Page.Profile = {
 				textBar.text('Books by ' + user.dname).show();
 			}
 		
-		}, function() {
-			Page.bodyHideLoading(content);			
+		}, function(error) {
+			Page.bodyHideLoading(content);	
+			content.find('#ptab1').height(((window.innerHeight - 400) +"px"));
+			Page.bodyNoItem(content.find('#ptab1'),"You have no published story");
 		});
 	},
 	

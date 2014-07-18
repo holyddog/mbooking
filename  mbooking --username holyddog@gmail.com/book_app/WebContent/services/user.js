@@ -156,7 +156,7 @@ Service.User = {
 		};
 		Web.post(url, params, callback);
 	},
-	GetNotificationByUid: function(uid,skip,limit, callback) {
+	GetNotificationByUid: function(uid,skip,limit, callback,error) {
 		var url = Service.url + '/getNotificationByUid.json';
 		var params = {
 			uid: uid
@@ -168,7 +168,7 @@ Service.User = {
 		if(limit!=null&&limit!=undefined)
 			params.limit = limit;
 		
-		Web.get(url, params, callback);
+		Web.get(url, params, callback,error);
 	},
 	CountNotifications: function(uid, callback) {
 		var url = Service.url + '/countNotifications.json';

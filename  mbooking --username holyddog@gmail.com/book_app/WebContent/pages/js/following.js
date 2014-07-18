@@ -42,6 +42,7 @@ Page.Following = {
 				Service.User.ViewGuide("fguide", Account.userId,
 					function(){
 						delete Account["fguide"];
+						localStorage.setItem("u", JSON.stringify(Account));
 					}
 				);
 			}else{

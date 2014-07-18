@@ -131,6 +131,7 @@ textarea {
 	position: absolute; 
 	top: 50%; 
 	width:100%;
+	z-index:10;
 }
 
 .content_noitem .labeltext{
