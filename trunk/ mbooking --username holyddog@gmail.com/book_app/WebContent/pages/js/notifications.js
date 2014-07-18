@@ -32,6 +32,13 @@ Page.Notifications = {
 					list.append(self.createItem(c));
 				} 
 				
+				$('.notf_item').css('visibility','hidden');
+
+                setTimeout(function(){
+                	$('.notf_item').css('padding','10px');
+                	$('.notf_item').css('visibility','');
+                },1);
+				
 				list.find('.notf_item').bind('click', function() {
 					var item = $(this);
 					if(item.data('href'))
