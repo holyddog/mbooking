@@ -274,6 +274,7 @@ Page.EditBook = {
 	key: null,
 	
 	fbPost: function(bid, title, desc, pic, callback) {
+		var self = this;
 		var post = function() {
 			var link = Config.WEB_BOOK_URL + '/b/' + self.key;
 			
