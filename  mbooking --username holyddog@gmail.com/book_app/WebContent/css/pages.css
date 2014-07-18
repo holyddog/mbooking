@@ -751,6 +751,16 @@
 	font-family: 'Roboto', 'Bangna';
 	font-weight: 400;
 }
+
+/*Book Flip*/
+#page_Book .tbar .btn.highlight {
+	background-color: transparent !important;
+}
+#page_Book .btn.highlight span {
+	background-color: #6DCAEC !important;
+}
+/*End Book Flip*/
+
 /*#page_Book .last_cover .end_box {
 	width: 70px;
 	height: 70px;

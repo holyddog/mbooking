@@ -220,13 +220,13 @@ Page.Following = {
 				self.runInterval_1(container, panel, container.find('#foll_tab2'));
 			}else if(data.error||data.length==0){
 				Page.bodyHideLoading(content);
-				Page.bodyNoItem(container.find('#foll_tab2'),"No Stroy Found");
+				Page.bodyNoItem(container.find('#foll_tab2'),"No Story Found");
 			}
 		},
 		function(error){
 			if(error.responseText=="" && error.status == 200){
 				Page.bodyHideLoading(content);
-				Page.bodyNoItem(container.find('#foll_tab2'),"No Stroy Found");
+				Page.bodyNoItem(container.find('#foll_tab2'),"No Story Found");
 			}
 		});
 	},
