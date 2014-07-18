@@ -14,6 +14,7 @@ init: function(params, container) {
 			Service.User.ViewGuide("bguide", Account.userId,
 				function(){
 					delete Account["bguide"];
+                    localStorage.setItem("u", JSON.stringify(Account));
 				}
 			);
 		}else{
@@ -177,6 +178,23 @@ load: function(container, bookData,params) {
 
             }
             
+            function refToStr(ref){
+				if (ref) {
+					if (/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w\?\=\&\+\.-]*)*\/?$/ig.test(ref)) {
+						var url = ref.split(/\s+/g)[0];
+						var newUrl = url.replace(/^(https?:\/\/)?(www.)?/ig, '');
+						if (newUrl.indexOf('/') > -1) {
+							newUrl = newUrl.substring(0, newUrl.indexOf('/'));
+						}
+						return '<div class="ext_url"><a target="_blank" class="block" href="' + url + '">' + newUrl + '</a></div>';
+					}
+					else {
+						return ref;
+					}
+				}else{
+					return '';
+				}	
+			}
             
             if( i != - 2){
                 
@@ -185,8 +203,21 @@ load: function(container, bookData,params) {
                 var finframe = $('<div class="fill_dock box vertical" style="position:absolute; left:-100%;"></div>');
                 if( i > - 1&&i<data.length-1){
                	fpic = $('<div class="pic_box relative f_ev" data-id="pic_box'+(i)+'"  style="background-color: #EEEEEE; overflow: hidden;width: '+window_width+'px; height: '+window_width+'px;"><img  data-id="'+i+'" style="visibility:hidden;opacity:0;transition:opacity 0.25s linear; position: absolute; width: 100%; height: 100%;"></div>');
-                    var fcaption = $('<div class="flex1 box f_ev center_middle"  data-id="txt'+(i)+'"  style="visibility:hidden;opacity:0;transition:opacity 0.25s linear; padding: 10px; -webkit-box-align: center;text-alig">' + data[i].caption + '</div><div style="line-height: 15px; padding: 0 10px 10px; font-size: 80%; text-align: right;">' + (i+1) + ' of ' + (data.length-1) + '</div>');
-                    foutframe.append(shadowf).append(title_bar_right).append(fpic).append(fcaption);
+//                    var fcaption = $('<div class="flex1 box f_ev center_middle"  data-id="txt'+(i)+'"  style="visibility:hidden;opacity:0;transition:opacity 0.25s linear; padding: 10px; -webkit-box-align: center;text-alig">' + data[i].caption + '</div><div style="line-height: 15px; padding: 0 10px 10px; font-size: 80%; text-align: right;">' + (i+1) + ' of ' + (data.length-1) + '</div>');
+                    
+               	
+               	var fcaption = $(
+               			'<div class="flex1 box f_ev center_middle"  data-id="txt'+(i)+'"  style="visibility:hidden;opacity:0;transition:opacity 0.25s linear; padding: 10px; -webkit-box-align: center;">' 
+               			+ data[i].caption 
+               			+ '</div>'
+               			+'<div class="pline box horizontal" style="pointer-events:all;"><div class="ref flex1">' + (refToStr(data[i].ref)) + '</div>'
+               			+'<div class="pnum" style="text-align: right;padding-left: 10px;">' 
+               			+ (i+1) + ' of ' + (data.length-1) 
+               			+ '</div>'
+               			+ '</div>');
+               	
+               	
+               		foutframe.append(shadowf).append(title_bar_right).append(fpic).append(fcaption);
                 }
                 else if(i==-1){
                     
@@ -209,8 +240,20 @@ load: function(container, bookData,params) {
                 
                 if( i !=-2&&i<data.length-2){
                 	pic = $('<div class="pic_box relative bk_ev"  data-id="pic_box'+(i+1)+'" style=" background-color: #EEEEEE; overflow: hidden; width: '+window_width+'px; height: '+window_width+'px;"><img  data-id="'+(i+1)+'" style="visibility:hidden;opacity:0;transition:opacity 0.25s linear; position: absolute; width: 100%; height: 100%;"></div>');
-                    var caption = $('<div class ="flex1 box bk_ev center_middle" data-id="txt'+(i+1)+'" style="visibility:hidden;opacity:0;transition:opacity 0.25s linear; padding: 10px; -webkit-box-align: center;">' + data[i+1].caption + '</div><div style="line-height: 15px; padding: 0 10px 10px; font-size: 80%; text-align: right;">' + (i + 2) + ' of ' + (data.length-1) + '</div>');
-                    outframe.append(shadowb).append(title_bar_left).append(pic).append(caption);//.append($(btn_b_str));
+                  
+//                	var caption = $('<div class ="flex1 box bk_ev center_middle" data-id="txt'+(i+1)+'" style="visibility:hidden;opacity:0;transition:opacity 0.25s linear; padding: 10px; -webkit-box-align: center;">' + data[i+1].caption + '</div><div style="line-height: 15px; padding: 0 10px 10px; font-size: 80%; text-align: right;">' + (i + 2) + ' of ' + (data.length-1) + '</div>');
+                    
+                	var caption = $(
+                   			'<div class="flex1 box f_ev center_middle"  data-id="txt'+(i+1)+'"  style="visibility:hidden;opacity:0;transition:opacity 0.25s linear; padding: 10px; -webkit-box-align: center;">' 
+                   			+ data[i+1].caption 
+                   			+ '</div>'
+                   			+'<div class="pline box horizontal" style="pointer-events:all;"><div class="ref flex1">' + (refToStr(data[i+1].ref)) + '</div>'
+                   			+'<div class="pnum" style="text-align: right;padding-left: 10px;">' 
+                   			+ (i+2) + ' of ' + (data.length-1) 
+                   			+ '</div>'
+                   			+ '</div>');
+                	
+                	outframe.append(shadowb).append(title_bar_left).append(pic).append(caption);//.append($(btn_b_str));
                 }
                 else if(i==data.length-2){
                 	outframe.append(shadowb).append($(back_page));
@@ -255,7 +298,13 @@ load: function(container, bookData,params) {
                          
 //            	Page.open('Share', true, { bid: params.bid });
 //                container.css('display','none');
-            	window.plugins.socialsharing.share(null, null, null, Config.WEB_BOOK_URL + '/?bid=' + params.bid);
+                 var url = Config.WEB_BOOK_URL + '/b/' + params.key;
+                 if (Device.PhoneGap.isReady) {
+                    window.plugins.socialsharing.share(null, null, null, url);
+                 }
+                 else {
+                    window.open(url,'_blank','location=yes');
+                 }
             });
         
         	var btnLike = $('[data-id=btn_l]');
@@ -304,6 +353,13 @@ load: function(container, bookData,params) {
                        container.css('display','none');
                        });
 
+        $('.pline .ref').tap(function() {
+                             var ref = ($(this).find('.ext_url').children()).attr('href');
+                             if(ref)
+                             window.open(ref,'_blank','location=yes');
+                             });
+
+        
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////     
         var os=Config.OS;
 		

@@ -18,47 +18,58 @@ Page.Notifications = {
 		var self = this;
 		var list = container.find('.content');		
 		list.empty();
-		
+		Page.bodyHideNoItem(list);
 		Page.bodyShowLoading(list, true);
 		
 		Service.User.GetNotificationByUid(Account.userId, 0, Config.LIMIT_ITEM, function(data) {
 			Page.bodyHideLoading(list);
-			
-			for (var i = 0; i < data.length; i++) {
-				var c = data[i];
-				list.append(self.createItem(c));
-			} 
-			
-			list.find('.notf_item').bind('click', function() {
-				var item = $(this);
-				if(item.data('href'))
-				window.location.href = item.data('href');
-			});
-			
-			list.find('.msg').bind('click', function() {
-				var item = $(this);
-				if(item.data('href'))
-				window.location.href = item.data('href');
-			});
-			
-			list.find('.uimage').bind('click', function() {
-				var item = $(this);
-				if(item.data('href'))
-				window.location.href = item.data('href');
-			});
-			
-			list.find('.follow_btn').bind('click', function() {
-				var item = $(this);
-				if(item.data('uid'))
-				{
-//					item.css('pointer-events','none');
-					item.hide();
-					Service.Book.FollowAuthor(item.data('uid'), Account.userId, function(data) {
-						Account.following = data.following;
-    					localStorage.setItem("u", JSON.stringify(Account));
-                    });
-				}
-			});
+	       if(data.error||data.length==0){
+	    	   Page.bodyHideLoading(list);
+	    	   Page.bodyNoItem(list,"No Notification");
+	       }else{
+				for (var i = 0; i < data.length; i++) {
+					var c = data[i];
+					list.append(self.createItem(c));
+				} 
+				
+				list.find('.notf_item').bind('click', function() {
+					var item = $(this);
+					if(item.data('href'))
+					window.location.href = item.data('href');
+				});
+				
+				list.find('.msg').bind('click', function() {
+					var item = $(this);
+					if(item.data('href'))
+					window.location.href = item.data('href');
+				});
+				
+				list.find('.uimage').bind('click', function() {
+					var item = $(this);
+					if(item.data('href'))
+					window.location.href = item.data('href');
+				});
+				
+				list.find('.follow_btn').bind('click', function() {
+					var item = $(this);
+					if(item.data('uid'))
+					{
+	//					item.css('pointer-events','none');
+						item.hide();
+						Service.Book.FollowAuthor(item.data('uid'), Account.userId, function(data) {
+							Account.following = data.following;
+	    					localStorage.setItem("u", JSON.stringify(Account));
+	                    });
+					}
+				});
+	       }
+		}
+		,
+		function(error){
+			if(error.responseText=="" && error.status == 200){
+				Page.bodyHideLoading(list);
+				Page.bodyNoItem(list,"No Notification");
+			}
 		});
 	},
 	

@@ -49,7 +49,7 @@
 }
 #page_Home #owl-example .item {
 	background-size: 110% auto;
-	background-position: center center;
+	background-position: top center;
 	background-repeat: no-repeat;
 }
 #page_Home .sym_title {
@@ -1390,6 +1390,7 @@
 	border-bottom: solid 2px #33B5E5;
 	padding-left: 40px;
 	padding-right: 40px;
+	-webkit-appearance: none;
 }
 #page_Search .search_box {
 	padding-right: 10px; 

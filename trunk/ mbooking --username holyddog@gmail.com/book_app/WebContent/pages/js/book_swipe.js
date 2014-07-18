@@ -61,6 +61,7 @@ Page.Book = {
 				Service.User.ViewGuide("bguide", Account.userId,
 					function(){
 						delete Account["bguide"];
+						localStorage.setItem("u", JSON.stringify(Account));
 					}
 				);
 			}else{

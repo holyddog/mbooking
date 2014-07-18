@@ -39,6 +39,7 @@ Page.EditBook = {
 				Service.User.ViewGuide("epguide", Account.userId,
 					function(){
 						delete Account["epguide"];
+						localStorage.setItem("u", JSON.stringify(Account));
 					}
 				);
 			}else{
@@ -288,6 +289,7 @@ Page.EditBook = {
 				picture : pic,
 
 				caption : "instory.me",
+
 				privacy: privacy
 	        };
 	    	var cb = function(response) {	    		
