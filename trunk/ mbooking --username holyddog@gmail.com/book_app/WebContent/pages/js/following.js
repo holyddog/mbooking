@@ -90,7 +90,8 @@ Page.Following = {
 		var box = document.createElement('box');
 		box.className = 'box horizontal border';
 		box.dataset.bid = data.bid;
-		box.dataset.uid = data.uid;
+		box.dataset.uid = data.author.uid;
+		box.dataset.key = data.key;
 		
 		var bpic = document.createElement('div');
 		bpic.className = 'bpic';
@@ -423,7 +424,7 @@ Page.Following = {
 		container.find('.box.border').click(function() {
 			var target = $(this);
 			if (target.data('bid')) {
-				Page.open('Book', true, { bid: target.data('bid'), uid: target.data('uid'), uid: target.data('key') });				
+				Page.open('Book', true, { bid: target.data('bid'), uid: target.data('uid'), key: target.data('key') });				
 			}
 			else {
 				Page.open('Profile', true, { uid: target.data('uid'), back: true });
