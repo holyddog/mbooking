@@ -209,7 +209,7 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 				db.updateMulti(new Query(Criteria.where("uid").is(uid)), new Update().set("author.pic", path), Book.class);
 
 				if (oldpic != null && !oldpic.equals("") && !oldpic.equals("undefined")) {
-					ImageUtils.deleteImageFile(oldpic, ConstValue.PROFILE_IMG_TYPE);
+//					ImageUtils.deleteImageFile(oldpic, ConstValue.PROFILE_IMG_TYPE);
 				}
 				return path;
 
