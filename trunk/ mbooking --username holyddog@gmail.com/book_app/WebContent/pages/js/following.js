@@ -90,7 +90,7 @@ Page.Following = {
 		var box = document.createElement('box');
 		box.className = 'box horizontal border';
 		box.dataset.bid = data.bid;
-		box.dataset.uid = data.author.uid;
+		box.dataset.uid = data.uid;
 		
 		var bpic = document.createElement('div');
 		bpic.className = 'bpic';
