@@ -11,6 +11,7 @@ public class Favourite {
 	Long bid;
 	Long uid;
 	Long fdate;
+	Boolean inactive;
 	
 	public ObjectId getFid() {
 		return fid;
@@ -35,5 +36,11 @@ public class Favourite {
 	}
 	public void setFdate(Long fdate) {
 		this.fdate = fdate;
+	}
+	public Boolean getInactive() {
+		return inactive;
+	}
+	public void setInactive(Boolean inactive) {
+		this.inactive = inactive;
 	}
 }

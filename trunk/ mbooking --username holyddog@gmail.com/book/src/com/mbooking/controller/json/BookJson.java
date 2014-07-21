@@ -213,9 +213,6 @@ public class BookJson {
 			@RequestParam(value = "like") Boolean like
 			) {
 		boolean success = bookRepo.likeBook(bid, uid, like);
-		if (success) {
-			actRepo.liked(uid, bid);
-		}
 		return ResultResponse.getResult("success", success);
 	}
 	
@@ -227,9 +224,6 @@ public class BookJson {
 			@RequestParam(value = "fav") Boolean fav
 			) {
 		boolean success = bookRepo.favBook(bid, uid, fav);
-		if (success) {
-			actRepo.favourite(uid, bid);
-		}
 		return ResultResponse.getResult("success", success);
 	}
 }

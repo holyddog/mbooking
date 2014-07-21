@@ -403,7 +403,7 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 
 	@Override
 	public List<Book> findFavBooks(Long uid, Integer start, Integer limit) {
-		List<Favourite> favList = db.find(new Query(Criteria.where("uid").is(uid)), Favourite.class);
+		List<Favourite> favList = db.find(new Query(Criteria.where("uid").is(uid).and("inactive").exists(false)), Favourite.class);
 		List<Book> bookList = new ArrayList<Book>();
 		for (int i = 0; i < favList.size(); i++) {
 			Long bid = favList.get(i).getBid();
