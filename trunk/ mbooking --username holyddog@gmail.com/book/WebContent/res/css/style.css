@@ -319,7 +319,9 @@ h2.share_title {
 	text-align: center;
 }
 #resetpass{
-	padding:10px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
 	max-width: 400px;
 	margin-left: auto;
 	margin-right: auto;
@@ -352,7 +354,7 @@ h2.share_title {
 }
 
 #reset_message{
-	padding:10px;
+	padding-top:10px;
 	max-width: 400px;
 	margin-left: auto;
 	margin-right: auto;
@@ -366,10 +368,9 @@ h2.share_title {
 }
 
 #reset_message img{
-	width: 100px;
-	height: 100px;
+	width: 80px;
+	height: 80px;
 	border-radius: 15px;
-	margin-top: 30px;
 }
 
 #reset_message .accountname{
