@@ -14,7 +14,6 @@
 	
 	<link rel="stylesheet" href="#{initParam['root']}/res/css/default.css" />
 	<link rel="stylesheet" href="#{initParam['root']}/res/css/style.css" />
-	
 	<script type="text/javascript" src="#{initParam['root']}/res/lib/jquery-1.10.2.min.js"></script>
 </head>	
 	<body>
@@ -60,14 +59,17 @@
 				</t:div>
 				<t:div rendered="#{resetView.valid}">
 					<div class="fill_dock box vertical">
-					<div class="flex1 box vertical">
+					<div class="flex1 box vertical" style=" min-height: 50px;">
 						<div class="flex1"></div>
 						<div id="reset_message">
-							<div class="title">Reset "InStory" Password of</div> 
+								<div class="title">Reset "InStory" Password of</div> 
+						</div>
+						<div class="flex1"></div>
+					</div>
+						<div id="reset_message">
 							<img src="#{initParam['file']}#{resetView.pic}" onerror="if (this.src != '#{initParam['root']}/res/images/user.jpg') this.src = '#{initParam['root']}/res/images/user.jpg';"></img>
 							<div class="accountname">#{resetView.dname}</div>
 						</div>
-					</div>
 					<form id="resetpass" method="post" action="data/reset">
 						<div class="input_layout">
 							<div class="label">
