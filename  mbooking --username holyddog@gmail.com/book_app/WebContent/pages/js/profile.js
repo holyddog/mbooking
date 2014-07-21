@@ -244,7 +244,7 @@ Page.Profile = {
 							Page.bodyHideLoading(ptab3);
 							setTimeout(
 								function(){
-									Page.bodyNoItem(ptab3,"You have no favourite story");
+									Page.bodyNoItem(ptab3,"No favourite story");
 								},
 								200
 							);
@@ -362,7 +362,7 @@ Page.Profile = {
 				container.find('.pimage img').attr("onerror", "this.src = 'images/user.jpg';");
 			}
 			if (user.cover) {
-				document.getElementById('profile_page').style.backgroundImage = 'url(' + Util.getImage(user.cover, 1) + ')';
+				container.find('#profile_page')[0].style.backgroundImage = 'url(' + Util.getImage(user.cover, 1) + ')';
 			}
 			
 			var statPanel = content.find('.stat_panel');
@@ -416,7 +416,7 @@ Page.Profile = {
 			}
 			else{
 				content.find('#ptab1').height(((window.innerHeight - 400) +"px"));
-				Page.bodyNoItem(content.find('#ptab1'),"You have no published story");
+				Page.bodyNoItem(content.find('#ptab1'),"No published story");
 			}
 
 			container.find('#xbar .flex1').hide();
@@ -436,7 +436,7 @@ Page.Profile = {
 				}
 				else{
 					content.find('#ptab2').height(((window.innerHeight - 400) +"px"));
-					Page.bodyNoItem(content.find('#ptab2'),"You have no private story");
+					Page.bodyNoItem(content.find('#ptab2'),"No private story");
 				}
 //				self.loadDraftBooks(data.drBooks, uid, container);
 			}
@@ -455,7 +455,7 @@ Page.Profile = {
 		}, function(error) {
 			Page.bodyHideLoading(content);	
 			content.find('#ptab1').height(((window.innerHeight - 400) +"px"));
-			Page.bodyNoItem(content.find('#ptab1'),"You have no published story");
+			Page.bodyNoItem(content.find('#ptab1'),"No published story");
 		});
 	},
 	
