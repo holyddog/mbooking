@@ -103,9 +103,9 @@
 					</div>
 					<h2 class="share_title">Share This</h2>
 					<ul class="share_list">
-						<li><a class="link fb" href="#"></a></li>
-						<li><a class="link tw" href="#"></a></li>
-						<li><a class="link gp" href="#"></a></li>
+						<li><a class="link fb" href="javascript:void(0);"></a></li>
+						<li><a class="link tw" href="javascript:void(0);"></a></li>
+						<li><a class="link gp" href="javascript:void(0);"></a></li>
 					</ul>
 				</div>
 			</div>
