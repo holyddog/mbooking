@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>The Book</title>
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+	
+	<link rel="stylesheet" href="css/default.css" type="text/css">
+	<link rel="stylesheet" href="css/style.css" type="text/css">
+	<link rel="stylesheet" href="css/pages.css" type="text/css">
+	<link rel="stylesheet" href="css/owl.carousel.css" type="text/css">
+	<link rel="stylesheet" href="css/owl.theme.css" type="text/css">
+	
+	<script type="text/javascript" src="lib/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="lib/jquery.hashchange-1.3.js"></script>
+	<script type="text/javascript" src="lib/jquery.bbq-1.2.1.js"></script>	
+	<script type="text/javascript" src="lib/iscroll.js"></script>	
+	<script type="text/javascript" src="lib/owl.carousel.js"></script>	
+	
+    <!-- 
+    <script type="text/javascript" src="cordova.js"></script> 
+	<script type="text/javascript" src="facebook-js-sdk.js"></script>
+	<script type="text/javascript" src="cdv-plugin-fb-connect.js"></script>	
+	<script type="text/javascript" src="SocialSharing.js"></script>
+	-->
+	
+	<!-- Android 
+	<script type="text/javascript" src="PushNotification.js"></script>
+	<script type="text/javascript">var PushNotification = cordova.require('com.urbanairship.phonegap.PushNotification.PushNotification');</script> 
+	-->
+	
+    <script type="text/javascript" src="data.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+	
+	<!-- Pages UI -->
+	<script type="text/javascript" src="pages/js/share.js"></script>
+    <script type="text/javascript" src="pages/js/add_page.js"></script>
+    <script type="text/javascript" src="pages/js/add_tag.js"></script>
+    <script type="text/javascript" src="pages/js/all_books.js"></script>
+    <script type="text/javascript" src="pages/js/book_list.js"></script>
+	<script type="text/javascript" src="pages/js/change_cover.js"></script>
+	<script type="text/javascript" src="pages/js/change_name.js"></script>
+	<script type="text/javascript" src="pages/js/change_pic.js"></script>
+	<script type="text/javascript" src="pages/js/change_pwd.js"></script>
+	<script type="text/javascript" src="pages/js/comments.js"></script>
+	<script type="text/javascript" src="pages/js/create_book.js"></script>
+	<script type="text/javascript" src="pages/js/edit_book.js"></script>
+	<script type="text/javascript" src="pages/js/edit_caption.js"></script>
+	<script type="text/javascript" src="pages/js/edit_ref.js"></script>
+	<script type="text/javascript" src="pages/js/explore.js"></script>
+	<script type="text/javascript" src="pages/js/following.js"></script>
+	<script type="text/javascript" src="pages/js/follows.js"></script>
+    <script type="text/javascript" src="pages/js/home.js"></script>
+	<script type="text/javascript" src="pages/js/notifications.js"></script>
+	<script type="text/javascript" src="pages/js/page.js"></script>
+	<script type="text/javascript" src="pages/js/profile.js"></script>
+	<script type="text/javascript" src="pages/js/publish_book.js"></script>
+	<script type="text/javascript" src="pages/js/search.js"></script>
+	<script type="text/javascript" src="pages/js/settings.js"></script>
+	<script type="text/javascript" src="pages/js/share.js"></script>
+	<script type="text/javascript" src="pages/js/sign_in.js"></script>
+	<script type="text/javascript" src="pages/js/sign_up.js"></script>
+	<script type="text/javascript" src="pages/js/tag.js"></script>
+ 	<script type="text/javascript" src="pages/js/follow_friend.js"></script>
+  	<script type="text/javascript" src="pages/js/forgetpass.js"></script>
+   	<script type="text/javascript" src="pages/js/terms.js"></script>
+ 
+	<script type="text/javascript" src="pages/js/book_swipe.js"></script>
+	
+   	<!-- <script type="text/javascript" src="pages/js/bookflip.js"></script>  -->
+	
+	<!-- iOS 
+	<script type="text/javascript" src="pages/js/bookflip.js"></script>
+	<script type="text/javascript" src="cordova_plugins.js"></script>
+	<script type="text/javascript" src="facebook-js-sdk.js"></script>
+	<script type="text/javascript" src="cdv-plugin-fb-connect.js"></script>
+	-->	
+	
+	<!-- Services -->
+	<script type="text/javascript" src="services/user.js"></script>
+	<script type="text/javascript" src="services/book.js"></script>
+	<script type="text/javascript" src="services/page.js"></script>
+	<script type="text/javascript" src="services/search.js"></script>
+	
+	<style id="custom_style" type="text/css"></style>
+	<style id="book_style" type="text/css"></style>
+</head>
+<body>
+	<div id="dd_message" class="box center_middle">
+		<div class="msg box flex1">
+			<div class="text flex1"></div>
+			<div class="retry_btn" style="display:none;">Retry</div>
+		</div>
+	</div>
+	<div id="dialog" class="box center_middle">
+		<div class="d_panel">
+				<!-- 
+			<ul class="list_item">
+				<li data-link="camera">Take a Photo</li>
+				<li data-link="gallery">Choose from Gallery</li>
+				<li data-link="multi">Select Multiple Photos</li>
+			</ul>
+				 -->
+		</div>
+	</div>
+	<div id="overlay_loading"></div>
+	<div id="loading_panel">
+		<div class="loading box horizontal">
+			<!-- <canvas id="cv_loading" width="40" height="40"></canvas> -->
+			<div id="cv_loading" style="width: 40px; height: 40px;"></div>
+			<div class="label flex1"></div>
+		</div>
+	</div>
+	<div id="sidebar_panel">
+		<div id="overlay"></div>
+		<ul id="sidebar">
+			<li data-link="Profile" class="item" style="padding: 0;">
+				<div id="profile_cover" class="profile_item">
+					<div class="box vertical">
+						<div class="pimage">
+							<img src="">
+						</div>
+						<div class="info flex1">
+						 	<h1></h1>
+						  	<div class="stat"></div>
+						</div>
+					</div>
+				</div>
+			</li>
+			<li data-link="Explore" class="item">Explore</li>
+			<li data-link="Following" class="item">Following</li>
+			<!-- <li class="item">Favourite</li> -->
+			<li data-link="Settings" class="item">Settings</li>
+			<!-- 
+			<li data-link="Notifications" class="item">Notifications</li>
+			<li data-link="SignIn" class="item">Sign In</li>
+			-->
+		</ul>
+	</div>
+	<div id="wrap"></div>
+</body>
+</html>
+
