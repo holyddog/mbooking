@@ -36,7 +36,7 @@ public class BookView {
 					Page p = pages.get(i);
 					p.setPic(getImage(p.getPic(), "_c"));
 				}
-				Collections.reverse(pages);
+//				Collections.reverse(pages);
 				pageSize = pages.size();
 			}
 
