@@ -320,6 +320,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			query.fields().include("ccount");
 
 			Book book = db.findOne(query, Book.class);
+			bid = book.getBid();
 
 			query = new Query(Criteria.where("bid").is(bid));
 			query.fields().include("seq");
