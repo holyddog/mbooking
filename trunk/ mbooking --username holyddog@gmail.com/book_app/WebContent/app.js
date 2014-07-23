@@ -10,11 +10,12 @@ Config = {
 	
 	FB_APP_ID: '370184839777084',
 	
-	WEB_BOOK_URL:'http://instory.me',
-	FILE_URL: 'http://' + 'instory.me' + '/f',
+//	WEB_BOOK_URL:'http://instory.me',
+//	FILE_URL: 'http://' + 'instory.me' + '/f',
 	
 //	FILE_URL: 'http://' + window.location.hostname + '/res/book',
-//	WEB_BOOK_URL : 'http://' + window.location.hostname + ':8080/book',
+	FILE_URL: 'http://119.59.122.38/book_dev_files',
+	WEB_BOOK_URL : 'http://' + window.location.hostname + ':8080/book',
 	
 	OS: 'iOS',
     OS_Int: 1, //iOS :1, Android :2
@@ -27,8 +28,8 @@ Config = {
 };
 
 Service = {	
-//	url: 'http://' + window.location.hostname + ':8080/book/data'
-	url: 'http://instory.me/data'
+	url: 'http://' + window.location.hostname + ':8080/book/data'
+//	url: 'http://instory.me/data'
 };	
 
 Account = {};
@@ -1211,36 +1212,36 @@ Web = {
         	MessageBox.hide_drop();
             if(/*navigator.onLine*/true){
                 var istimeout=false;
-                var getreq_timer = setTimeout(
-                    function(){
-                        if(!istimeout){
-                            MessageBox.drop_retry('Connection time out please try again',retry);
-                            istimeout = true;
-                            if(notconnect)
-                                notconnect();
-
-                        }
-                    },
-                    Config.SERVICE_TIMEOUT
-                );
+//                var getreq_timer = setTimeout(
+//                    function(){
+//                        if(!istimeout){
+//                            MessageBox.drop_retry('Connection time out please try again',retry);
+//                            istimeout = true;
+//                            if(notconnect)
+//                                notconnect();
+//
+//                        }
+//                    },
+//                    Config.SERVICE_TIMEOUT
+//                );
                 
                 $.ajax({
                        url: url,
                        success: function(data){
                             istimeout = true;
-                            clearTimeout(getreq_timer);
+//                            clearTimeout(getreq_timer);
                             success(data);
                        
                        },
                        error: function(xhr,status) {
                            if(status=='timeout'){
-                                if(!istimeout&&retry){
-                                    clearTimeout(getreq_timer);
-                                    MessageBox.drop_retry('Connection time out please try again',retry);
-                                    istimeout = true;
-                                    if(notconnect)
-                                       notconnect();
-                                }
+//                                if(!istimeout&&retry){
+//                                    clearTimeout(getreq_timer);
+//                                    MessageBox.drop_retry('Connection time out please try again',retry);
+//                                    istimeout = true;
+//                                    if(notconnect)
+//                                       notconnect();
+//                                }
                            }
                            else{
                         	   console.log(xhr);
@@ -1252,8 +1253,8 @@ Web = {
                        },
                        data: params,
                        cache: !Config.DEBUG_MODE,
-                       dataType: 'json',
-                       timeout:Config.SERVICE_TIMEOUT
+                       dataType: 'json'//,
+//                       timeout:Config.SERVICE_TIMEOUT
                        });
             }else{
                if(notconnect)
