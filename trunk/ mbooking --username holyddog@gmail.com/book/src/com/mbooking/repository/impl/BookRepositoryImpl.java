@@ -240,37 +240,43 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 	}
 
 	@Override
-	public Book findBookWithPages(Long bid, Long uid, Long gid, Boolean isCount) {
+	public Book findBookWithPages(Long bid, Long uid, Long gid,String key, Boolean isCount) {
 		try {
-			Criteria criteria = Criteria.where("uid").is(uid);
-			Query query = new Query(criteria);
-			query.fields().include("dname");
-			query.fields().include("pic");
-
-			User user = db.findOne(query, User.class);
-
-			criteria.and("bid").is(bid);
+			Criteria criteria ;
+			Query query;
+			
+			if(key!=null&&(!key.isEmpty())&&(!key.equals(""))){
+				criteria = Criteria.where("key").is(key);
+			}else if(bid!=null&&uid!=null){
+				criteria = Criteria.where("bid").is(bid).and("uid").is(uid);			
+			}
+			else{
+				System.out.println("Find Book With Page Service error : invalid parameter");
+				return null;
+			}
+			
 			query = new Query(criteria);
-//			query.fields().include("title");
-//			query.fields().include("desc");
-//			query.fields().include("pic");
-//			query.fields().include("pcount");
-//			query.fields().include("pbdate");
-//			query.fields().include("tags");
-//			query.fields().include("lcount");
-//			query.fields().include("ccount");
-//			query.fields().include("pub");
-
 			Book book = db.findOne(query, Book.class);
-
-			query = new Query(Criteria.where("bid").is(bid));
+			if(book==null){
+				System.out.println("Find Book With Page Service error : find book not found");
+				return null;
+			}
+			bid = book.getBid();
+			uid = book.getUid();
+			
 			query.fields().include("seq");
 			query.fields().include("pic");
 			query.fields().include("caption");
 			query.fields().include("ref");
 			query.sort().on("seq", Order.ASCENDING);
 			List<Page> pages = db.find(query, Page.class);
-
+			
+			
+			Query uquery = new Query(Criteria.where("uid").is(uid));
+			uquery.fields().include("dname");
+			uquery.fields().include("pic");
+			User user = db.findOne(uquery, User.class);
+			
 			book.setAuthor(user);
 			book.setPages(pages);
 			
