@@ -20,7 +20,8 @@ public interface BookRepostitoryCustom {
 	public User unpublishBook(Long bid, Long uid);
 	public Boolean changeCover(Long bid, String newCover);
 
-	public Book findBookWithPages(Long bid, Long uid, Long gid, Boolean isCount);
+	public Book findBookWithPages(Long bid, Long uid, Long gid,String key, Boolean isCount);
+
 	public Boolean addTag(Long bid, String tag);
 	public Boolean removeTag(Long bid, String tag);
 	

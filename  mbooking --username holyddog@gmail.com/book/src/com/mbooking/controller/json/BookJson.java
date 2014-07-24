@@ -76,24 +76,28 @@ public class BookJson {
 	@RequestMapping(method = RequestMethod.GET, value = "/getBook.json")
 	public @ResponseBody
 	Object getBook(
-			@RequestParam(value = "bid") Long bid,
+			@RequestParam(value = "bid", required = false) Long bid,
 			@RequestParam(value = "uid", required = false) Long uid,
+			@RequestParam(value = "key", required = false) String key,
 			@RequestParam(value = "gid", required = false) Long guestId,
 			@RequestParam(value = "count", required = false) Boolean isCount) {
 
 		Book book = null;
-		if (uid != null && uid > 0) {
-			book = bookRepo.findBookWithPages(bid, uid, guestId, isCount);	
+		if ((uid != null && uid > 0) || (key!=null&&(!key.equals(""))&&(!key.equals("undefined")))) {
+			book = bookRepo.findBookWithPages(bid, uid, guestId,key, isCount);	
 		}
-		else {
+		else if(bid != null && bid > 0){
 			book = bookRepo.findByBid(bid);	
 		}
+		else{
+			return ErrorResponse.getError("Find book id: invalid parameter");	
+		}	
 		
 		if (book != null) {
 			return book;
 		}
 
-		return ErrorResponse.getError("Find book id: " + bid + " was not found");
+		return ErrorResponse.getError("Find book" + (bid!=null?("bid :"+bid):(key!=null?("key :"+key):"")) + " was not found");
 	}
 
 	//Web View Mode
