@@ -280,4 +280,14 @@ public class UserJson {
 			) {
 		return ResultResponse.getResult("result", userRepo.viewedGuide(guide,uid));
 	}	
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/submitReport.json")
+	public @ResponseBody Object submitReport(
+			@RequestParam(value = "type") Integer type,
+			@RequestParam(value = "bid") Long bid,
+			@RequestParam(value = "uid") Long uid,
+			@RequestParam(value = "msg", required = false) String msg
+			) {
+		return ResultResponse.getResult("result", userRepo.submitReport(type, bid, uid, msg));
+	}	
 }

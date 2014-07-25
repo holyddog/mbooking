@@ -20,6 +20,7 @@ import com.mbooking.model.FBobj;
 import com.mbooking.model.Favourite;
 import com.mbooking.model.Follow;
 import com.mbooking.model.Notification;
+import com.mbooking.model.Report;
 import com.mbooking.model.User;
 import com.mbooking.repository.UserRepostitoryCustom;
 import com.mbooking.util.Convert;
@@ -546,6 +547,26 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 			update.unset("fguide");
 		
 		db.updateFirst(new Query(Criteria.where("uid").is(uid)), update, User.class);
+		
+		return true;
+	}
+
+	@Override
+	public Boolean submitReport(Integer type, Long bid, Long uid, String msg) {
+		try {
+			Report rep = new Report();
+			rep.setType(type);
+			rep.setBid(bid);
+			rep.setUid(uid);
+			rep.setMsg(msg);
+			rep.setRdate(System.currentTimeMillis());
+			
+			db.insert(rep);			
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
 		
 		return true;
 	}	
