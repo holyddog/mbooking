@@ -36,5 +36,6 @@ public interface UserRepostitoryCustom {
 	User findUserByForgetPwdKey(String code);
 	
 	Boolean viewedGuide(String guide,Long uid);
+	Boolean submitReport(Integer type, Long bid, Long uid, String msg);
 	
 }
