@@ -20,13 +20,25 @@ Page.Book = {
 		});
 		var btnShare = container.find('[data-id=btn_s]');
 		btnShare.tap(function() {
-			var url = Config.WEB_BOOK_URL + '/b/' + params.key;
-			if (Device.PhoneGap.isReady) {
-	        	window.plugins.socialsharing.share(null, null, null, url);				
-			}
-			else {
-				window.open(url);
-			}
+			Page.popDialog(function(link) {				
+				if (link == '1') {			
+					history.back(); 		
+					var url = Config.WEB_BOOK_URL + '/b/' + params.key;
+					if (Device.PhoneGap.isReady) {
+			        	window.plugins.socialsharing.share(null, null, null, url);				
+					}
+					else {
+						window.open(url);
+					}					
+				}
+				else if (link == '2') {
+					history.back(); 
+					
+					setTimeout(function() {
+						Page.open('Report', true, { bid: params.bid });
+					}, 100);
+				}
+			}, 5);
 		});	
 		var btnLike = container.find('[data-id=btn_l]');
 		btnLike.tap(function() {
@@ -169,16 +181,28 @@ Page.Book = {
 		container.find('.owl-item').css({
 			height: ph + 'px'
 		});
-		
-		content.click(function(e) {
-			var target = $(e.target);
-			if (target.hasClass('edit_book')) {
-				Page.open('EditBook', true, { bid: bookData.bid });
-			}
-			else if (target.closest('.author_info').length) {
-				Page.open('Profile', true, { uid: bookData.uid, back: true });
-			}
+
+		content.find('.edit_book').click(function() {
+			Page.open('EditBook', true, { bid: bookData.bid });		
 		});
+		content.find('.author_info').click(function() {
+			Page.open('Profile', true, { uid: bookData.uid, back: true });			
+		});
+		
+//		content.click(function(e) {
+//			var target = $(e.target);
+//			if (target.hasClass('edit_book')) {
+////				Page.open('EditBook', true, { bid: bookData.bid });
+//				
+//				Page.popDialog(function(link) {
+//					history.back(); 
+//					Message(link);
+//				}, 5);
+//			}
+//			else if (target.closest('.author_info').length) {
+//				Page.open('Profile', true, { uid: bookData.uid, back: true });
+//			}
+//		});
 		
 //		if (data.length) {		
 //		for (var i = data.length - 1; i > -1; i--) {
