@@ -13,8 +13,7 @@ Config = {
 //	WEB_BOOK_URL:'http://instory.me',
 //	FILE_URL: 'http://' + 'instory.me' + '/f',
 	
-//	FILE_URL: 'http://' + window.location.hostname + '/res/book',
-	FILE_URL: 'http://119.59.122.38/book_dev_files',
+	FILE_URL: 'http://' + window.location.hostname + '/res/book',
 	WEB_BOOK_URL : 'http://' + window.location.hostname + ':8080/book',
 	
 	OS: 'iOS',
@@ -1046,6 +1045,50 @@ Page = {
 //					dialog.find('li').click(function() {	
 //						Page._callbackDialog($(this).data('bid'));
 //					});
+					break;
+				}
+				case 5: {
+//					var items = [{
+//						name: '1',
+//						label: 'Nudity or pornography'
+//					}, {
+//						name: '2',
+//						label: 'Attacks a group or individual'
+//					}, {
+//						name: '3',
+//						label: 'Graphic violence'
+//					}, {
+//						name: '4',
+//						label: 'Spam'
+//					}, {
+//						name: '5',
+//						label: 'Copyright & trademark'
+//					}, {
+//						name: '6',
+//						label: 'Hateful speech or symbols'
+//					}, {
+//						name: '7',
+//						label: 'Other...'
+//					}];
+					
+					var items = [{
+						name: '1',
+						label: 'Share'
+					}, {
+						name: '2',
+						label: 'Report'
+					}];
+					
+					for (var i = 0; i < items.length; i++) {
+						var it = items[i];
+						ul.appendChild(getItem(it.name, it.label));
+					}
+					dialog.find('.d_panel').css('overflow-y', 'hidden').append(ul);
+					
+					dialog.find('[data-link]').click(function() {						
+						var link = $(this).data('link');
+						Page._callbackDialog(link);
+					});
 					break;
 				}
 			}

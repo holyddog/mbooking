@@ -234,6 +234,17 @@ Service.User = {
 				uid:uid
 		};
 		Web.post(url, params, callback);
+	},
+	
+	SubmitReport:function(type, bid, uid, msg, callback){
+		var url = Service.url + '/submitReport.json';
+		var params = {
+			type: type,
+			bid: bid,
+			uid: uid,
+			msg: msg
+		};
+		Web.post(url, params, callback);
 	}
 	
 };
