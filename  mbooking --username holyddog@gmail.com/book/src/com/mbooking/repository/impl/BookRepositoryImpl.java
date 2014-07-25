@@ -22,7 +22,6 @@ import com.mbooking.model.Page;
 import com.mbooking.model.Tag;
 import com.mbooking.model.User;
 import com.mbooking.model.View;
-import com.mbooking.repository.ActivityRepository;
 import com.mbooking.repository.BookRepostitoryCustom;
 import com.mbooking.util.ConfigReader;
 import com.mbooking.util.Convert;
@@ -34,8 +33,6 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 
 	@Autowired
 	private MongoTemplate db;
-	@Autowired
-	ActivityRepository actRepo;
 	
 	private String genKey() {
 		String key = Convert.uniqueString(10);
@@ -263,7 +260,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			}
 			bid = book.getBid();
 			uid = book.getUid();
-			
+			query = new Query(Criteria.where("bid").is(bid));
 			query.fields().include("seq");
 			query.fields().include("pic");
 			query.fields().include("caption");
@@ -277,6 +274,8 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			uquery.fields().include("pic");
 			User user = db.findOne(uquery, User.class);
 			
+			
+			
 			book.setAuthor(user);
 			book.setPages(pages);
 			
@@ -285,7 +284,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 				if (count > 0) {
 					book.setLiked(true);
 				}
-				if (db.count(new Query(Criteria.where("bid").is(bid).and("uid").is(gid).and("inactive").exists(false)), Favourite.class) > 0) {
+				if (db.count(new Query(Criteria.where("bid").is(bid).and("uid").is(gid)), Favourite.class) > 0) {
 					book.setFaved(true);
 				}
 				
@@ -326,7 +325,6 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			query.fields().include("ccount");
 
 			Book book = db.findOne(query, Book.class);
-			bid = book.getBid();
 
 			query = new Query(Criteria.where("bid").is(bid));
 			query.fields().include("seq");
@@ -704,8 +702,6 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 				
 				Long auid = book.getUid();
 				if (oldLike == null && auid.longValue() != who.longValue()) {
-					actRepo.liked(who, bid);
-					
 					Notification notf = new Notification();
 					notf.setUid(auid);
 					notf.setAdate(System.currentTimeMillis());
@@ -760,25 +756,19 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 	public Boolean favBook(Long bid, Long who, boolean fav) {
 		Query query = new Query(Criteria.where("bid").is(bid).and("uid").is(who));
 		if (fav) {
-			Long now = System.currentTimeMillis();
-			
 			if (db.count(query, Favourite.class) > 0) {
-				db.updateFirst(query, new Update().set("fdate", now).unset("inactive"), Favourite.class);
+				return true;
 			}
 			else {
 				Favourite f = new Favourite();
 				f.setBid(bid);
 				f.setUid(who);
-				f.setFdate(now);
+				f.setFdate(System.currentTimeMillis());
 				db.insert(f);
-				
-				actRepo.favourite(who, bid);
 			}			
 		}
 		else {
-			db.updateFirst(query, new Update().set("inactive", true), Favourite.class);
-			
-//			db.remove(query, Favourite.class);
+			db.remove(query, Favourite.class);
 		}
 		return true;
 	}

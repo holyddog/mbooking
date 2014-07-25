@@ -97,7 +97,7 @@ public class BookJson {
 			return book;
 		}
 
-		return ErrorResponse.getError("Find book" + (bid!=null?("bid :"+bid):(key!=null?("key :"+key):"")) + " was not found");
+		return ErrorResponse.getError("Find book"+ (bid!=null?("bid :"+bid):(key!=null?("key :"+key):"")) + " was not found");
 	}
 
 	//Web View Mode
