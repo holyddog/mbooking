@@ -434,3 +434,23 @@ h2.share_title {
 	margin-top: 20px;
 	color: #777;
 }
+
+#tos {
+	padding: 10px;
+	margin: 10px;
+	background-color: #fff;
+}
+#tos h1 {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+#tos h2 {
+	font-size: 100%;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	text-decoration: underline;
+}
+#tos p {
+	font-size: 80%;
+	padding-bottom: 10px;
+}
