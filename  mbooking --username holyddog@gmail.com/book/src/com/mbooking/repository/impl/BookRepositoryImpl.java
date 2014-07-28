@@ -326,7 +326,7 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 
 			Book book = db.findOne(query, Book.class);
 
-			query = new Query(Criteria.where("bid").is(bid));
+			query = new Query(Criteria.where("bid").is(book.getBid()));
 			query.fields().include("seq");
 			query.fields().include("pic");
 			query.fields().include("caption");
