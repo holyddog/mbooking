@@ -454,3 +454,256 @@ h2.share_title {
 	font-size: 80%;
 	padding-bottom: 10px;
 }
+
+.dlink {
+	border-radius: 5px;
+	display: block;
+	padding: 12px;
+	/*color: #33b5e5;*/
+	color: #333;
+	background-color: #fff;
+	margin-bottom: 15px;
+	padding-left: 70px;
+	background-repeat: no-repeat;
+	background-position: 15px center;
+	width: 100px;
+}
+.dlink span {
+	display: block;
+}
+.dlink .av {
+	font-size: 70%;
+	margin-top: 5px;
+	margin-bottom: 2px;
+}
+.dlink.android {
+	background-image: url(../images/android_blue.png);
+}
+.dlink.ios {
+	background-image: url(../images/apple_blue.png);
+}
+
+#bg_blue {
+	position: absolute;
+	width: 100%;
+	top: 150px;
+	background: linear-gradient(to bottom, #0099cc 0%, #6dcaec 100%);
+	height: 400px;
+	z-index: -1;
+	left: 0px;
+}
+
+#container {
+	max-width: 960px; 
+	margin: 0 auto;
+}
+#header {
+	height: 120px; 
+	position: relative;
+}
+#logo {
+	position: absolute; 
+	max-width: 350px; 
+	max-height: 120px;
+}
+#logo img {
+	max-width: 100%;
+	max-height: 100%;
+}
+#nav {
+	height: 120px; margin-left: 350px; overflow: hidden;
+}
+#nav .nav_panel {
+	padding-top: 40px; overflow: hidden; border-bottom: solid 2px #33B5E5;
+}
+#nav .menu_list {
+	float: right; line-height: 40px; overflow: hidden; height: 40px;
+}
+#nav .menu_list li {
+	float: left;
+}
+#nav .menu_list li a {
+	color: #555; display: block; padding: 0 15px;
+}
+
+#body {
+	position: relative;
+}
+#body .about {
+	position: relative; margin-left: 530px; padding-right: 20px;
+	height: 410px;
+}
+#body .qtitle {
+	padding-top: 50px;
+	margin-bottom: 20px;
+	font-size: 200%;
+	font-family: 'Roboto';
+	color: #fff;
+}
+#body .hline {
+	height: 1px; background-color: #fff; margin-bottom: 20px;
+}
+#body .para {
+	font-size: 120%; color: #fff; font-family: 'Roboto';
+}
+#body .lpanel {
+	overflow: hidden;
+	margin-top: 30px;
+}
+#body .fb_contact {
+	position: absolute; height: 50px; left: 0; bottom: 0;
+}
+#body .fb_contact .icon {
+	width: 50px;
+	height: 50px;
+	background: no-repeat url(../images/fb.png) center center;
+	position: absolute;
+	top: 0;
+	right: -15px;
+	display: block;
+}
+#body .fb_panel {
+	float: left; position: relative; padding-right: 50px; line-height: 40px; color: #fff; font-family: 'Roboto'; border-bottom: solid 1px #fff;
+}
+
+#mockup {
+	top: -20px;
+	width: 530px;
+	height: 526px;
+	position: absolute;
+	background: no-repeat url(../images/mockup.png) top center;
+}
+#carousel {
+	top: 52px;left: 229px;width: 217px;height: 389px; position: absolute;
+}
+#carousel div {
+	width: 217px; height: 389px;
+}
+
+.about_text {
+	padding: 15px;
+	max-width: 800px;
+	margin: 0 auto;
+	font-family: 'Roboto';
+}
+.about_text p {
+	padding-bottom: 15px;
+}
+.about_text p.q {
+	text-align: center;
+	font-size: 120%;
+	font-weight: 500;
+	padding: 20px 0;
+}
+
+@media only screen and (max-width : 959px) {
+	#mockup {
+		display: none;
+	}
+	#carousel {
+		display: none;
+	}
+	#body .hline {
+		max-width: 550px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	#body .qtitle {	
+		padding-top: 20px;
+		text-align: center;
+		max-width: 550px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	#body .about {
+		margin-top: 30px;
+		margin-left: 0;
+		padding-left: 20px;
+		text-align: center;
+		width: auto;		
+		background: linear-gradient(to bottom, #0099cc 0%, #6dcaec 100%);
+	}
+	#body .para {	
+		max-width: 550px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	#body .fb_contact {
+		left: 50%;
+		bottom: 20px;
+		width: 242px;
+		margin-left: -121px; 
+	}
+	#body .lpanel {
+		width: 374px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	#bg_blue {
+		display: none;
+	}
+	#nav .menu_list {
+		float: left;
+	}
+}
+
+@media only screen and (max-width : 599px) {
+	#header {
+		height: auto;
+	}
+	#logo {
+		position: static;
+		margin: 0 auto;
+	}
+	#nav {
+		margin-left: 0;
+		height: auto;
+	}
+	#nav .nav_panel {
+		padding-top: 0;
+		border-top: solid 2px #33B5E5;
+	}
+	#nav .menu_list {
+		float: none;
+		overflow: hidden;
+		line-height: 50px;
+		height: 50px;
+	}
+	#nav .menu_list li {
+		width: 33.33%;
+		text-align: center;
+	}
+	#nav .menu_list li a {
+		padding: 0;
+	}
+	#body .about {
+		margin-top: 0px;
+	}
+}
+@media only screen and (max-width : 419px) {
+	#body .lpanel {
+		width: 202px;
+		margin: 0 auto;
+		margin-top: 20px;
+	}
+	#body .qtitle {
+		font-size: 150%;
+	}
+	#body .para {
+		font-size: 100%;
+	}
+	.dlink {
+		margin: 0 10px 10px 10px;
+	}
+	#body .qtitle {
+		font-size: 150%;
+	}
+	#body .para {
+		font-size: 100%;
+	}
+	#body .about {
+		height: 450px;
+	}
+}
+@media only screen and (max-width : 369px) {
+}
