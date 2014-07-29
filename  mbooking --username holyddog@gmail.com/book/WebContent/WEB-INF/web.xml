@@ -14,15 +14,15 @@
   	</context-param>
   	<context-param>
     	<param-name>domain</param-name>
-    	<param-value>localhost</param-value>
+    	<param-value>192.168.0.114</param-value>
   	</context-param>
   	<context-param>
     	<param-name>root</param-name>
-    	<param-value>http://localhost:8080/book</param-value>
+    	<param-value>http://192.168.0.114:8080/book</param-value>
   	</context-param>
   	<context-param>
     	<param-name>file</param-name>
-    	<param-value>http://localhost/res/book</param-value>
+    	<param-value>http://192.168.0.114/res/book</param-value>
     </context-param>
   	<context-param>    
     	<param-name>upload</param-name>
