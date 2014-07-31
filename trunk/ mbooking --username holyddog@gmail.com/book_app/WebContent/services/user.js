@@ -236,6 +236,7 @@ Service.User = {
 		Web.post(url, params, callback);
 	},
 	
+	//version 0.2
 	SubmitReport:function(type, bid, uid, msg, callback){
 		var url = Service.url + '/submitReport.json';
 		var params = {
@@ -243,6 +244,22 @@ Service.User = {
 			bid: bid,
 			uid: uid,
 			msg: msg
+		};
+		Web.post(url, params, callback);
+	},
+	
+	SubmitReportWithType:function(type, subtype,uid,uname,auid,auname,oid,msg,comment, callback){
+		var url = Service.url + '/submitReportWithType.json';
+		var params = {
+			type: type,
+			subtype:subtype,
+			uid:uid,
+			uname: uname,
+			auid: auid,
+			auname:auname,
+			oid:oid,
+			msg:msg,
+			comment:comment
 		};
 		Web.post(url, params, callback);
 	}
