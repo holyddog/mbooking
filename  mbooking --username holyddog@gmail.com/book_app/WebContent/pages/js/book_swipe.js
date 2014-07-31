@@ -35,7 +35,15 @@ Page.Book = {
 					history.back(); 
 					
 					setTimeout(function() {
-						Page.open('Report', true, { bid: params.bid });
+						
+//						params.type	//1: story, 2: comment, 3:user
+//						param.auid
+//						param.auname
+//						param.oid
+//						param.comment
+						
+						var STORYTYPE = 1;
+						Page.open('Report', true, { type:STORYTYPE,auid:uid,oid:params.bid });
 					}, 100);
 				}
 			}, 5);
