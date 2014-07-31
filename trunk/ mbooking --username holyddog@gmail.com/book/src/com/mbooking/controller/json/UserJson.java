@@ -281,6 +281,8 @@ public class UserJson {
 		return ResultResponse.getResult("result", userRepo.viewedGuide(guide,uid));
 	}	
 	
+	
+	//Old Service version for InStory Version 0.2
 	@RequestMapping(method = RequestMethod.POST, value = "/submitReport.json")
 	public @ResponseBody Object submitReport(
 			@RequestParam(value = "type") Integer type,
@@ -288,6 +290,21 @@ public class UserJson {
 			@RequestParam(value = "uid") Long uid,
 			@RequestParam(value = "msg", required = false) String msg
 			) {
-		return ResultResponse.getResult("result", userRepo.submitReport(type, bid, uid, msg));
+		return ResultResponse.getResult("result", userRepo.submitReportStory(type, bid, uid, msg));
+	}	
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/submitReportWithType.json")
+	public @ResponseBody Object submitReportWithType(
+			@RequestParam(value = "type") Integer type,
+			@RequestParam(value = "subtype", required = false) Integer subtype,
+			@RequestParam(value = "uid") Long uid,
+			@RequestParam(value = "uname", required = false) String uname,
+			@RequestParam(value = "auid", required = false) Long auid,
+			@RequestParam(value = "auname", required = false) String auname,
+			@RequestParam(value = "oid", required = false) Long oid,//object id >ex: bid, cmid, others id
+			@RequestParam(value = "msg", required = false) String msg,
+			@RequestParam(value = "comment", required = false) String comment
+			) {
+		return ResultResponse.getResult("result", userRepo.submitReport(type, subtype, uid, auid, oid, msg, uname, auname, comment));
 	}	
 }
