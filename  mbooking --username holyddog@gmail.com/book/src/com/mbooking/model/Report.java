@@ -9,29 +9,48 @@ public class Report {
 	@Id
 	ObjectId rid;
 	
-	// 1 = Nudity or pornography
-	// 2 = Attacks a group or individual
-	// 3 = Graphic violence
-	// 4 = Spam
-	// 5 = Copyright & trademark
-	// 6 = Hateful speech or symbols
-	// 7 = Other...
+	// MainType
+	// 1 = Story
+	// 2 = Comment
+	// 3 = User
+	//
+	// Sub Type	
+	//	Nudity or pornography
+	//	Attacks a group or individual
+	//	Graphic violence
+	//	Spam
+	//	Copyright & trademark
+	//	Hateful speech or symbols
+	//	Other...
+	//
 	Integer type;
+	Integer subtype;
+	Long uid;
 	
 	String msg;
-	Long bid;
-	Long uid;
-	Long rdate;
 	
-//	Nudity or pornography
-//	Attacks a group or individual
-//	Graphic violence
-//	Spam
-//	Copyright & trademark
-//	Hateful speech or symbols
-//	Other...
-//
-//	Story reported
+	Long bid;
+	Long auid;
+	Long cmid;
+	String uname;
+	String auname;
+	String comment;
+
+	Long rdate;
+
+	Boolean inacive;
+	
+	public Boolean getInacive() {
+		return inacive;
+	}
+
+	public void setInacive(Boolean inacive) {
+		this.inacive = inacive;
+	}
+
+	public Long getAuid() {
+		return auid;
+	}
 
 	public ObjectId getRid() {
 		return rid;
@@ -79,5 +98,50 @@ public class Report {
 
 	public void setRdate(Long rdate) {
 		this.rdate = rdate;
+	}
+	public Integer getSubtype() {
+		return subtype;
+	}
+
+	public void setSubtype(Integer subtype) {
+		this.subtype = subtype;
+	}
+
+	public Long getCmid() {
+		return cmid;
+	}
+
+	public void setCmid(Long cmid) {
+		this.cmid = cmid;
+	}
+	public Long getAuthor() {
+		return auid;
+	}
+
+	public void setAuid(Long auid) {
+		this.auid = auid;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+	public String getUname() {
+		return uname;
+	}
+
+	public void setUname(String uname) {
+		this.uname = uname;
+	}
+
+	public String getAuname() {
+		return auname;
+	}
+
+	public void setAuname(String auname) {
+		this.auname = auname;
 	}
 }

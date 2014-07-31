@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import javax.crypto.Cipher;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -552,16 +554,34 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 	}
 
 	@Override
-	public Boolean submitReport(Integer type, Long bid, Long uid, String msg) {
+	public Boolean submitReportStory(Integer type, Long bid, Long uid, String msg) {
 		try {
-			Report rep = new Report();
-			rep.setType(type);
-			rep.setBid(bid);
-			rep.setUid(uid);
-			rep.setMsg(msg);
-			rep.setRdate(System.currentTimeMillis());
+			Update update = new Update();
+			update.set("type", 1);
+			update.set("subtype", type);
+			update.set("bid",bid);
+			update.set("uid",uid);
+		
+			Query query = new Query(Criteria.where("uid").is(uid));
+			query.fields().include("uname");
+			User user = db.findOne(query, User.class);
+			update.set("uname",user.getUname());
 			
-			db.insert(rep);			
+			Query bquery = new Query(Criteria.where("bid").is(bid));
+			bquery.fields().include("uid");
+			Book story = db.findOne(bquery, Book.class);
+			Long auid = story.getUid();	
+			update.set("auid",auid);
+			
+			Query auquery = new Query(Criteria.where("uid").is(auid));
+			auquery.fields().include("uname");
+			User author = db.findOne(auquery, User.class);
+			update.set("auname",author.getUname());
+			update.set("msg",msg);
+			update.set("rdate",System.currentTimeMillis());
+			update.set("inactive",false);
+			
+			db.upsert(new Query(Criteria.where("uid").is(uid).and("bid").is(bid).and("auid").is(auid).and("type").is(1).and("subtype").is(type).and("inactive").is(false)), update, Report.class);	
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -569,7 +589,73 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		}
 		
 		return true;
-	}	
+	}
+
+	@Override
+	public Boolean submitReport(Integer type, Integer subtype, Long uid,
+			Long auid, Long oid, String msg, String uname, String auname,
+			String comment) {
+		try {
+			Update update = new Update();
+			update.set("type",type);
+			update.set("subtype",subtype);
+			update.set("uid",uid);
+			update.set("auid",auid);
+			update.set("uname",uname);
+			update.set("auname",auname);
+			update.set("msg",msg);
+			update.set("inactive",false);
+			
+			if(uname==null||uname.equals("")){
+				Query query = new Query(Criteria.where("uid").is(uid));
+				query.fields().include("uname");
+				User user = db.findOne(query, User.class);
+				update.set("uname",user.getUname());
+			}
+			else{
+				update.set("uname",uname);
+			}
+			
+			if(auid!=null&&(auname==null||auname.equals(""))){
+				Query query = new Query(Criteria.where("uid").is(auid));
+				query.fields().include("uname");
+				User user = db.findOne(query, User.class);
+				update.set("auname",user.getUname());
+			}
+			else{
+				update.set("auname",auname);
+			}
+			
+			update.set("rdate",System.currentTimeMillis());
+
+			Criteria criteria = Criteria.where("uid").is(uid).and("auid").is(auid).and("type").is(type).and("subtype").is(subtype).and("inactive").is(false);
+			
+			if(type==1){
+				//story
+				update.set("bid",oid);
+				
+				criteria.and("bid").is(oid);
+				db.upsert(new Query(criteria), update, Report.class);
+			
+			}else if(type==2){
+				update.set("cmid",oid);
+				
+				criteria.and("cmid").is(oid);
+				update.set("comment",comment);
+			}
+			
+			db.upsert(new Query(criteria), update, Report.class);			
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
+		
+		return true;
+	}
+
+
+	
 	
 	
 }
