@@ -40,10 +40,9 @@ public class User {
 	
 	Long lstin;		//last login
 	FBobj fbobj;
-	
 	Boolean unlinkfb;
-
 	String fgpass; // Forget password code
+	Integer violate;// count violate behavior
 
 	// Service return
 	List<Book> books;
@@ -275,5 +274,13 @@ public class User {
 
 	public void setFguide(Boolean fguide) {
 		this.fguide = fguide;
+	}
+	
+	public Integer getViolate() {
+		return violate;
+	}
+
+	public void setViolate(Integer violate) {
+		this.violate = violate;
 	}
 }
