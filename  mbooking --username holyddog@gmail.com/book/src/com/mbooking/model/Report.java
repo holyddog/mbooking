@@ -51,6 +51,9 @@ public class Report {
 	public Long getAuid() {
 		return auid;
 	}
+	public void setAuid(Long auid) {
+		this.auid = auid;
+	}
 
 	public ObjectId getRid() {
 		return rid;
@@ -113,13 +116,6 @@ public class Report {
 
 	public void setCmid(Long cmid) {
 		this.cmid = cmid;
-	}
-	public Long getAuthor() {
-		return auid;
-	}
-
-	public void setAuid(Long auid) {
-		this.auid = auid;
 	}
 
 	public String getComment() {
