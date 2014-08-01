@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html 
 	xmlns="http://www.w3.org/1999/xhtml"
     xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -17,7 +17,7 @@
     
     <!-- opengraph -->
     <meta property="og:site_name" content="InStory" />
-    <meta property="og:url" content="#{initParam['root']}/?bid=#{bookView.book.bid}" />
+    <meta property="og:url" content="#{initParam['root']}/b/#{bookView.book.key}" />
     <meta property="og:title" content="#{bookView.book.title}" />
     <meta property="fb:app_id" content="370184839777084" />
     <meta property="og:image" content="#{initParam['file']}#{bookView.coverPic}" />
