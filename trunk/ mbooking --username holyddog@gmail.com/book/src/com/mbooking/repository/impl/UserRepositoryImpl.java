@@ -17,6 +17,7 @@ import org.springframework.data.mongodb.core.query.Update;
 
 import com.mbooking.constant.ConstValue;
 import com.mbooking.model.Book;
+import com.mbooking.model.Comment;
 import com.mbooking.model.Device;
 import com.mbooking.model.FBobj;
 import com.mbooking.model.Favourite;
@@ -616,16 +617,6 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 				update.set("uname",uname);
 			}
 			
-			if(auid!=null&&(auname==null||auname.equals(""))){
-				Query query = new Query(Criteria.where("uid").is(auid));
-				query.fields().include("uname");
-				User user = db.findOne(query, User.class);
-				update.set("auname",user.getUname());
-			}
-			else{
-				update.set("auname",auname);
-			}
-			
 			update.set("rdate",System.currentTimeMillis());
 
 			Criteria criteria = Criteria.where("uid").is(uid).and("auid").is(auid).and("type").is(type).and("subtype").is(subtype).and("inactive").is(false);
@@ -642,6 +633,28 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 				
 				criteria.and("cmid").is(oid);
 				update.set("comment",comment);
+				
+				Query comq = new Query(Criteria.where("cmid").is(oid));
+				comq.fields().include("bid");
+				comq.fields().include("uid");
+				
+				Comment com = db.findOne(comq, Comment.class);
+				
+				update.set("bid",com.getBid());
+				if(auid!=null){
+					auid = com.getUid();
+					update.set("auid",auid);					
+				}
+			}
+			
+			if(auid!=null&&(auname==null||auname.equals(""))){
+				Query userq = new Query(Criteria.where("uid").is(auid));
+				userq.fields().include("uname");
+				User user = db.findOne(userq, User.class);
+				update.set("auname",user.getUname());
+			}
+			else if(auname!=null&&!auname.equals("")){
+				update.set("auname",auname);
 			}
 			
 			db.upsert(new Query(criteria), update, Report.class);			
