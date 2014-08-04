@@ -180,7 +180,8 @@ load: function(container, bookData,params) {
             
             function refToStr(ref){
 				if (ref) {
-					if (/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})(.*)$/ig.test(ref.trim())) {
+					ref = ref.trim();
+					if (/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})(.*)$/ig.test(ref)) {
 						var url = ref.split(/\s+/g)[0];
 						var newUrl = url.replace(/^(https?:\/\/)?(www.)?/ig, '');
 						if (newUrl.indexOf('/') > -1) {
