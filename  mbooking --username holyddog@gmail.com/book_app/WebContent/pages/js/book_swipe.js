@@ -161,6 +161,7 @@ Page.Book = {
 				var refStr = '';
 				var ref = data[i].ref;
 				if (ref) {
+//					if (/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w\?\#\=\&\+\.-]*)*\/?$/ig.test(ref)) {
 					if (/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})(.*)$/ig.test(ref)) {
 						var url = ref.split(/\s+/g)[0];
 						var newUrl = url.replace(/^(https?:\/\/)?(www.)?/ig, '');
