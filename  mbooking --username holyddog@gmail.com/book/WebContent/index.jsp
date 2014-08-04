@@ -19,11 +19,11 @@
 				<div class="hline"></div>
 				<p class="para">Capture your memories and create your stories using your photos, text and share to your friends</p>
 				<div class="lpanel">
-					<a class="dlink android" href="#" style="float: left; margin-right: 10px;">
+					<a class="dlink android" href="https://play.google.com/store/apps/details?id=me.instory" style="float: left; margin-right: 10px;">
 						<span class="av">Available for</span>
 						<span class="src">Android</span>
 					</a>
-					<a class="dlink ios" href="#" style="float: left;">
+					<a class="dlink ios" href="https://itunes.apple.com/th/app/instory/id864883607?mt=8" style="float: left;">
 						<span class="av">Available on the</span>
 						<span class="src">App Store</span>
 					</a>

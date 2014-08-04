@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html 
 	xmlns="http://www.w3.org/1999/xhtml"
     xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -92,11 +92,11 @@
 				<div id="panel">
 					<div class="download_panel">
 						<h2>Download for Free</h2>
-						<a class="link android" href="#">
+						<a class="link android" href="https://play.google.com/store/apps/details?id=me.instory">
 							<span class="av">Available for</span>
 							<span class="src">Android</span>
 						</a>
-						<a class="link ios" href="#">
+						<a class="link ios" href="https://itunes.apple.com/th/app/instory/id864883607?mt=8">
 							<span class="av">Available on the</span>
 							<span class="src">App Store</span>
 						</a>
