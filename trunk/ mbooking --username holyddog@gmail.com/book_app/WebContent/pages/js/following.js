@@ -317,7 +317,16 @@ Page.Following = {
 			ref.appendChild(self.getUser(who));
 		}
 		else if (type == 6) {
-			ref.appendChild(self.getBook(book));
+			if (book) {
+				ref.appendChild(self.getBook(book));				
+			}
+			else {
+				var del = document.createElement('span');
+				del.style.fontSize = '80%';
+				del.style.color = '#555';
+				del.innerText = 'story deleted';
+				ref.appendChild(del);
+			}
 		}
 		
 		ubox.appendChild(uinfo);
