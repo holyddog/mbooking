@@ -260,6 +260,10 @@ Page.Profile = {
 		var scBar = container.find('.sc_bar');
 		if (isGuest) {
 			scBar.hide();
+			
+			if (Device.os.Android) {
+				container.find('.content').css('padding-bottom', '0px');
+			}
 		}
 		
 		self.loadProfile(uid, isGuest, container);
@@ -348,7 +352,6 @@ Page.Profile = {
 		content.find('#ptab2').height("");
 		
 		Service.User.GetProfile(uid, Account.userId, function(data) {
-			console.log(data);
 			Page.bodyHideLoading(content);
 			
 			profile_view.style.display = 'block';
