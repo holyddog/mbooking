@@ -162,7 +162,7 @@ Page.Book = {
 				var ref = data[i].ref;
 				if (ref) {
 //					if (/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w\?\#\=\&\+\.-]*)*\/?$/ig.test(ref)) {
-					if (/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})(.*)$/ig.test(ref)) {
+					if (/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})(.*)$/ig.test(ref.trim())) {
 						var url = ref.split(/\s+/g)[0];
 						var newUrl = url.replace(/^(https?:\/\/)?(www.)?/ig, '');
 						if (newUrl.indexOf('/') > -1) {
