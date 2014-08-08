@@ -13,7 +13,9 @@ Config = {
 //	WEB_BOOK_URL:'http://instory.me',
 //	FILE_URL: 'http://' + 'instory.me' + '/f',
 	
-	FILE_URL: 'http://' + window.location.hostname + '/res/book',
+//	FILE_URL: 'http://' + window.location.hostname + '/res/book',
+	FILE_URL: 'http://119.59.122.38/book_dev_files',
+	
 	WEB_BOOK_URL : 'http://' + window.location.hostname + ':8080/book',
 	
 	OS: 'iOS',
@@ -753,6 +755,7 @@ Page = {
 			}
 
 			var dialog = $('#dialog');
+			dialog.css('z-index','2000');
 			dialog.find('.d_panel').css('width', 'auto');
 			
 			var ul = document.createElement('ul');
@@ -1083,7 +1086,7 @@ Page = {
 						var it = items[i];
 						ul.appendChild(getItem(it.name, it.label));
 					}
-					dialog.find('.d_panel').css('overflow-y', 'hidden').append(ul);
+					dialog.find('.d_panel').css('overflow-y', 'hidden').css('z-index','2000').append(ul);
 					
 					dialog.find('[data-link]').click(function() {						
 						var link = $(this).data('link');
@@ -1666,7 +1669,7 @@ document.addEventListener("deviceready", function() {
             topage = event.extras.page;
         }
                           
-       if(page!='Home'&&page!='SignIn'&&page!='SignUp'&&(topage)){
+        if(page!='Home'&&page!='SignIn'&&page!='SignUp'&&(topage)&&!($.isEmptyObject(Account))){
           function changePage(){
               var params = {};
               if(topage=="Notifications"){
@@ -1696,13 +1699,13 @@ document.addEventListener("deviceready", function() {
           if(Device.PhoneGap.isOnScreen)
           {
                           MessageBox.confirm({
-                                message: 'Do you want to read new message',
+                                message: event.message,
                                 callback: function(button) {
                                     
                                 changePage();
                                             
                                 },
-                                title:'New Message',
+                                title:'New Event',
                                 confirm_lb:'View'
                           });
           }
@@ -1737,20 +1740,14 @@ document.addEventListener("deviceready", function() {
                   
         document.addEventListener("urbanairship.registration", onRegistration, false);
         document.addEventListener("urbanairship.push", handleIncomingPush, false);
-      
         setTimeout(function() {
         Device.PhoneGap.isOnScreen = true;
         },500);
                              
         Device.PhoneGap.isResume = true;
-        
- 
-                             
         Device.PhoneGap.isReady = true;
         PushNotification.getIncoming(handleIncomingPush);
 
-        
-        
    }, false);
 
    document.addEventListener("pause", function() {
@@ -1766,10 +1763,42 @@ document.addEventListener("deviceready", function() {
    
    PushNotification.getIncoming(handleIncomingPush);
 
-
-                          
-                          
-                          
 }, false);
+function getStrUrlParam(url,name) {
+    if (!url) {
+        results = "";
+    }
+    var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(url);
+    if (!results) {
+        return "";
+    }
+    return results[1] || "";
+}
 
+function handleOpenURL(url){
+    setTimeout(
+        function(){
+            var page = (document.URL).split('#')[1];
+            if(page!='Home'&&page!='SignIn'&&page!='SignUp'&& !($.isEmptyObject(Account))){
+               url = url.replace("instory://","");
+               var func = (url.split("?"))[0];
+               if(func="story"){
+               
+                   var key = getStrUrlParam(url,"key");
+                   if(key!=""){
+                       if(((document.URL).split('#')[1]).split("?")[0]=="Book"){
+                           Page.back();
+                           setTimeout(function(){
+                              Page.open("Book",true,{key:key});
+                           },100);
+                   
+                        }else{
+                            Page.open("Book",true,{key:key});
+                        }
+                    }
+               }
+            }
+        },0
+    );
+}
 

@@ -121,6 +121,16 @@ Service.Book = {
 		Web.get(url, params, callback);
 	},
 	
+	GetBookDataByKey : function(key, guestId, callback) {
+		var url = Service.url + '/getBook.json';
+		var params = {
+			key : key,
+			gid : guestId,
+            count: true
+		};
+		Web.get(url, params, callback);
+	},
+	
 	GetBookByBid: function(bid, callback) {
 		var url = Service.url + '/getBook.json';
 		var params = {

@@ -42,8 +42,16 @@ Page.Book = {
 //						param.oid
 //						param.comment
 						
-						var STORYTYPE = 1;
-						Page.open('Report', true, { type:STORYTYPE,auid:uid,oid:params.bid });
+						//var STORYTYPE = 1;
+						//Page.open('Report', true, { type:STORYTYPE,auid:uid,oid:params.bid });
+//						
+//						var STORYTYPE = 3;
+//						Page.open('Report', true, { type:STORYTYPE,auid:uid});
+						
+						var STORYTYPE = 2;
+						Page.open('Report', true, { type:STORYTYPE,auid:uid,oid:68,comment:"It' seem you that you spend money for this car too much." });
+						
+//						params.type, sel.val(),Account.userId,Account.userName,params.auid,params.auname,params.oid,text.val(),params.comment
 					}, 100);
 				}
 			}, 5);

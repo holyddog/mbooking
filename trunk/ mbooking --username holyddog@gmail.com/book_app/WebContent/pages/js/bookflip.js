@@ -3,9 +3,10 @@ url: 'pages/html/blank.html',
 init: function(params, container) {
     var self = this;
     Page.bodyShowLoading(container);
-   
+    Page.bodyHideNoItem(container);
+    
     if(/*window.navigator.onLine*/true){
-		if(Account.bguide){
+		if(Account.bguide&&!params.preview){
 			$('.user_guide').tap(
 				function(){
 					$('.user_guide').fadeOut();
@@ -34,11 +35,20 @@ init: function(params, container) {
 				Page.back();
 			}
 	);
-    
-    Service.Book.GetBookData(params.bid, params.uid, Account.userId, function(data) {
-          self.load(container, data,params);
-    });
-    
+
+    if(params.uid&&params.uid>0&&params.bid&&params.bid>0){
+        Service.Book.GetBookData(params.bid, params.uid, Account.userId, function(data) {
+            self.load(container, data,params);
+        });
+    }
+    else if(params.key!=null&&params.key!=undefined&&params.key!=""){
+      Service.Book.GetBookDataByKey(params.key, Account.userId, function(data) {
+            self.load(container, data,params);
+        });
+    }
+    else{
+      console.log("Internal Error");
+    }
     
 },
 LIMIT_PAGE:1,
@@ -46,9 +56,17 @@ reverseIndex:function(container){
 	container.css('display','');
 },
 load: function(container, bookData,params) {
+    Page.bodyHideNoItem(container);
+    
+    if(bookData.error){
+        Page.bodyHideLoading(container);
+        Page.bodyNoItem(container,"This story is not available");
+        return ;
+    }
+    
 	var uid = (params && params.uid)? params.uid: Account.userId;
 	var canEdit = true;
-	if (uid != Account.userId||params.preview) {
+	if (uid != Account.userId||params.preview||(!params.bid)) {
 		canEdit = false;
 	}
 	container.css('-webkit-transition','background-color 500ms linear');	
@@ -60,6 +78,19 @@ load: function(container, bookData,params) {
     var data = bookData.pages;
     data.push({});
     if (data.length) {
+        
+        if(data.length==1&&JSON.stringify(data[0])=="{}"){
+            Page.bodyHideLoading(container);
+            
+            var message = "This story is not available";
+            if(params.preview)
+                message = "No page in this story. Please add page and try again";
+            
+            Page.bodyNoItem(container,message);
+            return ;
+        }
+        
+        
         for (var i = data.length - 1; i > -3; i--) {
             var f_ev_str = 'f_ev';
             if(i==-2){
@@ -86,15 +117,15 @@ load: function(container, bookData,params) {
             var tbar_btn_back = '';
             
             if(!params.preview){
-                tbar_btn =  '<a data-id="btn_l" class="btn" style="position: relative; float: right; pointer-events:all;"><span style="background-color: #fff;" class="like"></span></a>'
+                tbar_btn =  '<a data-id="btn_s" class="btn" style="position: relative; float: right; pointer-events:all;"><span style="background-color: #fff;" class="more"></span></a> '
+                    +'<a data-id="btn_l" class="btn" style="position: relative; float: right; pointer-events:all;"><span style="background-color: #fff;" class="like"></span></a>'
                 	+'<a data-id="btn_f" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="star"style="background-color:#fff;"></span></a>'
-                    +'<a data-id="btn_c" class="btn" style="position: relative; float: right; pointer-events:all;"><span style="background-color: #fff;" class="comment"></span></a>'
-                    +'<a data-id="btn_s" class="btn" style="position: relative; float: right; pointer-events:all;"><span style="background-color: #fff;" class="share"></span></a> ';
+                    +'<a data-id="btn_c" class="btn" style="position: relative; float: right; pointer-events:all;"><span style="background-color: #fff;" class="comment"></span></a>';
                 
-                tbar_btn_bp =  '<a data-id="btn_l" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="like"style="background-color:#FBFBFB;"></span></a>'
+                tbar_btn_bp ='<a data-id="btn_s" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="more"style="background-color:#FBFBFB;"></span></a> '
+                    +'<a data-id="btn_l" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="like"style="background-color:#FBFBFB;"></span></a>'
                 	+'<a data-id="btn_f" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="star"style="background-color:#FBFBFB;"></span></a>'
-                    +'<a data-id="btn_c" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="comment"style="background-color:#FBFBFB;"></span></a>'
-                    +'<a data-id="btn_s" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="share"style="background-color:#FBFBFB;"></span></a> ';
+                    +'<a data-id="btn_c" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="comment"style="background-color:#FBFBFB;"></span></a>';
             
             }
             else{
@@ -109,7 +140,7 @@ load: function(container, bookData,params) {
                 +'<div class="title"></div>'
                 +tbar_btn
                 +'</div>'
-                +'<div class="content gray flex1 box vertical '+f_ev_str+'" style="pointer-events:all;">'
+                +'<div class="content gray flex1 box vertical '+f_ev_str+'" style="">'
                 +'	<div class="first_cover hid_loading">'
                 +'      <div class="box horizontal">'
     			+'          <h1 class="btitle flex1"></h1>'
@@ -147,8 +178,8 @@ load: function(container, bookData,params) {
                 +'<div class="title"></div>'
                 +tbar_btn_bp
                 +'</div>'
-                +'<div class=" flex1 box vertical '+f_ev_str+'" style="background:#131313; pointer-events:all;">'
-                +'	<div class="flex1" style=" background: url('+"'images/thank1.jpg'"+'); background-position: center; background-size: 100% auto; background-repeat: no-repeat;"></div>'
+                +'<div class=" flex1 box vertical '+f_ev_str+'" style="background:#131313; ">'
+                +'	<div class="flex1" style=" background: url('+"'images/thank1.png'"+'); background-position: center; background-size: 100% auto; background-repeat: no-repeat;"></div>'
                 +'		<div class="bottom_info">'
                 +'			<div class="text_bar flow_hidden" style="text-align: center;padding: 30px;">'
                 +'				<span style="font-family:'+"'Roboto'"+ ';">Credit by : '+bookData.author.dname+'</span>'
@@ -160,14 +191,14 @@ load: function(container, bookData,params) {
             
             var title_bar_left =$('<div class="tbar" style="height: 0px; pointer-events:none; z-index:1001"><div class="title"></div>'
                     +'<a data-id="btn_b" class="btn" style="left: 0; pointer-events:all;"><span style="background-color: #fff;" class="'+((params.preview)?"back":"cancel")+'"></span></a>'
-                    +((!params.preview)?'<a data-id="btn_s" class="btn" style="position: relative; float: right; pointer-events:all;margin-right:150px;"><span style="background-color: #fff;" class="share"></span></a> ':'')
+                    +((!params.preview)?'<a data-id="btn_c" class="btn" style="position: relative; float: right; pointer-events:all;margin-right:150px;"><span style="background-color: #fff;" class="comment"></span></a> ':'')
                     +'</div>');
             
             var title_bar_right =$('<div class="tbar" style="height: 0px; pointer-events:none; z-index:1001"><div class="title"></div>'
+                    +'<a data-id="btn_s" class="btn" style="position: relative; float: right; pointer-events:all;"><span style="background-color: #fff;" class="more"></span></a> '
                     +'<a data-id="btn_l" class="btn" style="position: relative; float: right; pointer-events:all;"><span style="background-color: #fff;" class="like"></span></a>'
                     +'<a data-id="btn_f" class="btn" style="position: relative; float: right; pointer-events:all;"><span class="star"style="background-color:#fff;"></span></a>'
-                    +'<a data-id="btn_c" class="btn" style="position: relative; float: right; pointer-events:all;"><span style="background-color: #fff;" class="comment"></span></a>'
-                    +((!params.preview)?'<a data-id="btn_s" class="btn" style="position: relative; float: right; pointer-events:all;margin-right:150px;"><span style="background-color: #fff;" class="share"></span></a> ':'')
+                    +'<a data-id="btn_c" class="btn" style="position: relative; float: right; pointer-events:all;margin-right:150px;"><span style="background-color: #fff;" class="comment"></span></a>'
                     +'</div>');
          
             var shadowf =  $('<div class="fill_dock" data-id="page_shadow" style="opacity:0; background:black; z-index:1"></div>');
@@ -277,7 +308,6 @@ load: function(container, bookData,params) {
             container.append(page);
             
         }
-   
         
    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////     
         /*Settings Btn*/   
@@ -294,19 +324,31 @@ load: function(container, bookData,params) {
                            Page.open('Comments', true, { bid: params.bid });
                            container.css('display','none');
             });
+        
             var btnShare = $('[data-id=btn_s]');
-            btnShare.tap(function(success) {
-                         
-//            	Page.open('Share', true, { bid: params.bid });
-//                container.css('display','none');
-                 var url = Config.WEB_BOOK_URL + '/b/' + params.key;
-                 if (Device.PhoneGap.isReady) {
-                    window.plugins.socialsharing.share(null, null, null, url);
-                 }
-                 else {
-                    window.open(url,'_blank','location=yes');
-                 }
-            });
+            btnShare.tap(function() {
+                Page.popDialog(function(link) {
+                    if (link == '1') {
+                        history.back();
+                        var url = Config.WEB_BOOK_URL + '/b/' + params.key;
+                        if (Device.PhoneGap.isReady) {
+                            window.plugins.socialsharing.share(null, null, null, url);
+                        }
+                        else {
+                            window.open(url);
+                        }
+                    }
+                    else if (link == '2') {
+                        history.back();
+
+                        setTimeout(function() {
+                            Page.open('Report', true, { bid: params.bid });
+                            container.css('display','none');
+                        }, 100);
+                    }
+                }, 5);
+            });	
+
         
         	var btnLike = $('[data-id=btn_l]');
         	
@@ -754,32 +796,51 @@ load: function(container, bookData,params) {
                            });
         }
        }
-      function loadcover(callback){  
+        
+      var default_img = $('<img class="book_bg absolute fade_out show" src="images/dc.png" />');
+      default_img.load();
+      var default_page_img = $('<img class="book_bg absolute fade_out show" src="images/imgerror.jpg" />');
+      default_page_img.load();
+        
+      function loadcover(callback){
+          Page.bodyHideLoading(container);
 	      var bgImage = Util.getImage(bookData.pic, 1);
-	      var img = $('<img class="book_bg absolute fade_out show" src="' + bgImage + '" />');  
+	      var img = $('<img class="book_bg absolute fade_out show" src="' + bgImage + '" />');
 	      var img2 = $('<img class="book_bg absolute fade_out show" src="' + bgImage + '" />');
-	      img.load(function() {
-
-	    	  	   $(container.find('.cover_book')[0]).parent().prepend(img);
-	               $(container.find('.cover_book')[1]).parent().prepend(img2);
-	                            
-	               var h = $(window).innerHeight();
-	               var w = window_width;
-	               
-	               img.height(h);
-	               img2.height(h);
-	               img.css('left', -1 * (img.width() / 2 - w / 2) + 'px');
-	               img2.css('left', -1 * (img.width() / 2 - w / 2) + 'px'); 
-	               callback();
+	      
+          var img3 = $('<img class="book_bg absolute fade_out show" src="images/dc.png" />');
+	      var img4 = $('<img class="book_bg absolute fade_out show" src="images/dc.png" />');
+          
+          function setImg(){
+              $(container.find('.cover_book')[0]).parent().prepend(img);
+              $(container.find('.cover_book')[1]).parent().prepend(img2);
+              
+              var h = $(window).innerHeight();
+              var w = window_width;
+              
+              img.height(h);
+              img2.height(h);
+              img.css('left', -1 * (img.width() / 2 - w / 2) + 'px');
+              img2.css('left', -1 * (img.width() / 2 - w / 2) + 'px');
+              callback();
+          }
+          
+          img.load(function() {
+              setImg();
 	      });
 	   
+          img.error(function() {
+              img = img3;
+              img2 = img4;
+              setImg();
+          });
 	      
 	  }
       
       
 
       function firstLoad(){
-    		Page.bodyHideLoading(container);
+//    		Page.bodyHideLoading(container);
     		container.find('[data-id=btn_cb]').hide();
 			var content = container.find('.content');
 			// show panel
@@ -811,31 +872,45 @@ load: function(container, bookData,params) {
 			
 			bindSwipe();
       }
+        
+        
       var count = 0;
+        
       function loadpagepic(){
     	  var pic =   container.find('[data-id='+count+']');
-    	  pic.attr("src", Util.getImage(data[count].pic, 1));
-    	  $(pic[0]).load(function() {
-    		  Page.bodyHideLoading($(container.find('[data-id=pic_box'+count+']')[0]));
+          
+          var str_img = Util.getImage(data[count].pic, 1);
+          
+          pic.attr("src", str_img);
+    	  
+          function setPageImage(){
+              Page.bodyHideLoading($(container.find('[data-id=pic_box'+count+']')[0]));
     		  Page.bodyHideLoading($(container.find('[data-id=pic_box'+count+']')[1]));
     		  
     		  pic.css("visibility",'');
     		  pic.css("opacity",'1');
     		  container.find('[data-id=txt'+count+']').css("visibility",'');
     		  container.find('[data-id=txt'+count+']').css("opacity",'1');
-				 if (count < data.length-1) {	
-					count++;
-						
-						loadpagepic();	
-
-					
-					if (count == 1) {
-						firstLoad();
-					}
-				}
+              if (count < data.length-1) {
+                  count++;
+                  
+                  loadpagepic();
+                  
+                  if (count == 1) {
+                      firstLoad();
+                  }
+              }
+          }
+          $(pic[0]).load(function() {
+                setPageImage();
     	  });
     	  
-    	  
+          $(pic[0]).error(function() {
+                var data_id = $(this).attr('data-id');
+                var p = container.find('[data-id='+data_id+']');
+                p.attr("src", "images/imgerror.jpg");
+          });
+          
       }
       
       loadcover(function(){
@@ -849,6 +924,9 @@ load: function(container, bookData,params) {
       
       
       
+    }else{
+        Page.bodyHideLoading(container);
+        Page.bodyNoItem(container,"This story is not available");
     }
 }
 };

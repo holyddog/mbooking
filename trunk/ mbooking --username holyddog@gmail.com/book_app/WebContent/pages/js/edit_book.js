@@ -83,7 +83,7 @@ Page.EditBook = {
 		btnDel.tap(function() {
 			MessageBox.confirm({ 
 				title: 'Confirm', 
-				message: 'Are you sure you want to delete this book?', 
+				message: 'Are you sure you want to delete this story?', 
 				callback: function() {
 					Service.Book.DeleteBook(self.bid, Account.userId, function() {
 						var books = Account.draftBooks;
@@ -160,28 +160,42 @@ Page.EditBook = {
 		
 		var btnPub = container.find('[data-id=btn_pub]');
 		btnPub.tap(function() {
-			Page.popDialog(function(text, share) { 
-				history.back();
-				
-				if (text == 'ok') {
-					if (share && Device.PhoneGap.isReady) {						
-						var title = container.find('.book_title').text();
-						var desc = container.find('.book_det .desc').text();
-						var pic = container.find('.book_size').css('background-image');
-						pic = pic.substring(pic.indexOf('(') + 1, pic.length - 1);
-						
-						setTimeout(function() {
-							Page.showLoading('Publishing...');							
-							self.fbPost(bid, title, desc, pic, function() {
-								publishBook();
-							});
-						}, 100);
-					}
-					else {
-						publishBook(true);
-					}
-				}
-			}, 4);
+			var counter = container.find('.pcount span');
+            
+            if(counter.text()=='0'){
+                MessageBox.alert({
+                    title: 'Unable to Publish',
+                    message: 'The publish story must has at least 1 page. If you want to publish this story, you should add page.',
+                    callback: function() {
+                                    
+                    }
+                });
+            }
+            else{
+                Page.popDialog(function(text, share) {
+                    history.back();
+                    
+                    if (text == 'ok') {
+                        if (share && Device.PhoneGap.isReady) {						
+                            var title = container.find('.book_title').text();
+                            var desc = container.find('.book_det .desc').text();
+                            var pic = container.find('.book_size').css('background-image');
+                            pic = pic.substring(pic.indexOf('(') + 1, pic.length - 1);
+                            
+                            setTimeout(function() {
+                                Page.showLoading('Publishing...');							
+                                self.fbPost(bid, title, desc, pic, function() {
+                                    publishBook();
+                                });
+                            }, 100);
+                        }
+                        else {
+                            publishBook(true);
+                        }
+                    }
+                }, 4);
+            }
+
 		});
 		
 		if (book_header.offsetWidth >= 600) {
@@ -382,28 +396,41 @@ Page.EditBook = {
 				}
 				else if (text == 'delete') {
 					history.back();
+
+                    var counter = container.find('.pcount span');
+                    if(!(container.find('.book_det .privacy').hasClass('priv'))&&(counter.text()==1)){
+                        MessageBox.alert({
+                                title: 'Unable to Delete',
+                                message: 'The publish story must has at least 1 page. If you want to delete this story, tap bin button on the top right.',
+                                callback: function() {
+                                
+                                }
+                        });
+                    }
+                    else{
+                        setTimeout(function() {
+                            MessageBox.confirm({
+                                title: 'Confirm',
+                                message: 'Are you sure you want to delete this page?',
+                                callback: function() {
+                                    Page.showLoading('Deleting...');
+                                    Service.Page.DeletePage(item.dataset.pid, self.bid, function() {
+                                        Page.hideLoading();
+
+                                        container.find('[data-pid=' + item.dataset.pid + ']').remove();
+                                        var counter = container.find('.pcount span');
+                                        counter.text(parseInt(counter.text()) - 1);
+                                        
+                                        var pages = container.find('.pp');
+                                        for (var i = 0; i < pages.length; i++) {
+                                            pages.eq(i).find('.page_num').text(i + 1);
+                                        }
+                                    });								
+                                } 
+                            });
+                        }, 100);                           
+                    }
 					
-					setTimeout(function() {
-						MessageBox.confirm({ 
-							title: 'Confirm', 
-							message: 'Are you sure you want to delete this page?', 
-							callback: function() {										
-								Page.showLoading('Deleting...');
-								Service.Page.DeletePage(item.dataset.pid, self.bid, function() {
-									Page.hideLoading();
-									
-									container.find('[data-pid=' + item.dataset.pid + ']').remove();
-									var counter = container.find('.pcount span');
-									counter.text(parseInt(counter.text()) - 1);
-									
-									var pages = container.find('.pp');
-									for (var i = 0; i < pages.length; i++) {
-										pages.eq(i).find('.page_num').text(i + 1);
-									}
-								});								
-							} 
-						});
-					}, 100);					
 				}
 				else if (text == 'cover') {
 					history.back();

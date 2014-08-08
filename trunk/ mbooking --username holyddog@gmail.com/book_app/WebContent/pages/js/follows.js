@@ -23,7 +23,7 @@ Page.Follows = {
 			container.find('.tbar .title').text('Following');
 			Service.User.FindFollowing(params.uid, function(data) {
 				Page.bodyHideLoading(content);
-				
+				Page.bodyHideNoItem(content);
 				self.load(content, data,params);
 			});		
 		}

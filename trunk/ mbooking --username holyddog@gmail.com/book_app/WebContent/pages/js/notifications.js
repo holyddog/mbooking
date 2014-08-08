@@ -101,7 +101,7 @@ Page.Notifications = {
 		notfDiv.className = 'notf_item box horizontal';
 		
 		if (book) {
-			notfDiv.dataset.href = '#Book?append=true&bid=' + book.bid + '&uid=' + user.uid;
+			notfDiv.dataset.href = '#Book?append=true&bid=' + book.bid + '&uid=' + data.uid;
 		}
 		else if(data.ntype!=1) {
 			notfDiv.dataset.href = '#Profile?append=true&uid=' + data.uid + '&back=true';
