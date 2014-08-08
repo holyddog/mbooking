@@ -61,35 +61,36 @@ Page.AddPage = {
 				
 				Service.Page.AddPage(pid, pic, drag_img.parentNode.offsetWidth, pos, desc_text.innerText, link.data('raw'), bid, Account.userId, function(data) {
 					Page.btnHideLoading(btnAccept[0]);
-					
-					Page.back(function(c, page) {						
-						if (!edit) {	
-							page.addPage(c, data);					
-							// set cover
-							if (data.seq == 1) {
-								c.find('.book_size').css('background-image', 'url(' + Util.getImage(data.pic, 2) + ')');
-								
-								if (Account.draftBooks) {
-									var books = Account.draftBooks;
-									for (var i = 0; i < books.length; i++) {
-										if (bid == books[i].bid) {
-											Account.draftBooks[i].pic = data.pic;
-											break;
+					if((((document.URL).split('#')[1]).split("?")[0])=="AddPage"){
+						Page.back(function(c, page) {						
+							if (!edit) {	
+								page.addPage(c, data);					
+								// set cover
+								if (data.seq == 1) {
+									c.find('.book_size').css('background-image', 'url(' + Util.getImage(data.pic, 2) + ')');
+									
+									if (Account.draftBooks) {
+										var books = Account.draftBooks;
+										for (var i = 0; i < books.length; i++) {
+											if (bid == books[i].bid) {
+												Account.draftBooks[i].pic = data.pic;
+												break;
+											}
 										}
+										localStorage.setItem('u', JSON.stringify(Account));
 									}
-									localStorage.setItem('u', JSON.stringify(Account));
 								}
+								
+								var counter = c.find('.pcount span');
+								counter.text(parseInt(counter.text()) + 1);
 							}
-							
-							var counter = c.find('.pcount span');
-							counter.text(parseInt(counter.text()) + 1);
-						}
-						else {
-							c.find('[data-pid=' + pid + ']').css({
-								'background-image': 'url(' + Util.getImage(data.pic, 2) + '?' + new Date().getTime() + ')'
-							});
-						}
-					});
+							else {
+								c.find('[data-pid=' + pid + ']').css({
+									'background-image': 'url(' + Util.getImage(data.pic, 2) + '?' + new Date().getTime() + ')'
+								});
+							}
+						});
+					}
 				});		
 				
 //				if (drag_img.className == 'noedit') {

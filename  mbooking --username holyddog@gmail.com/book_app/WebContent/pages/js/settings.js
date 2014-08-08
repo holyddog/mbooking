@@ -32,7 +32,8 @@ Page.Settings = {
 		  }
 		});
 		container.find('[data-id=terms]').click(function() {
-			Page.open('TermsOfUse', true);
+//			Page.open('TermsOfUse', true);
+			window.open("http://www.instory.me/tos");
 		});
 		
 		self.setImage(container);
