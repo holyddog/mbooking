@@ -76,7 +76,7 @@ public class ActivityRepositoryImpl implements ActivityRepostitoryCustom {
 	public void liked(Long uid, Long bid) {
 		Long now = System.currentTimeMillis();
 		
-		Query query = new Query(Criteria.where("type").is(Activity.LIKED).and("uid").is(uid).and("book._id").is(bid));
+		Query query = new Query(Criteria.where("type").is(Activity.LIKED).and("uid").is(uid).and("bid").is(bid));
 		long count = db.count(query, Activity.class);
 		
 		// insert like activity at first time
@@ -99,7 +99,7 @@ public class ActivityRepositoryImpl implements ActivityRepostitoryCustom {
 	public void favourite(Long uid, Long bid) {
 		Long now = System.currentTimeMillis();
 		
-		Query query = new Query(Criteria.where("type").is(Activity.FAVOURITE).and("uid").is(uid).and("book._id").is(bid));
+		Query query = new Query(Criteria.where("type").is(Activity.FAVOURITE).and("uid").is(uid).and("bid").is(bid));
 		long count = db.count(query, Activity.class);
 		
 		// insert like activity at first time
