@@ -142,12 +142,23 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 			
 			String imgPath = "u" + addBy + "/b" + bookId;
 			String uploadPath = ConfigReader.getProp("upload_path") + "/" + imgPath;
-			File file = new File(uploadPath + "/" + picture);
-			Integer[] pos = new Integer[2];
-			ImageUtils.generatePicture(file, picture, imgSize, cropPos, imgPath, pos);
+
 			
-			Update update = new Update().set("pos", pos).set("caption", caption);
 			
+			Update update = new Update();
+			if(picture.length()>150){
+				String	pic = ImageUtils.generatePicture(null, picture, imgSize, cropPos, imgPath, null);
+				update.set("pic", pic);
+			}
+			else if(cropPos!=0){
+				/*File file = new File(uploadPath + "/" + picture);
+				Integer[] pos = new Integer[2];
+				String	pic = ImageUtils.generatePicture(file, picture, imgSize, cropPos, imgPath, pos);
+				update.set("pic", pic);
+				update.set("pos", pos);*/
+			}
+			
+			update.set("caption", caption);
 			if (ref != null && ref.trim().length() > 0) {
 				update.set("ref", ref);
 			}
