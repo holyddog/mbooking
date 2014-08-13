@@ -56,7 +56,8 @@ Page.AddPage = {
 				var pic = drag_img.src;
 				if (pid) {
 					edit = true;
-					pic = pic.substring(pic.lastIndexOf('/') + 1, pic.length);
+//					pic = pic.substring(pic.lastIndexOf('/') + 1, pic.length);
+					pic = pic.replace(Config.FILE_URL,'');
 				}
 				
 				Service.Page.AddPage(pid, pic, drag_img.parentNode.offsetWidth, pos, desc_text.innerText, link.data('raw'), bid, Account.userId, function(data) {
