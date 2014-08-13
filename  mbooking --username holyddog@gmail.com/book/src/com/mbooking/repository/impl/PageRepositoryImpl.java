@@ -138,33 +138,59 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 		}
 		else {
 			Query query = new Query(Criteria.where("pid").is(pid));
-			query.fields().include("seq").include("pic").include("pid");
-			
-			String imgPath = "u" + addBy + "/b" + bookId;
-			String uploadPath = ConfigReader.getProp("upload_path") + "/" + imgPath;
+            query.fields().include("seq").include("pic").include("pid");
+            
+            String imgPath = "u" + addBy + "/b" + bookId;
+            String uploadPath = ConfigReader.getProp("upload_path") + "/" + imgPath;
 
+            File file = null;
+            if (picture.indexOf(";base64") == -1) {
+            	file = new File(uploadPath + "/" + picture);
+            }            
+            
+            Integer[] pos = new Integer[2];
+            String newImage = ImageUtils.generatePicture(file, picture, imgSize, cropPos, imgPath, pos);
+            
+            Update update = new Update().set("pos", pos).set("caption", caption);
+            if (file == null) {
+            	update.set("pic", newImage);
+            }
+            
+            if (ref != null && ref.trim().length() > 0) {
+                    update.set("ref", ref);
+            }
+            
+            Page retPage = db.findAndModify(query, update, new FindAndModifyOptions().returnNew(true), Page.class);
+            return retPage;
 			
-			
-			Update update = new Update();
-			if(picture.length()>150){
-				String	pic = ImageUtils.generatePicture(null, picture, imgSize, cropPos, imgPath, null);
-				update.set("pic", pic);
-			}
-			else if(cropPos!=0){
-				/*File file = new File(uploadPath + "/" + picture);
-				Integer[] pos = new Integer[2];
-				String	pic = ImageUtils.generatePicture(file, picture, imgSize, cropPos, imgPath, pos);
-				update.set("pic", pic);
-				update.set("pos", pos);*/
-			}
-			
-			update.set("caption", caption);
-			if (ref != null && ref.trim().length() > 0) {
-				update.set("ref", ref);
-			}
-			
-			Page retPage = db.findAndModify(query, update, new FindAndModifyOptions().returnNew(true), Page.class);
-			return retPage;
+//			Query query = new Query(Criteria.where("pid").is(pid));
+//			query.fields().include("seq").include("pic").include("pid");
+//			
+//			String imgPath = "u" + addBy + "/b" + bookId;
+//			String uploadPath = ConfigReader.getProp("upload_path") + "/" + imgPath;
+//
+//			
+//			
+//			Update update = new Update();
+//			if(picture.length()>150){
+//				String	pic = ImageUtils.generatePicture(null, picture, imgSize, cropPos, imgPath, null);
+//				update.set("pic", pic);
+//			}
+//			else if(cropPos!=0){
+//				/*File file = new File(uploadPath + "/" + picture);
+//				Integer[] pos = new Integer[2];
+//				String	pic = ImageUtils.generatePicture(file, picture, imgSize, cropPos, imgPath, pos);
+//				update.set("pic", pic);
+//				update.set("pos", pos);*/
+//			}
+//			
+//			update.set("caption", caption);
+//			if (ref != null && ref.trim().length() > 0) {
+//				update.set("ref", ref);
+//			}
+//			
+//			Page retPage = db.findAndModify(query, update, new FindAndModifyOptions().returnNew(true), Page.class);
+//			return retPage;
 		}
 	}
 	
