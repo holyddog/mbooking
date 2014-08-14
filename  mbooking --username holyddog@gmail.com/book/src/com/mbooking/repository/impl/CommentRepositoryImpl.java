@@ -81,11 +81,10 @@ public class CommentRepositoryImpl implements CommentRepostitoryCustom {
 					User author =  db.findOne(auth_q, User.class);
 					
 					HashMap<String, String> map = new HashMap<String, String>();
-					map.put("page", "Book");
+					map.put("page", "Comments");
 					map.put("bid", book.getBid()+"");
 					map.put("uid",book.getUid()+"");
-					PushNotification.sendPush(String.format(ConstValue.FOLLOWER_COMMENT_MSG_FORMAT_PUSH_EN, user.getDname(), book.getTitle(), message), Selectors.alias(author.getEmail()), null, map);
-				}
+					PushNotification.sendPush(String.format(ConstValue.FOLLOWER_COMMENT_MSG_FORMAT_PUSH_EN, user.getDname(), book.getTitle(),message.length()>15?message.substring(15):message), Selectors.alias(author.getEmail()), null, map);				}
 				
 				return true;
 			} else
