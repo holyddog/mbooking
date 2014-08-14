@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mbooking.common.ErrorResponse;
 import com.mbooking.common.ResultResponse;
+import com.mbooking.model.Conf;
 import com.mbooking.model.Notification;
 import com.mbooking.model.User;
 import com.mbooking.repository.BookRepository;
+import com.mbooking.repository.ConfRepository;
 import com.mbooking.repository.UserRepository;
 
 @Controller
@@ -24,7 +26,9 @@ public class UserJson {
 	UserRepository userRepo;	
 	@Autowired
 	BookRepository bookRepo;
-
+	@Autowired
+	ConfRepository confRepo;
+	
 	@RequestMapping(method = RequestMethod.POST, value = "/getFBFriendsList.json")
 	public @ResponseBody Object getFBFriendsList(
 			@RequestParam(value = "uid") Long uid,
@@ -307,4 +311,10 @@ public class UserJson {
 			) {
 		return ResultResponse.getResult("result", userRepo.submitReport(type, subtype, uid, auid, oid, msg, uname, auname, comment));
 	}	
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/getAppInfo.json")
+	public @ResponseBody
+	Object getAppInfo() {
+		return ResultResponse.getResult("result",confRepo.findAll());
+	}
 }
