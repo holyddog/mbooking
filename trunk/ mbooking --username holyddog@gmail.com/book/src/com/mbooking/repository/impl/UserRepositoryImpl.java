@@ -36,7 +36,7 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 	@Autowired
 	private MongoTemplate db;
 	
-	private void addDevice(String email,Integer os,String dvtoken){
+	private void addDevice(String email,Integer os,String dvtoken,String version){
 		Query query = new Query();
 		query.addCriteria(Criteria.where("os").is(os).and("token").is(dvtoken));
 		Update update = new Update();
@@ -44,6 +44,7 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		update.set("os", os);
 		update.set("alias", email);
 		update.set("lstuse", System.currentTimeMillis());
+		update.set("version", version);
 		try{
 			db.upsert(query, update, Device.class);
 		}
@@ -53,7 +54,7 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 	}
 	
 	@Override
-	public User signIn(String loginName, String password,Integer os,String dvtoken) {
+	public User signIn(String loginName, String password,Integer os,String dvtoken,String version) {
 		Criteria loginCriteria = new Criteria().orOperator(
 			Criteria.where("uname").is(loginName), 
 			Criteria.where("email").is(loginName)
@@ -73,7 +74,7 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 			List<Book> books = db.find(query, Book.class);
 			user.setBooks(books);
 				if(os!=null&&dvtoken!=null&&!dvtoken.equals(""))
-					addDevice(user.getEmail(),os,dvtoken);
+					addDevice(user.getEmail(),os,dvtoken,version);
 		
 		}
 		
@@ -81,7 +82,7 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 	}
 
 	@Override
-	public User signUp(String email, String password, String displayName, String userName,Integer os,String dvtoken) {
+	public User signUp(String email, String password, String displayName, String userName,Integer os,String dvtoken,String version) {
 		User user = new User();
 		
 		user.setPwd(Convert.toMD5Password(password));	
@@ -97,7 +98,7 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		user.setPwd(null); // remove password before return data
 		
 		if(os!=null&&dvtoken!=null)
-		addDevice(email,os,dvtoken);
+		addDevice(email,os,dvtoken,version);
 		
 		return user;
 	}
@@ -113,7 +114,7 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 	}
 
 	@Override
-	public User signInFB(Long fbid,Integer os,String dvtoken) {
+	public User signInFB(Long fbid,Integer os,String dvtoken,String version) {
 			Criteria criteria = Criteria.where("fbobj._id").is(fbid).and("inactive").ne(true).and("unlinkfb").exists(false);
 			Query query = new Query(criteria);
 			query.fields().exclude("pwd");
@@ -128,14 +129,14 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 			}
 			
 			if(os!=null&&dvtoken!=null&&user!=null)
-				addDevice(user.getEmail(),os,dvtoken);
+				addDevice(user.getEmail(),os,dvtoken,version);
 			
 			return user;
 	}
 
 	@Override
 	public User signUpFB(String email, String displayName, String userName,String password,
-			Long fbid, String fbpic,String fbname,String fbemail,Integer os,String dvtoken) {
+			Long fbid, String fbpic,String fbname,String fbemail,Integer os,String dvtoken,String version) {
 		
 		User user = new User();
 		user.setUid(MongoCustom.generateMaxSeq(User.class, db));
@@ -160,7 +161,7 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		
 		db.insert(user);
 		if(os!=null&&dvtoken!=null)
-			addDevice(fbemail,os,dvtoken);
+			addDevice(fbemail,os,dvtoken,version);
 		
 		return user;
 	}
