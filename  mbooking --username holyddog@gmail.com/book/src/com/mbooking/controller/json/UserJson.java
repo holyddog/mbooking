@@ -106,9 +106,10 @@ public class UserJson {
 			@RequestParam(value = "login") String loginName,
 			@RequestParam(value = "pwd",required = false) String password,
 			@RequestParam(value = "os",required = false) Integer os,
-			@RequestParam(value = "dvtoken",required = false) String dvtoken
+			@RequestParam(value = "dvtoken",required = false) String dvtoken,
+			@RequestParam(value = "version",required = false) String version
 			) {
-		User user = userRepo.signIn(loginName, password,os,dvtoken);
+		User user = userRepo.signIn(loginName, password,os,dvtoken,version);
 		if (user != null) {
 			return user;
 		}
@@ -122,10 +123,11 @@ public class UserJson {
 			@RequestParam(value = "uname") String userName,
 			@RequestParam(value = "pwd") String password,
 			@RequestParam(value = "os",required = false) Integer os,
-			@RequestParam(value = "dvtoken",required = false) String dvtoken
+			@RequestParam(value = "dvtoken",required = false) String dvtoken,
+			@RequestParam(value = "version",required = false) String version
 			)
 			{
-		User user = userRepo.signUp(email, password, displayName, userName,os,dvtoken);
+		User user = userRepo.signUp(email, password, displayName, userName,os,dvtoken,version);
 		if (user != null) {
 			return user;
 		}
@@ -138,10 +140,11 @@ public class UserJson {
 	public @ResponseBody Object signInFB(
 			@RequestParam(value = "fbid") Long fbid,			
 			@RequestParam(value = "os",required = false) Integer os,
-			@RequestParam(value = "dvtoken",required = false) String dvtoken
+			@RequestParam(value = "dvtoken",required = false) String dvtoken,
+			@RequestParam(value = "version",required = false) String version
 			)
 	{
-		User user = userRepo.signInFB(fbid,os,dvtoken);
+		User user = userRepo.signInFB(fbid,os,dvtoken,version);
 		if (user != null) {
 			return user;
 		}
@@ -161,10 +164,11 @@ public class UserJson {
 			@RequestParam(value = "fbname") String fbname,
 			@RequestParam(value = "fbemail", required = false) String fbemail,
 			@RequestParam(value = "os",required = false) Integer os,
-			@RequestParam(value = "dvtoken",required = false) String dvtoken
+			@RequestParam(value = "dvtoken",required = false) String dvtoken,
+			@RequestParam(value = "version",required = false) String version
 			)
 			{
-		User user = userRepo.signUpFB(email, displayName, userName, password, fbid, fbpic, fbname, fbemail,os,dvtoken);
+		User user = userRepo.signUpFB(email, displayName, userName, password, fbid, fbpic, fbname, fbemail,os,dvtoken,version);
 		if (user != null) {
 			return user;
 		}

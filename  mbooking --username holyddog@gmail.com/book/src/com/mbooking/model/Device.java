@@ -10,7 +10,7 @@ public class Device {
 	
 	String alias;	//Username || Email
 	String[] tags;
-	
+	String ver;
 	Long lstuse;	//last use
 	
 	public Integer getOs() {
@@ -43,5 +43,10 @@ public class Device {
 	public void setLstuse(Long lstuse) {
 		this.lstuse = lstuse;
 	}
-
+	public String getVer() {
+		return ver;
+	}
+	public void setVer(String ver) {
+		this.ver = ver;
+	}
 }
