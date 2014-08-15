@@ -13,7 +13,7 @@ $('#resetpass').find('input').on('input',
 				}
 				var npw = $('[name=npwd]').val();
 				var cpw = $('[name=cpwd]').val();
-				if (npw == cpw && npw >= 6) {
+				if (npw == cpw && npw.length >= 6) {
 					$('.input_layout .submit_btn').removeClass('disable');
 				} else {
 					$('.input_layout .submit_btn').addClass('disable');
