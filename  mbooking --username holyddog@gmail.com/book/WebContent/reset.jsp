@@ -16,7 +16,7 @@
 	<link rel="stylesheet" href="#{initParam['root']}/res/css/style.css" />
 	<script type="text/javascript" src="#{initParam['root']}/res/lib/jquery-1.10.2.min.js"></script>
 </head>	
-	<body>
+	<body style="background-color:rgba(0,0,0,.1);">
 		<f:view>	
 			<f:subview id="successView" rendered="#{resetView.success}">
 			 	<div class="fill_dock box vertical">
