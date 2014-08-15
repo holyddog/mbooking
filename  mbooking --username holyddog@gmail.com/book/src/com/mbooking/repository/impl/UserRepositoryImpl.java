@@ -26,6 +26,7 @@ import com.mbooking.model.Notification;
 import com.mbooking.model.Report;
 import com.mbooking.model.User;
 import com.mbooking.repository.UserRepostitoryCustom;
+import com.mbooking.util.ConfigReader;
 import com.mbooking.util.Convert;
 import com.mbooking.util.ImageUtils;
 import com.mbooking.util.JavaMail;
@@ -486,7 +487,7 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 			JavaMail sender = new JavaMail();
 						
 			sender.sendMail(email.toLowerCase(),"Forget password",
-					"<html>From your change password request, <a href='http://119.59.122.38/book/reset.jsf?key="+unq_str+"'>Click Here</a> to reset your password </html>"
+					"<html>From your change password request, <a href='"+ConfigReader.getProp("root")+"/reset.jsf?key="+unq_str+"'>Click Here</a> to reset your password </html>"
 			);
 			
 			return true;
