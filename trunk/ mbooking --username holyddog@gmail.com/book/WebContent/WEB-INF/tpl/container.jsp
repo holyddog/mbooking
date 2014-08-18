@@ -42,7 +42,7 @@
 							<ul class="menu_list">
 								<li><a href="#{initParam['root']}">Home</a></li>
 								<li><a href="#{initParam['root']}/about">About</a></li>
-								<li><a href="https://www.facebook.com/pages/InStory">Facebook</a></li>
+								<li><a href="https://www.facebook.com/pages/InStory/486833234780373">Facebook</a></li>
 							</ul>
 						</div>
 					</div>
