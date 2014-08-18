@@ -402,10 +402,10 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 							User recvnot = users.get(i);
 							
 							Notification notf = new Notification();
-							notf.setUid(recvnot.getUid());
+							notf.setUid(who.getUid());
 							notf.setAdate(System.currentTimeMillis());
 							notf.setUnread(true);
-							notf.setWho(who);
+							notf.setWho(recvnot);
 							notf.setBook(book);
 							
 							String fullMessage = String.format(ConstValue.NEW_PUBLISH_BOOK_MSG_FORMAT_EN, who.getDname(),book.getTitle());
