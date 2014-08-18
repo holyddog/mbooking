@@ -424,7 +424,9 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 			query.fields().include("ccount");
 			query.fields().include("author");
 			
-			bookList.add(db.findOne(query, Book.class));
+			Book b= db.findOne(query, Book.class);
+			if(b!=null)
+			bookList.add(b);
 		}
 		
 		return bookList;
