@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mbooking.common.ErrorResponse;
 import com.mbooking.common.ResultResponse;
-import com.mbooking.model.Conf;
 import com.mbooking.model.Notification;
 import com.mbooking.model.User;
 import com.mbooking.repository.BookRepository;
@@ -191,7 +190,13 @@ public class UserJson {
 			@RequestParam(value = "fbname") String fbname,
 			@RequestParam(value = "fbemail", required = false) String fbemail,
 			@RequestParam(value = "token") String token) {
-		return ResultResponse.getResult("result", userRepo.linkFB(uid, fbid, fbpic, fbname, fbemail, token) != false);
+		
+		if(userRepo.linkFB(uid, fbid, fbpic, fbname, fbemail, token)){
+			return true;
+		}
+		else{
+			return ErrorResponse.getError("Facebook account "+fbemail+" has already been used by another user. Please log in facebook with different account and try again.");	
+		}
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/changePassword.json")
