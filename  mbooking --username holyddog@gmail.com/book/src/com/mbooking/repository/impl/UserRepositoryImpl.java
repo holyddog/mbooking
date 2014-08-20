@@ -245,23 +245,28 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 	@Override
 	public Boolean linkFB(Long uid, Long fbid, String fbpic, String fbname, String fbemail, String token) {
 		try {
-			Update update = new Update();
-			update.unset("unlinkfb");
-
-			if (fbid != null) {
-				FBobj fbobj = new FBobj();
-				fbobj.setFbid(fbid);
-				fbobj.setPic(fbpic);
-				fbobj.setDname(fbname);
-				fbobj.setToken(token);
-				if (fbemail != null) {
-					fbobj.setEmail(fbemail);
+			
+			if(db.count(new Query(Criteria.where("fbobj.email").is(fbemail)), User.class)<1){
+				Update update = new Update();
+				update.unset("unlinkfb");
+				
+				if (fbid != null) {
+					FBobj fbobj = new FBobj();
+					fbobj.setFbid(fbid);
+					fbobj.setPic(fbpic);
+					fbobj.setDname(fbname);
+					fbobj.setToken(token);
+					if (fbemail != null) {
+						fbobj.setEmail(fbemail);
+					}
+					update.set("fbobj", fbobj);
 				}
-				update.set("fbobj", fbobj);
+	
+				db.updateFirst(new Query(Criteria.where("uid").is(uid)), update, User.class);
+				return true;
 			}
-
-			db.updateFirst(new Query(Criteria.where("uid").is(uid)), update, User.class);
-			return true;
+			else
+				return false;
 		} catch (Exception e) {
 			return false;
 
