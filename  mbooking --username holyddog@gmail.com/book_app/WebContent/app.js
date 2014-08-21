@@ -13,9 +13,7 @@ Config = {
 //	WEB_BOOK_URL:'http://instory.me',
 //	FILE_URL: 'http://' + 'instory.me' + '/f',
 	
-//	FILE_URL: 'http://' + window.location.hostname + '/res/book',
-	FILE_URL: 'http://119.59.122.38/book_dev_files',
-	
+	FILE_URL: 'http://' + window.location.hostname + '/res/book',	
 	WEB_BOOK_URL : 'http://' + window.location.hostname + ':8080/book',
 	
 	OS: 'iOS',
@@ -289,6 +287,10 @@ Device = {
 				encodingType : navigator.camera.EncodingType.JPEG,
 				destinationType : navigator.camera.DestinationType.DATA_URL
 			};
+			
+			if (opts.fileUri) {
+				options.destinationType = navigator.camera.DestinationType.FILE_URI; 
+			}
 	        
 			if (!opts.camera) {
 				options.sourceType = navigator.camera.PictureSourceType.PHOTOLIBRARY;
@@ -777,6 +779,9 @@ Page = {
 					}, {
 						name: 'gallery',
 						label: 'Choose from Gallery'
+					}, {
+						name: 'multi',
+						label: 'Multiple Pages'
 					}];
 					
 					for (var i = 0; i < items.length; i++) {
@@ -789,6 +794,7 @@ Page = {
 						if (Page._callbackDialog) {
 							if (Device.PhoneGap.isReady) {
 								Device.PhoneGap.takePhoto({
+									fileUri: true,
 									success: function(imageData) {
 										history.back();
 										Page._callbackDialog(imageData);
@@ -806,6 +812,7 @@ Page = {
 				        if (Page._callbackDialog) {
 				        	if (Device.PhoneGap.isReady) {
 					        	Device.PhoneGap.choosePhoto({
+									fileUri: true,
 									success: function(imageData) {
 										history.back();
 										Page._callbackDialog(imageData);
@@ -1662,7 +1669,7 @@ document.addEventListener("deviceready", function() {
      if(event.message) {
         Device.PhoneGap.onNotification = true;
         var page = (document.URL).split('#')[1];
-              // �ó� topage==page �� case by case �Դ����͹
+              // ๏ฟฝรณ๏ฟฝ topage==page ๏ฟฝ๏ฟฝ case by case ๏ฟฝิด๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอน
         var topage = null;
         if(event.extras){
            if(event.extras.page)
@@ -1801,4 +1808,3 @@ function handleOpenURL(url){
         },0
     );
 }
-
