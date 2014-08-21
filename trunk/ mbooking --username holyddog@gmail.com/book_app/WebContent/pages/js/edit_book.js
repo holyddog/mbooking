@@ -214,7 +214,13 @@ Page.EditBook = {
 				return;
 			}
 			var pcount = parseInt(container.find('.pcount span').text());
-			Page.open('AddPage', true, { bid: bid, count: pcount });
+
+//			Page.open('AddPage', true, { bid: bid, count: pcount });
+			Page.popDialog(function(img) {
+				setTimeout(function() {
+					Page.open('AddPage', true, { bid: bid, count: pcount, newImage: img });					
+				}, 100);
+			});
 		});
 		
 		container.find('.tab_page a').click(function() {
