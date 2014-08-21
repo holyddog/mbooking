@@ -219,7 +219,7 @@ Page.EditBook = {
 			Page.popDialog(function(img) {
 				setTimeout(function() {
 					Page.open('AddPage', true, { bid: bid, count: pcount, newImage: img });					
-				}, 100);
+				}, 300);
 			});
 		});
 		
