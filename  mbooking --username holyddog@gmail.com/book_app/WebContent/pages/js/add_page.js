@@ -19,11 +19,17 @@ Page.AddPage = {
 		
 		var adjPhoto = container.find('#adj_photo');
 		var btnAddPhoto = container.find('#add_photo');
+		var btnAccept = container.find('[data-id=btn_a]');
 		btnAddPhoto.tap(function() {
 			Page.popDialog(function(img) {
+				btnAccept.upload = true;
 				self.addPhoto(container, img);
 			});
 		});		
+		
+		if (params.newImage) {
+			self.addPhoto(container, params.newImage);
+		}
 		
 		var link = container.find('.ref_link');
 		link.tap(function() {
@@ -38,10 +44,11 @@ Page.AddPage = {
 		container.find('[data-id=btn_c]').tap(function() {
 			Page.back();
 		});
-		var btnAccept = container.find('[data-id=btn_a]');
 		btnAccept.tap(function() {
 			if (!btnAccept.hasClass('disabled')) {
 				Page.btnShowLoading(btnAccept[0]);
+				
+				var pic = drag_img.src;
 				
 				var pos = 0;
 				var dir = $(drag_img).data('dir');
@@ -52,59 +59,93 @@ Page.AddPage = {
 					pos = -1 * parseInt(drag_img.style.webkitTransform.split('(')[1].split('px, ')[1]);
 				}
 				
-				var edit = false;
-				var pic = drag_img.src;
+				var addPage = function(newPic) {
+					Service.Page.AddPage(pid, newPic, drag_img.parentNode.offsetWidth, pos, desc_text.innerText, link.data('raw'), bid, Account.userId, function(data) {
+						Page.btnHideLoading(btnAccept[0]);
+						
+						if ((((document.URL).split('#')[1]).split("?")[0])=="AddPage"){
+							Page.back(function(c, page) {						
+								if (!self.edit) {	
+									page.addPage(c, data);					
+									// set cover
+									if (data.seq == 1) {
+										c.find('.book_size').css('background-image', 'url(' + Util.getImage(data.pic, 2) + ')');
+										
+										if (Account.draftBooks) {
+											var books = Account.draftBooks;
+											for (var i = 0; i < books.length; i++) {
+												if (bid == books[i].bid) {
+													Account.draftBooks[i].pic = data.pic;
+													break;
+												}
+											}
+											localStorage.setItem('u', JSON.stringify(Account));
+										}
+									}
+									
+									var counter = c.find('.pcount span');
+									counter.text(parseInt(counter.text()) + 1);
+								}
+								else {
+									c.find('[data-pid=' + pid + ']').css({
+										'background-image': 'url(' + Util.getImage(data.pic, 2) + '?' + new Date().getTime() + ')'
+									});
+								}
+							});
+						}
+					});	
+				};		
+				
+				var upload = function(fileURL) {
+					if (!Device.PhoneGap.isReady) {
+						addPage(pic);
+						return;
+					}
+					
+					var win = function(r) {
+						var newPic = r.response.replace(/"/ig, '');
+						addPage(newPic);
+					};
+
+					var fail = function(error) {
+						MessageBox.alert({
+							message: "An error has occurred: Code = " + error.code
+						});
+					};
+					
+					var options = new FileUploadOptions();
+					options.fileKey = "file";
+					options.fileName = fileURL.substr(fileURL.lastIndexOf('/') + 1);
+					options.mimeType = "image/jpeg";
+
+					var params = {};
+					params.uid = Account.userId;
+					params.bid = bid;
+
+					options.params = params;
+
+					var ft = new FileTransfer();
+					ft.upload(fileURL, encodeURI(Service.url + '/upload.json'), win, fail, options);
+				};
+				
+				self.edit = false;
 				if (pid) {
-					edit = true;
+					self.edit = true;
 					
 					if (pic.indexOf(';base64') == -1) {
 						pic = pic.substring(pic.lastIndexOf('/') + 1, pic.length);						
 					}
-				}
-				
-				Service.Page.AddPage(pid, pic, drag_img.parentNode.offsetWidth, pos, desc_text.innerText, link.data('raw'), bid, Account.userId, function(data) {
-					Page.btnHideLoading(btnAccept[0]);
-					if((((document.URL).split('#')[1]).split("?")[0])=="AddPage"){
-						Page.back(function(c, page) {						
-							if (!edit) {	
-								page.addPage(c, data);					
-								// set cover
-								if (data.seq == 1) {
-									c.find('.book_size').css('background-image', 'url(' + Util.getImage(data.pic, 2) + ')');
-									
-									if (Account.draftBooks) {
-										var books = Account.draftBooks;
-										for (var i = 0; i < books.length; i++) {
-											if (bid == books[i].bid) {
-												Account.draftBooks[i].pic = data.pic;
-												break;
-											}
-										}
-										localStorage.setItem('u', JSON.stringify(Account));
-									}
-								}
-								
-								var counter = c.find('.pcount span');
-								counter.text(parseInt(counter.text()) + 1);
-							}
-							else {
-								c.find('[data-pid=' + pid + ']').css({
-									'background-image': 'url(' + Util.getImage(data.pic, 2) + '?' + new Date().getTime() + ')'
-								});
-							}
-						});
+					
+					if (btnAccept.upload) {
+						upload(pic);							
 					}
-				});		
-				
-//				if (drag_img.className == 'noedit') {
-//					Service.Page.EditCaption(pid, desc_text.innerText, function() {
-//						Page.btnHideLoading(btnAccept[0]);
-//						Page.back();
-//					});
-//				}
-//				else {
-//								
-//				}				
+					else {
+						addPage(pic);						
+					}
+				}
+				else {
+					upload(pic);					
+				}
 			}
 		});
 		
@@ -137,10 +178,13 @@ Page.AddPage = {
 		adjPhoto.show();
 		
 		if (typeof imgData == 'string') {
-			var img = 'data:image/jpg;base64,' + imgData;
+			if (!Device.PhoneGap.isReady) {
+				imgData = 'data:image/jpg;base64,' + imgData;
+			}
+			
 			var imgObj = document.createElement('img');
 			imgObj.setAttribute('id', 'drag_img');
-			imgObj.src = img;
+			imgObj.src = imgData;
 			adjPhoto.append(imgObj);
 		}
 		else {
