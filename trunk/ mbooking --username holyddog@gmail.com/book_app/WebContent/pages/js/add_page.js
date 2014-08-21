@@ -22,7 +22,7 @@ Page.AddPage = {
 		var btnAccept = container.find('[data-id=btn_a]');
 		btnAddPhoto.tap(function() {
 			Page.popDialog(function(img) {
-				btnAccept.upload = true;
+				btnAccept.upload = true;				
 				self.addPhoto(container, img);
 			});
 		});		
@@ -96,7 +96,7 @@ Page.AddPage = {
 					});	
 				};		
 				
-				var upload = function(fileURL) {
+				var upload = function(fileURL, exists) {
 					if (!Device.PhoneGap.isReady) {
 						addPage(pic);
 						return;
@@ -121,6 +121,10 @@ Page.AddPage = {
 					var params = {};
 					params.uid = Account.userId;
 					params.bid = bid;
+					
+					if (exists && self.tempImage) {
+						params.name = self.tempImage;						
+					}
 
 					options.params = params;
 
@@ -132,14 +136,14 @@ Page.AddPage = {
 				if (pid) {
 					self.edit = true;
 					
-					if (pic.indexOf(';base64') == -1) {
-						pic = pic.substring(pic.lastIndexOf('/') + 1, pic.length);						
-					}
-					
 					if (btnAccept.upload) {
-						upload(pic);							
+						upload(pic, true);				
 					}
-					else {
+					else {						
+						if (pic.indexOf(';base64') == -1) {
+							pic = pic.substring(pic.lastIndexOf('/') + 1, pic.length);						
+						}
+						
 						addPage(pic);						
 					}
 				}
@@ -208,6 +212,8 @@ Page.AddPage = {
 		Service.Page.GetPage(pid, function(data) {
 			
 			var img = $('<img id="drag_img" src="' + Util.getImage(data.pic) + '">');
+			self.tempImage = data.pic.substring(data.pic.lastIndexOf('/') + 1, data.pic.length);
+			
 			img.load(function() {
 				Page.bodyHideLoading(content);
 				boxPhoto.style.display = 'block';
