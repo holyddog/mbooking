@@ -600,7 +600,7 @@ public class ImageUtils {
 		if(imgtype==ConstValue.PAGE_IMG_TYPE){
 			
 			String small_size_path = path + filename.replace(".jpg","_s.jpg");	
-			String normal_size_path = path + filename.replace(".jpg","_n.jpg");	
+			String normal_size_path = path + filename.replace(".jpg","_c.jpg");	
 			String large_size_path = path + filename.replace(".jpg","_l.jpg");	
 			String xlarge_size_path = path + filename.replace(".jpg","_xl.jpg");	
 			

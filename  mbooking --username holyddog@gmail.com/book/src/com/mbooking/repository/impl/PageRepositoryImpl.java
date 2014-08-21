@@ -112,10 +112,17 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 			page.setUid(addBy);
 			page.setRef(ref);
 			page.setCdate(System.currentTimeMillis());
+
+            String imgPath = "u" + addBy + "/b" + bookId;
+            String uploadPath = ConfigReader.getProp("upload_path") + "/" + imgPath;
+            File file = null;
+            if (picture.indexOf(";base64") == -1) {
+            	file = new File(uploadPath + "/" + picture);
+            }    
 			
 			// generate picture to directory
 			Integer[] pos = new Integer[2];
-			String pic = ImageUtils.generatePicture(null, picture, imgSize, cropPos, "u" + addBy + "/b" + bookId, pos);
+			String pic = ImageUtils.generatePicture(file, picture, imgSize, cropPos, "u" + addBy + "/b" + bookId, pos);
 			page.setPic(pic);
 			page.setPos(pos);
 			

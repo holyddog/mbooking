@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
 
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,8 @@ import com.mbooking.model.Book;
 import com.mbooking.model.Page;
 import com.mbooking.repository.ActivityRepository;
 import com.mbooking.repository.PageRepository;
+import com.mbooking.util.ConfigReader;
+import com.mbooking.util.Convert;
 import com.mbooking.util.ImageUtils;
 
 @Controller
@@ -48,7 +51,48 @@ public class PageJson {
 			return page;
 		}
 		return ErrorResponse.getError("This page cannot be saved");
-	}
+	}	
+
+    @RequestMapping(value = "/upload.json", method = RequestMethod.POST)
+	public @ResponseBody
+	Object upload(
+			@RequestParam("file") MultipartFile file,
+			@RequestParam(value = "uid") Long uid,
+			@RequestParam(value = "bid") Long bid,
+			@RequestParam(value = "name", required = false) String name
+			) {
+    	if (!file.isEmpty()) {
+			try {
+		    	String imgPath = "u" + uid + "/b" + bid;
+				String uploadPath = ConfigReader.getProp("upload_path") + "/" + imgPath;
+				File output = new File(uploadPath);
+				if (!output.exists()) {
+					output.mkdirs();
+				}
+				
+				String key = Convert.uniqueString(8);
+				String image = key + ".jpg";
+				
+				if (name != null) {
+					image = name;
+				}
+				
+				byte[] b = file.getBytes();
+				File newFile = new File(uploadPath + "/" + image);
+				FileOutputStream out = new FileOutputStream(newFile);  
+				out.write(b);  
+				out.flush();  
+				out.close();
+				
+				return newFile.getName();
+			}
+			catch (Exception ex) {
+				ex.printStackTrace();
+				return ErrorResponse.getError("Upload failed");
+			}
+    	}
+    	return null;
+    }
 	
 
     @RequestMapping(value = "/addMultiPage.json", method = RequestMethod.POST)
