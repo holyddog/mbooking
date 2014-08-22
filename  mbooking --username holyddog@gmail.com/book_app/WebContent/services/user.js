@@ -13,17 +13,18 @@ Service.User = {
 		};
 		Web.get(url, params, callback);
 	},
-	SignIn : function(loginName, password,os,dvtoken, callback, error) {
+	SignIn : function(loginName, password,os,dvtoken,version, callback, error) {
 			var url = Service.url + '/signIn.json';
 			var params = {
 				login : loginName,
 				pwd : password,
 	            os : os,
-	            dvtoken : dvtoken
+	            dvtoken : dvtoken,
+                version : version
 			};
 			Web.post(url, params, callback, error);
 		},
-	SignUp : function(fullName, email, userName, password,os,dvtoken, callback, error) {
+	SignUp : function(fullName, email, userName, password,os,dvtoken,version, callback, error) {
 			var url = Service.url + '/signUp.json';
 			var params = {
 				dname : fullName,
@@ -31,7 +32,8 @@ Service.User = {
 				uname : userName,
 				pwd : password,
 	            os : os,
-	            dvtoken : dvtoken
+	            dvtoken : dvtoken,
+                version : version
 			};
 			Web.post(url, params, callback, error);
 	},
@@ -59,16 +61,17 @@ Service.User = {
 	            
 		Web.post(url, params, callback);
 	},
-	SignInFB : function(fbid,os,dvtoken, callback) {
+	SignInFB : function(fbid,os,dvtoken,version, callback) {
 		var url = Service.url + '/signInFB.json';
 		var params = {
 			fbid : fbid,
             os : os,
-            dvtoken : dvtoken
+            dvtoken : dvtoken,
+            version : version
 		};
 		Web.post(url, params, callback);
 	},
-	SignUpFB : function(email, fullName, userName, password, fbid, fbpic, fbname, fbemail,os,dvtoken, callback) {
+	SignUpFB : function(email, fullName, userName, password, fbid, fbpic, fbname, fbemail,os,dvtoken,version, callback) {
 		var url = Service.url + '/signUpFB.json';
 		var params = {
 			email : email,
@@ -79,7 +82,8 @@ Service.User = {
 			fbpic : fbpic,
 			fbname : fbname,
             os : os,
-            dvtoken : dvtoken
+            dvtoken : dvtoken,
+            version : version
 		};
 
 		if (fbemail != null && fbemail && fbemail != undefined) {
@@ -262,6 +266,10 @@ Service.User = {
 			comment:comment
 		};
 		Web.post(url, params, callback);
-	}
+	},
 	
+    GetAppInfo:function(callback){
+        var url = Service.url + '/getAppInfo.json';
+		Web.get(url, null, callback);
+    }
 };
