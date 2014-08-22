@@ -820,22 +820,28 @@ textarea {
 	height: 50px;
 	overflow: hidden;
 	width: 100%;
-	visibility: hidden;
+    visibility: hidden;
 }
 #dd_message .msg {	
 	padding: 5px;
 	background-color: #99CC00;
-	height: 4s0px;
+	height: 40px;
 	color: #fff;
 	font-size: 80%;
 	-webkit-transform: translateY(-50px);
 	-webkit-transition: .3s -webkit-transform ease-in-out;
+    white-space:nowrap;
+    text-overflow:ellipsis;
 }
 #dd_message.error .msg {
 	background-color: #FF4444;
 }
 #dd_message.warning .msg {
 	background-color: #FFBB33;
+}
+#dd_message.pushnote .msg {
+	background-color: #33B5E5;
+    font-size: 70%;
 }
 #dd_message.show {
 	visibility: visible;
