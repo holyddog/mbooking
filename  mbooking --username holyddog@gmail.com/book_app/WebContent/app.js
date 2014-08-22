@@ -1,20 +1,18 @@
 Config = {
+    IOS_VERSION:"beta 0.3",
+    ANDROID_VERSION:"beta 0.1",
 	DEBUG_MODE: true,
 	DEFAULT_PAGE: 'Home',
 	LIMIT_ITEM: 20,
 	SLIDE_DELAY: 250,
 	FADE_DELAY: 250,
-	
 	INTERVAL_DELAY: 30000, //60000, // 1 minute
 	SERVICE_TIMEOUT:15000,
-	
 	FB_APP_ID: '370184839777084',
-	
-//	WEB_BOOK_URL:'http://instory.me',
-//	FILE_URL: 'http://' + 'instory.me' + '/f',
-	
-	FILE_URL: 'http://' + window.location.hostname + '/res/book',	
-	WEB_BOOK_URL : 'http://' + window.location.hostname + ':8080/book',
+    
+	WEB_BOOK_URL:'http://instory.me',
+	FILE_URL: 'http://' + 'instory.me' + '/f',
+//	FILE_URL: 'http://119.59.122.38/book_dev_files',
 	
 	OS: 'iOS',
     OS_Int: 1, //iOS :1, Android :2
@@ -27,9 +25,9 @@ Config = {
 };
 
 Service = {	
-	url: 'http://' + window.location.hostname + ':8080/book/data'
-//	url: 'http://instory.me/data'
-};	
+	url: 'http://instory.me/data'
+//    url: 'http://119.59.122.38/book/data'
+};
 
 Account = {};
 
@@ -87,8 +85,12 @@ MessageBox = {
                 navigator.notification.confirm(config.message,
                                                function(index) {
                                                 if (index == 2 && typeof config.callback == 'function') {
-                                                config.callback();
+                                                    config.callback();
                                                 }
+                                                else if(index == 1 && typeof config.ccallback == 'function'){
+                                                    config.ccallback();
+                                                }
+                                               
                                                },
                                                config.title,
                                                'Cancel,'+config.confirm_lb);
@@ -119,20 +121,75 @@ MessageBox = {
 			}
 		}
 	},
+    timer:{},
 	drop: function(message) {
-		var dd = document.getElementById('dd_message');
-		dd.style.zIndex = 2000;
-		dd.children[0].children[0].innerText = message;
-		var temp = dd.className;
-		dd.className = temp + ' show';
-		
-		setTimeout(function() {
-			dd.className = temp;
-			setTimeout(function() {
-				dd.style.zIndex = -1;
-			}, 300);
-		}, 5000);
+        $('#dd_message').find('.retry_btn').hide();
+        var dd = document.getElementById('dd_message');
+
+        if(dd.style.zIndex>0){
+            clearTimeout(MessageBox.timer);
+            setTimeout(function() {
+               $('#dd_message').unbind();
+               dd.className = 'box center_middle';
+               dd.style.zIndex = -1;
+                setTimeout(function() {
+                    dodrop(dd,message);
+                }, 500);
+            }, 600);
+        }
+		else{
+            dodrop(dd,message);
+        }
+        
+        function dodrop(dd,message){
+            dd.style.zIndex = 2000;
+            dd.children[0].children[0].innerText = message;
+            var temp = dd.className;
+            dd.className = temp + ' show';
+            
+            MessageBox.timer = setTimeout(function() {
+                dd.className = temp;
+                setTimeout(function() {
+                    dd.style.zIndex = -1;
+                }, 1);
+            }, 5000);
+        }
 	},
+    drop_pushnote: function(message,func) {
+        $('#dd_message').find('.retry_btn').hide();
+        var dd = document.getElementById('dd_message');
+
+        if(dd.style.zIndex>0){
+            clearTimeout(MessageBox.timer);
+            setTimeout(function() {
+               $('#dd_message').unbind();
+               dd.className = 'box center_middle';
+               dd.style.zIndex = -1;
+                setTimeout(function() {
+                    dodrop(dd,message);
+                }, 500);
+            }, 1000);
+        }
+		else{
+            dodrop(dd,message);
+        }
+
+        function dodrop(dd,message){
+            dd.style.zIndex = 2000;
+            dd.children[0].children[0].innerText = message;
+            dd.className = 'box center_middle pushnote show';
+
+            $('#dd_message').bind('click',func);
+            
+            MessageBox.timer = setTimeout(function() {
+                dd.className = 'box center_middle';
+                setTimeout(function() {
+                    $('#dd_message').unbind();
+                    dd.style.zIndex = -1;
+                }, 1);
+            }, 7000);
+        }
+},
 	drop_retry: function(message,retry) {
 		var dd = document.getElementById('dd_message');
 		dd.style.zIndex = 2000;
@@ -261,6 +318,12 @@ Device = {
                 console.log("Set Alias Success: " + email);
             });
         },
+        setTagsPushnotification : function(tag){
+        	if (!Device.PhoneGap.isReady) return;
+            PushNotification.setTags(tag, function() {
+                console.log("Set Tag Success: " + tag);
+            });
+        },
         disablePush:function(){
         	if (!Device.PhoneGap.isReady) return;
             PushNotification.disablePush(function() {
@@ -287,9 +350,9 @@ Device = {
 				encodingType : navigator.camera.EncodingType.JPEG,
 				destinationType : navigator.camera.DestinationType.DATA_URL
 			};
-			
+
 			if (opts.fileUri) {
-				options.destinationType = navigator.camera.DestinationType.FILE_URI; 
+				options.destinationType = navigator.camera.DestinationType.FILE_URI;
 			}
 	        
 			if (!opts.camera) {
@@ -314,7 +377,7 @@ Device = {
 	        
 			this._getPhoto(opts);
 		},
-		loginFacebook: function(callback,permissions){
+		loginFacebook: function(callback,permissions,timer){
 	    	if (!Device.PhoneGap.isReady) return;
         
             if(!permissions){
@@ -333,7 +396,7 @@ Device = {
 									access_token : access_token,
 									dname : user.name,
 									fbemail : user.email
-								});
+								},timer);
 						}
 					});
 				} else {
@@ -779,9 +842,9 @@ Page = {
 					}, {
 						name: 'gallery',
 						label: 'Choose from Gallery'
-					}, {
-						name: 'multi',
-						label: 'Multiple Pages'
+                    }, {
+                        name: 'multi',
+                        label: 'Multiple Pages'
 					}];
 					
 					for (var i = 0; i < items.length; i++) {
@@ -794,7 +857,7 @@ Page = {
 						if (Page._callbackDialog) {
 							if (Device.PhoneGap.isReady) {
 								Device.PhoneGap.takePhoto({
-									fileUri: true,
+                                    fileUri: true,
 									success: function(imageData) {
 										history.back();
 										Page._callbackDialog(imageData);
@@ -812,7 +875,7 @@ Page = {
 				        if (Page._callbackDialog) {
 				        	if (Device.PhoneGap.isReady) {
 					        	Device.PhoneGap.choosePhoto({
-									fileUri: true,
+                                    fileUri: true,
 									success: function(imageData) {
 										history.back();
 										Page._callbackDialog(imageData);
@@ -1195,12 +1258,16 @@ Page = {
 		content.children('.content_noitem').remove();
 	},
 	
-	btnShowLoading: function(btn, white) {
+	btnShowLoading: function(btn, white,margin) {
 		var cv = document.createElement('div');
 	    cv.id = "cv_button";
-	    cv.style.width = '20px';
-	    cv.style.height = '20px';
-	    cv.style.margin= '15px';
+        cv.style.width = '20px';
+        cv.style.height = '20px';
+        if(!margin){
+            margin= 15;
+        }
+        cv.style.margin= (margin+'px');
+        
 	    cv.style.backgroundImage = 'url(images/circle_s.png)';
 
 	    btn.children[0].style.display = 'none';
@@ -1668,8 +1735,9 @@ document.addEventListener("deviceready", function() {
                           
      if(event.message) {
         Device.PhoneGap.onNotification = true;
-        var page = (document.URL).split('#')[1];
-              // ๏ฟฝรณ๏ฟฝ topage==page ๏ฟฝ๏ฟฝ case by case ๏ฟฝิด๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอน
+        var url = document.URL;
+        var page = ((url).split('#')[1]).split('?')[0];
+              // �ó� topage==page �� case by case �Դ����͹
         var topage = null;
         if(event.extras){
            if(event.extras.page)
@@ -1682,13 +1750,43 @@ document.addEventListener("deviceready", function() {
               if(topage=="Notifications"){
                  $('.notf_count').removeClass('show');
               }
-              else if(topage=="Book"){
+              else if(topage=="Book"||topage=="Comments"){
+                
                 if(event.extras.bid){
                     params = { bid: event.extras.bid, uid:event.extras.uid };
-                }
-                else{
+                    
+                    if(page=="Book"){
+                        
+                        var isSameBook=false;
+                        if(url.indexOf("bid")>-1&&event.extras.bid){
+                            var current_bid = (url.split('bid=')[1]).split('&')[0];
+                            if(event.extras.bid==current_bid)
+                            isSameBook=true;
+                        }
+                        if(!isSameBook){
+                            setTimeout(function(){
+                                Page.back();
+                                setTimeout(function(){
+                                    topage="Book";
+                                    Page.open(topage, true,params);
+                                },10);
+                            },10);
+                        }else{
+                            if(topage=="Comments"){
+                                  Page.open('Comments', true, { bid: event.extras.bid });
+                                  if(Config.OS_Int==1){
+                                    Page.Book.container.css('display','none');
+                                  }
+                            }
+                        }
+                        return;
+                    }
+                    topage="Book";
+               }
+               else{
                     return;
-                }
+               }
+                          
               }
               else if(topage=="Profile"){
                     if(event.extras.followid){
@@ -1705,16 +1803,29 @@ document.addEventListener("deviceready", function() {
                     
           if(Device.PhoneGap.isOnScreen)
           {
-                          MessageBox.confirm({
-                                message: event.message,
-                                callback: function(button) {
-                                    
-                                changePage();
-                                            
-                                },
-                                title:'New Event',
-                                confirm_lb:'View'
-                          });
+            var msg = event.message;
+            var tmp = "";
+            
+            if(msg.length>50)
+                tmp = "...";
+            
+            msg = msg.substring(0,50)+tmp;
+                          
+            MessageBox.drop_pushnote(msg,function(){
+                changePage();
+//              Page.open('Notifications');
+            });
+//            MessageBox.drop_pushnote(event.message,function(){changePage();});
+//                          MessageBox.confirm({
+//                                message: event.message,
+//                                callback: function(button) {
+//                                    
+//                                changePage();
+//                                            
+//                                },
+//                                title:'New Event',
+//                                confirm_lb:'View'
+//                          });
           }
           else {
                        
@@ -1738,10 +1849,9 @@ document.addEventListener("deviceready", function() {
    setTimeout(function() {
         Device.PhoneGap.isOnScreen = true;
    },800);
-                          
+
    document.addEventListener("urbanairship.registration", onRegistration, false);
    document.addEventListener("urbanairship.push", handleIncomingPush, false);
-
    
    document.addEventListener("resume", function() {
                   
@@ -1756,7 +1866,7 @@ document.addEventListener("deviceready", function() {
         PushNotification.getIncoming(handleIncomingPush);
 
    }, false);
-
+                          
    document.addEventListener("pause", function() {
         Device.PhoneGap.isOnScreen = false;
         document.removeEventListener("urbanairship.registration",onRegistration, false);
@@ -1764,12 +1874,72 @@ document.addEventListener("deviceready", function() {
          PushNotification.getIncoming(handleIncomingPush);
    }, false);
    
-   PushNotification.registerForNotificationTypes(PushNotification.notificationType.badge |
-                                                 PushNotification.notificationType.sound |
-                                                 PushNotification.notificationType.alert);
+//   PushNotification.registerForNotificationTypes(PushNotification.notificationType.badge |
+//                                                 PushNotification.notificationType.sound |
+//                                                 PushNotification.notificationType.alert);
    
    PushNotification.getIncoming(handleIncomingPush);
 
+    Service.User.GetAppInfo(
+        function(data){
+        if(data&&data.result){
+//        alert(JSON.stringify(data.result));
+            var version = "";
+            var vcurrent;
+                            
+            if(Config.OS_Int==1)
+                vcurrent = Config.IOS_VERSION;
+            else
+                vcurrent = Config.ANDROID_VERSION;
+                            
+            for(var i=0;i<data.result.length;i++){
+                if((data.result)[i].osid == Config.OS_Int){
+                    if(((data.result)[i].ver_lock).indexOf(vcurrent) > -1){
+                        function ver_alert (vcurrent,data,i){
+                            MessageBox.confirm({message:('Your InStory version '+vcurrent+' has not be able to used. A new InStory version '+(data.result)[i].ver+' available. Would you like to update?'),title:'No longer to use',confirm_lb:'Update',callback:
+                                function(){
+                                    if(Config.OS_Int ==1)
+                                        window.open("itms-apps://itunes.com/apps/instory/id864883607?Is=1&mt=8");
+                                    else
+                                        window.open("market://details?id=me.instory");
+                                    
+                                    ver_alert (vcurrent,data,i);
+                                },
+                                ccallback:
+                                function(){
+                                    ver_alert (vcurrent,data,i);
+                                }
+                           });
+                        };
+                        ver_alert(vcurrent,data,i);
+                    }
+                    else{
+                      var older_ver = localStorage.getItem("ver");
+                      localStorage.setItem("ver", (data.result)[i].ver);
+                       if((data.result)[i].ver!=vcurrent&&older_ver!=(data.result)[i].ver){
+                                localStorage.setItem("vnt",true);
+                                MessageBox.confirm({message:('A new InStory version '+(data.result)[i].ver+' available. Would you like to update?'),title:'New Version',confirm_lb:'Update',callback:
+                                    function(){
+                                        if(Config.OS_Int ==1)
+                                            window.open("itms-apps://itunes.com/apps/instory/id864883607?Is=1&mt=8");
+                                        else
+                                            window.open("market://details?id=me.instory");
+                                    }
+                                });
+                       }
+                       else{
+                            localStorage.removeItem("vnt");
+                       }
+                       return;
+                    }
+                }
+            }
+        }
+        }
+    );
+                          
+                          
+                
 }, false);
 function getStrUrlParam(url,name) {
     if (!url) {
@@ -1808,3 +1978,4 @@ function handleOpenURL(url){
         },0
     );
 }
+
