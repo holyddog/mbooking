@@ -32,11 +32,19 @@ Page.SignIn = {
                 if (localStorage.getItem("dvk"))
                 	dvtoken = localStorage.getItem("dvk");
                 
-                Service.User.SignIn(inputText.val(), inputPwd.val(),Config.OS_Int,dvtoken, 
+                var version;
+                if(Config.OS_Int==1){
+                    version = Config.IOS_VERSION;
+                }else{
+                    version = Config.ANDROID_VERSION;
+                }
+
+                Service.User.SignIn(inputText.val(), inputPwd.val(),Config.OS_Int,dvtoken,version,
                 		function(data) {
                 			if (Device.PhoneGap.isReady) {
 								Device.PhoneGap.setAliasPushnotification(data.email);
-                			}
+                                Device.PhoneGap.setTagsPushnotification([version]);
+                            }
 									
 
 							// Device.PhoneGap.enablePush();

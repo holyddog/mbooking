@@ -1,7 +1,9 @@
 Page.Book = {
 url: 'pages/html/blank.html',
+container:{},
 init: function(params, container) {
     var self = this;
+    Page.Book.container = container;
     Page.bodyShowLoading(container);
     Page.bodyHideNoItem(container);
     
@@ -148,7 +150,7 @@ load: function(container, bookData,params) {
                 +'      </div>'
                 +'		<div class="bdesc"></div>'
                 +'		<div class="bline"></div>'
-                +'		<div class="author_info box horizontal">'
+                +'		<div class="author_info box horizontal" style="pointer-events: all;">'
                 +'			<div class="pimage">'
                 +'				<img src="images/user.jpg" />'
                 +'			</div>'
@@ -218,6 +220,7 @@ load: function(container, bookData,params) {
 						if (newUrl.indexOf('/') > -1) {
 							newUrl = newUrl.substring(0, newUrl.indexOf('/'));
 						}
+                        
 						return '<div class="ext_url"><a target="_blank" class="block" href="' + url + '">' + newUrl + '</a></div>';
 					}
 					else {
@@ -310,14 +313,22 @@ load: function(container, bookData,params) {
         }
         
    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////     
-        /*Settings Btn*/   
+        /*Settings Btn*/
+        
+        
         
         // set toolbar buttons
             var btnBack = $('[data-id=btn_b]');
         
             btnBack.tap(function() {
-                        Page.back();
-                        });
+                if(!params.back_reload){
+                    Page.back();
+                }else{
+                    Page.back(function(c, page) {
+                       page.load(c.find('.content'));
+                    });
+                }
+            });
 
             var btnComment = $('[data-id=btn_c]');
             btnComment.tap(function() {
@@ -395,13 +406,40 @@ load: function(container, bookData,params) {
                        Page.open('EditBook', true, { bid: params.bid,frombookpage:true });
                        container.css('display','none');
                        });
-
+        if(Config.OS_Int==1){
+            $('.ext_url').each(
+                function(){
+                    var refdiv = $(this);
+                    var url = (refdiv.children()).attr('href');
+                    if(url.indexOf('https://www.facebook.com') > -1){
+                               
+                        var gotopage_str = (url.replace('https://www.facebook.com/','')).split('/')[0];
+                               
+                        if(!(parseInt(gotopage_str)==parseFloat(gotopage_str)&&!isNaN(gotopage_str))
+                           &&gotopage_str!="page"
+                           &&gotopage_str!="profile"
+                           &&gotopage_str!="group"){
+                            var graphUrl = "https://graph.facebook.com//" + gotopage_str;
+                            $.getJSON(graphUrl,function(data){
+                                url = url.replace(gotopage_str,data.id)+"";
+                                (refdiv.children()).attr('href',url);
+                            });
+                        }
+                    }
+                }
+            );
+        }
         $('.pline .ref').tap(function() {
-                             var ref = ($(this).find('.ext_url').children()).attr('href');
-                             if(ref)
-                             window.open(ref,'_blank','location=yes');
-                             });
+            var url = ($(this).find('.ext_url').children()).attr('href');
+            if(url){
+                window.open(url);
+            }
+        });
 
+        container.find('.author_info').tap(function(){
+            Page.open('Profile', true, { uid: bookData.uid, back: true });
+            container.css('display','none');
+        });
         
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////     
         var os=Config.OS;

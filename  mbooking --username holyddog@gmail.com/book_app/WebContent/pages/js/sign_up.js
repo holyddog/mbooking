@@ -2,6 +2,13 @@ Page.SignUp = {
 	url: 'pages/html/sign_up.html',
 	init: function(params, container) {
 
+        var version;
+        if(Config.OS_Int==1){
+            version = Config.IOS_VERSION;
+        }else{
+            version = Config.ANDROID_VERSION;
+        }
+        
 		// check authen
 		if (localStorage.getItem('u')) {
 			Account = JSON.parse(localStorage.getItem('u'));
@@ -123,9 +130,12 @@ Page.SignUp = {
 						   
 						   var load_inp = container.find('.input_load[data-name="email"]');
 						   Page.btnShowLoading(load_inp[0],true);
-						   load_inp.find('#cv_button').css('margin',' 12px 10px');
+                           
+                           var load = load_inp.find('#cv_button');
+                           load.css('position','absolute');
+                           load.css('top','-6px');
 						   
-						   Service.User.CheckEmail(text,function(data){
+                            Service.User.CheckEmail(text,function(data){
 							   between_check_email = false;
 			    				if($('input[name=email]').val()==text){
 				    				if(!data.result){
@@ -171,29 +181,27 @@ Page.SignUp = {
 						 if(text.length>=6&&text.length<=15){
 						   $(this).removeAttr("data-error");   
 						   $('[data-lbl=uname]').html("");
-				    		uname_timer = setTimeout(
-								    		function(){
-								    			
-								    			var load_inp = container.find('.input_load[data-name="uname"]');
-												Page.btnShowLoading(load_inp[0],true);
-										        load_inp.find('#cv_button').css('margin',' 12px 10px');
-												   
-								    			Service.User.CheckUserName(text,function(data){
-								    				between_check_uname = false;
-								    				if($('input[name=uname]').val()==text){
-									    				if(!data.result){
-									    					$('[data-lbl=uname]').html("");
-									    					$('input[name=uname]').removeAttr("data-error");		
-									    				}else{
-									    					$('input[name=uname]').attr("data-error","Username has already been used");
-									    					console.log("uname duplicate");
-									    				}
-									    				checkReadyToSubmit();
-								    				}
-								    				Page.btnHideLoading(container.find('.input_load[data-name="uname"]')[0]);
-												});
-								    		}
-								    	,3000);
+				    		uname_timer = setTimeout(function(){
+                                var load_inp = container.find('.input_load[data-name="uname"]');
+                                Page.btnShowLoading(load_inp[0],true);
+                                var load = load_inp.find('#cv_button');
+                                load.css('position','absolute');
+                                load.css('top','-6px');
+                                Service.User.CheckUserName(text,function(data){
+                                    between_check_uname = false;
+                                    if($('input[name=uname]').val()==text){
+                                        if(!data.result){
+                                            $('[data-lbl=uname]').html("");
+                                            $('input[name=uname]').removeAttr("data-error");
+                                        }else{
+                                            $('input[name=uname]').attr("data-error","Username has already been used");
+                                            console.log("uname duplicate");
+                                        }
+                                        checkReadyToSubmit();
+                                    }
+                                    Page.btnHideLoading(container.find('.input_load[data-name="uname"]')[0]);
+                                });
+                            },3000);
 						 }
 						 else{
 							$(this).attr("data-error","The length must be 6-15 charactors");
@@ -268,9 +276,11 @@ Page.SignUp = {
 			var pwd   = pwd_inp.val();
 			
 			function afterSignup(data) {
-                      
-                Device.PhoneGap.setAliasPushnotification(data.email);
-//                      Device.PhoneGap.enablePush();
+                if(Device.PhoneGap.isReady){
+                    Device.PhoneGap.setAliasPushnotification(data.email);
+                    Device.PhoneGap.setTagsPushnotification(version);
+//                  Device.PhoneGap.enablePush();
+                }
 				Page.btnHideLoading(btnAccept[0]);
                       
 				Account = {
@@ -301,13 +311,13 @@ Page.SignUp = {
 			var dvtoken = '';
             if(localStorage.getItem("dvk"))
             dvtoken = localStorage.getItem("dvk");
-
+                      
 			if (!fbid) {
-				Service.User.SignUp(dname, email, uname, pwd,Config.OS_Int,dvtoken, function(data) {
+				Service.User.SignUp(dname, email, uname, pwd,Config.OS_Int,dvtoken,version, function(data) {
 					afterSignup(data);
 				});
 			} else {
-				Service.User.SignUpFB(email, dname, uname, pwd, fbid, fbpic, dname, fbemail,Config.OS_Int,dvtoken, function(data) {
+				Service.User.SignUpFB(email, dname, uname, pwd, fbid, fbpic, dname, fbemail,Config.OS_Int,dvtoken,version, function(data) {
 					afterSignup(data);
 				});
 			}
