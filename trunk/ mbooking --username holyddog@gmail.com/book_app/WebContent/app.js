@@ -10,9 +10,11 @@ Config = {
 	SERVICE_TIMEOUT:15000,
 	FB_APP_ID: '370184839777084',
     
-	WEB_BOOK_URL:'http://instory.me',
-	FILE_URL: 'http://' + 'instory.me' + '/f',
-//	FILE_URL: 'http://119.59.122.38/book_dev_files',
+//	WEB_BOOK_URL:'http://instory.me',
+//	FILE_URL: 'http://' + 'instory.me' + '/f',
+	
+	FILE_URL: 'http://' + '192.168.0.112' + '/res/book',	
+	WEB_BOOK_URL : 'http://' + '192.168.0.112' + ':8080/book',
 	
 	OS: 'iOS',
     OS_Int: 1, //iOS :1, Android :2
@@ -25,8 +27,8 @@ Config = {
 };
 
 Service = {	
-	url: 'http://instory.me/data'
-//    url: 'http://119.59.122.38/book/data'
+//	url: 'http://instory.me/data'
+	url: 'http://' + '192.168.0.112' + ':8080/book/data'
 };
 
 Account = {};
@@ -377,6 +379,19 @@ Device = {
 	        
 			this._getPhoto(opts);
 		},
+		
+		multiSelectPhotos: function(callback) {
+			window.imagePicker.getPictures(
+    		    callback, function (error) {
+    		        console.log('Multi Select Error: ' + error);
+    		    }, {
+    		        maximumImagesCount: 5,
+    		        width: 960,
+    		        height: 960
+    		    }
+    		);
+		},
+		
 		loginFacebook: function(callback,permissions,timer){
 	    	if (!Device.PhoneGap.isReady) return;
         
@@ -886,6 +901,21 @@ Page = {
 								history.back();
 								Page._callbackDialog(Data['Image' + dIndex]);
 								dIndex = (dIndex % 4) + 1;
+				        	}
+						}
+					});
+					dialog.find('[data-link=multi]').tap(function() {
+				        if (Page._callbackDialog) {
+				        	if (Device.PhoneGap.isReady) {
+					        	var fn = function(results) {
+									history.back();
+									Page._callbackDialog(results, true);
+				    		    };
+				        		
+					        	Device.PhoneGap.multiSelectPhotos(fn);
+				        	}
+				        	else {
+								history.back();
 				        	}
 						}
 					});
