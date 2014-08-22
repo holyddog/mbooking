@@ -872,6 +872,21 @@
 #page_Settings .ch_logfb.checked {
 	background-color: green !important;
 }
+#page_Settings .newver{
+    border-radius: 9px;
+    height: 18px;
+    width: 18px;
+    max-width: 18px;
+    left: 50%;
+    top: 50%;
+    background-color: #CC0000;
+    color: #fff;
+    line-height: 18px;
+    text-align: center;
+    font-size: 70%;
+    margin-left: 10px;
+    display:none;
+}
 
 #page_BookFlip .btitle {
 	padding: 10px;
@@ -930,6 +945,7 @@
 #page_ChangePic .bg_pic {
 	width: 120px;
 	height: 120px;
+
 	background-color: #ddd;
 	border-radius: 60px;
 	margin: 0 auto;
@@ -1534,4 +1550,16 @@
 	font-size:70%;
 	line-height: 20px;
 	color: #999;
+}
+
+#page_About .ver_lb {
+    margin-right: 5px;
+    text-align: right;
+    font-size: 15px;
+    margin-right: 20px;
+    color: #0099CC;
+    line-height: 15px;
+}
+#page_About .not_update {
+    color: #FF8800;
 }
