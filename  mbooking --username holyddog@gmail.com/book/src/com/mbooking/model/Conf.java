@@ -8,7 +8,14 @@ public class Conf {
 	Long osid;
 	String ver;	
 	String os;
+	Object[] ver_lock;
 	
+	public Object[] getVer_lock() {
+		return ver_lock;
+	}
+	public void setVer_lock(Object[] ver_lock) {
+		this.ver_lock = ver_lock;
+	}
 	public String getOs() {
 		return os;
 	}
