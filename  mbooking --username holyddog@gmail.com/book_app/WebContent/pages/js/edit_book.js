@@ -263,10 +263,93 @@ Page.EditBook = {
 
 
 //			Page.open('AddPage', true, { bid: bid, count: pcount });
-			Page.popDialog(function(img) {
-				setTimeout(function() {
-					Page.open('AddPage', true, { bid: bid, count: pcount, newImage: img });					
-				}, 300);
+			Page.popDialog(function(img, multi) {
+				if (!multi) {
+					setTimeout(function() {
+						Page.open('AddPage', true, { bid: bid, count: pcount, newImage: img });					
+					}, 300);					
+				}
+				else {
+					if (img.length > 0) {
+						var count = 0;
+						var fileArr = new Array();
+						
+						var addAllPages = function() {
+							var pics = '';
+							for (var i = 0; i < fileArr.length; i++) {
+								pics += '|' + fileArr[i];
+							}
+							Service.Page.AddMultiPages(pics.substring(1), bid, Account.userId, function(pages) {
+								Page.hideLoading();
+								
+								for (var i = 0; i < pages.length; i++) {
+									self.addPage(container, pages[i], pages[i].seq == 1);
+									
+									if (pages[i].seq == 1) {
+										container.find('.book_size').css('background-image', 'url(' + Util.getImage(pages[i].pic, 2) + ')');
+										
+										if (Account.draftBooks) {
+											var books = Account.draftBooks;
+											for (var j = 0; j < books.length; j++) {
+												if (bid == books[j].bid) {
+													Account.draftBooks[j].pic = pages[i].pic;
+													break;
+												}
+											}
+											localStorage.setItem('u', JSON.stringify(Account));
+										}
+									}
+								}
+								
+								var counter = container.find('.pcount span');
+								counter.text(parseInt(counter.text()) + pages.length);
+							});
+						};
+						
+						var upload = function() {
+							if (count == img.length) {
+								addAllPages();
+								
+								return;
+							}
+							
+							var fileURL = img[count];
+							
+							var win = function(r) {
+								count++;
+								
+								fileArr.push(r.response.replace(/"/ig, ''));
+								
+								upload();
+							};							
+							var fail = function(error) {
+								count++;
+								console.log(count + ": An error has occurred: Code = " + error.code);
+								
+								upload();
+							};
+							
+							var options = new FileUploadOptions();
+							options.fileKey = "file";
+							options.fileName = fileURL.substr(fileURL.lastIndexOf('/') + 1);
+							options.mimeType = "image/jpeg";
+
+							var params = {};
+							params.uid = Account.userId;
+							params.bid = bid;
+
+							options.params = params;
+
+							var ft = new FileTransfer();
+							ft.upload(fileURL, encodeURI(Service.url + '/upload.json'), win, fail, options);
+						};
+						
+						setTimeout(function() {
+							Page.showLoading('Adding...');	
+	    		            upload();						
+						}, 300);			
+					}
+				}
 			});
 
 		});

@@ -33,6 +33,17 @@ Service.Page = {
 		Web.post(url, params, callback);
 	},
 	
+	AddMultiPages: function(pics, bookId, addBy, callback) {
+		var url = Service.url + '/addMultiPages.json';
+		var params = {
+			pics: pics,
+			bid : bookId, 
+			uid : addBy
+		};
+		Web.post(url, params, callback);
+	},	
+	
+	
 	EditCaption: function(pageId, caption, callback) {
 		var url = Service.url + '/editCaption.json';
 		var params = {
