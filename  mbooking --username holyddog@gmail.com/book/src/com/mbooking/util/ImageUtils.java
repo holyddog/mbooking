@@ -368,11 +368,21 @@ public class ImageUtils {
 			// crop to square 640x640
 			int size = 640;
 			
-			if (imageDir == 0) {
-				x = (int) ((cropPos * size) / imgSize);
+			if (cropPos != -999) {
+				if (imageDir == 0) {
+					x = (int) ((cropPos * size) / imgSize);
+				}
+				else {
+					y = (int) ((cropPos * size) / imgSize);
+				}				
 			}
 			else {
-				y = (int) ((cropPos * size) / imgSize);
+				if (imageDir == 0) {
+					x = (newBuff.getWidth() / 2) - (size / 2);
+				}
+				else {
+					y = (newBuff.getHeight() / 2) - (size / 2);
+				}
 			}
 			
 			BufferedImage dest = new BufferedImage(size, size, src.getType());
