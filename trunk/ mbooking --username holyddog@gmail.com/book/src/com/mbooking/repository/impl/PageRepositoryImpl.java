@@ -1,6 +1,7 @@
 package com.mbooking.repository.impl;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -369,6 +370,59 @@ public class PageRepositoryImpl implements PageRepostitoryCustom {
 		}
 
 		return null;
+	}
+
+	@Override
+	public List<Page> addMultiPages(String pics, Long uid, Long bid) {
+		List<Page> pages = new ArrayList<Page>();
+		
+		String[] picArr = pics.split("[|]");
+
+		Query query = new Query(Criteria.where("bid").is(bid));
+		
+	    Integer seq = (int) db.count(query, Page.class) + 1;		
+		Long now = System.currentTimeMillis();
+		
+    	String imgPath = "u" + uid + "/b" + bid;
+		String uploadPath = ConfigReader.getProp("upload_path") + "/" + imgPath;
+		
+		String cover = null;
+	    for (int i = 0; i < picArr.length; i++) {
+	    	Long pid = MongoCustom.generateMaxSeq(Page.class, db);
+	    	
+	    	String str = uploadPath + "/" + picArr[i];
+			Integer[] pos = new Integer[2];
+	    	String img = ImageUtils.generatePicture(new File(str), picArr[i], 0, -999, imgPath, pos);
+	    	
+	    	Page page = new Page();
+	    	page.setPid(pid);
+	    	page.setPic(img);
+	    	page.setPos(pos);
+	    	
+	    	if (seq.intValue() == 1) {
+	    		cover = "/" + imgPath + "/" + picArr[i];
+	    	}
+	    	
+	    	page.setSeq(seq++);
+	    	page.setCdate(now);
+	    	page.setBid(bid);
+	    	page.setUid(uid);
+	    	
+	    	db.insert(page);
+	    	
+	    	pages.add(page);
+	    }
+
+	    // update book (page count, 
+		Update update = new Update();
+		update.set("pcount", seq - 1);
+		
+		if (cover != null) {
+			update.set("pic", cover);
+		}
+		db.updateFirst(query, update, Book.class);
+		
+		return pages;
 	}
 	
 	public List<Page> findFollowingPages(Long uid,Integer skip,Integer limit) {

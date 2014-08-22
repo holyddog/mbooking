@@ -20,6 +20,7 @@ public interface PageRepostitoryCustom {
 	public List<Page> edit_seq(Long bid, Long uid, Long[] pid, Integer[] seq);
 
 	public List<Page> findFollowingPages(Long uid, Integer skip, Integer limit);
+	public List<Page> addMultiPages(String pics, Long uid, Long bid);
 
 	public Boolean addMulti(
 			String pic,

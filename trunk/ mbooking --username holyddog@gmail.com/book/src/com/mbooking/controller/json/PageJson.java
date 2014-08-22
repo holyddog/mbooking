@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
 
-import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,6 +50,19 @@ public class PageJson {
 			return page;
 		}
 		return ErrorResponse.getError("This page cannot be saved");
+	}	
+	
+
+	@RequestMapping(method = RequestMethod.POST, value = "/addMultiPages.json")
+	public @ResponseBody
+	Object addMultiPages(
+			@RequestParam(value = "pics") String pics,
+			@RequestParam(value = "bid") Long bookId,
+			@RequestParam(value = "uid") Long addBy
+
+	) 
+	{
+		return pageRepo.addMultiPages(pics, addBy, bookId);
 	}	
 
     @RequestMapping(value = "/upload.json", method = RequestMethod.POST)
