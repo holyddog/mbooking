@@ -25,7 +25,7 @@ Page.Explore = {
 		var btnSearch = container.find('[data-id=btn_s]');
 		btnSearch.tap(function() {
 			Page.open('Search', true);
-		});	
+		});
 		
 		if (/*window.navigator.onLine*/true) {
 			if (Account.exguide) {
@@ -114,7 +114,7 @@ Page.Explore = {
 				var bid = $(this).data('bid');
 				var uid = $(this).data('uid');
 				var key = $(this).data('key');
-				Page.open('Book', true, { bid: bid, uid: uid, key: key });
+                     Page.open('Book', true, { bid: bid, uid: uid, key: key,back_reload:true });
 			});
 			panel.find('.panel').click(function(e) {
 				e.preventDefault();

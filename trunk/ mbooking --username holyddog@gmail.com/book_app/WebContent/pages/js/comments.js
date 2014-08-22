@@ -67,7 +67,7 @@ Page.Comments = {
 		var content = container.find('.content');
 		Page.bodyShowLoading(content, true);
 		
-		Service.Book.GetComments(bid, 0, Config.LIMIT_ITEM, function(data) { 
+		Service.Book.GetComments(bid, 0, 1000, function(data) {
 			Page.bodyHideLoading(content);
 			
 			for (var i = 0; i < data.length; i++) {
@@ -105,7 +105,8 @@ Page.Comments = {
 		
 		var msg = document.createElement('div');
 		msg.className = 'message';
-		msg.innerText = message;
+		msg.style.wordWrap='break-word';
+        msg.innerText = message;
 		
 		var timeDiv = document.createElement('div');
 		timeDiv.className = 'time';

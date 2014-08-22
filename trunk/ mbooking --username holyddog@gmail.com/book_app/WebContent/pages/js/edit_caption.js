@@ -59,10 +59,10 @@ Page.EditCaption = {
 				page.updateDesc(c, val);
 			});
 		});
-		inputText.keyup(function() {
-			updateRemainLetter(($(this).val()).length);
-		});
-		
+		inputText.on('input',function() {
+            updateRemainLetter(($(this).val()).length);
+        });
+        
 		setTimeout(function() {
 			inputText.trigger('click');
 		}, 100);

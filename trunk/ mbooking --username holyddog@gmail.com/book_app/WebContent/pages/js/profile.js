@@ -23,7 +23,11 @@ Page.Profile = {
 		});
 		var btnBack = container.find('[data-id=btn_b]');
 		btnBack.tap(function() {
-			Page.back();
+            Page.back(function(c, page) {
+                if(page.reverseIndex){
+                    page.reverseIndex(c);
+                }
+            });
 		});	
 		var btnSearch = container.find('[data-id=btn_s]');
 		btnSearch.tap(function() {

@@ -134,8 +134,18 @@ Page.EditBook = {
 			
 //			var img = container.find('.book_size').css('background-image');
 //			img = img.replace('url(' + Config.FILE_URL, '').replace(')', '').replace('_s', '');
-			Service.Book.PublishBook(bid, Account.userId, '', function(data) {	   					
+            
+            var timer = setTimeout(function(){
+                    Page.hideLoading();
+                    MessageBox.alert({
+                            title: 'Connection Timed Out',
+                            message: 'Connection timed out. Please check your internet connection and try again.'
+                    });
+            },10000);
+            
+			Service.Book.PublishBook(bid, Account.userId, '', function(data) {
 				Page.hideLoading();
+                clearTimeout(timer);
 				updateAccount(data.user, bid);
 				
 				Page.back(function(c, page) {
@@ -155,6 +165,10 @@ Page.EditBook = {
 						page.loadProfile(Account.userId, false, c);
 					}			
 				});
+               
+                setTimeout(function(){
+                    MessageBox.drop('Story published');
+                },100);
 			});
 		};
 		
@@ -182,15 +196,47 @@ Page.EditBook = {
                             var pic = container.find('.book_size').css('background-image');
                             pic = pic.substring(pic.indexOf('(') + 1, pic.length - 1);
                             
+                            var timout = 15000;
                             setTimeout(function() {
-                                Page.showLoading('Publishing...');							
-                                self.fbPost(bid, title, desc, pic, function() {
-                                    publishBook();
+                                       
+                                var timer = setTimeout(
+                                    function(){
+                                       Page.hideLoading();
+                                       MessageBox.confirm({
+                                        title: 'Connection Timed Out',
+                                        message: 'Connection timed out. Do you want to retry connecting facebook ?',
+                                        callback: function() {
+                                          var timer2 = setTimeout(function(){
+                                              Page.hideLoading();
+                                              MessageBox.alert({
+                                                   title: 'Connection Timed Out',
+                                                   message: 'Connection timed out. Please check your internet connection and try again.'
+                                              });
+                                             },timout);
+                                           Page.showLoading('Publishing...');
+                                           self.fbPost(bid, title, desc, pic, function() {
+                                                Page.hideLoading();
+                                                clearTimeout(timer2);
+                                                publishBook(true);
+                                            });
+                                        }
+                                       });
+                                    },
+                                    timout);
+                                
+                                Page.showLoading('Publishing...');
+                                    self.fbPost(bid, title, desc, pic, function() {
+                                    Page.hideLoading();
+                                    clearTimeout(timer);
+                                    publishBook(true);
                                 });
+                    
                             }, 100);
                         }
                         else {
-                            publishBook(true);
+                            setTimeout(function() {
+                                publishBook(true);
+                            }, 100);
                         }
                     }
                 }, 4);
@@ -215,12 +261,14 @@ Page.EditBook = {
 			}
 			var pcount = parseInt(container.find('.pcount span').text());
 
+
 //			Page.open('AddPage', true, { bid: bid, count: pcount });
 			Page.popDialog(function(img) {
 				setTimeout(function() {
 					Page.open('AddPage', true, { bid: bid, count: pcount, newImage: img });					
 				}, 300);
 			});
+
 		});
 		
 		container.find('.tab_page a').click(function() {

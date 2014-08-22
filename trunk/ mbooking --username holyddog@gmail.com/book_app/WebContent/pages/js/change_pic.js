@@ -30,9 +30,33 @@ Page.ChangePic = {
 				});
 			}
 		});
+        
 		container.find('[data-id=btn_change]').tap(function() {
 			Page.popDialog(function(img) {
-				container.find('img[data-ref=base64]').attr('src', 'data:image/jpg;base64,' + img);
+                var prof_img = container.find('img[data-ref=base64]');
+                prof_img.css('margin-top','');
+                prof_img.css('margin-left','');
+                prof_img[0].onload = function(){
+                    var pwidth = this.width;
+                    var pheight = this.height;
+                    if(pwidth>pheight){
+                      prof_img.height(120);
+                      prof_img.css('width',('auto'));
+                      var w = prof_img.width();
+                      var h = prof_img.height();
+                      prof_img.css('margin-left',((w-h)/-2)+"px");
+                    }else if(pwidth<pheight){
+                     
+                      prof_img.width(120);
+                      prof_img.css('height','auto');
+                      var w = prof_img.width();
+                      var h = prof_img.height();
+                           
+                      prof_img.css('margin-top',((h-w)/-4)+"px");
+                    }
+                };
+                prof_img[0].src = 'data:image/jpg;base64,' + img;
+                           
 				btnAccept.removeClass('disabled');
 			});
 		});

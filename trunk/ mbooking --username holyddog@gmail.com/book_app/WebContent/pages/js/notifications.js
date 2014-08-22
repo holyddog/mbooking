@@ -95,6 +95,9 @@ Page.Notifications = {
 		
 		if(user){
 			data.pic = user.pic;
+			if((data.message).indexOf("published") > -1){
+				data.uid = user.uid;
+			}
 		}
 		
 		var notfDiv = document.createElement('div');

@@ -21,6 +21,7 @@ Page.CreateBook = {
 		var btnAccept = container.find('[data-id=btn_a]');
 		btnAccept.tap(function() {
 			if (!btnAccept.hasClass('disabled')) {
+                btnAccept.css('pointer-events','none');
 				Page.btnShowLoading(btnAccept[0]);
 				
 				var title = inputTitle.val();

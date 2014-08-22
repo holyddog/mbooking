@@ -53,9 +53,11 @@ Page.ForgetPass = {
 			cancel_btn.css('pointer-events', 'none');
 			sendmail_btn.css('pointer-events', 'none');
 			sendmail_btn.html('Sending Email ...');
-			Page.btnShowLoading(cancel_btn[0],true);	
-			cancel_btn.find('canvas').css('margin','10px');
-			
+			Page.btnShowLoading(cancel_btn[0],true);
+            var canvas = cancel_btn.find('#cv_button');
+            canvas.css('position','absolute');
+			canvas.css('top','-5px');
+			canvas.css('left','-5px');
 			Service.User.SendForgetPassToEmail(email, function(data){
 				Page.btnHideLoading(cancel_btn[0]);	
 				if(data.result){
