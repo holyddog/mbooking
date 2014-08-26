@@ -29,12 +29,17 @@ Page.Report = {
 		if(!params.auname)
 			params.auname = null;
 		
-		if(!params.oid)
-			params.oid = null;
-		
+		if(!params.oid){
+            if(params.bid)
+                params.oid = params.bid;
+            else
+                params.oid = null;
+            alert(params.oid);
+		}
+        
 		if(!params.comment)
 			params.comment= null;
-		
+		 
 		
 		btnAccept.tap(function() {
 			if (!btnAccept.hasClass('disabled')) {
@@ -44,13 +49,21 @@ Page.Report = {
 					Service.User.SubmitReportWithType(params.type, sel.val(),Account.userId,Account.userName,params.auid,params.auname,params.oid,text.val(),params.comment,
 						function(){
 							Page.btnHideLoading(btnAccept[0]);
-							Page.back();
+                            Page.back(function(c, page) {
+                                if(page.reverseIndex){
+                                    page.reverseIndex(c);
+                                }
+                            });
 							MessageBox.drop("Already send you report");
 						}
 					);
 				}
 				else{
-					Page.back();
+                      Page.back(function(c, page) {
+                        if(page.reverseIndex){
+                            page.reverseIndex(c);
+                        }
+                      });
 				}
 				
 			}

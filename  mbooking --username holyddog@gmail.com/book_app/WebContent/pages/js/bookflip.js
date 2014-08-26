@@ -353,7 +353,7 @@ load: function(container, bookData,params) {
                         history.back();
 
                         setTimeout(function() {
-                            Page.open('Report', true, { bid: params.bid });
+                            Page.open('Report', true, { bid: params.bid ,auid:bookData.uid,type:1});//type 1 = story report
                             container.css('display','none');
                         }, 100);
                     }
