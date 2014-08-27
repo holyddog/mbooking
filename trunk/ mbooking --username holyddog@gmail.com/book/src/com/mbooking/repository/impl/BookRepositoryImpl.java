@@ -242,22 +242,22 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			Criteria criteria ;
 			Query query;
 			
-			if(key!=null&&(!key.isEmpty())&&(!key.equals(""))){
+			if (key != null && (!key.isEmpty()) && (!key.equals(""))) {
 				criteria = Criteria.where("key").is(key);
-			}else if(bid!=null&&uid!=null){
-				criteria = Criteria.where("bid").is(bid).and("uid").is(uid);			
-			}
-			else{
+			} else if (bid != null && uid != null) {
+				criteria = Criteria.where("bid").is(bid).and("uid").is(uid);
+			} else {
 				System.out.println("Find Book With Page Service error : invalid parameter");
 				return null;
 			}
 			
 			query = new Query(criteria);
 			Book book = db.findOne(query, Book.class);
-			if(book==null){
+			if (book == null) {
 				System.out.println("Find Book With Page Service error : find book not found");
 				return null;
 			}
+			
 			bid = book.getBid();
 			uid = book.getUid();
 			query = new Query(Criteria.where("bid").is(bid));
@@ -266,15 +266,12 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			query.fields().include("caption");
 			query.fields().include("ref");
 			query.sort().on("seq", Order.ASCENDING);
-			List<Page> pages = db.find(query, Page.class);
-			
+			List<Page> pages = db.find(query, Page.class);			
 			
 			Query uquery = new Query(Criteria.where("uid").is(uid));
 			uquery.fields().include("dname");
 			uquery.fields().include("pic");
 			User user = db.findOne(uquery, User.class);
-			
-			
 			
 			book.setAuthor(user);
 			book.setPages(pages);
@@ -342,6 +339,10 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			
 			book.setAuthor(user);
 			book.setPages(pages);
+
+			db.updateFirst(query, new Update().inc("vcount", 1), Book.class);
+			Update up = new Update().inc("count", 1).set("ldate", System.currentTimeMillis());
+			db.upsert(new Query(Criteria.where("bid").is(bid).and("uid").is(0)), up, View.class);
 
 			return book;
 		} catch (Exception e) {
