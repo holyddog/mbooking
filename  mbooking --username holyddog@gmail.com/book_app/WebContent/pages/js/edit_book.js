@@ -408,12 +408,23 @@ Page.EditBook = {
 				}
 				self.reScale(container);
 				
+				
 				var tags = data.tags;
 				if (tags && tags.length > 0) {
 					var tagPanel = container.find('.tags');
 					for (var i = 0; i < tags.length; i++) {
 						self.addTag(tagPanel, tags[i]);
-					}				
+					}	
+
+					var tagData = Data;
+					if (tagData) {
+						for (var j = 0; j < tagData.length; j++) {
+							var tagElm = tagPanel.find('[data-tag=' + tagData[j].tag.toLocaleLowerCase() + ']');
+							if (tagElm.length) {
+								tagElm.addClass('main');
+							}
+						}							
+					}			
 				}
 			});
 		}
@@ -461,6 +472,7 @@ Page.EditBook = {
 		var self = this;
 		
 		var link = document.createElement('a');
+		link.dataset.tag = tagName.toLocaleLowerCase();
 		link.className = 'name';
 		link.innerText = tagName;
 		
