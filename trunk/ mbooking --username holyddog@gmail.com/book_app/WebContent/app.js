@@ -13,8 +13,8 @@ Config = {
 //	WEB_BOOK_URL:'http://instory.me',
 //	FILE_URL: 'http://' + 'instory.me' + '/f',
 	
-	FILE_URL: 'http://' + '192.168.0.112' + '/res/book',	
-	WEB_BOOK_URL : 'http://' + '192.168.0.112' + ':8080/book',
+	FILE_URL: 'http://' + 'localhost' + '/res/book',	
+	WEB_BOOK_URL : 'http://' + 'localhost' + ':8080/book',
 	
 	OS: 'iOS',
     OS_Int: 1, //iOS :1, Android :2
@@ -28,10 +28,11 @@ Config = {
 
 Service = {	
 //	url: 'http://instory.me/data'
-	url: 'http://' + '192.168.0.112' + ':8080/book/data'
+	url: 'http://' + 'localhost' + ':8080/book/data'
 };
 
 Account = {};
+Data = {};
 
 income_push = false;
 
@@ -776,6 +777,9 @@ Page = {
 				if (params) {
 					url += '&' + $.param(params);
 				}
+			}
+			else if (params) {
+				url += '?' + $.param(params);
 			}
 			window.location = url;
 		};
@@ -1727,7 +1731,13 @@ var pageLoad = function() {
 		Page._showDialog = true;
 	}
 };
-$(function(){
+
+$(function() {
+	
+	Service.Book.TagCategories(function(data) {
+		Data = data;
+	});
+	
 	$(window).hashchange(function() {		
 		pageLoad();
 	});

@@ -62,6 +62,22 @@ Service.Book = {
 		Web.post(url, params, callback);
 	},
 
+	TagCategories: function(callback) {
+		var url = Service.url + '/findTagCategories.json';
+		var params = {};
+		Web.get(url, params, callback);
+	},
+
+	RelatedStory: function(bid, uid, callback) {
+		var url = Service.url + '/findRelatedStory.json';
+		var params = {
+			bid: bid,
+			uid: uid
+		};
+		
+		Web.get(url, params, callback);
+	},
+
 //	EditBook : function(bookID, bookName, desc, userID, picName, startDate,
 //			endDate, tags, callback) {
 //		var url = Service.url + '/editBook.json';

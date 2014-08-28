@@ -141,6 +141,7 @@ Page.Book = {
 	},
 	
 	load: function(container, bookData) {
+		var self = this;
 		var content = container.find('.content');
 		content.find('.res_message').remove();
 		
@@ -154,6 +155,7 @@ Page.Book = {
 		content.find('.text_bar .fright').text(bookData.pcount);
 		if (bookData.lcount) content.find('.text_bar .lcount').text(bookData.lcount);
 		if (bookData.ccount) content.find('.text_bar .ccount').text(bookData.ccount);
+		if (bookData.vcount) content.find('.text_bar .vcount').text(bookData.vcount);
 		
 		var index = 0;
 		var size = 0;
@@ -187,8 +189,25 @@ Page.Book = {
 				var pline = '<div class="pline box horizontal"><div class="ref flex1">' + refStr + '</div><div class="pnum">' + (i + 1) + ' of ' + data.length + '</div></div>';
 				content.append(page.append(pic).append('<div class="page_cap flex1 box center_middle" style="padding: 15px;"><div style="width: 100%;">' + data[i].caption + '</div></div>' + pline));
 				pic.css('height', pic.width());
-			}	
-			content.find('.last_cover').appendTo(content);
+			}
+			
+			var lastCover = content.find('.last_cover');
+			lastCover.appendTo(content);
+			
+			Service.Book.RelatedStory(bookData.bid, Account.userId, function(dt) {
+				var relPanel = lastCover.find('.panel');
+				for (var i = 0; i < dt.length; i++) {
+					var b = dt[i];
+					relPanel.append(Page.Profile.getBook(b.bid, b.title, b.pic, b.pcount, b.author, b.lcount, b.ccount, b.key));
+				}
+				relPanel.find('.book_size').click(function() {
+					var b = $(this);
+					Page.open('Book', false, { bid: b.data('bid'), uid: b.data('uid'), key: b.data('key') });
+				});
+
+				self.resize(container);
+				lastCover.css('visibility', 'visible');		
+			});
 		}
 		container.find(".content").owlCarousel({
 			singleItem: true,
@@ -333,5 +352,26 @@ Page.Book = {
 		// show panel
 		content.removeClass('gray').addClass('no_color');
 		container.find('.hid_loading').removeClass('hid_loading');
+		
+		container.find('[data-id=btn_reset]').click(function() {
+			var owl = container.find(".owl-carousel").data('owlCarousel');
+			owl.goTo(0);
+		});
+	},
+	
+	resize: function(container) {
+		var header = $('.content:last-child')[0];
+		
+		var ratio = 2;
+		if (header.offsetWidth >= 600) {
+			ratio = 3;
+		}
+		
+		var w = (header.offsetWidth / ratio) - 15;
+		var h = (w * 4) / 3;
+		container.find('.book_size').css({
+			width: w + 'px',
+			height: h + 'px'
+		});
 	}
 };

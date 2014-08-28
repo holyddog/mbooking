@@ -660,6 +660,10 @@
 #page_Book .clabel .icon.comment {	
 	-webkit-mask-image: url(../icons/comment.png);
 }
+#page_Book .clabel .icon.view {	
+	-webkit-mask-image: url(../icons/preview.png);
+	-webkit-mask-size: 25px;
+}
 #page_Book .clabel .text {
 	width: 20px;
 	height: 50px;
@@ -972,6 +976,9 @@
 	margin-bottom: 10px;
 	padding: 10px;
 	font-size: 80%;
+}
+#page_EditBook .tags .name.main {
+	background-color: #FF8800;	
 }
 #page_EditBook .cmd_panel .box {
 	height: 50px;
@@ -1531,6 +1538,43 @@
 	font-style: italic;
 }
 
+#page_Book .the_end {
+	position: absolute;
+	top: 30%;
+	width: 100%;
+	height: 50px;
+	text-align: center;
+}
+#page_Book .the_end .rel {
+	height: 50px;
+	color: #eee;
+	font-size: 150%;
+	text-align: center;
+	font-family: 'Roboto', 'Bangna';
+	font-weight: 400;
+	position: relative;
+}
+#page_Book .the_end .line {
+	position: absolute; width: 30%; height: 1px; background-color: #fff; top: 25px;
+}
+#page_Book .the_end .lbl {
+	position: relative; width: 250px; margin: 0 auto; line-height: 50px;
+}
+#page_Book .the_end .restart {
+	right: 0; top: 0; position: absolute; width: 50px; height: 50px; border-radius: 50%; background-color: rgba(255,255,255,.4);
+}
+#page_Book .the_end .restart span {
+	background-color: #222; -webkit-mask-image: url(../icons/refresh.png);width: 50px;height: 50px;position: absolute;left: 0;
+}
+#page_Book .rel_story {
+	position: absolute; bottom: 0; width: 100%;
+}
+#page_Book .rel_story .title {
+	text-align: left; font-family: 'Roboto', 'Bangna'; font-weight: 400; overflow: hidden; padding: 10px; font-size: 120%; color: #eee; line-height: 30px;
+}
+#page_Book .rel_story .panel {
+	padding: 5px;overflow: hidden; background-color: rgba(255,255,255,.4)
+}
 
 #page_AddTag #tag_list {
 	background-color: #fff;
@@ -1551,6 +1595,12 @@
 	line-height: 20px;
 	color: #999;
 }
+#page_AddTag .tag_item .num {
+	line-height: 50px;
+	color: #555;
+	font-family: 'Roboto';
+	font-size: 120%;
+}
 
 #page_About .ver_lb {
     margin-right: 5px;
@@ -1562,4 +1612,4 @@
 }
 #page_About .not_update {
     color: #FF8800;
-}
+}>>>>>>> .r438
