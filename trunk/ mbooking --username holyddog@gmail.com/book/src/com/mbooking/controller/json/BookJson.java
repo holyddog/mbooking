@@ -100,6 +100,20 @@ public class BookJson {
 		return ErrorResponse.getError("Find book"+ (bid!=null?("bid :"+bid):(key!=null?("key :"+key):"")) + " was not found");
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value = "/findTagCategories.json")
+	public @ResponseBody
+	Object findTagCategories() {
+		return bookRepo.findTagCategories();
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/findRelatedStory.json")
+	public @ResponseBody
+	Object findRelatedStory(
+			@RequestParam(value = "bid") Long bid,
+			@RequestParam(value = "uid") Long uid) {
+		return bookRepo.findRelatedStory(bid, uid);
+	}
+
 	//Web View Mode
 	@RequestMapping(method = RequestMethod.GET, value = "/getBookByUid.json")
 	public @ResponseBody

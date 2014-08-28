@@ -1,8 +1,10 @@
 package com.mbooking.repository.impl;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -235,6 +237,37 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 
 		return null;
 	}
+	
+	private int randInt(int min, int max) {
+	    Random rand = new Random();
+	    int randomNum = rand.nextInt((max - min) + 1) + min;
+	    return randomNum;
+	}
+
+	@Override
+	public List<Book> findRelatedStory(Long bid, Long uid) {
+		Query query1  = new Query(Criteria.where("pbdate").exists(true).and("pub").is(true).and("bid").nin(new Object[]{ bid }));
+		long count1 = db.count(query1, Book.class);
+		query1.fields().include("title").include("pic").include("key").include("ccount").include("pcount").include("ccount").include("lcount").include("author");		
+		int r1 = randInt(1, (int) count1);		
+		System.out.println("r1: " + r1);
+		query1.skip(r1 - 1).limit(1);
+		Book b1 = db.find(query1, Book.class).get(0);
+		
+		Query query2  = new Query(Criteria.where("pbdate").exists(true).and("pub").is(true).and("bid").nin(new Object[]{ bid, b1.getBid() }));
+		long count2 = db.count(query2, Book.class);
+		query2.fields().include("title").include("pic").include("key").include("ccount").include("pcount").include("ccount").include("lcount").include("author");		
+		int r2 = randInt(1, (int) count2);			
+		System.out.println("r2: " + r2);
+		query2.skip(r2 - 1).limit(1);
+		Book b2 = db.find(query2, Book.class).get(0);
+		
+		List<Book> list = new ArrayList<Book>();
+		list.add(b1);
+		list.add(b2);
+		
+		return list;
+	}
 
 	@Override
 	public Book findBookWithPages(Long bid, Long uid, Long gid,String key, Boolean isCount) {
@@ -298,6 +331,14 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			System.out.println("Find Book With Page Service error : " + e);
 			return null;
 		}
+	}	
+
+	@Override
+	public List<Tag> findTagCategories() {
+		Query query = new Query(Criteria.where("cat").exists(true));
+		query.fields().exclude("cat");
+		query.sort().on("seq", Order.ASCENDING);
+		return db.find(query, Tag.class);
 	}
 	
 	@Override
