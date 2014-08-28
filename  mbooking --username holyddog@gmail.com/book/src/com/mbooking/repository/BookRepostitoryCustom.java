@@ -25,6 +25,7 @@ public interface BookRepostitoryCustom {
 	public Boolean addTag(Long bid, String tag);
 	public Boolean removeTag(Long bid, String tag);
 	
+	public List<Book> findRelatedStory(Long bid, Long uid);
 	public List<Book> findLastBookByUid(Long uid);
 	public List<Book> findBooksByTitle(String keyword);
 	public List<Book> findBooksByTag(String tag);
@@ -35,6 +36,7 @@ public interface BookRepostitoryCustom {
 	
 	public List<Book> findByPbdateExists(boolean exists,Integer skip,Integer limit);
 	public List<Book> findByPbdateExistsByTag(String tag, Integer skip, Integer limit);
+	public List<Tag> findTagCategories();
 	
 	public List<Book> findFollowingBooks(Long uid,Integer skip,Integer limit);
 
