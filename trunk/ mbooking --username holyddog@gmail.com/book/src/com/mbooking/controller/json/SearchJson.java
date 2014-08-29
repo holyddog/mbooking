@@ -97,6 +97,13 @@ public class SearchJson {
 		follow.setType(3);
 		groupList.add(follow);
 		
+		StoryGroup recent = new StoryGroup();
+		recent.setTitle("Recent Updates");
+		recent.setBooks(bookRepo.findByPbdateExists(true, 0, 3));
+		recent.setRef("Recent");
+		recent.setType(4);
+		groupList.add(recent);
+		
 		return groupList;
 	}
 	
