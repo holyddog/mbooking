@@ -21,6 +21,7 @@ import com.mbooking.model.Favourite;
 import com.mbooking.model.Like;
 import com.mbooking.model.Notification;
 import com.mbooking.model.Page;
+import com.mbooking.model.StoryGroup;
 import com.mbooking.model.Tag;
 import com.mbooking.model.User;
 import com.mbooking.model.View;
@@ -249,16 +250,14 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 		Query query1  = new Query(Criteria.where("pbdate").exists(true).and("pub").is(true).and("bid").nin(new Object[]{ bid }));
 		long count1 = db.count(query1, Book.class);
 		query1.fields().include("title").include("pic").include("key").include("ccount").include("pcount").include("ccount").include("lcount").include("author");		
-		int r1 = randInt(1, (int) count1);		
-		System.out.println("r1: " + r1);
+		int r1 = randInt(1, (int) count1);	
 		query1.skip(r1 - 1).limit(1);
 		Book b1 = db.find(query1, Book.class).get(0);
 		
 		Query query2  = new Query(Criteria.where("pbdate").exists(true).and("pub").is(true).and("bid").nin(new Object[]{ bid, b1.getBid() }));
 		long count2 = db.count(query2, Book.class);
 		query2.fields().include("title").include("pic").include("key").include("ccount").include("pcount").include("ccount").include("lcount").include("author");		
-		int r2 = randInt(1, (int) count2);			
-		System.out.println("r2: " + r2);
+		int r2 = randInt(1, (int) count2);
 		query2.skip(r2 - 1).limit(1);
 		Book b2 = db.find(query2, Book.class).get(0);
 		
@@ -813,5 +812,44 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			db.remove(query, Favourite.class);
 		}
 		return true;
+	}
+
+	@Override
+	public List<Book> findPickupStory(Integer limit) {
+		Query query = new Query(Criteria.where("pbdate").exists(true).and("pub").is(true).and("pickup").exists(true));
+		query.sort().on("pickup", Order.DESCENDING);
+		
+		if (limit == null) {
+			query.skip(0).limit(50);			
+		}
+		else {
+			query.skip(0).limit(limit);
+		}
+		return db.find(query, Book.class);
+	}
+
+	@Override
+	public List<StoryGroup> findStoryGroup() {
+		List<StoryGroup> groupList = new ArrayList<StoryGroup>();
+		
+		Query query = new Query(Criteria.where("exp").is(true));
+		List<Tag> tagList = db.find(query, Tag.class);
+		for (int i = 0; i < tagList.size(); i++) {
+			Tag t = tagList.get(i);
+			List<Book> bookList = findByPbdateExistsByTag(t.getTag(), 0, 3);
+			if (bookList != null && bookList.size() > 0) {
+				StoryGroup group = new StoryGroup();
+				
+				group.setDesc(t.getTag());
+				group.setTitle(t.getLabel());
+				group.setRef("Tag");
+				group.setBooks(bookList);
+				group.setType(2);
+				
+				groupList.add(group);
+				
+			}
+		}
+		return groupList;
 	}
 }

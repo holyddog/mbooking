@@ -1,8 +1,10 @@
 package com.mbooking.repository;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.mbooking.model.Book;
+import com.mbooking.model.StoryGroup;
 import com.mbooking.model.Tag;
 import com.mbooking.model.User;
 
@@ -26,6 +28,9 @@ public interface BookRepostitoryCustom {
 	public Boolean removeTag(Long bid, String tag);
 	
 	public List<Book> findRelatedStory(Long bid, Long uid);
+	public List<Book> findPickupStory(Integer limit);
+	public List<StoryGroup> findStoryGroup();
+	
 	public List<Book> findLastBookByUid(Long uid);
 	public List<Book> findBooksByTitle(String keyword);
 	public List<Book> findBooksByTag(String tag);

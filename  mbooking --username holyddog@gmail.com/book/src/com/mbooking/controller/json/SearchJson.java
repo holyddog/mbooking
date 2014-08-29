@@ -1,5 +1,6 @@
 package com.mbooking.controller.json;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mbooking.common.ErrorResponse;
 import com.mbooking.model.Book;
+import com.mbooking.model.StoryGroup;
 import com.mbooking.model.Tag;
 import com.mbooking.model.User;
 import com.mbooking.repository.BookRepository;
@@ -70,5 +72,37 @@ public class SearchJson {
 			return books;
 		}
 		return ErrorResponse.getError("An internal error");
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/explore.json")
+	public @ResponseBody
+	Object explore(@RequestParam(value = "uid") Long uid) {
+		List<StoryGroup> groupList = new ArrayList<StoryGroup>();
+		
+		// select pickup story
+		StoryGroup group = new StoryGroup();
+		group.setTitle("Popular Stories");
+		group.setBooks(bookRepo.findPickupStory(3));
+		group.setRef("Pickup");
+		group.setType(1);
+		groupList.add(group);
+		
+		List<StoryGroup> tagList = bookRepo.findStoryGroup();
+		groupList.addAll(tagList);
+		
+		StoryGroup follow = new StoryGroup();
+		follow.setTitle("Following");
+		follow.setBooks(bookRepo.findFollowingBooks(uid, 0, 3));
+		follow.setRef("Following");
+		follow.setType(3);
+		groupList.add(follow);
+		
+		return groupList;
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/pickup.json")
+	public @ResponseBody
+	Object explore() {
+		return bookRepo.findPickupStory(null);
 	}
 }
