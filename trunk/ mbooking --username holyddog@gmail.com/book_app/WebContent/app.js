@@ -13,8 +13,8 @@ Config = {
 //	WEB_BOOK_URL:'http://instory.me',
 //	FILE_URL: 'http://' + 'instory.me' + '/f',
 	
-	FILE_URL: 'http://' + 'localhost' + '/res/book',	
-	WEB_BOOK_URL : 'http://' + 'localhost' + ':8080/book',
+	FILE_URL: 'http://' + window.location.hostname + '/res/book',	
+	WEB_BOOK_URL : 'http://' + window.location.hostname + ':8080/book',
 	
 	OS: 'iOS',
     OS_Int: 1, //iOS :1, Android :2
@@ -28,7 +28,7 @@ Config = {
 
 Service = {	
 //	url: 'http://instory.me/data'
-	url: 'http://' + 'localhost' + ':8080/book/data'
+	url: 'http://' + window.location.hostname + ':8080/book/data'
 };
 
 Account = {};

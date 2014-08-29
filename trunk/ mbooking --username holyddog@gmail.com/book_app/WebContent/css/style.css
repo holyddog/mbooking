@@ -1034,11 +1034,12 @@ textarea {
 	float: left;
 }
 .book_size .social .clabel .icon {
-	width: 20px;
-	height: 20px;
+	width: 12px;
+	height: 12px;
+	-webkit-mask-size: 12px !important;
+	margin: 4px;
 	background-color: #fff;
 	float: left;
-	-webkit-mask-size: 12px;
 }
 .book_size .social .clabel .text {
 	width: 20px;
@@ -1262,4 +1263,46 @@ textarea {
 	margin-top: -20px;
 	color: #999;
 	text-align: center;
+}
+
+.cat_group {
+	padding-top: 5px;
+	margin-top: 5px;
+}
+.cat_group .title {
+	font-family: 'Roboto', 'Bangna';
+	font-size: 120%;
+}
+.cat_group .title.notag {
+	line-height: 40px;
+}
+.cat_group .fleft {
+	padding-left: 10px;
+}
+.cat_group .ref_tag {
+	font-family: 'Roboto', 'Bangna';
+	font-size: 70%;
+	color: #999;
+}
+.cat_group .more {
+	display: block;
+	width: 50px;
+	margin-top: 5px;
+	margin-right: 10px;
+	padding: 5px 10px;
+	font-size: 70%;
+	text-align: center;
+	color: #fff;
+}
+.cat_group .more.type1 {	
+	background-color: #FF4444;
+}
+.cat_group .more.type2 {	
+	background-color: #99CC00;
+}
+.cat_group .more.type3 {	
+	background-color: #AA66CC;
+}
+.cat_group .more.type4 {	
+	background-color: #FFBB33;
 }

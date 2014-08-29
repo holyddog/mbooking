@@ -52,6 +52,7 @@
 <div class="tbar_bg gray"></div>
 <div class="tbar">	
 	<a data-id="btn_m" class="btn" style="left: 0;"><span class="list"></span></a>
+	<a data-id="btn_b" class="btn" style="left: 0; display: none;"><span class="back"></span></a>
 	<div class="title">Following</div>
 	<a data-id="btn_r" class="btn" style="right: 50px;"><span class="refresh"></span></a>
 	<a data-id="btn_n" class="btn" style="right: 0px;">
@@ -61,17 +62,17 @@
 </div>
 <div class="content gray flex1 box vertical no_scroll">	
 	<div class="tab_cat box horizontal">
-		<div class="tab flex1 flex_lock active" data-link="foll_tab1">ACTIVITY</div>
+		<div class="tab flex1 flex_lock active" data-link="foll_tab2">STORY</div>
 		<div class="sep"></div>
-		<div class="tab flex1 flex_lock" data-link="foll_tab2">STORY</div>
+		<div class="tab flex1 flex_lock" data-link="foll_tab1">ACTIVITY</div>
 	</div>	
-	<div id="foll_tab1" class="flex1 overflow_scroll">
-		<div class="act_con">
+	<div id="foll_tab2" class="flex1 overflow_scroll">
+		<div class="book_con">
 		</div>
 		<div class="load_more relative"></div>
 	</div>
-	<div id="foll_tab2" class="flex1 overflow_scroll" style="display: none;">
-		<div class="book_con">
+	<div id="foll_tab1" class="flex1 overflow_scroll" style="display: none;">
+		<div class="act_con">
 		</div>
 		<div class="load_more relative"></div>
 	</div>
