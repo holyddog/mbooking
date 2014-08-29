@@ -146,7 +146,7 @@ Page.Explore = {
 		header.className = 'flow_hidden';
 		
 		var fleft = document.createElement('div');
-		fleft.className = 'fleft';
+		fleft.className = 'fleft label';
 		
 		var h2 = document.createElement('h2');
 		h2.className = 'title ' + ((!tag)? 'notag': '');
