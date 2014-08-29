@@ -10,16 +10,22 @@ Page.Following = {
 		var tab2 = container.find('#foll_tab2');
 		
 		// set toolbar buttons
-		container.find('[data-id=btn_m]').tap(function() {
+		var btnMenu = container.find('[data-id=btn_m]');
+		btnMenu.tap(function() {
 			Page.slideMenu();
 		});	
-		container.find('[data-id=btn_r]').tap(function() {
+		var btnRef = container.find('[data-id=btn_r]');
+		btnRef.tap(function() {
 			if (tab2.is(':visible')) {
 				self.load(container);				
 			}
 			else {	
 				self.loadActivity(container);
 			}
+		});	
+		var btnBack = container.find('[data-id=btn_b]');
+		btnBack.tap(function() {
+            Page.back();
 		});	
 		var btnAdd = container.find('[data-id=btn_a]');
 		btnAdd.tap(function() {
@@ -30,6 +36,13 @@ Page.Following = {
 			btnNotf.find('.notf_count').removeClass('show');
 			Page.open('Notifications', true);
 		});	
+		
+		if (params && params.back) {
+			btnBack.show();
+			btnMenu.hide();
+			btnNotf.hide();
+			btnRef.css('right', '0px');
+		}
 		
 		if(/*window.navigator.onLine*/true){
 		$('.user_guide').css('pointer-events','all');
@@ -70,13 +83,19 @@ Page.Following = {
 			if (index == 0) {
 			}
 			else {
-				if (container.find('.book_con').find('.b').length == 0) {
-					self.load(container);					
+//				if (container.find('.book_con').find('.b').length == 0) {
+//					self.load(container);					
+//				}
+
+				if (container.find('.act_con').find('.apanel').length == 0) {
+					self.loadActivity(container);			
 				}
 			}
 		});
 
-		self.loadActivity(container);
+//		self.loadActivity(container);
+		self.load(container);
+		
 		Page.createShortcutBar(container);
 	},
 	
