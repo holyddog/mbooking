@@ -654,6 +654,22 @@
 	float: left;
 	-webkit-mask-size: 16px;
 }
+#page_Book .book_size .social .clabel .icon {
+	width: 20px;
+	height: 20px;
+	background-color: #fff;
+	float: left;
+	-webkit-mask-size: 12px;
+}
+#page_Book .book_size .social .clabel .text {
+	width: 20px;
+	height: 20px;
+	color: #fff;
+	float: left;
+	font-size: 75%;
+	line-height: 23px;	
+}
+
 #page_Book .clabel .icon.like {	
 	-webkit-mask-image: url(../icons/like.png);
 }
@@ -1539,8 +1555,6 @@
 }
 
 #page_Book .the_end {
-	position: absolute;
-	top: 30%;
 	width: 100%;
 	height: 50px;
 	text-align: center;
@@ -1553,6 +1567,7 @@
 	font-family: 'Roboto', 'Bangna';
 	font-weight: 400;
 	position: relative;
+	width: 100%;
 }
 #page_Book .the_end .line {
 	position: absolute; width: 30%; height: 1px; background-color: #fff; top: 25px;
@@ -1567,7 +1582,6 @@
 	background-color: #222; -webkit-mask-image: url(../icons/refresh.png);width: 50px;height: 50px;position: absolute;left: 0;
 }
 #page_Book .rel_story {
-	position: absolute; bottom: 0; width: 100%;
 }
 #page_Book .rel_story .title {
 	text-align: left; font-family: 'Roboto', 'Bangna'; font-weight: 400; overflow: hidden; padding: 10px; font-size: 120%; color: #eee; line-height: 30px;
