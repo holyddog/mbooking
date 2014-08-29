@@ -30,6 +30,7 @@ public class Book {
 	Long vcount; // view count
 	
 	Long pbdate; // publish date
+	Long pickup; // pickup date
 	
 	Integer seq;
 	Boolean pub; // public to everyone
@@ -244,4 +245,11 @@ public class Book {
 		this.vcount = vcount;
 	}
 
+	public Long getPickup() {
+		return pickup;
+	}
+
+	public void setPickup(Long pickup) {
+		this.pickup = pickup;
+	}
 }

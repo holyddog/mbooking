@@ -8,8 +8,10 @@ public class Tag {
 	@Id
 	String tag;
 	Integer count;
+	
 	String label;
 	Boolean cat;
+	Boolean exp;
 	Integer seq;
 
 	public String getTag() {
@@ -42,5 +44,21 @@ public class Tag {
 
 	public void setCat(Boolean cat) {
 		this.cat = cat;
+	}
+
+	public Boolean getExp() {
+		return exp;
+	}
+
+	public void setExp(Boolean exp) {
+		this.exp = exp;
+	}
+
+	public Integer getSeq() {
+		return seq;
+	}
+
+	public void setSeq(Integer seq) {
+		this.seq = seq;
 	}
 }
