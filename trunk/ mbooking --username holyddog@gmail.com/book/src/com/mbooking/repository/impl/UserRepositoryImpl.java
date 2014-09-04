@@ -682,8 +682,13 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		q.fields().include("drcount");
 		q.fields().include("pbcount");
 		q.fields().include("inactive");
-		
-		return db.findOne(q,User.class);
+		User user = db.findOne(q,User.class); 
+				
+		Query bq = new Query(Criteria.where("uid").is(uid).and("pbdate").exists(false));
+		bq.fields().include("pic").include("title").include("pcount");
+		List<Book> books = db.find(bq, Book.class);
+		user.setBooks(books);
+		 return user;
 	}
 
 
