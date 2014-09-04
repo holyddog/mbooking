@@ -326,4 +326,10 @@ public class UserJson {
 	Object getAppInfo() {
 		return ResultResponse.getResult("result",confRepo.findAll());
 	}
+	@RequestMapping(method = RequestMethod.GET, value = "/getAccountInfo.json")
+	public @ResponseBody Object getAccountInfo(
+			@RequestParam(value = "uid") Long uid
+			) {
+		return ResultResponse.getResult("result",userRepo.getAccountInfo(uid));
+	}
 }

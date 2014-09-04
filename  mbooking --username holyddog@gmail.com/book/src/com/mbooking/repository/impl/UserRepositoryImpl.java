@@ -567,7 +567,7 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 	public Boolean submitReportStory(Integer type, Long bid, Long uid, String msg) {
 		try {
 			Update update = new Update();
-			update.set("type", 1);
+			update.set("type", type);
 			update.set("subtype", type);
 			update.set("bid",bid);
 			update.set("uid",uid);
@@ -591,7 +591,7 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 			update.set("rdate",System.currentTimeMillis());
 			update.set("inactive",false);
 			
-			db.upsert(new Query(Criteria.where("uid").is(uid).and("bid").is(bid).and("auid").is(auid).and("type").is(1).and("subtype").is(type).and("inactive").is(false)), update, Report.class);	
+			db.upsert(new Query(Criteria.where("uid").is(uid).and("bid").is(bid).and("auid").is(auid).and("type").is(type).and("subtype").is(type)), update, Report.class);	
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -674,6 +674,16 @@ public class UserRepositoryImpl implements UserRepostitoryCustom {
 		}
 		
 		return true;
+	}
+
+	@Override
+	public User getAccountInfo(Long uid) {
+		Query q = new Query(Criteria.where("uid").is(uid));
+		q.fields().include("drcount");
+		q.fields().include("pbcount");
+		q.fields().include("inactive");
+		
+		return db.findOne(q,User.class);
 	}
 
 
