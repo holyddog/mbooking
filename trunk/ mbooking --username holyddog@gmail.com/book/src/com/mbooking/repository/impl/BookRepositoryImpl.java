@@ -399,7 +399,14 @@ public class BookRepositoryImpl implements BookRepostitoryCustom {
 			Criteria criteria = Criteria.where("bid").is(bid);
 			Query query = new Query(criteria);
 			Update update = new Update();
-			update.set("pbdate", System.currentTimeMillis());
+		
+			Book b = db.findOne(query, Book.class);					
+			if(b.getOpbdate()!=null&&b.getOpbdate()>0){
+				update.set("pbdate", b.getOpbdate());
+				update.unset("opbdate");
+			}else{
+				update.set("pbdate",System.currentTimeMillis());
+			}
 
 			db.updateFirst(query, update, Book.class);			
 			

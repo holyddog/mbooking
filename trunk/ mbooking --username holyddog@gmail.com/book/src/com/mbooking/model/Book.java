@@ -30,6 +30,7 @@ public class Book {
 	Long vcount; // view count
 	
 	Long pbdate; // publish date
+	Long opbdate;// old publish date (temp pbdate collect after unpublish by admin)
 	Long pickup; // pickup date
 	
 	Integer seq;
@@ -179,7 +180,15 @@ public class Book {
 	public void setPbdate(Long pbdate) {
 		this.pbdate = pbdate;
 	}
+	
+	public Long getOpbdate() {
+		return opbdate;
+	}
 
+	public void setOpbdate(Long opbdate) {
+		this.opbdate = opbdate;
+	}
+	
 	// Return from Service Only , Not in db
 	public User getAuthor() {
 		return author;
@@ -244,7 +253,6 @@ public class Book {
 	public void setVcount(Long vcount) {
 		this.vcount = vcount;
 	}
-
 	public Long getPickup() {
 		return pickup;
 	}

@@ -35,19 +35,15 @@ public class Report {
 	String uname;
 	String auname;
 	String comment;
-
 	Long rdate;
-
-	Boolean inacive;
+	Long appvdate; // approve date
 	
-	public Boolean getInacive() {
-		return inacive;
+	public Long getAppvdate() {
+		return appvdate;
 	}
-
-	public void setInacive(Boolean inacive) {
-		this.inacive = inacive;
+	public void setAppvdate(Long appvdate) {
+		this.appvdate = appvdate;
 	}
-
 	public Long getAuid() {
 		return auid;
 	}

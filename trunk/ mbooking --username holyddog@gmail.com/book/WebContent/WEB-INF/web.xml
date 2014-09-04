@@ -22,11 +22,13 @@
   	</context-param>
   	<context-param>
     	<param-name>file</param-name>
-    	<param-value>http://192.168.0.114/res/book</param-value>
+    	<!-- <param-value>http://localhost/res/book</param-value> -->
+    	<param-value>http://localhost:8080/book_dev_files</param-value>
     </context-param>
   	<context-param>    
     	<param-name>upload</param-name>
-  		<param-value>D:/Resources/book</param-value>
+  		<!-- <param-value>D:/Resources/book</param-value>-->
+  		<param-value>C:/Resources/Book_Dev/images</param-value>
   	</context-param>
 	<servlet>
 		<servlet-name>Faces Servlet</servlet-name>

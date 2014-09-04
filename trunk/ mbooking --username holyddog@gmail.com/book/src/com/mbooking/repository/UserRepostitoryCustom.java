@@ -39,4 +39,5 @@ public interface UserRepostitoryCustom {
 	Boolean submitReportStory(Integer type, Long bid, Long uid, String msg);
 
 	Boolean submitReport(Integer type,Integer subtype,Long uid,Long auid,Long oid,String msg,String uname,String auname,String comment);
+	User getAccountInfo(Long uid);
 }
