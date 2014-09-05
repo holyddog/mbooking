@@ -872,11 +872,13 @@ Page = {
 					}
 					dialog.find('.d_panel').css('overflow-y', 'hidden').append(ul);
 					
+					var editBook = $('#page_EditBook').length > 0;
+					
 					dialog.find('[data-link=camera]').tap(function() {	
 						if (Page._callbackDialog) {
 							if (Device.PhoneGap.isReady) {
 								Device.PhoneGap.takePhoto({
-                                    fileUri: true,
+                                    fileUri: editBook,
 									success: function(imageData) {
 										history.back();
 										Page._callbackDialog(imageData);
@@ -885,7 +887,7 @@ Page = {
 							}
 							else {
 								history.back();
-								Page._callbackDialog(Data['Image' + dIndex]);
+								Page._callbackDialog(DataImages['Image' + dIndex]);
 								dIndex = (dIndex % 4) + 1;
 							}
 						}
@@ -894,7 +896,7 @@ Page = {
 				        if (Page._callbackDialog) {
 				        	if (Device.PhoneGap.isReady) {
 					        	Device.PhoneGap.choosePhoto({
-                                    fileUri: true,
+                                    fileUri: editBook,
 									success: function(imageData) {
 										history.back();
 										Page._callbackDialog(imageData);
@@ -903,11 +905,19 @@ Page = {
 				        	}
 				        	else {
 								history.back();
-								Page._callbackDialog(Data['Image' + dIndex]);
+								Page._callbackDialog(DataImages['Image' + dIndex]);
 								dIndex = (dIndex % 4) + 1;
 				        	}
 						}
 					});
+					
+					if (editBook) {
+						dialog.find('[data-link=multi]').show();
+					}
+					else {
+						dialog.find('[data-link=multi]').hide();
+					}
+					
 					dialog.find('[data-link=multi]').tap(function() {
 				        if (Page._callbackDialog) {
 				        	if (Device.PhoneGap.isReady) {
@@ -1253,6 +1263,8 @@ Page = {
 	},
 	
 	bodyShowLoading: function(content, white) {
+		if (content.find('.content_loading').length > 0) return;
+		
 		var cv = document.createElement('div');
 		cv.className = 'content_loading';
 		cv.style.width = '40px';

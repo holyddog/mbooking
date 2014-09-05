@@ -186,6 +186,10 @@ Page.Book = {
 					}
 				}
 				
+				if (!data[i].caption) {
+					data[i].caption = '';
+				}
+				
 				var pline = '<div class="pline box horizontal"><div class="ref flex1">' + refStr + '</div><div class="pnum">' + (i + 1) + ' of ' + data.length + '</div></div>';
 				content.append(page.append(pic).append('<div class="page_cap flex1 box center_middle" style="padding: 15px;"><div style="width: 100%;">' + data[i].caption + '</div></div>' + pline));
 				pic.css('height', pic.width());
