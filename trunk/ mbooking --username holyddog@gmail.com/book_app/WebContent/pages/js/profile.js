@@ -131,19 +131,21 @@ Page.Profile = {
 //						}
 //					});
 					setTimeout(function() {
-						Page.showLoading('Uploading...');						
+						Page.showLoading('Uploading...');		
+						
+						Service.User.ChangeProfilePic(Account.userId, img, function(data) {
+							Page.hideLoading();
+							MessageBox.drop('Picture changed');
+							
+							container.find('.pimage img').attr('src', Util.getImage(data.picture, 3));
+							container.find('.pimage img').attr("onerror", "this.src = 'images/user.jpg';");
+							
+							Account.picture = data.picture;
+							localStorage.setItem('u', JSON.stringify(Account));
+							
+							Page.loadMenu();
+						});				
 					}, 300);
-					
-					Service.User.ChangeProfilePic(Account.userId, img, function(data) {
-						Page.hideLoading();
-						MessageBox.drop('Picture changed');
-						
-						container.find('.pimage img').attr('src', Util.getImage(data.picture, 3));
-						container.find('.pimage img').attr("onerror", "this.src = 'images/user.jpg';");
-						
-						Account.picture = data.picture;
-						localStorage.setItem('u', JSON.stringify(Account));
-					});
 				});
 			});
 			
@@ -151,22 +153,22 @@ Page.Profile = {
 			editCover.click(function() {
 				Page.popDialog(function(img) {
 					setTimeout(function() {
-						Page.showLoading('Uploading...');						
+						Page.showLoading('Uploading...');	
+						
+						Service.User.ChangeProfileCover(Account.userId, img, function(data) {
+							Page.hideLoading();
+							MessageBox.drop('Cover changed');
+							
+							Account.cover = data.picture;
+							localStorage.setItem('u', JSON.stringify(Account));
+							
+							var header = container.find('#profile_page');
+							header.css({
+								'background-image': 'url(' + Util.getImage(data.picture, 1) + ')'
+							});
+							Page.loadMenu();
+						});					
 					}, 300);
-					
-					Service.User.ChangeProfileCover(Account.userId, img, function(data) {
-						Page.hideLoading();
-						MessageBox.drop('Cover changed');
-						
-						Account.cover = data.picture;
-						localStorage.setItem('u', JSON.stringify(Account));
-						
-						var header = container.find('#profile_page');
-						header.css({
-							'background-image': 'url(' + Util.getImage(data.picture, 1) + ')'
-						});
-						Page.loadMenu();
-					});
 				});
 			});
 		}
