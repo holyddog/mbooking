@@ -51,6 +51,9 @@ Page.Tag = {
 			
 			var w = (panelWidth / ratio) - 15;
 			var h = (w * 4) / 3;
+			content.find('.book').css({
+				width: w + 'px'
+			});
 			content.find('.book_size').css({
 				width: w + 'px',
 				height: h + 'px',
